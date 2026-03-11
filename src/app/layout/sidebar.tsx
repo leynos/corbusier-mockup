@@ -49,7 +49,7 @@ function SidebarLink(
 
 function ZoneLabel({ children }: { readonly children: ReactNode }): JSX.Element {
   return (
-    <h3 className="px-3 pb-1 pt-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/50">
+    <h3 className="px-3 pb-1 pt-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
       {children}
     </h3>
   );

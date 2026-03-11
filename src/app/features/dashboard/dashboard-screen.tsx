@@ -9,7 +9,7 @@ import { PlaceholderScreen } from "../placeholder-screen";
 function ChamferDemo(): JSX.Element {
   return (
     <section aria-label="Chamfer demo" className="mt-8 space-y-6">
-      <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/50">
+      <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
         Punch-card chamfer demo
       </h2>
 

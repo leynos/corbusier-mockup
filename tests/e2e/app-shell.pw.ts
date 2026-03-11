@@ -13,6 +13,6 @@ test.describe("App shell", () => {
     await sidebar.getByRole("link", { name: "My Tasks" }).click();
     await expect(page).toHaveURL(/\/tasks$/);
 
-    await expect(page.getByText("My Tasks")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "My Tasks" })).toBeVisible();
   });
 });
