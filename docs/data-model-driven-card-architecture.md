@@ -74,16 +74,19 @@ export type LocalizedStringSet = {
   readonly shortLabel?: string;
 };
 
-export type EntityLocalizations = Record<LocaleCode, LocalizedStringSet>;
+export type EntityLocalizations = Partial<Record<LocaleCode, LocalizedStringSet>>;
+export type LocalizedAltText = Partial<Record<LocaleCode, string>>;
 
 export type ImageAsset = {
   readonly url: string;
-  readonly alt: string;
+  readonly alt: LocalizedAltText;
 };
 ```
 
 Fallback rule: prefer the current user locale, fall back to `en-GB` then any
 available locale. Components must not construct names from translation keys.
+The same fallback chain resolves localized image alt text when the current
+locale is absent.
 
 ## Entity schemas by card type
 
@@ -219,7 +222,7 @@ erDiagram
   COMMUNITY_PICK ||--|| ROUTE : is_based_on_optional
 ```
 
-Figure 2 sketches the class-level model with localisation-aware fields and
+Figure 2 sketches the class-level model with localization-aware fields and
 asset references that underpin the card architecture.
 
 ```mermaid
@@ -228,18 +231,23 @@ classDiagram
 
   class LocalizedStringSet {
     +string name
-    optional string shortLabel
-    optional string description
+    +string shortLabel?
+    +string description?
   }
 
   class EntityLocalizations {
     <<type alias>>
-    +Record~LocaleCode, LocalizedStringSet~
+    +PartialRecord~LocaleCode|LocalizedStringSet~
+  }
+
+  class LocalizedAltText {
+    <<type alias>>
+    +PartialRecord~LocaleCode|string~
   }
 
   class ImageAsset {
     +string url
-    +string alt
+    +LocalizedAltText alt
   }
 
   class Route {
@@ -250,8 +258,8 @@ classDiagram
     +number durationSeconds
     +number rating
     +BadgeId[] badges
-    +optional DifficultyId difficultyId
-    +optional InterestId[] interests
+    +DifficultyId difficultyId?
+    +InterestId[] interests?
   }
 
   class RouteCategory {
@@ -323,13 +331,13 @@ classDiagram
   class BadgeDescriptor {
     +string id
     +EntityLocalizations localizations
-    +optional string accentClass
+    +string accentClass?
   }
 
   class ResolvedBadgeDescriptor {
     +string id
     +EntityLocalizations localizations
-    +optional string accentClass
+    +string accentClass?
     +LocalizedStringSet localization
   }
 
@@ -358,6 +366,7 @@ classDiagram
 
   ExploreScreenHelpers ..> LocalizedStringSet : uses
   ExploreScreenHelpers ..> EntityLocalizations : uses
+  ExploreScreenHelpers ..> LocalizedAltText : uses
   ExploreScreenHelpers ..> ImageAsset : uses
 
 ```
@@ -422,7 +431,7 @@ classDiagram
   - Reshape `WalkPointOfInterest` and saved routes; ensure tags use registries
     and unit formatting covers all numerical values.
 - Status (6 Dec 2025): Offline suggestions/downloads now expose
-  localisation maps with SI sizes and relative timestamps; saved routes/POIs
+  localization maps with SI sizes and relative timestamps; saved routes/POIs
   resolve tags via registries and route metrics render through the unit
   formatters.
 - **Phase 4: wizard & completion**

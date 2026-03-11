@@ -125,14 +125,14 @@
                     </nav>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                    <button type="button" aria-label="Open menu" class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <div class="relative hidden md:block">
                         <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
-                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <input type="text" aria-label="Global search" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                     </div>
-                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                    <button type="button" aria-label="View notifications" class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
                         <i class="fa-solid fa-bell text-lg"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
                     </button>
@@ -193,13 +193,13 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors flex items-center gap-2">
+                        <button type="button" class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-arrow-left"></i>Back to Task
                         </button>
-                        <button class="px-4 py-2 bg-corbusier-teal text-white rounded-md text-sm font-bold hover:bg-teal-700 transition-colors shadow-card flex items-center gap-2">
+                        <button type="button" class="px-4 py-2 bg-corbusier-teal text-white rounded-md text-sm font-bold hover:bg-teal-700 transition-colors shadow-card flex items-center gap-2">
                             <i class="fa-solid fa-code-pull-request"></i>View Delivery
                         </button>
-                        <button class="px-4 py-2 bg-corbusier-orange text-white rounded-md text-sm font-bold hover:bg-red-600 transition-colors shadow-card flex items-center gap-2">
+                        <button type="button" class="px-4 py-2 bg-corbusier-orange text-white rounded-md text-sm font-bold hover:bg-red-600 transition-colors shadow-card flex items-center gap-2">
                             <i class="fa-solid fa-stop"></i>Stop Agent
                         </button>
                     </div>
@@ -219,13 +219,13 @@
                                 <h2 class="text-lg font-bold text-corbusier-charcoal">Live Conversation</h2>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                <button type="button" aria-label="Filter conversation" class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
                                     <i class="fa-solid fa-filter"></i>
                                 </button>
-                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                <button type="button" aria-label="Export conversation" class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
                                     <i class="fa-solid fa-download"></i>
                                 </button>
-                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                <button type="button" aria-label="Conversation options" class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
                                     <i class="fa-solid fa-ellipsis"></i>
                                 </button>
                             </div>
@@ -282,7 +282,7 @@
                                             <span class="text-xs text-corbusier-gray">23 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">find src/ -name "*connection*" -o -name "*pool*"</p>
-                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-1">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-1">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View Results</span>
                                         </button>
@@ -381,7 +381,7 @@ Execution time: 0.34s</pre>
                                             <span class="text-xs text-corbusier-gray">18 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">config/pgbouncer.ini</p>
-                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-2">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-2">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View File Content</span>
                                         </button>
@@ -427,7 +427,7 @@ stats_period = 60</pre>
                                             <span class="text-xs text-corbusier-gray">2 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">npm run test:integration -- --grep "connection pool"</p>
-                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-3">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-3">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View Test Results</span>
                                         </button>
@@ -494,7 +494,7 @@ Exit code: 0</pre>
                             <div class="flex-1">
                                 <div class="relative">
                                     <textarea id="message-input" placeholder="Type a message or use /command..." rows="2" class="w-full px-4 py-3 pr-12 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
-                                    <button class="absolute right-3 bottom-3 p-2 bg-corbusier-blue text-white rounded-md hover:bg-ibm-blue transition-colors">
+                                    <button type="button" aria-label="Send message" class="absolute right-3 bottom-3 p-2 bg-corbusier-blue text-white rounded-md hover:bg-ibm-blue transition-colors">
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
                                 </div>
@@ -506,10 +506,10 @@ Exit code: 0</pre>
                                         <span class="font-mono">/stop</span>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <button type="button" aria-label="Attach file" class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
                                             <i class="fa-solid fa-paperclip"></i>
                                         </button>
-                                        <button class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <button type="button" aria-label="Insert code snippet" class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
                                             <i class="fa-solid fa-code"></i>
                                         </button>
                                     </div>
@@ -628,23 +628,23 @@ Exit code: 0</pre>
                     </h3>
 
                     <div class="space-y-2">
-                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                        <button type="button" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-arrow-up-right-from-square text-corbusier-blue"></i>
                             <span>Jump to Overview</span>
                         </button>
-                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                        <button type="button" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-link text-corbusier-teal"></i>
                             <span>View Dependencies</span>
                         </button>
-                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                        <button type="button" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-code-pull-request text-corbusier-teal"></i>
                             <span>Open Pull Request</span>
                         </button>
-                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                        <button type="button" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-code-branch text-corbusier-blue"></i>
                             <span>View Branch</span>
                         </button>
-                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                        <button type="button" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-clock-rotate-left text-corbusier-mustard"></i>
                             <span>Activity Log</span>
                         </button>
@@ -695,7 +695,7 @@ Exit code: 0</pre>
                     <a href="#" class="hover:text-white transition-colors">Support</a>
                 </div>
                 <div class="flex items-center gap-3">
-                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <p class="text-sm text-gray-400 font-mono">© 2026 CORBUSIER</p>
                     <div class="w-px h-4 bg-gray-600"></div>
                     <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
                 </div>
@@ -748,16 +748,6 @@ Exit code: 0</pre>
                     }
                 });
             }
-
-            setInterval(() => {
-                const lastActivity = document.querySelectorAll('.font-mono.text-corbusier-charcoal');
-                lastActivity.forEach(element => {
-                    if (element.textContent.includes('ago')) {
-                        const seconds = Math.floor(Math.random() * 30) + 10;
-                        element.textContent = `${seconds}s ago`;
-                    }
-                });
-            }, 5000);
 
             console.log('Task Conversation Console initialized - Real-time updates active');
             console.log('Slash commands enabled: /help, /status, /logs, /stop, /rollback');

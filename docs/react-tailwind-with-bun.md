@@ -9,6 +9,7 @@ This is a pragmatic walkthrough for building and serving a tiny React + Tailwind
 ---
 
 ## 0) Prerequisites
+
 - Node/npm not required, but fine to have.
 - Bun **1.3.0** installed:
 
@@ -28,6 +29,7 @@ npm install -g bun
 ```
 
 Verify:
+
 ```bash
 bun --version  # expect 1.3.0
 ```
@@ -35,6 +37,7 @@ bun --version  # expect 1.3.0
 ---
 
 ## 1) Scaffold a React + Tailwind project
+
 Bun ships templates. Use the Tailwind variant to avoid manual setup.
 
 ```bash
@@ -43,13 +46,14 @@ bun init --react=tailwind
 # Follow the prompts; accept defaults if unsure.
 ```
 
-What you get:
+The scaffold provides:
 - React + TS/JS wired up for Bun’s **HTML‑first** dev server.
 - Tailwind preconfigured (content paths, `@tailwind` directives, PostCSS config).
 
 ---
 
 ## 2) Run the dev server (with HMR)
+
 Bun 1.3 can serve HTML entry points directly and handle bundling/transpilation under the hood.
 
 ```bash
@@ -58,9 +62,12 @@ bun './**/*.html'
 bun ./index.html
 ```
 
-You’ll see a URL like `http://localhost:3000/` and a routes table. Open it in the browser. Edits to React components hot‑reload instantly (React Fast Refresh).
+A URL like `http://localhost:3000/` and a routes table are displayed. Open the
+address in a browser. Edits to React components hot‑reload instantly (React
+Fast Refresh).
 
-> Tip: Bun pipes browser `console.log` back to your terminal. Handy for quick debugging.
+> Tip: Bun pipes browser `console.log` back to the terminal, which helps with
+> quick debugging.
 
 ---
 
@@ -84,11 +91,11 @@ The template includes a basic app. If starting from a blank template, here’s t
 </html>
 ```
 
-**`src/index.css`** (Tailwind directives):
+**`src/index.css`** (Tailwind v4 CSS-first entry):
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.js";
+@import "tailwindcss";
+@source "./**/*.{ts,tsx,js,jsx}";
 ```
 
 **`src/main.tsx`**:
@@ -115,13 +122,10 @@ function App() {
 createRoot(document.getElementById("root")!).render(<App />);
 ```
 
-Tailwind config (`tailwind.config.{js,ts}`) should include your content globs, e.g.:
+Tailwind config (`tailwind.config.{js,ts}`) should omit `content` globs when
+scan roots are declared with `@source`, e.g.:
 ```js
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{ts,tsx,js,jsx}",
-  ],
   theme: { extend: {} },
   plugins: [],
 };
@@ -136,7 +140,7 @@ Bun bundles HTML, TS/JS, CSS assets. Use `--production` for minification and tre
 bun build ./index.html --production --outdir=dist
 ```
 
-You’ll get a *fully bundled* `dist/` directory ready to host anywhere.
+The result is a *fully bundled* `dist/` directory ready to host anywhere.
 
 ---
 
@@ -176,7 +180,8 @@ bun run server.ts
 ---
 
 ## 6) (Optional) One‑process full‑stack dev
-If you prefer a single process serving your SPA **and** APIs during development, use HTML imports + `Bun.serve()` routes.
+For a single process serving the SPA **and** APIs during development, use HTML
+imports + `Bun.serve()` routes.
 
 ```ts
 // dev-serve.ts
@@ -197,7 +202,8 @@ Start it:
 bun run dev-serve.ts
 ```
 
-You still get HMR, HTML bundling, and a tidy `/api/*` space without CORS faff.
+The setup still provides HMR, HTML bundling, and a tidy `/api/*` space without
+CORS faff.
 
 ---
 
@@ -210,7 +216,7 @@ You still get HMR, HTML bundling, and a tidy `/api/*` space without CORS faff.
 ---
 
 ## 8) Bonus: compile to a single executable (advanced)
-You can ship a self‑contained binary that serves your app:
+A self‑contained binary can serve the app:
 
 ```bash
 bun build --compile ./index.html --outfile myapp
@@ -222,4 +228,6 @@ Use this for kiosk‑style SPAs or internal tools where “download and run” b
 ---
 
 ## That’s it
-You’ve got: scaffold → dev server with HMR → Tailwind styling → production bundle → optional Bun‑served hosting. Compact, fast, and pleasantly free of yak‑hair.
+The flow is: scaffold → dev server with HMR → Tailwind styling → production
+bundle → optional Bun‑served hosting. Compact, fast, and pleasantly free of
+yak‑hair.

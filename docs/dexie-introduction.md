@@ -1,6 +1,11 @@
-Dexie lives in that curious middle ground where JavaScript storage stops being “slap some JSON in localStorage and pray” and starts behaving like a real database. It’s basically a civilised wrapper over IndexedDB—civilised in the sense that it removes the callback-ridden, error-prone medieval torture apparatus that IndexedDB exposes by default.
+# Dexie introduction
 
-It doesn’t pretend to be a universal state manager, nor a sync engine, nor a CRDT playground. It does one job: **make IndexedDB fast, pleasant, and structurally sane**, while letting you think in terms of tables, indexes, and transactions instead of event handlers and arcane IDB boilerplate.
+Dexie lives in that curious middle ground where JavaScript storage stops being “slap some JSON in localStorage and pray” and starts behaving like a real database. It’s basically a civilized wrapper over IndexedDB—civilized in the sense that it removes the callback-ridden, error-prone medieval torture apparatus that IndexedDB exposes by default.
+
+Dexie does not pretend to be a universal state manager, a sync engine, or a
+CRDT playground. It does one job: **make IndexedDB fast, pleasant, and
+structurally sane**, while allowing development to proceed in terms of tables,
+indexes, and transactions instead of event handlers and arcane IDB boilerplate.
 
 Here’s the shape of it.
 
@@ -8,12 +13,15 @@ Here’s the shape of it.
 
 ## What Dexie actually is
 
-IndexedDB itself is a transactional object store with indexes. It’s absurdly capable—stores gigabytes, does range queries, supports indexes—but the API feels like something that crawled out of the primordial soup. Dexie gives you a modern, typed, Promise-based façade:
+IndexedDB itself is a transactional object store with indexes. It’s absurdly
+capable—stores gigabytes, does range queries, supports indexes—but the API
+feels like something that crawled out of the primordial soup. Dexie provides a
+modern, typed, Promise-based façade:
 
-- You declare a database schema in a single string.
-- You issue queries with familiar methods (`where`, `equals`, `startsWith`, etc.).
-- You wrap multiple operations in a transaction that behaves like a normal transaction.
-- You handle upgrades declaratively instead of juggling IDB versionchange events.
+- Declare a database schema in a single string.
+- Issue queries with familiar methods (`where`, `equals`, `startsWith`, etc.).
+- Wrap multiple operations in a transaction that behaves like a normal transaction.
+- Handle upgrades declaratively instead of juggling IDB versionchange events.
 
 Dexie doesn’t abstract away IndexedDB; it simply exposes a sane representation of it.
 
@@ -62,13 +70,17 @@ The appeal is immediate: the mental model is “small SQLite”, not “screamin
 
 ### 1. Managing large local datasets
 
-Dexie is built for situations where you might store _thousands_ or _millions_ of records in the browser, efficiently, with indexed lookups. That’s exactly why people reach for it in mapping PWAs, note-taking apps, offline CRMs, and anything involving attachments or binary blobs.
+Dexie is built for situations where _thousands_ or _millions_ of records must
+be stored in the browser, efficiently, with indexed lookups. That’s exactly
+why people reach for it in mapping PWAs, note-taking apps, offline CRMs, and
+anything involving attachments or binary blobs.
 
 Dexie doesn’t blink at 500MB of tiles. LocalStorage would die of fright.
 
 ### 2. Bulk inserts and high-throughput operations
 
-Native IndexedDB supports bulk ops, but you have to dance. Dexie turns mass tile import into a straight-line `bulkPut()` call.
+Native IndexedDB supports bulk ops, but the raw API requires extra ceremony.
+Dexie turns mass tile import into a straight-line `bulkPut()` call.
 
 ```ts
 await db.tiles.bulkPut(tileRecords);  // 10k+ ops in one go
@@ -79,7 +91,8 @@ For map tiles or offline bundles, this matters.
 
 ### 3. Price/performance sweet spot
 
-Dexie gives you 90% of the capability of full local-first databases (Pouch, RxDB, ElectricSQL, etc.) at 5% of the complexity. You still get:
+Dexie provides 90% of the capability of full local-first databases (Pouch,
+RxDB, ElectricSQL, etc.) at 5% of the complexity. This still includes:
 
 - indexed queries
 - transactions
@@ -88,7 +101,8 @@ Dexie gives you 90% of the capability of full local-first databases (Pouch, RxDB
 - upgrade path
 - excellent browser portability
 
-but without pulling in MVCC sync machinery or conflict resolvers you don’t need.
+but without pulling in MVCC sync machinery or conflict resolvers that are not
+needed.
 
 ### 4. Extremely stable and well-maintained
 
@@ -106,7 +120,8 @@ Dexie is not:
 - a CRDT store
 - a distributed database
 
-It doesn’t solve “how do I reconcile data from the server later?”. It just stores bytes in a structured way and lets you retrieve them very quickly.
+It doesn’t solve “how does reconciliation with later server updates work?” It
+stores bytes in a structured way and makes retrieval very fast.
 
 That’s exactly why it pairs cleanly with **TanStack Query**, **Zustand**, and **a service worker**: it behaves like a local storage engine, not a worldview.
 
@@ -114,7 +129,7 @@ That’s exactly why it pairs cleanly with **TanStack Query**, **Zustand**, and 
 
 ## Why Dexie fits beautifully in Wildside’s architecture
 
-Your Wildside PWA wants to do three jobs offline:
+The Wildside PWA needs to do three jobs offline:
 
 1. Store large asset bundles (map tiles, static GeoJSON, fonts, imagery).
 2. Store user-created data (notes, progress, “visited” flags).
@@ -124,11 +139,11 @@ Dexie does 1 and 2 without invading 3.
 
 - **TanStack Query** stays in charge of domain data and server communication.
 - **Zustand** stays in charge of UI state.
-- **Dexie** becomes your durable data engine for “everything heavy or binary”.
+- **Dexie** becomes the durable data engine for “everything heavy or binary”.
 
-You get a clean separation:
+This yields a clean separation:
 
-- “What do I show in the UI?” → Zustand/Query
+- “What shows in the UI?” → Zustand/Query
 - “What needs re-syncing?” → Query + the outbox
 - “Where do the bytes live?” → Dexie
 
@@ -146,13 +161,16 @@ Dexie’s performance is mostly IndexedDB’s performance, which is surprisingly
 - Iterating through hundreds of thousands of map tiles: fine, but you stream them, not grab them all at once.
 - Blob storage: depends on browser; Chrome’s IDB handles blobs gracefully.
 
-For map tiles specifically: keep tiles in Dexie or Cache Storage depending on your caching strategy. Dexie gives you more control; Cache Storage gives you more “free” caching semantics.
+For map tiles specifically: keep tiles in Dexie or Cache Storage depending on
+the caching strategy. Dexie gives more control; Cache Storage gives more “free”
+caching semantics.
 
 ---
 
 ## The “developer ergonomics” bit
 
-Dexie is pleasant in the mundane way a good screwdriver is pleasant: it gets out of your way.
+Dexie is pleasant in the mundane way a good screwdriver is pleasant: it gets
+out of the way.
 
 Migrations are clear:
 
@@ -184,13 +202,13 @@ const notesForRoute = await db.notes
 
 ```
 
-You’re not fighting the browser; you’re writing code that feels obvious.
+Fighting the browser is unnecessary; the result is code that feels obvious.
 
 ---
 
 ## In summary
 
-Dexie gives you:
+Dexie provides:
 
 - A fast, typed, ergonomic wrapper over IndexedDB
 - Proper indexed queries
@@ -201,13 +219,17 @@ Dexie gives you:
 - Zero ceremony
 - Zero conflict with TanStack Query / Zustand
 
-It’s effectively the local storage engine you wish the web had shipped with.
+It’s effectively the local storage engine the web should have shipped with.
 
-For Wildside, Dexie fills the **“offline data warehouse”** role without forcing the UI to adopt a database-centred worldview, which keeps your architecture clean:
+For Wildside, Dexie fills the **“offline data warehouse”** role without forcing
+the UI to adopt a database-centred worldview, which keeps the architecture
+clean:
 
 - Query handles server state + persistence + optimistic mutations.
 - Dexie handles heavy assets + outbox + user attachments.
 - Zustand handles UI wibble.
 - MapLibre interacts with Dexie or the service worker for tiles.
 
-If you’d like I can show you a concrete Wildside PWA architecture sketch with Dexie in the loop, including how to structure route bundles, tile metadata, outbox queues, and SW interactions.
+A concrete Wildside PWA architecture sketch with Dexie in the loop can be
+provided, including route bundles, tile metadata, outbox queues, and service
+worker interactions.

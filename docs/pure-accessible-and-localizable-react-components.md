@@ -407,7 +407,6 @@ to prevent invalid state transitions.[^24] A
 `useReducer` centralizes this transition logic, which is an improvement. A full
 state machine library like XState goes further by allowing declarative side
 effects, such as an `after` delay for the animation, directly within the state
-<!-- markdownlint-disable-next-line MD013 -->
 definition.[^24] Therefore, for components with non-trivial lifecycles,
 adopting a reducer-based state machine from the outset is a strategic
 investment in future maintainability, even if it appears more verbose initially.
@@ -432,7 +431,7 @@ chosen technology stack. This layered approach ensures that each architectural
 concern—behavior, state, and presentation—is handled independently, leading to
 a highly modular and flexible system.
 
-### 3.1 Layer[^1]: The Accessible Foundation with Radix UI
+### 3.1 Layer 1: The Accessible Foundation with Radix UI
 
 The foundation of any interactive component is its behavior and accessibility.
 Building accessible components from scratch is an incredibly difficult and
@@ -497,7 +496,7 @@ ensures that screen readers can correctly announce the label for the input and
 any associated validation messages, a critical aspect of form accessibility
 that is handled automatically.[^29]
 
-### 3.2 Layer[^2]: Server State Management with Tanstack Query
+### 3.2 Layer 2: Server State Management with Tanstack Query
 
 With the behavioral foundation in place, the next layer is state management,
 handled within the custom logic hook. This layer is responsible for all data
@@ -580,7 +579,7 @@ robust approach is to establish a shared source of truth for data structures. A
 This process eliminates an entire class of integration bugs caused by
 mismatched data shapes between the client and server.[^36]
 
-### 3.3 Layer[^3]: Responsive Styling with DaisyUI 5 and Tailwind CSS
+### 3.3 Layer 3: Responsive Styling with DaisyUI 5 and Tailwind CSS
 
 The final layer is presentation. With behavior and state handled by the lower
 layers, the React component can focus exclusively on rendering the UI. DaisyUI,
@@ -670,7 +669,7 @@ Localization (i18n) is a prime example of such a concern, and its
 implementation must also adhere to the principle of separating logic from the
 view.
 
-### 4.1 Comprehensive Localisation with `react-i18next` and `i18next-fluent`
+### 4.1 Comprehensive Localization with `react-i18next` and `i18next-fluent`
 
 To build a truly global application, components must be localizable.
 `react-i18next`, built on top of the powerful `i18next` library, remains the
@@ -817,7 +816,7 @@ and plural selectors just need a `count` (or similar) argument:
 not use braces for JSX, developers should continue to reach for `<Trans>` when a
 sentence needs a React component (for example, a link) embedded inside it; the
 component injects the React nodes while the Fluent string keeps the prose,
-yielding truly localisable markup without unsafe HTML.[^45]
+yielding truly localizable markup without unsafe HTML.[^45]
 
 The following table compares leading React i18n libraries, justifying the
 selection of `react-i18next` for its comprehensive feature set and robust

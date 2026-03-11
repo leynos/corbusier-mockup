@@ -187,7 +187,7 @@ Use a strict `tsconfig.json` suitable for browser builds:
 - `noPropertyAccessFromIndexSignature: true`
 - `verbatimModuleSyntax: true` (and use `import type` / `export type`)
 - `moduleResolution: "bundler"` (lets Vite resolve modern packages)
-- `lib`: include only what you need (e.g., `dom`, `dom.iterable`, `es2022`)
+- `lib`: required libs only (e.g., `dom`, `dom.iterable`, `es2022`)
 - Do not emit from `tsc` in app packages (`noEmit: true`); Vite handles
   emission.
 
@@ -250,7 +250,7 @@ Keep docs close to code.
   responses. Avoid ad hoc object literals in tests.
 - **Parameterised tests**: Drive variations with helper builders or tight loops
   rather than copy‑pasting cases.
-- **Mocking**: Prefer dependency injection; if you must stub modules, lean on
+- **Mocking**: Prefer dependency injection. When stubbing modules, lean on
   the `mock` helpers provided by `bun:test`.
 - **Fake timers**: Encapsulate clocks behind adapters; fall back to
   `mock.timers` from `bun:test` only when necessary.
@@ -449,11 +449,10 @@ The following tooling is available in this environment:
 - `difft` **(Difftastic)** – Semantic diff tool that compares code structure
   rather than just text differences.
 - `Playwright MCP` – Validate UI changes against the running dev server without
-  leaving the CLI. The dev server is managed by the user — **never start, stop,
-  or restart it**. Assume it is already running and use Playwright MCP to verify
-  your work:
-  1. Call `playwright.navigate` with the target URL to load the page you
-     have modified.
+  leaving the CLI. The dev server is user-managed — **never start, stop, or
+  restart it**. Assume it is already running; verify changes with Playwright
+  MCP:
+  1. Call `playwright.navigate` with the target URL to load the changed page.
   2. Call `playwright.screenshot` (set `fullPage: true` when useful) to
      capture current visuals. Screenshots are written under
      `/tmp/playwright-mcp-output/`; inspect them before you commit.

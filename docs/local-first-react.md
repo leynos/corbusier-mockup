@@ -42,7 +42,7 @@ as a guiding philosophy and a benchmark for the architecture detailed in this
 report, outlining the tangible user-facing benefits that this approach aims to
 deliver.[^1]
 
-1. **No spinners: your work at your fingertips.** The most immediate and
+1. **No spinners: work at one's fingertips.** The most immediate and
    perceptible benefit of a local-first architecture is its speed. Because all
    operations read from and write to a local database on the device, the user
    interface can respond instantly to user input. There is no need to wait for
@@ -207,7 +207,7 @@ easier to maintain at scale.
 
 ## Mastering Client State with Zustand
 
-### Core Concepts: The ,`create`, API
+### Core Concepts: The `create` API
 
 Zustand's API is intentionally minimalist, centered around a single function:
 `create`. This function takes a "creator" function as an argument, which
@@ -393,7 +393,7 @@ By abstracting these concerns away, Tanstack Query allows developers to focus
 on what data their components need, rather than the complex mechanics of how to
 fetch and maintain it.
 
-### The Query Lifecycle: ,`staleTime`, vs. ,`gcTime`
+### The Query Lifecycle: `staleTime` vs. `gcTime`
 
 Understanding the distinction between `staleTime` and `gcTime` (garbage
 collection time) is the absolute key to mastering Tanstack Query's caching
@@ -698,7 +698,7 @@ by Tanstack Query to a durable storage layer. This transforms the cache from a
 transient, session-based optimization into a robust, local database that
 enables full offline functionality.
 
-### Enabling Offline Mode with ,`persistQueryClient`
+### Enabling Offline Mode with `persistQueryClient`
 
 The Tanstack ecosystem provides a dedicated utility for this purpose: the
 `@tanstack/react-query-persist-client` package. Its primary export, the
@@ -968,7 +968,7 @@ update latency.
 | **Cons**              | - Higher latency due to the second HTTP round-trip. - Can lead to more HTTP requests if updates are very frequent.                                                         | - More complex client-side logic to manually update the cache. - Bypasses the `queryFn`, potentially leading to inconsistencies if transformation logic exists there. |
 | **Ideal Use Case**    | Infrequent but important updates where eventual consistency is acceptable (e.g., a project's status changing, a new comment being added).                                  | High-frequency, low-latency updates where immediate reflection is critical (e.g., real-time chat messages, live stock tickers, collaborative cursor positions).       |
 
-Strategy 1: Event-Driven Query Invalidation
+### Strategy 1: Event-Driven Query Invalidation
 
 This is often the simplest and most robust approach. The server sends a small
 message indicating what has changed, not the new data itself. The client
@@ -996,7 +996,7 @@ useEffect(() => {
 
 ```
 
-Strategy 2: Direct Cache Updates
+### Strategy 2: Direct Cache Updates
 
 For applications requiring the lowest possible latency, such as a chat app, the
 server can push the entire data object over the WebSocket. The client then

@@ -1,11 +1,11 @@
-Here is what you need to know about Tailwind CSS v4 (May 2025)
+# Tailwind CSS v4 (May 2025)
 
-### I. Core Architecture & Performance
+## I. Core Architecture & Performance
 
 1.  **New Engine - Performance First:**
     *   V4 ships with a completely rewritten engine. Expect drastically reduced build times – typically sub-10ms for most projects, even large ones often under 100ms. This is achieved by more efficiently parsing sources and generating CSS on-demand.
 2.  **CSS-First Configuration via `@theme`:**
-    *   The primary configuration mechanism shifts from `tailwind.config.js` (for theme values) to your main CSS file using the `@theme` directive.
+    *   The primary configuration mechanism shifts from `tailwind.config.js` (for theme values) to the main CSS file using the `@theme` directive.
         ```css
         /* app.css */
         @import "tailwindcss";
@@ -45,7 +45,7 @@ Here is what you need to know about Tailwind CSS v4 (May 2025)
     *   Scales for `shadow`, `rounded`, and `blur` have been normalized (e.g., `shadow` -> `shadow-sm`, `shadow-sm` -> `shadow-xs`).
     *   `ring` default width is now `1px` (was `3px`); use `ring-3` for the old default.
 3.  **Default Value Adjustments:**
-    *   Default border color is now `currentColor`. Explicitly add color classes like `border-gray-200` if you relied on the v3 default gray.
+    *   Default border color is now `currentColor`. Explicitly add color classes like `border-gray-200` when the v3 default gray was previously relied upon.
     *   Default ring color is `currentColor` (was `blue-500`).
 4.  **Selector Modifications:**
     *   `space-x-*`/`space-y-*` utilities now use `margin-bottom`/`margin-right` on `:not(:last-child)` for performance. This might affect inline elements or layouts with existing tweaked margins. Flex/grid `gap` is often a better alternative.
@@ -61,7 +61,7 @@ Here is what you need to know about Tailwind CSS v4 (May 2025)
     *   Functional utilities (e.g., `tab-*` matching `tab-2`, `tab-github`) are defined using `@utility` with a `--value()` function to parse arguments and match theme keys or arbitrary values.
 6.  **`@apply` in Scoped Styles (Vue SFCs, Svelte, CSS Modules):**
     *   Due to isolated processing of these style blocks by build tools, theme variables, custom utilities, and variants defined in global CSS are not automatically available.
-    *   Use `@reference "../path/to/your/main.css";` *inside* the scoped style block to make these available without duplicating CSS output.
+    *   Use `@reference "../path/to/main.css";` *inside* the scoped style block to make these available without duplicating CSS output.
     *   Alternatively, directly use CSS variables (`var(--color-brand-500)`) instead of `@apply` for better performance and simpler processing.
 7.  **Prefix Syntax:**
     *   Utility prefixes are now variant-like: `tw:bg-red-500`. Theme variables in `@theme` remain unprefixed, but generated CSS variables *will* be prefixed (e.g., `--tw-color-red-500`).

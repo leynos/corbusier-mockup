@@ -9,7 +9,7 @@ Wildside Mockup in two layers:
   design and architecture documents.
 
 That distinction matters because the mockup already exercises much of the UI,
-styling, routing, localisation, and map stack, while the broader product
+styling, routing, localization, and map stack, while the broader product
 architecture adds local-first data and orchestration tooling that is not yet
 fully declared in the current `package.json`.
 
@@ -18,7 +18,7 @@ fully declared in the current `package.json`.
 The application is a client-side single-page application built with Bun, Vite,
 React 19, TanStack Router, Tailwind CSS v4, and DaisyUI v5. It uses Radix UI
 primitives for interactive components, i18next with Fluent translation bundles
-for localisation, and MapLibre GL JS for the interactive map screens.
+for localization, and MapLibre GL JS for the interactive map screens.
 
 The map canvas, tile rendering, and location-aware UI are specific to this
 product domain. They are part of the Wildside mockup because it models a
@@ -48,7 +48,7 @@ The fuller v2a stack described across the repo’s architecture
 documents adds:
 
 - **Zustand** for interactive client and UI state,
-- **TanStack Query** for server-state fetching, caching, and synchronisation,
+- **TanStack Query** for server-state fetching, caching, and synchronization,
 - **Dexie** for durable browser-side storage of offline bundles, map tiles, and
   related heavier local data, and
 - **XState** for modelling more complex interaction and workflow orchestration
@@ -120,7 +120,7 @@ than a state-machine or data-cache architecture.
 For the fuller v2a application stack, the state split is broader:
 
 - **Zustand** owns interactive client and UI state,
-- **TanStack Query** owns server and synchronised domain state, and
+- **TanStack Query** owns server and synchronized domain state, and
 - **XState** is the right fit for explicit multi-step workflows or
   long-running interaction logic that benefits from a formal state machine.
 
@@ -168,7 +168,8 @@ framework:
 - `src/app/providers/theme-provider.tsx` persists the active theme in
   `localStorage`.
 - The provider sets `data-theme` on the document root and body.
-- The shipped theme names are `wildside-night` and `wildside-day`.
+- The shipped theme names are `corbusier-mockup-night` and
+  `corbusier-mockup-day`.
 
 ### PostCSS
 
@@ -192,9 +193,9 @@ toasts. The codebase also depends on:
 This gives the repository a Radix-behaviour plus Tailwind/DaisyUI-presentation
 shape, rather than a single monolithic component framework.
 
-## Localisation stack
+## Localization stack
 
-Localisation is one of the more specialised parts of this stack.
+Localization is one of the more specialized parts of this stack.
 
 - `src/i18n.ts` configures `i18next`.
 - `react-i18next` integrates translations with React.
@@ -220,15 +221,14 @@ domain-specific layer rather than a foundational part of the general front-end
 stack. The map, tile, and location elements exist because Wildside is a
 map-based application with itinerary, quick-walk, and saved-route flows.
 
-- `src/app/components/wildside-map.tsx` lazy-loads `maplibre-gl` and its CSS.
-- The map uses the OpenMapTiles demo style as its base style.
-- The code registers the MapLibre RTL text plugin when the runtime supports
-  it.
-- Shared viewport and layer state is coordinated through
-  `src/app/features/map/map-state.tsx`.
+- The fuller map stack is expected to lazy-load `maplibre-gl` and its CSS.
+- OpenMapTiles-backed styling supplies the base map presentation.
+- The integration is expected to register the MapLibre RTL text plugin when
+  the runtime supports it.
+- Shared viewport and layer state should live in a dedicated map-state module.
 
-The map layer is therefore a real interactive map integration, not only a
-static mockup image.
+The map layer is therefore intended to be a real interactive map integration,
+not only a static mockup image.
 
 In the full v2a architecture, map-related persistence is also expected to
 touch the broader local-first stack:
@@ -289,7 +289,7 @@ The strict TypeScript settings in `tsconfig.json` include:
 
 ## Effective stack summary
 
-If you need the shortest accurate summary of the checked-in mockup, the current
+For the shortest accurate summary of the checked-in mockup, the current
 front-end stack is:
 
 - Bun for package management, scripts, and the primary test runner,
@@ -299,7 +299,7 @@ front-end stack is:
 - Tailwind CSS v4 plus DaisyUI v5 for styling,
 - Style Dictionary for generated design tokens and themes,
 - Radix UI primitives for interactive components,
-- i18next plus Fluent for localisation,
+- i18next plus Fluent for localization,
 - MapLibre GL JS for map screens,
 - Biome, TypeScript, Stylelint, Semgrep, and custom scripts for code quality,
   and
@@ -312,11 +312,11 @@ that stack:
 - OpenMapTiles-backed tile styling, and
 - location-centric UI and state for itinerary and route experiences.
 
-If you need the shortest accurate summary of the fuller v2a application
+For the shortest accurate summary of the fuller v2a application
 architecture, add:
 
 - Zustand for interactive state,
-- TanStack Query for server-state caching and synchronisation,
+- TanStack Query for server-state caching and synchronization,
 - Dexie for offline bundle and map tile storage, and
 - XState for explicit interaction orchestration where state machines are
   warranted.

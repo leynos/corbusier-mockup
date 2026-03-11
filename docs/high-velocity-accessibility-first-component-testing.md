@@ -10,9 +10,9 @@ This architecture reflects recent tooling decisions. Notably, we leverage the sp
 
 Initial experiments exposed a fundamental deadlock between Bun's default DOM simulation and the industry-standard accessibility engine, **`axe-core`**. Bun’s test runner is engineered for extreme speed and recommends using **Happy DOM** for simulating the browser environment. **Happy DOM** is a lightweight, fast implementation of browser APIs – but its quest for speed comes at a cost. It diverges from web standards in subtle ways that clash with `axe-core`.
 
-The most critical incompatibility lies in Happy DOM’s handling of the **`Node.isConnected`** property. This DOM API indicates if a node is attached to the document. `axe-core` relies on modifying `isConnected` during its DOM traversal. In Happy DOM, `isConnected` is implemented as a read-only property (and not fully standard), causing `axe-core` to throw runtime errors when it attempts to set it. In practice, this means any accessibility scan using `axe-core` fails outright under Happy DOM1. Community reports and library documentation confirm this issue: the maintainers of `vitest-axe` (a Vitest/Jest integration for axe) explicitly warn that their matcher is **incompatible** with Happy DOM environments.
+The most critical incompatibility lies in Happy DOM’s handling of the **`Node.isConnected`** property. This DOM API indicates if a node is attached to the document. `axe-core` relies on modifying `isConnected` during its DOM traversal. In Happy DOM, `isConnected` is implemented as a read-only property (and not fully standard), causing `axe-core` to throw runtime errors when it attempts to set it. In practice, this means any accessibility scan using `axe-core` fails outright under Happy DOM.[^1] Community reports and library documentation confirm this issue: the maintainers of `vitest-axe` (a Vitest/Jest integration for axe) explicitly warn that their matcher is **incompatible** with Happy DOM environments.
 
-Unfortunately, Bun’s test runner **does not yet support** the more standards-compliant **JSDOM** environment (the de facto choice for Node-based DOM testing). JSDOM would solve the `isConnected` issue, but Bun cannot use it as a drop-in replacement at this time2. This presents a catch-22:
+Unfortunately, Bun’s test runner **does not yet support** the more standards-compliant **JSDOM** environment (the de facto choice for Node-based DOM testing). JSDOM would solve the `isConnected` issue, but Bun cannot use it as a drop-in replacement at this time.[^2] This presents a catch-22:
 
 - Bun’s recommended path for DOM tests is Happy DOM (for speed).
 
@@ -42,7 +42,7 @@ By introducing a Node+JSDOM harness for `axe-core`, we unblock our accessibility
 
 Even with JSDOM enabling `axe-core` scans, it’s important to set realistic expectations. **No simulated DOM environment (Happy DOM or JSDOM) can replace a real browser for certain accessibility validations.** JSDOM is purely a DOM parser and engine; it does **not** perform visual rendering, apply CSS layout, or run the browser’s accessibility tree computations. This means some accessibility rules are beyond its scope.
 
-The official Axe documentation notes "limited support for JSDOM" and advises disabling rules that are known to yield false results in a headless DOM3. The most prominent example is the **color contrast** rule. Verifying color contrast requires computing rendered text colors against background pixels – something impossible without an actual rendering engine (JSDOM has no concept of pixels or CSS cascade in effect). Any `axe-core` rule that depends on actual rendering or CSS will fail or produce irrelevant results under JSDOM. Besides `color-contrast`, other rules in this category include:
+The official Axe documentation notes "limited support for JSDOM" and advises disabling rules that are known to yield false results in a headless DOM.[^3] The most prominent example is the **color contrast** rule. Verifying color contrast requires computing rendered text colors against background pixels – something impossible without an actual rendering engine (JSDOM has no concept of pixels or CSS cascade in effect). Any `axe-core` rule that depends on actual rendering or CSS will fail or produce irrelevant results under JSDOM. Besides `color-contrast`, other rules in this category include:
 
 - **Target size** (minimum touch target dimensions)
 
@@ -219,10 +219,11 @@ see the trade-off.
 
 *Example:* In the `GlobalControls` component test, instead of selecting a toggle button by an ID or class, we query it by its accessible name:
 
-```
-tsxCopy code`const displayToggle = mountNode.querySelector("button[aria-label='Switch to Full View']");
-expect(displayToggle).toBeTruthy();
-`
+```tsx
+const displayToggle = screen.getByRole("button", {
+  name: "Switch to Full View",
+});
+expect(displayToggle).toBeInTheDocument();
 ```
 
 Here we rely on the presence of `aria-label="Switch to Full View"` on the button. If that label were missing or changed, the test would fail – which is good, because the accessible contract of the UI changed. In a future refactor, we might rewrite such a query using Testing Library’s `getByRole('button', { name: 'Switch to Full View' })` for clarity. Either way, the test asserts something a screen reader user would care about: that there is a button with that label.
@@ -722,8 +723,9 @@ By modernizing the original design to use **Bun for speed** and a **Node assist 
 
 ## Footnotes
 
-- *Happy DOM issue tracker – documented incompatibility of `Node.isConnected` implementation with axe-core’s expectations.* ↩
-
-- *Bun GitHub issue #3554 – tracking request for JSDOM support in Bun’s test runner (unresolved as of 2025).* ↩
-
-- *Deque `axe-core` documentation – notes on JSDOM support and rules like color-contrast being inapplicable in headless DOM.* ↩
+[^1]: Happy DOM issue tracker – documented incompatibility of
+  `Node.isConnected` implementation with axe-core’s expectations.
+[^2]: Bun GitHub issue #3554 – tracking request for JSDOM support in Bun’s
+  test runner (unresolved as of 2025).
+[^3]: Deque `axe-core` documentation – notes on JSDOM support and rules like
+  `color-contrast` being inapplicable in headless DOM.

@@ -1,6 +1,6 @@
 # Tailwind CSS v4 LLM Development Guidelines
 
-You are an expert web developer specializing in Tailwind CSS v4. Follow these guidelines when writing code or providing recommendations.
+This guide provides expert-level Tailwind CSS v4 implementation guidance for modern web applications.
 
 ## Core Principles
 
@@ -27,7 +27,7 @@ export default defineConfig({
 
 ### Package Installation
 ```bash
-npm install tailwindcss@next @tailwindcss/vite@next
+npm install tailwindcss @tailwindcss/vite
 ```
 
 ## Configuration (CSS-First)
@@ -371,7 +371,7 @@ src/
 3. Update deprecated utility classes
 4. Replace `@layer utilities` with `@utility`
 5. Test in modern browsers only
-6. Use the official upgrade tool: `npx @tailwindcss/upgrade@next`
+6. Use the official upgrade tool: `npx @tailwindcss/upgrade`
 
 ## Complete Utility Class Reference
 
@@ -1358,7 +1358,7 @@ npm list | grep postcss
 
 ### Automated Migration
 ```bash
-npx @tailwindcss/upgrade@next
+npx @tailwindcss/upgrade
 ```
 
 ### Manual Verification

@@ -8,10 +8,10 @@ A design language brief for the Corbusier AI agent orchestration platform.
 
 ### User need
 
-As a software development team lead or DevOps engineer, I need to
-coordinate multiple AI agents across complex development workflows, so that
-my team maintains consistent governance, quality visibility, and audit
-traceability across all agent-mediated work.
+Software development team leads and DevOps engineers need to coordinate
+multiple AI agents across complex development workflows so that consistent
+governance, quality visibility, and audit traceability are maintained across
+all agent-mediated work.
 
 ### Business need
 
@@ -532,7 +532,7 @@ information the text does not.
 | Palette modal | Focus trap, return, Escape | 2.1.2 |
 | Shimmer animation | `prefers-reduced-motion` gated | 2.3.3 |
 | Chart colours | Shape/pattern + colour always | 1.4.1 |
-| Chamfer focus ring on Firefox/Safari | `clip-path` fallback clips outline; inset shadow preserves border; focus remains visible via `:focus-visible` outline on non-clipped edges. Acceptable until `corner-shape` ships cross-browser | 2.4.11 |
+| Chamfer focus ring on Firefox/Safari | SVG polygon implementation keeps the outline independent of the card fill geometry; focus remains visible via `:focus-visible` outline and non-scaling stroke on the chamfer frame. | 2.4.11 |
 
 ---
 

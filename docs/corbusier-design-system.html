@@ -469,10 +469,10 @@ body {
       <p class="ds-version">v0.4.2 — Polychromie Architecturale · Dynamic 45° chamfer with SVG fill</p>
     </div>
     <div class="ds-theme-toggle" role="radiogroup" aria-label="Theme">
-      <button class="active" aria-label="Light theme" onclick="setTheme('light')">
+      <button type="button" class="active" role="radio" aria-checked="true" aria-label="Light theme" data-theme="light" onclick="setTheme('light')">
         <i data-lucide="sun" style="width:16px;height:16px"></i>
       </button>
-      <button aria-label="Dark theme" onclick="setTheme('dark')">
+      <button type="button" role="radio" aria-checked="false" aria-label="Dark theme" data-theme="dark" onclick="setTheme('dark')">
         <i data-lucide="moon" style="width:16px;height:16px"></i>
       </button>
     </div>
@@ -688,26 +688,26 @@ body {
 
     <h3 class="ds-subsection-title">Standard</h3>
     <div class="ds-button-row">
-      <button class="btn btn-action"><i data-lucide="play" style="width:14px;height:14px"></i> Start Task</button>
-      <button class="btn btn-teal"><i data-lucide="message-square" style="width:14px;height:14px"></i> View Conversation</button>
-      <button class="btn btn-secondary"><i data-lucide="git-branch" style="width:14px;height:14px"></i> Associate Branch</button>
-      <button class="btn btn-ghost"><i data-lucide="eye" style="width:14px;height:14px"></i> Details</button>
-      <button class="btn btn-danger"><i data-lucide="trash-2" style="width:14px;height:14px"></i> Abandon</button>
+      <button type="button" class="btn btn-action"><i data-lucide="play" style="width:14px;height:14px"></i> Start Task</button>
+      <button type="button" class="btn btn-teal"><i data-lucide="message-square" style="width:14px;height:14px"></i> View Conversation</button>
+      <button type="button" class="btn btn-secondary"><i data-lucide="git-branch" style="width:14px;height:14px"></i> Associate Branch</button>
+      <button type="button" class="btn btn-ghost"><i data-lucide="eye" style="width:14px;height:14px"></i> Details</button>
+      <button type="button" class="btn btn-danger"><i data-lucide="trash-2" style="width:14px;height:14px"></i> Abandon</button>
     </div>
 
     <h3 class="ds-subsection-title">Small</h3>
     <div class="ds-button-row">
-      <button class="btn btn-action btn-sm">Add to Backlog</button>
-      <button class="btn btn-teal btn-sm">Open PR</button>
-      <button class="btn btn-secondary btn-sm">Dismiss</button>
-      <button class="btn btn-ghost btn-sm">Cancel</button>
+      <button type="button" class="btn btn-action btn-sm">Add to Backlog</button>
+      <button type="button" class="btn btn-teal btn-sm">Open PR</button>
+      <button type="button" class="btn btn-secondary btn-sm">Dismiss</button>
+      <button type="button" class="btn btn-ghost btn-sm">Cancel</button>
     </div>
 
     <h3 class="ds-subsection-title">Disabled</h3>
     <div class="ds-button-row">
-      <button class="btn btn-action" disabled>Start Task</button>
-      <button class="btn btn-teal" disabled>View Conversation</button>
-      <button class="btn btn-secondary" disabled>Associate Branch</button>
+      <button type="button" class="btn btn-action" disabled>Start Task</button>
+      <button type="button" class="btn btn-teal" disabled>View Conversation</button>
+      <button type="button" class="btn btn-secondary" disabled>Associate Branch</button>
     </div>
   </section>
 
@@ -773,7 +773,7 @@ body {
           <div class="ds-card-body">Agent backend · Anthropic · v1.0.0 · Streaming ✓ · Tools ✓</div>
           <div class="ds-card-footer">
             <span style="font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">Heartbeat: 2s ago</span>
-            <button class="btn btn-ghost btn-sm"><i data-lucide="settings" style="width:14px;height:14px"></i> Configure</button>
+            <button type="button" class="btn btn-ghost btn-sm"><i data-lucide="settings" style="width:14px;height:14px"></i> Configure</button>
           </div>
         </div>
       </div>
@@ -915,7 +915,7 @@ body {
       <div class="ds-palette">
         <div class="ds-palette-input">
           <i data-lucide="search" style="width:16px;height:16px;color:var(--text-tertiary);flex-shrink:0"></i>
-          <input type="text" placeholder="Search tasks, conversations, commands…" value="branch track">
+          <input type="text" aria-label="Command palette search" placeholder="Search tasks, conversations, commands…" value="branch track">
         </div>
         <div class="ds-palette-results">
           <div class="ds-palette-group-label">Tasks</div>
@@ -1023,11 +1023,11 @@ body {
     <h2 class="ds-section-title">Focus Styles</h2>
     <p class="ds-body">3px solid teal outline, 2px offset. Teal focus ring matches the structural accent — navigation is part of the room. Tab through to see:</p>
     <div class="ds-focus-demo">
-      <button class="btn btn-action">Primary button</button>
-      <button class="btn btn-teal">Teal button</button>
-      <button class="btn btn-secondary">Secondary</button>
+      <button type="button" class="btn btn-action">Primary button</button>
+      <button type="button" class="btn btn-teal">Teal button</button>
+      <button type="button" class="btn btn-secondary">Secondary</button>
       <a href="#">A text link</a>
-      <input type="text" class="ds-input" style="width:200px" placeholder="Text input">
+      <input type="text" class="ds-input" style="width:200px" placeholder="Text input" aria-label="Focus demo text input">
     </div>
   </section>
 
@@ -1058,7 +1058,9 @@ body {
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   document.querySelectorAll('.ds-theme-toggle button').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('aria-label').toLowerCase().includes(theme));
+    const isActive = btn.dataset.theme === theme;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-checked', String(isActive));
   });
 }
 document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });

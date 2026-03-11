@@ -12,8 +12,8 @@ Status: DRAFT
 After this plan is complete, a developer can navigate to:
 
 - **`/` (Dashboard)** — and see the operations room: system health
-  gauges, KPI cards (active tasks, agent utilisation, tool success
-  rate, SLA status), a recent activity feed, and an agent utilisation
+  gauges, KPI cards (active tasks, agent utilization, tool success
+  rate, SLA status), a recent activity feed, and an agent utilization
   summary. All panels show static fixture data.
 - **`/tasks` (My Tasks)** — and see a filterable task queue with
   state, priority, and project filters. Each row shows task title,
@@ -46,7 +46,7 @@ stacks, and state machine controls.
   1. System health status (loudest)
   2. KPI cards
   3. Recent activity feed
-  4. Agent utilisation summary
+  4. Agent utilization summary
   5. Navigation (always visible, never dominant)
   6. Header (utility)
 - Task Detail must match the hierarchy:
@@ -175,7 +175,7 @@ Create `src/data/tasks.ts` defining:
 - A `Task` interface with fields: `id`, `title`, `description`,
   `state` (TaskState enum), `priority`, `project`, `assignee`,
   `dueDate`, `estimate`, `labels`, `subtasks`, `dependencies`
-  (blocks/blockedBy), `branchRef`, `pullRequestRef`, `activityLog`,
+  (`blockedBy`/`blocks`), `branchRef`, `pullRequestRef`, `activityLog`,
   `parentGoal`, `parentIdea`, `parentStep`, `relatedTasks`.
 - A `TaskState` enum: `draft`, `in_progress`, `in_review`, `paused`,
   `done`, `abandoned`.
@@ -188,13 +188,13 @@ Create `src/data/tasks.ts` defining:
 
 Create `src/data/dashboard.ts` defining:
 
-- KPI data: active task count, agent utilisation %, tool success
+- KPI data: active task count, agent utilization %, tool success
   rate %, SLA P95 latency.
 - System health: status (healthy/degraded/critical), component
   health breakdown.
 - Recent activity: 10–15 timestamped events (state transitions, tool
   calls, agent turns).
-- Agent utilisation: list of backends with name, status, turn count.
+- Agent utilization: list of backends with name, status, turn count.
 
 ### Milestone 2: Reusable UI components
 
@@ -233,11 +233,11 @@ matching the design spec. Four panels:
 2. **KPI cards** — A 4-column responsive grid of `KpiCard` components.
 3. **Activity feed** — A card containing an `ActivityTimeline`
    rendering the 10 most recent events.
-4. **Agent utilisation** — A card listing active backends with name,
+4. **Agent utilization** — A card listing active backends with name,
    status badge, and turn count.
 
 Use the hierarchy from section 5 of the design language: health is
-loudest, then KPIs, then feed, then utilisation.
+loudest, then KPIs, then feed, then utilization.
 
 ### Milestone 4: My Tasks page
 
@@ -264,8 +264,8 @@ Decompose into sub-components under
   buttons to show.
 - **`subtask-checklist.tsx`** — Ordered subtask list with check/
   uncheck icons and active highlight.
-- **`dependency-panel.tsx`** — Two sections: "Dependencies (Blocks
-  This Task)" and "Blocked By This Task". Each shows cards for
+- **`dependency-panel.tsx`** — Two sections: "Blocked By" bound to
+  `blockedBy` and "Blocks" bound to `blocks`. Each shows cards for
   related tasks with status, assignee, and completion date.
 - **`branch-pr-panel.tsx`** — Branch name and PR number with links.
 - **`task-metadata-panel.tsx`** — Assignee, due date, priority,

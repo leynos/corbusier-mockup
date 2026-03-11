@@ -1,6 +1,6 @@
-# Wildside Front‑End Semantic Linting — Implementation Guide (BiomeJS + GritQL first)
+# Corbusier Front‑End Semantic Linting — Implementation Guide (BiomeJS + GritQL first)
 
-**Audience:** Implementers working on `wildside-mockup` (and later `wildside`).  
+**Audience:** Implementers working on `corbusier-mockup` (and later `corbusier`).  
 **Goal:** Enforce semantic, accessible HTML with clean, token‑driven Tailwind/DaisyUI usage. Prefer **BiomeJS + GritQL** rules; fall back to **Semgrep**/**Stylelint** when they express rules better.  
 **Outcome:** Readable, queryable markup; reusable semantic classes via `@apply`; consistent DaisyUI/Radix‑aligned naming; single CLI for local + CI.
 
@@ -24,8 +24,8 @@
 
 ## 1) Repository Layout (suggested)
 
-```
-wildside-mockup/
+```text
+corbusier-mockup/
 ├─ src/
 │  ├─ app/...                 # TSX
 │  └─ styles/
@@ -135,9 +135,9 @@ pnpm add -D @biomejs/biome
 }
 ```
 
-> Biome’s current Grit integration accepts one pattern per file. The repository therefore keeps the rules granular (for example, separate files for `<div>` and `<span>` button misuse). If the plugin grows support for multi‑pattern files we can collapse this list back into fewer modules.
+> Biome’s current Grit integration accepts one pattern per file. The repository therefore keeps the rules granular (for example, separate files for `<div>` and `<span>` button misuse). If the plugin grows support for multi‑pattern files, this list can be collapsed into fewer modules.
 
-> If your Biome build doesn’t natively load GritQL, invoke a small Node wrapper that executes Grit rules and prints Biome‑style diagnostics. Keep the same paths/thresholds.
+> When a Biome build does not natively load GritQL, use a small Node wrapper that executes Grit rules and prints Biome‑style diagnostics. Maintain the same paths and thresholds.
 
 **`tools/semantic-lint.config.json`** (thresholds & policy)
 ```json
@@ -145,7 +145,7 @@ pnpm add -D @biomejs/biome
   "repeatMinClasses": 4,
   "repeatMinOccurrences": 2,
   "maxClasslistLength": 24,
-  "allowProjectPrefixes": ["btn", "card", "nav__", "form-", "ws-"],
+  "allowProjectPrefixes": ["btn", "card", "nav__", "form-", "app-"],
   "disallowRawHex": true,
   "nearDuplicateClasses": {
     "minTokenCount": 4,
@@ -334,7 +334,7 @@ pnpm add -D stylelint stylelint-declaration-strict-value
 
 **`tools/stylelint.config.cjs`**
 ```js
-export default {
+module.exports = {
   plugins: ["stylelint-declaration-strict-value"],
   rules: {
     // Disallow hex/named colors; require tokens or Tailwind classes
@@ -354,7 +354,7 @@ export default {
       "/^(margin|padding|gap|inset|top|right|bottom|left)$/": ["px"]
     }
   }
-}
+};
 ```
 
 > We’re **not** using Stylelint for general formatting; only token enforcement and a few hygiene rules.

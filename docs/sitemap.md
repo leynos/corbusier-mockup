@@ -300,7 +300,7 @@ Theme toggle (light/dark), layout density, and SSE reconnection preferences.
 
 The sidebar is persistent across all views:
 
-```
+```text
 MAINFRAME
   ├─ Dashboard
   ├─ My Tasks

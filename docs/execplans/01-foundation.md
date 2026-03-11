@@ -84,7 +84,7 @@ constraints; the following apply everywhere.
 - **Icons**: `@tabler/icons-react` for primary iconography;
   `@radix-ui/react-icons` as supplement. Class composition with
   `clsx`.
-- **Localisation**: i18next with Fluent `.ftl` bundles
+- **Localization**: i18next with Fluent `.ftl` bundles
   (`i18next-fluent` + `i18next-fluent-backend`). Locale files in
   `public/locales/<locale>/common.ftl`.
 - **Testing**: Bun for unit/component tests (Happy DOM + Testing
@@ -549,8 +549,7 @@ WCAG 2.2 AA.
 
 ## Concrete steps
 
-All commands run from the repository root
-(`/data/leynos/Projects/corbusier-mockup`).
+All commands run from the repository root.
 
 ### Milestone 1
 

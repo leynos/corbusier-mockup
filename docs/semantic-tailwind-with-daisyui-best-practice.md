@@ -25,7 +25,7 @@ Create a single entry stylesheet (e.g., `app.css`).
 }
 ```
 
-If you keep your components in unusual places, add explicit sources:
+When components are stored in unusual places, add explicit sources:
 
 ```css
 /* Tailwind v4: help the scanner find templates when needed */
@@ -65,7 +65,9 @@ The cascade should flow so that **inline utilities win** over broad component st
 </main>
 ```
 
-Use native elements first. Where you need a button, use `<button>`; for navigation, use `<nav>`. This improves keyboard behaviour, form semantics, and SR (screen reader) output without extra ceremony.
+Use native elements first. Where a button is needed, use `<button>`; for
+navigation, use `<nav>`. This improves keyboard behaviour, form semantics, and
+SR (screen reader) output without extra ceremony.
 
 ---
 
@@ -186,7 +188,11 @@ Example for a menu item:
 </div>
 ```
 
-> **Note:** Variants like `data-[state=open]:…` work with **Tailwind utilities** (e.g., `bg-primary`, `ring-2`). They won’t magically prefix non‑utility classes such as `btn-primary`. If you need to flip a daisyUI variant by state, compute the class in your component (`clsx(isOn && "btn-primary")`).
+> **Note:** Variants like `data-[state=open]:…` work with **Tailwind
+> utilities** (e.g., `bg-primary`, `ring-2`). They won’t magically prefix
+> non‑utility classes such as `btn-primary`. When a daisyUI variant must flip
+> by state, compute the class in the component
+> (`clsx(isOn && "btn-primary")`).
 
 ---
 
@@ -256,7 +262,7 @@ Markup stays semantic:
 > state through selectors. This mirrors daisyUI’s approach and keeps all visual
 > logic in the stylesheet instead of scattering utility soup through JSX.
 >
-> **Ordering hint:** When your markup keeps Tailwind utilities (e.g. `bg-base-200/60`
+> **Ordering hint:** When markup keeps Tailwind utilities (e.g. `bg-base-200/60`
 > or `text-base-content/70`) alongside a semantic class, place the stateful
 > selectors in the `@layer utilities` block so they compile *after* the inline
 > utilities. Otherwise those utilities will win the cascade and your state
@@ -430,7 +436,9 @@ Tailwind v4 lets you reference custom properties in arbitrary values without wri
 
 ### 11.5 Project utilities that *feel* first‑class
 
-Where you need semantic *wrappers*, register them as **custom utilities** so they inherit variants (`hover:`, `md:`, `data-[state=...]`) like any Tailwind class.
+Where semantic *wrappers* are needed, register them as **custom utilities** so
+they inherit variants (`hover:`, `md:`, `data-[state=...]`) like any Tailwind
+class.
 
 ```css
 /* A semantic CTA built from tokens (no component class @apply) */

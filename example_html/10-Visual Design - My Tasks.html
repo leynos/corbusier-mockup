@@ -80,14 +80,14 @@
                     </nav>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                    <button type="button" aria-label="Open menu" class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <div class="relative hidden md:block">
                         <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
-                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <input type="text" aria-label="Global search" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                     </div>
-                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                    <button type="button" aria-label="View notifications" class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
                         <i class="fa-solid fa-bell text-lg"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
                     </button>
@@ -115,10 +115,10 @@
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <button type="button" class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                         <i class="fa-solid fa-download mr-2"></i>Export
                     </button>
-                    <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                    <button type="button" class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
                         <i class="fa-solid fa-plus mr-2"></i>Start Task
                     </button>
                 </div>
@@ -197,15 +197,15 @@
             <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Search Tasks</label>
+                        <label for="searchInput" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Search Tasks</label>
                         <div class="relative">
                             <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
-                            <input type="text" placeholder="Search by title, ID, or description..." class="w-full pl-9 pr-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <input type="text" id="searchInput" placeholder="Search by title, ID, or description..." class="w-full pl-9 pr-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Status</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="statusSelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Status</label>
+                        <select id="statusSelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>All Statuses</option>
                             <option>In Progress</option>
                             <option>Pending</option>
@@ -215,8 +215,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Priority</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="prioritySelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Priority</label>
+                        <select id="prioritySelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>All Priorities</option>
                             <option>Critical</option>
                             <option>High</option>
@@ -225,8 +225,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Label</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="labelSelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Label</label>
+                        <select id="labelSelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>All Labels</option>
                             <option>Bug</option>
                             <option>Feature</option>
@@ -238,8 +238,8 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Milestone</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="milestoneSelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Milestone</label>
+                        <select id="milestoneSelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>All Milestones</option>
                             <option>v3.0 Release</option>
                             <option>Q1 2024</option>
@@ -248,8 +248,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Assignee</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="assigneeSelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Assignee</label>
+                        <select id="assigneeSelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>All Assignees</option>
                             <option>John Doe (Me)</option>
                             <option>Sarah Chen</option>
@@ -259,8 +259,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Sort By</label>
-                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <label for="sortBySelect" class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Sort By</label>
+                        <select id="sortBySelect" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
                             <option>Due Date (Earliest)</option>
                             <option>Due Date (Latest)</option>
                             <option>Priority (High to Low)</option>
@@ -271,10 +271,10 @@
                         </select>
                     </div>
                     <div class="flex items-end gap-2">
-                        <button class="flex-1 px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                        <button type="button" class="flex-1 px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
                             <i class="fa-solid fa-filter mr-2"></i>Apply Filters
                         </button>
-                        <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <button type="button" aria-label="Reset filters" class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                             <i class="fa-solid fa-rotate-left"></i>
                         </button>
                     </div>
@@ -292,10 +292,10 @@
                             <span class="text-sm font-mono text-corbusier-gray ml-2">(24 tasks)</span>
                         </h2>
                         <div class="flex items-center gap-2">
-                            <button class="px-3 py-1.5 text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                            <button type="button" class="px-3 py-1.5 text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
                                 <i class="fa-solid fa-table-cells mr-1"></i>Card View
                             </button>
-                            <button class="px-3 py-1.5 text-xs font-semibold text-white bg-corbusier-blue rounded-md">
+                            <button type="button" class="px-3 py-1.5 text-xs font-semibold text-white bg-corbusier-blue rounded-md">
                                 <i class="fa-solid fa-list mr-1"></i>List View
                             </button>
                         </div>
@@ -306,14 +306,14 @@
                     
                     <div id="task-item-1" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-1" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-corbusier-blue/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-code text-corbusier-blue"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Implement user authentication flow</h3>
+                                        <h3 id="task-title-1" class="font-semibold text-corbusier-charcoal mb-1">Implement user authentication flow</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1247 • Platform API v3</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-bold uppercase rounded-full flex-shrink-0">High</span>
@@ -343,16 +343,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -364,14 +364,14 @@
 
                     <div id="task-item-2" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-2" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-bug text-red-600"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Fix API rate limiting issue</h3>
+                                        <h3 id="task-title-2" class="font-semibold text-corbusier-charcoal mb-1">Fix API rate limiting issue</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1248 • Platform API v3</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Critical</span>
@@ -396,16 +396,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -417,14 +417,14 @@
 
                     <div id="task-item-3" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-3" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-corbusier-teal/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-database text-corbusier-teal"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Optimize database queries</h3>
+                                        <h3 id="task-title-3" class="font-semibold text-corbusier-charcoal mb-1">Optimize database queries</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1249 • Data Pipeline Upgrade</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Medium</span>
@@ -453,16 +453,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -474,14 +474,14 @@
 
                     <div id="task-item-4" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-4" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-paint-brush text-purple-600"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Update dashboard UI components</h3>
+                                        <h3 id="task-title-4" class="font-semibold text-corbusier-charcoal mb-1">Update dashboard UI components</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1250 • Platform API v3</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Low</span>
@@ -506,16 +506,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -527,14 +527,14 @@
 
                     <div id="task-item-5" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" checked class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" checked aria-labelledby="task-title-5" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-check-circle text-green-600"></i>
                             </div>
                             <div class="flex-1 min-w-0 opacity-75">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1 line-through">Add unit tests for API endpoints</h3>
+                                        <h3 id="task-title-5" class="font-semibold text-corbusier-charcoal mb-1 line-through">Add unit tests for API endpoints</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1251 • Platform API v3</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Medium</span>
@@ -559,10 +559,10 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -574,14 +574,14 @@
 
                     <div id="task-item-6" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-6" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-shield-halved text-corbusier-mustard"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Implement security headers</h3>
+                                        <h3 id="task-title-6" class="font-semibold text-corbusier-charcoal mb-1">Implement security headers</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1252 • Security Audit 2024</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-bold uppercase rounded-full flex-shrink-0">High</span>
@@ -606,16 +606,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -627,14 +627,14 @@
 
                     <div id="task-item-7" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-7" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-mobile-screen text-corbusier-orange"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Build offline sync mechanism</h3>
+                                        <h3 id="task-title-7" class="font-semibold text-corbusier-charcoal mb-1">Build offline sync mechanism</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1253 • Mobile App v2</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Critical</span>
@@ -659,16 +659,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -680,14 +680,14 @@
 
                     <div id="task-item-8" class="p-4 hover:bg-corbusier-cream/30 transition-colors">
                         <div class="flex items-start gap-4">
-                            <input type="checkbox" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
+                            <input type="checkbox" aria-labelledby="task-title-8" class="mt-1.5 w-4 h-4 text-corbusier-blue border-corbusier-border rounded focus:ring-corbusier-blue">
                             <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="fa-solid fa-file-lines text-corbusier-teal"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <div>
-                                        <h3 class="font-semibold text-corbusier-charcoal mb-1">Write API documentation</h3>
+                                        <h3 id="task-title-8" class="font-semibold text-corbusier-charcoal mb-1">Write API documentation</h3>
                                         <p class="text-xs text-corbusier-gray font-mono">TASK-1254 • Platform API v3</p>
                                     </div>
                                     <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold uppercase rounded-full flex-shrink-0">Medium</span>
@@ -711,16 +711,16 @@
                                     <div class="flex items-center gap-2">
                                         <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-7.jpg" alt="avatar" />
                                         <div class="flex items-center gap-1">
-                                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
+                                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-bold hover:bg-ibm-blue transition-colors">
                                                 <i class="fa-solid fa-arrow-right mr-1"></i>Open
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="Start task" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-play"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View conversation" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-comments"></i>
                                             </button>
-                                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                            <button type="button" aria-label="View branch" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                                 <i class="fa-solid fa-code-branch"></i>
                                             </button>
                                         </div>
@@ -736,13 +736,13 @@
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-corbusier-gray">Showing 8 of 24 tasks</p>
                         <div class="flex items-center gap-2">
-                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <button type="button" aria-label="Previous page" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </button>
-                            <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-sm font-bold">1</button>
-                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">2</button>
-                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">3</button>
-                            <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <button type="button" class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-sm font-bold">1</button>
+                            <button type="button" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">2</button>
+                            <button type="button" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">3</button>
+                            <button type="button" aria-label="Next page" class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </div>

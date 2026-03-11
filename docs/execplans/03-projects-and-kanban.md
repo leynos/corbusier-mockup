@@ -133,10 +133,16 @@ Create `src/data/projects.ts` defining:
   `dateRange`, `status` (active/inactive/completed), `description`,
   `team` (array of assignees), `taskCounts` per state.
 - 3 fixture projects: Apollo-Guidance (active, space navigation
-  system), Manhattan-Logistics (active, supply chain orchestration),
-  Skunkworks-Alpha (inactive, experimental agent framework).
+  system, `taskCounts: { draft: 4, in_progress: 3, in_review: 2,
+  paused: 1, done: 5, abandoned: 0 }`), Manhattan-Logistics (active,
+  supply chain orchestration, `taskCounts: { draft: 3,
+  in_progress: 4, in_review: 1, paused: 0, done: 6, abandoned: 0 }`),
+  Skunkworks-Alpha (inactive, experimental agent framework,
+  `taskCounts: { draft: 2, in_progress: 0, in_review: 0, paused: 2,
+  done: 1, abandoned: 3 }`).
 - A function to get tasks grouped by state for a given project (using
-  the task fixtures from plan 02).
+  the task fixtures from plan 02), returning both grouped task arrays
+  and the derived `taskCounts` object used by the Kanban headers.
 
 ### Milestone 2: Project list page
 
@@ -256,5 +262,67 @@ export interface Project {
   readonly status: "active" | "inactive" | "completed";
   readonly description: string;
   readonly team: readonly Assignee[];
+  readonly taskCounts: Readonly<Record<TaskState, number>>;
+}
+```
+
+Fixture data in `src/data/projects.ts` should include `taskCounts` for
+Apollo-Guidance, Manhattan-Logistics, and Skunkworks-Alpha, while the
+grouping helper recomputes those counts from the task fixtures so the
+view model stays aligned with the documented source of truth.
+
+```tsx
+export const PROJECT_FIXTURES: readonly Project[] = [
+  {
+    slug: "apollo-guidance",
+    name: "Apollo-Guidance",
+    taskCounts: {
+      draft: 4,
+      in_progress: 3,
+      in_review: 2,
+      paused: 1,
+      done: 5,
+      abandoned: 0,
+    },
+  },
+  {
+    slug: "manhattan-logistics",
+    name: "Manhattan-Logistics",
+    taskCounts: {
+      draft: 3,
+      in_progress: 4,
+      in_review: 1,
+      paused: 0,
+      done: 6,
+      abandoned: 0,
+    },
+  },
+  {
+    slug: "skunkworks-alpha",
+    name: "Skunkworks-Alpha",
+    taskCounts: {
+      draft: 2,
+      in_progress: 0,
+      in_review: 0,
+      paused: 2,
+      done: 1,
+      abandoned: 3,
+    },
+  },
+];
+
+export function groupTasksByState(projectSlug: string, tasks: readonly Task[]) {
+  const grouped = getTasksForProject(projectSlug, tasks).reduce(
+    (accumulator, task) => {
+      accumulator[task.state].push(task);
+      return accumulator;
+    },
+    createEmptyTaskStateBuckets(),
+  );
+
+  return {
+    grouped,
+    taskCounts: countTasksByState(grouped),
+  };
 }
 ```
