@@ -411,15 +411,15 @@ every **machine-readable surface**.
 
 #### Sizes
 
-Chamfer depth is encoded in the SVG polygon coordinates. Four named
-sizes are available:
+Chamfer depth is a fixed pixel value, producing a true 45° cut
+regardless of the card's aspect ratio. Four named sizes are available:
 
-| Size | Polygon (standard) | Polygon (reversed) | Usage |
-|------|--------------------|--------------------|-------|
-| `sm` | `1,1 91,1 99,9 99,99 1,99` | `9,1 99,1 99,99 1,99 1,9` | Tags, inline code elements |
-| `md` | `1,1 82,1 99,18 99,99 1,99` | `18,1 99,1 99,99 1,99 1,18` | Task cards, code blocks, command expansions |
-| `lg` | `1,1 77,1 99,23 99,99 1,99` | `23,1 99,1 99,99 1,99 1,23` | Feature cards, detail panels |
-| `xl` | `1,1 72,1 99,28 99,99 1,99` | `28,1 99,1 99,99 1,99 1,28` | Hero panels |
+| Size | Depth (px) | Usage |
+|------|-----------|-------|
+| `sm` | 8 | Tags, inline code elements |
+| `md` | 16 | Task cards, code blocks, command expansions |
+| `lg` | 24 | Feature cards, detail panels |
+| `xl` | 32 | Hero panels |
 
 #### Orientation semantics
 
@@ -431,27 +431,31 @@ sizes are available:
 
 #### Implementation
 
-An inline SVG polygon stretched across the card with
-`preserveAspectRatio="none"` draws the chamfered border. The
-`vector-effect: non-scaling-stroke` property keeps the stroke width
-constant regardless of element size, so the border is always 1 CSS
-pixel. This approach works in every modern browser without
-feature-detection fallbacks or `@supports` blocks.
+An inline SVG polygon draws the chamfered border and background fill.
+The SVG's `viewBox` is set to the element's pixel dimensions via a
+`ResizeObserver`, and polygon coordinates are computed so the chamfer
+uses the same pixel distance on both axes — guaranteeing a true 45°
+angle at any aspect ratio. `vector-effect: non-scaling-stroke` keeps
+the border at 1 CSS pixel. This approach works in every modern
+browser without feature-detection fallbacks or `@supports` blocks.
 
-```html
-<!-- Standard orientation (top-right bevel) -->
-<div class="chamfer-card">
-  <svg class="chamfer-card__frame"
-       viewBox="0 0 100 100"
-       preserveAspectRatio="none"
-       aria-hidden="true">
-    <polygon points="1,1 82,1 99,18 99,99 1,99" />
-  </svg>
-  <div class="chamfer-card__content">
-    <!-- card content here -->
-  </div>
-</div>
+The React component `ChamferCard` handles all of this automatically.
+Its `fillClassName` prop sets the polygon fill (e.g.,
+`fill-base-100`), and `strokeClassName` sets the border colour (e.g.,
+`stroke-base-300`). The card background lives on the SVG polygon,
+not on the containing `<div>`.
+
+```tsx
+<ChamferCard
+  className="w-64 p-4"
+  fillClassName="fill-base-100"
+  strokeClassName="stroke-base-300"
+>
+  {/* card content */}
+</ChamferCard>
 ```
+
+The underlying CSS is minimal:
 
 ```css
 .chamfer-card { position: relative; }
@@ -465,7 +469,7 @@ feature-detection fallbacks or `@supports` blocks.
 }
 
 .chamfer-card__frame polygon {
-  fill: none;
+  fill: transparent;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -476,11 +480,12 @@ feature-detection fallbacks or `@supports` blocks.
 }
 ```
 
-The polygon coordinates sit 1 unit inward from each edge of the
-100 × 100 viewBox, giving the stroke room to render without clipping.
-The chamfer depth is encoded in the polygon points: the `md` size
-above cuts from (82, 1) to (99, 18). The reversed (top-left) variant
-mirrors the cut: `points="18,1 99,1 99,99 1,99 1,18"`.
+The `fill: transparent` default in the components layer is overridden
+by Tailwind `fill-*` utility classes on the polygon. A pure helper
+function `computePoints(w, h, chamfer, reversed)` produces the SVG
+polygon points string from the element's pixel dimensions and the
+chamfer depth. Coordinates sit 0.5 px inward from each edge (half
+the stroke width) to prevent stroke clipping.
 
 #### Where it applies
 
@@ -494,15 +499,16 @@ mirrors the cut: `points="18,1 99,1 99,99 1,99 1,18"`.
 - **Badges** — no. Too small to read the detail.
 - **Form inputs** — no. Fights native affordance.
 
-#### Border treatment
+#### Fill and border treatment
 
-The SVG polygon stroke **is** the border. Because `vector-effect:
-non-scaling-stroke` is applied, the stroke stays at the declared
-pixel width regardless of the element's dimensions. Stroke colour
-is set via a Tailwind `stroke-*` utility on the `<polygon>` element
-(e.g., `stroke-base-300` for the default border, `stroke-error` for
-the blocked state). No `clip-path`, `box-shadow`, or `@supports`
-hacks are needed.
+The SVG polygon carries both the card's background fill and its
+border stroke. Fill colour is set via a Tailwind `fill-*` utility
+(e.g., `fill-base-100`); stroke colour via a `stroke-*` utility
+(e.g., `stroke-base-300` for the default, `stroke-error` for the
+blocked state). Because `vector-effect: non-scaling-stroke` is
+applied, the stroke stays at the declared pixel width regardless of
+the element's dimensions. No `clip-path`, `box-shadow`, or
+`@supports` hacks are needed.
 
 ### 6.5 Illustration direction
 

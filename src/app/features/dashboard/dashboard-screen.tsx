@@ -15,7 +15,11 @@ function ChamferDemo(): JSX.Element {
 
       <div className="flex flex-wrap gap-4">
         {/* Standard task card */}
-        <ChamferCard className="w-64 bg-base-100 p-4" strokeClassName="stroke-base-300">
+        <ChamferCard
+          className="w-64 p-4"
+          fillClassName="fill-base-100"
+          strokeClassName="stroke-base-300"
+        >
           <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
             Task card
           </p>
@@ -25,7 +29,12 @@ function ChamferDemo(): JSX.Element {
         </ChamferCard>
 
         {/* Blocked task card */}
-        <ChamferCard className="w-64 bg-base-100 p-4" reversed strokeClassName="stroke-error">
+        <ChamferCard
+          className="w-64 p-4"
+          reversed
+          fillClassName="fill-base-100"
+          strokeClassName="stroke-error"
+        >
           <p className="text-[length:var(--font-size-sm)] font-semibold text-error">Blocked card</p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
             Reversed chamfer-md (top-left bevel)
@@ -34,7 +43,11 @@ function ChamferDemo(): JSX.Element {
       </div>
 
       {/* Code block demo */}
-      <ChamferCard className="bg-base-300/30 p-4" strokeClassName="stroke-base-300">
+      <ChamferCard
+        className="p-4"
+        fillClassName="fill-base-300/30"
+        strokeClassName="stroke-base-300"
+      >
         <pre className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/80">
           <code>{"const directive = await agent.plan(task);\nawait directive.execute();"}</code>
         </pre>

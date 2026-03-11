@@ -143,7 +143,7 @@ body {
 
 .ds-chamfer-card { position: relative; }
 .ds-chamfer-card__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.ds-chamfer-card__frame polygon { fill: none; stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ds-chamfer-card__frame polygon { fill: transparent; stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .ds-chamfer-card__content { position: relative; z-index: 1; }
 
 /* ═══════════════════════════════════════════════════
@@ -466,7 +466,7 @@ body {
     <div>
       <h1>Corbusier</h1>
       <p class="ds-subtitle">Design System Reference</p>
-      <p class="ds-version">v0.4.1 — Polychromie Architecturale · SVG chamfer frame</p>
+      <p class="ds-version">v0.4.2 — Polychromie Architecturale · Dynamic 45° chamfer with SVG fill</p>
     </div>
     <div class="ds-theme-toggle" role="radiogroup" aria-label="Theme">
       <button class="active" aria-label="Light theme" onclick="setTheme('light')">
@@ -590,35 +590,35 @@ body {
   <section class="ds-section" id="chamfer">
     <div class="ds-section-label">Tokens</div>
     <h2 class="ds-section-title">Punch-Card Chamfer</h2>
-    <p class="ds-body">The clipped top-right corner from mainframe punch cards. On an 80-column card, the chamfer tells the operator which way to feed it — orientation at a glance. Implemented with an inline SVG polygon stretched via <code>preserveAspectRatio="none"</code>. The <code>vector-effect: non-scaling-stroke</code> property keeps the border width constant. Works cross-browser without feature-detection fallbacks.</p>
+    <p class="ds-body">The clipped top-right corner from mainframe punch cards. On an 80-column card, the chamfer tells the operator which way to feed it — orientation at a glance. An inline SVG polygon draws both the border and the background fill. A <code>ResizeObserver</code> recomputes polygon points in pixel coordinates so the chamfer angle stays at exactly 45° regardless of the card's aspect ratio. <code>vector-effect: non-scaling-stroke</code> keeps the border at 1 CSS pixel. Works cross-browser without feature-detection fallbacks.</p>
 
     <h3 class="ds-subsection-title">Chamfer sizes</h3>
     <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
       <div>
-        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
-          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 91,1 99,9 99,99 1,99"/></svg>
-          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">sm</span>
+        <div class="ds-chamfer-card" style="height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 91,1 99,9 99,99 1,99" style="fill:var(--surface-elevated)"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">sm · 8 px</span>
         </div>
         <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">sm · Tags, inline</div>
       </div>
       <div>
-        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
-          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
-          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">md</span>
+        <div class="ds-chamfer-card" style="height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99" style="fill:var(--surface-elevated)"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">md · 16 px</span>
         </div>
         <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">md · Cards, code blocks</div>
       </div>
       <div>
-        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
-          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 77,1 99,23 99,99 1,99"/></svg>
-          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">lg</span>
+        <div class="ds-chamfer-card" style="height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 77,1 99,23 99,99 1,99" style="fill:var(--surface-elevated)"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">lg · 24 px</span>
         </div>
         <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">lg · Feature cards</div>
       </div>
       <div>
-        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
-          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 72,1 99,28 99,99 1,99"/></svg>
-          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">xl</span>
+        <div class="ds-chamfer-card" style="height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 72,1 99,28 99,99 1,99" style="fill:var(--surface-elevated)"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">xl · 32 px</span>
         </div>
         <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">xl · Hero panels</div>
       </div>
@@ -662,23 +662,20 @@ body {
     <h3 class="ds-subsection-title">Implementation</h3>
     <div class="ds-code-block">
       <svg class="ds-code-block__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
-      <div class="ds-code-block__content">/* SVG frame approach — works cross-browser, no fallback needed.
-   vector-effect: non-scaling-stroke keeps the border constant. */
+      <div class="ds-code-block__content">/* React component — fill and stroke on the SVG polygon.
+   ResizeObserver computes pixel coordinates for true 45°. */
 
-&lt;div class="chamfer-card"&gt;
-  &lt;svg class="chamfer-card__frame"
-       viewBox="0 0 100 100"
-       preserveAspectRatio="none"
-       aria-hidden="true"&gt;
-    &lt;polygon points="1,1 82,1 99,18 99,99 1,99" /&gt;
-  &lt;/svg&gt;
-  &lt;div class="chamfer-card__content"&gt;
-    &lt;!-- card content --&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
+&lt;ChamferCard
+  className="w-64 p-4"
+  fillClassName="fill-base-100"
+  strokeClassName="stroke-base-300"
+&gt;
+  {/* card content */}
+&lt;/ChamferCard&gt;
 
-/* Reversed (top-left bevel, blocked state) */
-&lt;polygon points="18,1 99,1 99,99 1,99 1,18" /&gt;</div>
+/* Reversed (blocked state) */
+&lt;ChamferCard reversed strokeClassName="stroke-error"
+  fillClassName="fill-base-100" /&gt;</div>
     </div>
   </section>
 
