@@ -3,6 +3,7 @@
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ChamferCard } from "../../components/chamfer-card";
 import { PlaceholderScreen } from "../placeholder-screen";
 
 function ChamferDemo(): JSX.Element {
@@ -14,28 +15,30 @@ function ChamferDemo(): JSX.Element {
 
       <div className="flex flex-wrap gap-4">
         {/* Standard task card */}
-        <div className="chamfer-md w-64 border border-base-300 bg-base-100 p-4">
+        <ChamferCard className="w-64 bg-base-100 p-4" strokeClassName="stroke-base-300">
           <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
             Task card
           </p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
             Standard chamfer-md (top-right bevel)
           </p>
-        </div>
+        </ChamferCard>
 
         {/* Blocked task card */}
-        <div className="chamfer-reversed-md w-64 border border-error bg-base-100 p-4">
+        <ChamferCard className="w-64 bg-base-100 p-4" reversed strokeClassName="stroke-error">
           <p className="text-[length:var(--font-size-sm)] font-semibold text-error">Blocked card</p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
             Reversed chamfer-md (top-left bevel)
           </p>
-        </div>
+        </ChamferCard>
       </div>
 
       {/* Code block demo */}
-      <pre className="chamfer-md border border-base-300 bg-base-300/30 p-4 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/80">
-        <code>{"const directive = await agent.plan(task);\nawait directive.execute();"}</code>
-      </pre>
+      <ChamferCard className="bg-base-300/30 p-4" strokeClassName="stroke-base-300">
+        <pre className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/80">
+          <code>{"const directive = await agent.plan(task);\nawait directive.execute();"}</code>
+        </pre>
+      </ChamferCard>
     </section>
   );
 }

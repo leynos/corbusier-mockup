@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corbusier — Design System Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS — POLYCHROMIE ARCHITECTURALE
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-pill: 999px;
+  --font-display: 'DM Sans', system-ui, sans-serif;
+  --font-body: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --transition-fast: 100ms ease-out;
+  --transition-base: 150ms ease-out;
+  --transition-slow: 200ms ease-in-out;
+
+}
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --surface-base: #E8E2D8;
+  --surface-elevated: #F4F0EA;
+  --surface-code: #DED8CC;
+  --surface-sidebar: #D5CFC4;
+  --surface-overlay: rgba(28, 51, 64, 0.45);
+
+  --text-primary: #1C3340;
+  --text-secondary: #5A5A58;
+  --text-tertiary: #8A8478;
+  --text-on-accent: #F4F0EA;
+
+  --accent-primary: #1A6E6E;
+  --accent-primary-hover: #155A5A;
+  --accent-primary-subtle: rgba(26, 110, 110, 0.10);
+  --accent-action: #BF6C4B;
+  --accent-action-hover: #A85D40;
+  --accent-action-subtle: rgba(191, 108, 75, 0.10);
+
+  --state-success: #5A6B48;
+  --state-success-subtle: rgba(90, 107, 72, 0.10);
+  --state-warning: #B08878;
+  --state-warning-subtle: rgba(176, 136, 120, 0.12);
+  --state-error: #A04535;
+  --state-error-subtle: rgba(160, 69, 53, 0.10);
+  --state-info: #6B7A8A;
+  --state-info-subtle: rgba(107, 122, 138, 0.10);
+
+  --border-default: #C5BDB0;
+  --border-strong: #9A9480;
+  --focus-ring: #1A6E6E;
+
+  --shadow-sm: 0 1px 2px rgba(28, 51, 64, 0.06);
+  --shadow-md: 0 4px 12px rgba(28, 51, 64, 0.08);
+  --shadow-lg: 0 8px 24px rgba(28, 51, 64, 0.12);
+}
+
+/* ── DARK THEME ── */
+[data-theme="dark"] {
+  --surface-base: #1C2426;
+  --surface-elevated: #262D30;
+  --surface-code: #1A2022;
+  --surface-sidebar: #212829;
+  --surface-overlay: rgba(0, 0, 0, 0.6);
+
+  --text-primary: #E8E2D8;
+  --text-secondary: #B5ADA2;
+  --text-tertiary: #7A7468;
+  --text-on-accent: #F4F0EA;
+
+  --accent-primary: #3AADAD;
+  --accent-primary-hover: #4CC0C0;
+  --accent-primary-subtle: rgba(58, 173, 173, 0.12);
+  --accent-action: #D4805E;
+  --accent-action-hover: #E09575;
+  --accent-action-subtle: rgba(212, 128, 94, 0.12);
+
+  --state-success: #7A9060;
+  --state-success-subtle: rgba(122, 144, 96, 0.12);
+  --state-warning: #C49A88;
+  --state-warning-subtle: rgba(196, 154, 136, 0.12);
+  --state-error: #C65A48;
+  --state-error-subtle: rgba(198, 90, 72, 0.12);
+  --state-info: #8A9AAA;
+  --state-info-subtle: rgba(138, 154, 170, 0.12);
+
+  --border-default: #333A3C;
+  --border-strong: #4A5254;
+  --focus-ring: #3AADAD;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* ═══════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: var(--font-body);
+  font-weight: 400; line-height: 1.55;
+  color: var(--text-primary);
+  background: var(--surface-base);
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+.skip-link {
+  position: absolute; top: -100%; left: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent-primary); color: var(--text-on-accent);
+  border-radius: var(--radius-md); font-weight: 600; z-index: 9999; text-decoration: none;
+}
+.skip-link:focus { top: var(--space-4); }
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ═══════════════════════════════════════════════════
+   PUNCH-CARD CHAMFER (SVG frame approach)
+   Orientation cut from mainframe punch cards.
+   Top-right corner bevelled at 45°.
+
+   An inline SVG polygon with preserveAspectRatio="none"
+   stretches to fill the card. vector-effect: non-scaling-stroke
+   keeps the border constant. Works cross-browser.
+   ═══════════════════════════════════════════════════ */
+
+.ds-chamfer-card { position: relative; }
+.ds-chamfer-card__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ds-chamfer-card__frame polygon { fill: none; stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ds-chamfer-card__content { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════ */
+
+.ds-page { max-width: 1120px; margin: 0 auto; padding: var(--space-10) var(--space-6); }
+
+.ds-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--space-12); padding-bottom: var(--space-8);
+  border-bottom: 2px solid var(--accent-primary);
+}
+.ds-header h1 { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.2; letter-spacing: -0.02em; }
+.ds-header .ds-subtitle { font-family: var(--font-body); font-size: 0.93rem; color: var(--text-secondary); margin-top: var(--space-1); }
+.ds-header .ds-version { font-family: var(--font-mono); font-size: 12px; color: var(--accent-primary); margin-top: var(--space-1); }
+
+.ds-section { margin-bottom: var(--space-12); }
+.ds-section-label {
+  font-family: var(--font-display); font-weight: 600; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-primary); margin-bottom: var(--space-2);
+}
+.ds-section-title { font-family: var(--font-display); font-weight: 700; font-size: 1.47rem; line-height: 1.3; margin-bottom: var(--space-6); }
+.ds-subsection-title { font-family: var(--font-display); font-weight: 600; font-size: 1.13rem; line-height: 1.35; margin-top: var(--space-8); margin-bottom: var(--space-4); }
+.ds-body { max-width: 65ch; color: var(--text-secondary); margin-bottom: var(--space-4); }
+.ds-body code { font-family: var(--font-mono); font-size: 0.87em; background: var(--surface-code); padding: 2px 6px; border-radius: var(--radius-sm); }
+
+/* ═══════════════════════════════════════════════════
+   COLOUR SWATCHES
+   ═══════════════════════════════════════════════════ */
+
+.ds-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.ds-swatch { border: 1px solid var(--border-default); border-radius: var(--radius-lg); overflow: hidden; }
+.ds-swatch-color { height: 56px; width: 100%; }
+.ds-swatch-info { padding: var(--space-3); background: var(--surface-elevated); }
+.ds-swatch-name { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-primary); }
+.ds-swatch-value { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); margin-top: 1px; }
+.ds-swatch-role { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); margin-top: var(--space-1); }
+
+/* ═══════════════════════════════════════════════════
+   TYPE SCALE
+   ═══════════════════════════════════════════════════ */
+
+.ds-type-sample { padding: var(--space-4) 0; border-bottom: 1px solid var(--border-default); }
+.ds-type-sample:last-child { border-bottom: none; }
+.ds-type-meta { display: flex; gap: var(--space-4); align-items: baseline; margin-bottom: var(--space-2); }
+.ds-type-meta span { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
+.ds-type-specimen-label { font-family: var(--font-display); font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-primary); }
+.ds-type-specimen-h1 { font-family: var(--font-display); font-weight: 700; font-size: 28px; line-height: 1.3; letter-spacing: -0.02em; }
+.ds-type-specimen-h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.35; }
+.ds-type-specimen-h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; line-height: 1.4; }
+.ds-type-specimen-body { font-family: var(--font-body); font-weight: 400; font-size: 15px; line-height: 1.55; }
+.ds-type-specimen-body-sm { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
+.ds-type-specimen-mono { font-family: var(--font-mono); font-weight: 400; font-size: 14px; line-height: 1.5; }
+.ds-type-specimen-mono-sm { font-family: var(--font-mono); font-weight: 400; font-size: 12px; line-height: 1.45; color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════════════════
+   SPACING SCALE
+   ═══════════════════════════════════════════════════ */
+
+.ds-spacing-row { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-2) 0; }
+.ds-spacing-bar { height: 20px; background: var(--accent-primary-subtle); border: 1px solid var(--accent-primary); border-radius: var(--radius-sm); min-width: 4px; }
+.ds-spacing-label { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); min-width: 110px; }
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════ */
+
+.ds-button-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-4); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4); min-height: 36px;
+  font-family: var(--font-body); font-weight: 600; font-size: 14px; line-height: 1;
+  border-radius: var(--radius-md); border: none; cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast);
+  text-decoration: none;
+}
+.btn-action { background: var(--accent-action); color: var(--text-on-accent); }
+.btn-action:hover { background: var(--accent-action-hover); }
+.btn-teal { background: var(--accent-primary); color: var(--text-on-accent); }
+.btn-teal:hover { background: var(--accent-primary-hover); }
+.btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--surface-sidebar); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { background: var(--surface-sidebar); color: var(--text-primary); }
+.btn-danger { background: var(--state-error); color: var(--text-on-accent); }
+.btn-danger:hover { opacity: 0.9; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.btn-sm { padding: var(--space-1) var(--space-3); min-height: 28px; font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════
+   STATUS BADGES
+   ═══════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 3px 10px; font-family: var(--font-body); font-size: 12px;
+  font-weight: 600; line-height: 1; border-radius: var(--radius-pill);
+  border: 1px solid; white-space: nowrap;
+}
+.badge-icon { font-size: 11px; line-height: 1; }
+.badge-draft { background: transparent; color: var(--text-tertiary); border-color: var(--border-default); }
+.badge-in-progress { background: var(--accent-action-subtle); color: var(--accent-action); border-color: var(--accent-action); }
+.badge-in-review { background: var(--state-info-subtle); color: var(--state-info); border-color: var(--state-info); }
+.badge-paused { background: var(--state-warning-subtle); color: var(--state-warning); border-color: var(--state-warning); }
+.badge-done { background: var(--state-success-subtle); color: var(--state-success); border-color: var(--state-success); }
+.badge-abandoned { background: transparent; color: var(--text-tertiary); border-color: var(--border-default); }
+.badge-blocked { background: var(--state-error-subtle); color: var(--state-error); border-color: var(--state-error); }
+
+/* ═══════════════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════════════ */
+
+.ds-card { background: var(--surface-elevated); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-5); transition: border-color var(--transition-base); }
+.ds-card-interactive:hover { border-color: var(--border-strong); }
+.ds-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3); }
+.ds-card-title { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.ds-card-meta { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); }
+.ds-card-body { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.ds-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border-default); }
+
+/* ═══════════════════════════════════════════════════
+   TASK CARD (Kanban)
+   ═══════════════════════════════════════════════════ */
+
+.ds-task-card {
+  position: relative;
+  background: var(--surface-elevated);
+  padding: var(--space-4);
+  transition: box-shadow var(--transition-base);
+  cursor: grab;
+}
+.ds-task-card:hover {
+  box-shadow: 0 2px 8px rgba(28, 51, 64, 0.08);
+}
+.ds-task-card__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ds-task-card__frame polygon { fill: none; stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ds-task-card__content { position: relative; z-index: 1; }
+
+/* Blocked variant: chamfer on the LEFT (card is backwards — something's wrong) */
+.ds-task-card-blocked .ds-task-card__frame polygon { stroke: var(--state-error); }
+.ds-task-card-tags { display: flex; gap: var(--space-1); margin-bottom: var(--space-2); }
+.ds-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: var(--radius-sm); text-transform: uppercase; letter-spacing: 0.04em; }
+.ds-tag-priority { background: var(--state-error-subtle); color: var(--state-error); }
+.ds-tag-category { background: var(--accent-primary-subtle); color: var(--accent-primary); }
+.ds-tag-feature { background: var(--state-success-subtle); color: var(--state-success); }
+.ds-task-card-title { font-family: var(--font-display); font-weight: 600; font-size: 14px; line-height: 1.35; margin-bottom: var(--space-2); }
+.ds-task-card-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.45; margin-bottom: var(--space-3); }
+.ds-task-card-footer { display: flex; align-items: center; justify-content: space-between; }
+.ds-task-card-id { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
+.ds-progress-bar { height: 4px; background: var(--border-default); border-radius: 2px; overflow: hidden; width: 60px; }
+.ds-progress-bar-fill { height: 100%; border-radius: 2px; transition: width var(--transition-slow); }
+.ds-avatar-stack { display: flex; }
+.ds-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--surface-elevated); margin-left: -6px;
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; color: var(--text-on-accent);
+}
+.ds-avatar:first-child { margin-left: 0; }
+
+/* ═══════════════════════════════════════════════════
+   FORM INPUTS
+   ═══════════════════════════════════════════════════ */
+
+.ds-form-group { margin-bottom: var(--space-4); }
+.ds-form-group label { display: block; font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--text-primary); margin-bottom: var(--space-1); }
+.ds-form-hint { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--space-2); }
+.ds-input {
+  display: block; width: 100%; height: 36px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-body); font-size: 14px; color: var(--text-primary);
+  background: var(--surface-elevated); border: 1px solid var(--border-default);
+  border-radius: var(--radius-md); transition: border-color var(--transition-fast);
+}
+.ds-input:hover { border-color: var(--border-strong); }
+.ds-input:focus { border-color: var(--accent-primary); outline: 3px solid var(--focus-ring); outline-offset: 0; }
+.ds-input-error { border-color: var(--state-error); }
+.ds-input-error:focus { outline-color: var(--state-error); }
+.ds-form-error { display: flex; align-items: center; gap: var(--space-1); font-size: 13px; color: var(--state-error); margin-top: var(--space-1); }
+.ds-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235A5A58' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+}
+
+/* ═══════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════ */
+
+.ds-sidebar { width: 240px; background: var(--surface-sidebar); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-4) 0; overflow: hidden; }
+.ds-sidebar-zone { padding: 0 var(--space-4); margin-top: var(--space-5); }
+.ds-sidebar-zone:first-child { margin-top: 0; }
+.ds-sidebar-zone-label { font-family: var(--font-display); font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: var(--space-2) var(--space-3); }
+.ds-sidebar-item {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: 6px var(--space-3); font-family: var(--font-body); font-size: 14px;
+  color: var(--text-secondary); border-radius: var(--radius-md); cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  text-decoration: none; border: none; background: none; width: 100%; text-align: left; min-height: 32px;
+}
+.ds-sidebar-item:hover { background: var(--surface-base); color: var(--text-primary); }
+.ds-sidebar-item-active { color: var(--text-primary); background: var(--surface-base); border-left: 3px solid var(--accent-primary); padding-left: 9px; font-weight: 600; }
+.ds-sidebar-item i { width: 16px; height: 16px; flex-shrink: 0; }
+.ds-sidebar-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ds-sidebar-status-active { background: var(--state-success); }
+.ds-sidebar-status-inactive { background: transparent; border: 1.5px solid var(--text-tertiary); }
+
+/* ═══════════════════════════════════════════════════
+   DATA TABLE
+   ═══════════════════════════════════════════════════ */
+
+.ds-table-wrapper { overflow-x: auto; border: 1px solid var(--border-default); border-radius: var(--radius-lg); }
+.ds-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.ds-table th { font-family: var(--font-body); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); text-align: left; padding: var(--space-3) var(--space-4); border-bottom: 2px solid var(--border-strong); background: var(--surface-elevated); white-space: nowrap; }
+.ds-table td { font-size: 13px; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border-default); min-height: 36px; vertical-align: middle; }
+.ds-table tbody tr:nth-child(even) { background: var(--surface-base); }
+.ds-table tbody tr:hover { background: var(--surface-sidebar); }
+
+/* ═══════════════════════════════════════════════════
+   COMMAND PALETTE
+   ═══════════════════════════════════════════════════ */
+
+.ds-palette-backdrop { position: relative; background: var(--surface-overlay); border-radius: var(--radius-lg); padding: var(--space-10) var(--space-6); display: flex; align-items: flex-start; justify-content: center; }
+.ds-palette { width: 100%; max-width: 560px; background: var(--surface-elevated); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+.ds-palette-input { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border-default); }
+.ds-palette-input input { flex: 1; border: none; background: transparent; font-family: var(--font-body); font-size: 15px; color: var(--text-primary); outline: none; }
+.ds-palette-input input::placeholder { color: var(--text-tertiary); }
+.ds-palette-results { padding: var(--space-2) 0; max-height: 300px; overflow-y: auto; }
+.ds-palette-group-label { font-family: var(--font-body); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-tertiary); padding: var(--space-2) var(--space-4); }
+.ds-palette-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-4); cursor: pointer; transition: background var(--transition-fast); }
+.ds-palette-item:hover, .ds-palette-item-active { background: var(--surface-sidebar); }
+.ds-palette-item-icon { width: 16px; height: 16px; color: var(--text-tertiary); flex-shrink: 0; }
+.ds-palette-item-text { font-size: 14px; color: var(--text-primary); }
+.ds-palette-item-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); margin-left: auto; }
+.ds-palette-footer { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-2) var(--space-4); border-top: 1px solid var(--border-default); font-size: 11px; color: var(--text-tertiary); }
+.ds-kbd { font-family: var(--font-mono); font-size: 11px; padding: 1px 5px; border: 1px solid var(--border-default); border-radius: var(--radius-sm); background: var(--surface-base); color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════════════════
+   CODE BLOCK
+   ═══════════════════════════════════════════════════ */
+
+.ds-code-block {
+  position: relative;
+  background: var(--surface-code);
+  padding: var(--space-4);
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.55;
+  overflow-x: auto; white-space: pre; color: var(--text-primary);
+}
+.ds-code-block__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ds-code-block__frame polygon { fill: none; stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ds-code-block__content { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════
+   KPI CARDS
+   ═══════════════════════════════════════════════════ */
+
+.ds-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.ds-kpi-card { background: var(--surface-elevated); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-5); }
+.ds-kpi-label { font-family: var(--font-body); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin-bottom: var(--space-2); }
+.ds-kpi-value { font-family: var(--font-display); font-weight: 700; font-size: 32px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ds-kpi-context { font-size: 13px; color: var(--text-secondary); margin-top: var(--space-1); }
+.ds-kpi-trend { display: inline-flex; align-items: center; gap: 2px; font-weight: 600; font-size: 13px; }
+.ds-kpi-trend-up { color: var(--state-success); }
+.ds-kpi-trend-down { color: var(--state-error); }
+
+/* ═══════════════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════════════ */
+
+.ds-theme-toggle { display: flex; align-items: center; gap: var(--space-2); padding: 4px; background: var(--surface-sidebar); border-radius: var(--radius-pill); border: 1px solid var(--border-default); }
+.ds-theme-toggle button { display: flex; align-items: center; justify-content: center; width: 32px; height: 28px; border: none; border-radius: var(--radius-pill); background: transparent; color: var(--text-tertiary); cursor: pointer; transition: background var(--transition-fast), color var(--transition-fast); }
+.ds-theme-toggle button.active { background: var(--surface-elevated); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+
+/* ═══════════════════════════════════════════════════
+   SKELETON
+   ═══════════════════════════════════════════════════ */
+
+.ds-skeleton { background: linear-gradient(90deg, var(--surface-sidebar) 25%, var(--surface-base) 50%, var(--surface-sidebar) 75%); background-size: 200% 100%; border-radius: var(--radius-md); }
+@media (prefers-reduced-motion: no-preference) { .ds-skeleton { animation: shimmer 1500ms linear infinite; } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ═══════════════════════════════════════════════════
+   ACTIVITY TIMELINE
+   ═══════════════════════════════════════════════════ */
+
+.ds-timeline-item { display: flex; gap: var(--space-3); padding: var(--space-3) 0; border-left: 2px solid var(--border-default); margin-left: 7px; padding-left: var(--space-4); position: relative; }
+.ds-timeline-item::before { content: ''; position: absolute; left: -5px; top: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--surface-elevated); border: 2px solid var(--border-strong); }
+.ds-timeline-item-teal::before { border-color: var(--accent-primary); background: var(--accent-primary); }
+.ds-timeline-item-action::before { border-color: var(--accent-action); background: var(--accent-action); }
+.ds-timeline-item-success::before { border-color: var(--state-success); background: var(--state-success); }
+.ds-timeline-content { flex: 1; }
+.ds-timeline-text { font-size: 13px; color: var(--text-primary); }
+.ds-timeline-time { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════════
+   UTILITY
+   ═══════════════════════════════════════════════════ */
+
+.ds-component-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-bottom: var(--space-6); }
+@media (max-width: 768px) { .ds-component-row { grid-template-columns: 1fr; } }
+.ds-focus-demo { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+.ds-focus-demo a { color: var(--accent-primary); text-decoration: underline; text-underline-offset: 2px; padding: var(--space-1); }
+
+/* Data-viz palette strip */
+.ds-viz-strip { display: flex; gap: 2px; margin-bottom: var(--space-4); border-radius: var(--radius-md); overflow: hidden; }
+.ds-viz-strip-swatch { flex: 1; height: 40px; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<div class="ds-page" id="main">
+
+  <!-- HEADER -->
+  <header class="ds-header">
+    <div>
+      <h1>Corbusier</h1>
+      <p class="ds-subtitle">Design System Reference</p>
+      <p class="ds-version">v0.4.1 — Polychromie Architecturale · SVG chamfer frame</p>
+    </div>
+    <div class="ds-theme-toggle" role="radiogroup" aria-label="Theme">
+      <button class="active" aria-label="Light theme" onclick="setTheme('light')">
+        <i data-lucide="sun" style="width:16px;height:16px"></i>
+      </button>
+      <button aria-label="Dark theme" onclick="setTheme('dark')">
+        <i data-lucide="moon" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ COLOUR ═══ -->
+  <section class="ds-section" id="colour">
+    <div class="ds-section-label">Tokens</div>
+    <h2 class="ds-section-title">Colour</h2>
+    <p class="ds-body">Drawn from Le Corbusier's Polychromie Architecturale: verdigris, terracotta, olive, slate, dusty copper. Four chromatic families, each with a communicative role. Surfaces carry warmth — cream, taupe, teal-charcoal. No cool blue-black.</p>
+
+    <h3 class="ds-subsection-title">Surfaces</h3>
+    <div class="ds-swatch-grid">
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#E8E2D8"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--surface-base</div><div class="ds-swatch-value">#E8E2D8</div><div class="ds-swatch-role">Page background · plaster wall</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#F4F0EA"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--surface-elevated</div><div class="ds-swatch-value">#F4F0EA</div><div class="ds-swatch-role">Cards, panels, modals</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#DED8CC"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--surface-code</div><div class="ds-swatch-value">#DED8CC</div><div class="ds-swatch-role">Code blocks, monospace</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#D5CFC4"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--surface-sidebar</div><div class="ds-swatch-value">#D5CFC4</div><div class="ds-swatch-role">Sidebar · cork board</div></div></div>
+    </div>
+
+    <h3 class="ds-subsection-title">Text</h3>
+    <div class="ds-swatch-grid">
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#1C3340"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--text-primary</div><div class="ds-swatch-value">#1C3340</div><div class="ds-swatch-role">Headings, body · 9.8:1 on base</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#5A5A58"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--text-secondary</div><div class="ds-swatch-value">#5A5A58</div><div class="ds-swatch-role">Labels, timestamps · 4.9:1 on base</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#8A8478"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--text-tertiary</div><div class="ds-swatch-value">#8A8478</div><div class="ds-swatch-role">Placeholder · large text only</div></div></div>
+    </div>
+
+    <h3 class="ds-subsection-title">Chromatic families</h3>
+    <div class="ds-swatch-grid">
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#1A6E6E"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--accent-primary</div><div class="ds-swatch-value">#1A6E6E</div><div class="ds-swatch-role">Teal · verdigris · navigation, focus</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#BF6C4B"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--accent-action</div><div class="ds-swatch-value">#BF6C4B</div><div class="ds-swatch-role">Terracotta · CTAs, urgency</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#5A6B48"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--state-success</div><div class="ds-swatch-value">#5A6B48</div><div class="ds-swatch-role">Olive · done, healthy</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#B08878"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--state-warning</div><div class="ds-swatch-value">#B08878</div><div class="ds-swatch-role">Dusty copper · pending, degraded</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#A04535"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--state-error</div><div class="ds-swatch-value">#A04535</div><div class="ds-swatch-role">Deep terracotta · critical, blocked</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#6B7A8A"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--state-info</div><div class="ds-swatch-value">#6B7A8A</div><div class="ds-swatch-role">Slate · in review, informational</div></div></div>
+    </div>
+
+    <h3 class="ds-subsection-title">Data-visualisation sequence</h3>
+    <p class="ds-body">Six-hue sequence for charts and categorical data. Each pair maintains ≥3:1 mutual contrast and is always supplemented with shape or pattern cues.</p>
+    <div class="ds-viz-strip">
+      <div class="ds-viz-strip-swatch" style="background:#1A6E6E" title="Deep teal"></div>
+      <div class="ds-viz-strip-swatch" style="background:#BF6C4B" title="Terracotta"></div>
+      <div class="ds-viz-strip-swatch" style="background:#6B7058" title="Olive"></div>
+      <div class="ds-viz-strip-swatch" style="background:#6B7A8A" title="Slate blue"></div>
+      <div class="ds-viz-strip-swatch" style="background:#AA5585" title="Dusty rose"></div>
+      <div class="ds-viz-strip-swatch" style="background:#43857C" title="Seafoam"></div>
+    </div>
+
+    <h3 class="ds-subsection-title">Borders</h3>
+    <div class="ds-swatch-grid">
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#C5BDB0"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--border-default</div><div class="ds-swatch-value">#C5BDB0</div><div class="ds-swatch-role">Card borders, separators</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch-color" style="background:#9A9480"></div><div class="ds-swatch-info"><div class="ds-swatch-name">--border-strong</div><div class="ds-swatch-value">#9A9480</div><div class="ds-swatch-role">Section borders, emphasis</div></div></div>
+    </div>
+  </section>
+
+
+  <!-- ═══ TYPOGRAPHY ═══ -->
+  <section class="ds-section" id="typography">
+    <div class="ds-section-label">Tokens</div>
+    <h2 class="ds-section-title">Typography</h2>
+    <p class="ds-body">DM Sans for display and structural labels — stencilled on the operations room wall. Source Sans 3 for body — warm, legible at density. JetBrains Mono for task IDs, code, and command syntax — the routing slips and message logs.</p>
+
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Section Label</span><span>DM Sans · 600 · 11px · +0.08em</span></div>
+      <div class="ds-type-specimen-label">MAINFRAME · PROJECTS · SYSTEM</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Heading 1</span><span>DM Sans · 700 · 28px · ↕1.3</span></div>
+      <div class="ds-type-specimen-h1">Agent Orchestration Dashboard</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Heading 2</span><span>DM Sans · 600 · 22px · ↕1.35</span></div>
+      <div class="ds-type-specimen-h2">Task Lifecycle Management</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Heading 3</span><span>DM Sans · 600 · 17px · ↕1.4</span></div>
+      <div class="ds-type-specimen-h3">Branch &amp; Pull Request Association</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Body</span><span>Source Sans 3 · 400 · 15px · ↕1.55</span></div>
+      <div class="ds-type-specimen-body">Corbusier coordinates multiple specialized AI agents to accomplish complex workflows, enabling teams of intelligent agents to work together across shared operations rooms.</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Body small</span><span>Source Sans 3 · 400 · 13px · ↕1.5</span></div>
+      <div class="ds-type-specimen-body-sm">Updated 14 Mar 2026 · 3 agents active · 42 tool calls today</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Code</span><span>JetBrains Mono · 400 · 14px · ↕1.5</span></div>
+      <div class="ds-type-specimen-mono">TASK-892 · /task action=start issue=123</div>
+    </div>
+    <div class="ds-type-sample">
+      <div class="ds-type-meta"><span>Code small</span><span>JetBrains Mono · 400 · 12px · ↕1.45</span></div>
+      <div class="ds-type-specimen-mono-sm">call-456 → read_file → succeeded · 120ms</div>
+    </div>
+  </section>
+
+
+  <!-- ═══ SPACING ═══ -->
+  <section class="ds-section" id="spacing">
+    <div class="ds-section-label">Tokens</div>
+    <h2 class="ds-section-title">Spacing</h2>
+    <p class="ds-body">Base unit 4px. Tight at the component level (the index card), generous at the section level (the room between boards).</p>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-1 · 4px</div><div class="ds-spacing-bar" style="width:4px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-2 · 8px</div><div class="ds-spacing-bar" style="width:8px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-3 · 12px</div><div class="ds-spacing-bar" style="width:12px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-4 · 16px</div><div class="ds-spacing-bar" style="width:16px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-5 · 20px</div><div class="ds-spacing-bar" style="width:20px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-6 · 24px</div><div class="ds-spacing-bar" style="width:24px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-8 · 32px</div><div class="ds-spacing-bar" style="width:32px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-10 · 40px</div><div class="ds-spacing-bar" style="width:40px"></div></div>
+    <div class="ds-spacing-row"><div class="ds-spacing-label">--space-12 · 48px</div><div class="ds-spacing-bar" style="width:48px"></div></div>
+  </section>
+
+
+  <!-- ═══ PUNCH-CARD CHAMFER ═══ -->
+  <section class="ds-section" id="chamfer">
+    <div class="ds-section-label">Tokens</div>
+    <h2 class="ds-section-title">Punch-Card Chamfer</h2>
+    <p class="ds-body">The clipped top-right corner from mainframe punch cards. On an 80-column card, the chamfer tells the operator which way to feed it — orientation at a glance. Implemented with an inline SVG polygon stretched via <code>preserveAspectRatio="none"</code>. The <code>vector-effect: non-scaling-stroke</code> property keeps the border width constant. Works cross-browser without feature-detection fallbacks.</p>
+
+    <h3 class="ds-subsection-title">Chamfer sizes</h3>
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div>
+        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 91,1 99,9 99,99 1,99"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">sm</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">sm · Tags, inline</div>
+      </div>
+      <div>
+        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">md</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">md · Cards, code blocks</div>
+      </div>
+      <div>
+        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 77,1 99,23 99,99 1,99"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">lg</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">lg · Feature cards</div>
+      </div>
+      <div>
+        <div class="ds-chamfer-card" style="background:var(--surface-elevated); height:80px; display:flex; align-items:center; justify-content:center;">
+          <svg class="ds-chamfer-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 72,1 99,28 99,99 1,99"/></svg>
+          <span class="ds-chamfer-card__content" style="font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary);">xl</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:var(--space-2); text-align:center;">xl · Hero panels</div>
+      </div>
+    </div>
+
+    <h3 class="ds-subsection-title">Orientation semantics</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div>
+        <div class="ds-task-card" style="cursor:default">
+          <svg class="ds-task-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
+          <div class="ds-task-card__content">
+            <div class="ds-task-card-tags"><span class="ds-tag ds-tag-feature">FEATURE</span></div>
+            <div class="ds-task-card-title">Standard orientation</div>
+            <div class="ds-task-card-desc">Top-right bevel. Card feeds correctly — work is moving forward. SVG polygon frame stretches to fill.</div>
+            <div class="ds-task-card-footer">
+              <span class="badge badge-in-progress" style="font-size:11px;padding:2px 8px"><span class="badge-icon">◉</span> In Progress</span>
+              <span class="ds-task-card-id">TASK-200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ds-task-card ds-task-card-blocked" style="cursor:default">
+          <svg class="ds-task-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="18,1 99,1 99,99 1,99 1,18"/></svg>
+          <div class="ds-task-card__content">
+            <div class="ds-task-card-tags"><span class="ds-tag ds-tag-priority">BLOCKED</span></div>
+            <div class="ds-task-card-title">Reversed orientation</div>
+            <div class="ds-task-card-desc">Top-left bevel. Card is backwards — something is wrong. Visible discomfort by design.</div>
+            <div class="ds-task-card-footer">
+              <span class="badge badge-blocked" style="font-size:11px;padding:2px 8px"><span class="badge-icon">⊘</span> Blocked</span>
+              <span class="ds-task-card-id">TASK-331</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="ds-subsection-title">Where it applies</h3>
+    <p class="ds-body">The chamfer is for cards and machine-readable surfaces: task cards (Kanban and detail), code blocks, slash command expansions, tool call output. It does <strong>not</strong> apply to buttons (breaks target shape), badges (too small), form inputs (fights native affordance), or information cards that aren't moveable work units.</p>
+
+    <h3 class="ds-subsection-title">Implementation</h3>
+    <div class="ds-code-block">
+      <svg class="ds-code-block__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
+      <div class="ds-code-block__content">/* SVG frame approach — works cross-browser, no fallback needed.
+   vector-effect: non-scaling-stroke keeps the border constant. */
+
+&lt;div class="chamfer-card"&gt;
+  &lt;svg class="chamfer-card__frame"
+       viewBox="0 0 100 100"
+       preserveAspectRatio="none"
+       aria-hidden="true"&gt;
+    &lt;polygon points="1,1 82,1 99,18 99,99 1,99" /&gt;
+  &lt;/svg&gt;
+  &lt;div class="chamfer-card__content"&gt;
+    &lt;!-- card content --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* Reversed (top-left bevel, blocked state) */
+&lt;polygon points="18,1 99,1 99,99 1,99 1,18" /&gt;</div>
+    </div>
+  </section>
+
+
+  <!-- ═══ BUTTONS ═══ -->
+  <section class="ds-section" id="buttons">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Buttons</h2>
+    <p class="ds-body">Two accent variants: terracotta for the primary action (the card that needs moving), teal for navigation-adjacent actions. Secondary and ghost for supporting roles. All ≥24×24 target.</p>
+
+    <h3 class="ds-subsection-title">Standard</h3>
+    <div class="ds-button-row">
+      <button class="btn btn-action"><i data-lucide="play" style="width:14px;height:14px"></i> Start Task</button>
+      <button class="btn btn-teal"><i data-lucide="message-square" style="width:14px;height:14px"></i> View Conversation</button>
+      <button class="btn btn-secondary"><i data-lucide="git-branch" style="width:14px;height:14px"></i> Associate Branch</button>
+      <button class="btn btn-ghost"><i data-lucide="eye" style="width:14px;height:14px"></i> Details</button>
+      <button class="btn btn-danger"><i data-lucide="trash-2" style="width:14px;height:14px"></i> Abandon</button>
+    </div>
+
+    <h3 class="ds-subsection-title">Small</h3>
+    <div class="ds-button-row">
+      <button class="btn btn-action btn-sm">Add to Backlog</button>
+      <button class="btn btn-teal btn-sm">Open PR</button>
+      <button class="btn btn-secondary btn-sm">Dismiss</button>
+      <button class="btn btn-ghost btn-sm">Cancel</button>
+    </div>
+
+    <h3 class="ds-subsection-title">Disabled</h3>
+    <div class="ds-button-row">
+      <button class="btn btn-action" disabled>Start Task</button>
+      <button class="btn btn-teal" disabled>View Conversation</button>
+      <button class="btn btn-secondary" disabled>Associate Branch</button>
+    </div>
+  </section>
+
+
+  <!-- ═══ STATUS BADGES ═══ -->
+  <section class="ds-section" id="badges">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Status Badges</h2>
+    <p class="ds-body">Colour + icon + text, always. Verified against greyscale pass — icons and text carry full meaning alone.</p>
+    <div class="ds-button-row" style="gap: var(--space-3);">
+      <span class="badge badge-draft"><span class="badge-icon">○</span> Draft</span>
+      <span class="badge badge-in-progress"><span class="badge-icon">◉</span> In Progress</span>
+      <span class="badge badge-in-review"><span class="badge-icon">◎</span> In Review</span>
+      <span class="badge badge-paused"><span class="badge-icon">⏸</span> Paused</span>
+      <span class="badge badge-done"><span class="badge-icon">✓</span> Done</span>
+      <span class="badge badge-abandoned"><span class="badge-icon">✕</span> Abandoned</span>
+      <span class="badge badge-blocked"><span class="badge-icon">⊘</span> Blocked</span>
+    </div>
+  </section>
+
+
+  <!-- ═══ CARDS ═══ -->
+  <section class="ds-section" id="cards">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Cards</h2>
+    <p class="ds-body">Two card families. <strong>Task cards</strong> carry the punch-card chamfer — they are movable units of work, index cards on the board. <strong>Information cards</strong> (backend registry, KPI, settings) keep standard rounded corners — they are fixtures of the room, not items to be sorted.</p>
+
+    <div class="ds-component-row">
+      <div>
+        <h3 class="ds-subsection-title">Task card (Kanban)</h3>
+        <div class="ds-task-card">
+          <svg class="ds-task-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
+          <div class="ds-task-card__content">
+            <div class="ds-task-card-tags">
+              <span class="ds-tag ds-tag-priority">HIGH</span>
+              <span class="ds-tag ds-tag-category">BACKEND</span>
+            </div>
+            <div class="ds-task-card-title">Implement agent turn execution and sessions</div>
+            <div class="ds-task-card-desc">Coordinate turn execution with tool calls and responses. Maintain session state and expiry rules.</div>
+            <div class="ds-task-card-footer">
+              <div style="display:flex;align-items:center;gap:var(--space-3)">
+                <span class="badge badge-in-progress" style="font-size:11px;padding:2px 8px"><span class="badge-icon">◉</span> In Progress</span>
+                <div class="ds-progress-bar"><div class="ds-progress-bar-fill" style="width:65%;background:var(--accent-action)"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--space-2)">
+                <div class="ds-avatar-stack">
+                  <div class="ds-avatar" style="background:var(--accent-primary)">PL</div>
+                  <div class="ds-avatar" style="background:var(--state-info)">KR</div>
+                </div>
+                <span class="ds-task-card-id">TASK-892</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="ds-subsection-title">Backend registry card</h3>
+        <div class="ds-card ds-card-interactive" tabindex="0">
+          <div class="ds-card-header">
+            <span class="ds-card-title">Claude Code SDK</span>
+            <span class="badge badge-done" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✓</span> Active</span>
+          </div>
+          <div class="ds-card-body">Agent backend · Anthropic · v1.0.0 · Streaming ✓ · Tools ✓</div>
+          <div class="ds-card-footer">
+            <span style="font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">Heartbeat: 2s ago</span>
+            <button class="btn btn-ghost btn-sm"><i data-lucide="settings" style="width:14px;height:14px"></i> Configure</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ KPI CARDS ═══ -->
+  <section class="ds-section" id="kpi">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">KPI Cards</h2>
+    <p class="ds-body">The wall-mounted gauges. Large number, context line, trend indicator. Tabular figures for alignment. The first thing you see when you walk in the room.</p>
+    <div class="ds-kpi-grid">
+      <div class="ds-kpi-card">
+        <div class="ds-kpi-label">Active Tasks</div>
+        <div class="ds-kpi-value">47</div>
+        <div class="ds-kpi-context"><span class="ds-kpi-trend ds-kpi-trend-up">↑ 12%</span> vs last week</div>
+      </div>
+      <div class="ds-kpi-card">
+        <div class="ds-kpi-label">Agent Utilisation</div>
+        <div class="ds-kpi-value" style="color:var(--accent-primary)">83%</div>
+        <div class="ds-kpi-context">2 of 3 backends active</div>
+      </div>
+      <div class="ds-kpi-card">
+        <div class="ds-kpi-label">Tool Success Rate</div>
+        <div class="ds-kpi-value" style="color:var(--state-success)">98.2%</div>
+        <div class="ds-kpi-context">1,247 calls today</div>
+      </div>
+      <div class="ds-kpi-card">
+        <div class="ds-kpi-label">SLA Status</div>
+        <div class="ds-kpi-value" style="color:var(--state-warning)">P95: 820ms</div>
+        <div class="ds-kpi-context"><span class="ds-kpi-trend ds-kpi-trend-down">↑ 15%</span> above target</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <section class="ds-section" id="sidebar">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Sidebar Navigation</h2>
+    <p class="ds-body">The room directory. Zone labels stencilled in teal uppercase. Active item marked with a teal left border — you are here. Project entries carry status dots: filled for active, hollow for dormant.</p>
+    <div style="max-width:280px">
+      <nav class="ds-sidebar" aria-label="Main navigation">
+        <div class="ds-sidebar-zone">
+          <div class="ds-sidebar-zone-label">Mainframe</div>
+          <a href="#" class="ds-sidebar-item ds-sidebar-item-active"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i> Dashboard</a>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="check-square" style="width:16px;height:16px"></i> My Tasks</a>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="sparkles" style="width:16px;height:16px"></i> AI Suggestions</a>
+        </div>
+        <div class="ds-sidebar-zone">
+          <div class="ds-sidebar-zone-label">Projects</div>
+          <a href="#" class="ds-sidebar-item"><span class="ds-sidebar-status ds-sidebar-status-active"></span> Apollo-Guidance</a>
+          <a href="#" class="ds-sidebar-item"><span class="ds-sidebar-status ds-sidebar-status-active"></span> Manhattan-Logistics</a>
+          <a href="#" class="ds-sidebar-item"><span class="ds-sidebar-status ds-sidebar-status-inactive"></span> Skunkworks-Alpha</a>
+        </div>
+        <div class="ds-sidebar-zone">
+          <div class="ds-sidebar-zone-label">System</div>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="users" style="width:16px;height:16px"></i> Personnel</a>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="cpu" style="width:16px;height:16px"></i> Agent Backends</a>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="wrench" style="width:16px;height:16px"></i> Tool Registry</a>
+          <a href="#" class="ds-sidebar-item"><i data-lucide="activity" style="width:16px;height:16px"></i> Monitoring</a>
+        </div>
+      </nav>
+    </div>
+  </section>
+
+
+  <!-- ═══ FORMS ═══ -->
+  <section class="ds-section" id="forms">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Form Inputs</h2>
+    <p class="ds-body">Labels above, always visible. Focus rings in teal. Error states combine icon + colour + text. No placeholder-as-label.</p>
+    <div style="max-width:400px">
+      <div class="ds-form-group">
+        <label for="task-title">Task title</label>
+        <input type="text" id="task-title" class="ds-input" placeholder="e.g. Implement branch tracking">
+      </div>
+      <div class="ds-form-group">
+        <label for="task-branch">Branch name</label>
+        <div class="ds-form-hint">The Git branch associated with this task.</div>
+        <input type="text" id="task-branch" class="ds-input" value="feature/branch-tracking">
+      </div>
+      <div class="ds-form-group">
+        <label for="task-priority">Priority</label>
+        <select id="task-priority" class="ds-input ds-select"><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select>
+      </div>
+      <div class="ds-form-group">
+        <label for="task-estimate">Estimate (hours)</label>
+        <input type="number" id="task-estimate" class="ds-input ds-input-error" value="-3" aria-invalid="true" aria-describedby="estimate-error">
+        <div class="ds-form-error" id="estimate-error" role="alert"><i data-lucide="alert-circle" style="width:14px;height:14px;flex-shrink:0"></i> Estimate must be a positive number.</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ DATA TABLE ═══ -->
+  <section class="ds-section" id="table">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Data Table</h2>
+    <p class="ds-body">The logbook. Tabular figures, proper <code>&lt;th scope&gt;</code>, sortable headers. Row hover for scanability. This is the operations room ledger.</p>
+    <div class="ds-table-wrapper">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Server</th><th scope="col">Transport</th><th scope="col">State</th><th scope="col">Health</th><th scope="col">Tools</th><th scope="col">Last Check</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-family:var(--font-mono);font-size:13px">workspace_tools</td><td>stdio</td>
+            <td><span class="badge badge-done" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✓</span> Running</span></td>
+            <td><span class="badge badge-done" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✓</span> Healthy</span></td>
+            <td style="font-variant-numeric:tabular-nums">3</td>
+            <td style="font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">2s ago</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono);font-size:13px">weaver_mcp</td><td>HTTP+SSE</td>
+            <td><span class="badge badge-done" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✓</span> Running</span></td>
+            <td><span class="badge badge-paused" style="font-size:11px;padding:2px 8px"><span class="badge-icon">⏸</span> Degraded</span></td>
+            <td style="font-variant-numeric:tabular-nums">12</td>
+            <td style="font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">5s ago</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono);font-size:13px">podbot_runtime</td><td>stdio</td>
+            <td><span class="badge badge-abandoned" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✕</span> Stopped</span></td>
+            <td><span class="badge badge-draft" style="font-size:11px;padding:2px 8px"><span class="badge-icon">○</span> Unknown</span></td>
+            <td style="font-variant-numeric:tabular-nums">—</td>
+            <td style="font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">14m ago</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ═══ COMMAND PALETTE ═══ -->
+  <section class="ds-section" id="palette">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Command Palette</h2>
+    <p class="ds-body"><code>⌘K</code> — the intercom. Focus-trapped, keyboard-navigable. The fastest path to any entity in the room.</p>
+    <div class="ds-palette-backdrop">
+      <div class="ds-palette">
+        <div class="ds-palette-input">
+          <i data-lucide="search" style="width:16px;height:16px;color:var(--text-tertiary);flex-shrink:0"></i>
+          <input type="text" placeholder="Search tasks, conversations, commands…" value="branch track">
+        </div>
+        <div class="ds-palette-results">
+          <div class="ds-palette-group-label">Tasks</div>
+          <div class="ds-palette-item ds-palette-item-active">
+            <i data-lucide="check-square" class="ds-palette-item-icon"></i>
+            <span class="ds-palette-item-text">Implement branch tracking</span>
+            <span class="ds-palette-item-meta">TASK-200</span>
+          </div>
+          <div class="ds-palette-item">
+            <i data-lucide="check-square" class="ds-palette-item-icon"></i>
+            <span class="ds-palette-item-text">Branch association unit tests</span>
+            <span class="ds-palette-item-meta">TASK-215</span>
+          </div>
+          <div class="ds-palette-group-label">Commands</div>
+          <div class="ds-palette-item">
+            <i data-lucide="terminal" class="ds-palette-item-icon"></i>
+            <span class="ds-palette-item-text">/task action=start</span>
+            <span class="ds-palette-item-meta">Slash command</span>
+          </div>
+        </div>
+        <div class="ds-palette-footer">
+          <span><span class="ds-kbd">↑↓</span> Navigate</span>
+          <span><span class="ds-kbd">↵</span> Open</span>
+          <span><span class="ds-kbd">esc</span> Close</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ TIMELINE ═══ -->
+  <section class="ds-section" id="timeline">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Activity Timeline</h2>
+    <p class="ds-body">The message log. Chronological, immutable, auditable. Timeline dots use teal for structural events, terracotta for state changes, olive for completions.</p>
+    <div style="max-width:500px">
+      <div class="ds-timeline-item ds-timeline-item-action">
+        <div class="ds-timeline-content">
+          <div class="ds-timeline-text">Task transitioned from <span class="badge badge-draft" style="font-size:11px;padding:1px 6px"><span class="badge-icon">○</span> Draft</span> to <span class="badge badge-in-progress" style="font-size:11px;padding:1px 6px"><span class="badge-icon">◉</span> In Progress</span></div>
+          <div class="ds-timeline-time">14 Mar 2026 · 09:14:22</div>
+        </div>
+      </div>
+      <div class="ds-timeline-item ds-timeline-item-teal">
+        <div class="ds-timeline-content">
+          <div class="ds-timeline-text">Branch <code style="font-family:var(--font-mono);font-size:12px;background:var(--surface-code);padding:1px 4px;border-radius:3px">feature/branch-tracking</code> associated</div>
+          <div class="ds-timeline-time">14 Mar 2026 · 09:15:03</div>
+        </div>
+      </div>
+      <div class="ds-timeline-item ds-timeline-item-success">
+        <div class="ds-timeline-content">
+          <div class="ds-timeline-text">Subtask "Define BranchRef value object" completed</div>
+          <div class="ds-timeline-time">14 Mar 2026 · 11:42:17</div>
+        </div>
+      </div>
+      <div class="ds-timeline-item ds-timeline-item-teal">
+        <div class="ds-timeline-content">
+          <div class="ds-timeline-text">Agent turn completed · <span style="font-family:var(--font-mono);font-size:12px">claude_code_sdk</span> · 3 tool calls</div>
+          <div class="ds-timeline-time">14 Mar 2026 · 11:43:01</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CODE BLOCK ═══ -->
+  <section class="ds-section" id="code">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Code Block</h2>
+    <p class="ds-body">Slightly deeper cream surface with the punch-card chamfer — the routing slip. Machine-readable surfaces carry the clip. Used for slash command expansions, tool schemas, and tool call output.</p>
+    <div class="ds-code-block">
+      <svg class="ds-code-block__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="1,1 82,1 99,18 99,99 1,99"/></svg>
+      <div class="ds-code-block__content">/task action=start issue=123
+
+→ Expansion:
+  command: /task
+  params:  { action: "start", issue: 123 }
+  tool_calls:
+    - call_id: "tc_a1b2c3"
+      tool:    "transition_task"
+      input:   { task_id: "TASK-123", target_state: "in_progress" }</div>
+    </div>
+  </section>
+
+
+  <!-- ═══ SKELETON ═══ -->
+  <section class="ds-section" id="loading">
+    <div class="ds-section-label">Components</div>
+    <h2 class="ds-section-title">Skeleton Loading</h2>
+    <p class="ds-body">Warm shimmer for SSE-fed panels. Respects <code>prefers-reduced-motion</code>.</p>
+    <div class="ds-card" style="max-width:400px">
+      <div class="ds-skeleton" style="width:60%;height:20px;margin-bottom:12px"></div>
+      <div class="ds-skeleton" style="width:100%;height:14px;margin-bottom:8px"></div>
+      <div class="ds-skeleton" style="width:80%;height:14px;margin-bottom:16px"></div>
+      <div style="display:flex;gap:8px">
+        <div class="ds-skeleton" style="width:80px;height:24px;border-radius:999px"></div>
+        <div class="ds-skeleton" style="width:60px;height:24px;border-radius:999px"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ FOCUS ═══ -->
+  <section class="ds-section" id="focus">
+    <div class="ds-section-label">Accessibility</div>
+    <h2 class="ds-section-title">Focus Styles</h2>
+    <p class="ds-body">3px solid teal outline, 2px offset. Teal focus ring matches the structural accent — navigation is part of the room. Tab through to see:</p>
+    <div class="ds-focus-demo">
+      <button class="btn btn-action">Primary button</button>
+      <button class="btn btn-teal">Teal button</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <a href="#">A text link</a>
+      <input type="text" class="ds-input" style="width:200px" placeholder="Text input">
+    </div>
+  </section>
+
+
+  <!-- ═══ PRINCIPLES ═══ -->
+  <section class="ds-section" id="principles">
+    <div class="ds-section-label">Foundation</div>
+    <h2 class="ds-section-title">Design Principles</h2>
+    <div class="ds-component-row" style="grid-template-columns: repeat(3, 1fr); gap: var(--space-4)">
+      <div class="ds-card">
+        <div class="ds-card-header" style="margin-bottom:var(--space-2)"><span class="ds-card-title">The room is the product</span></div>
+        <div class="ds-card-body">The interface is an operations room. Wall-mounted boards, index cards, message logs. Every panel earns its place by answering a question.</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-card-header" style="margin-bottom:var(--space-2)"><span class="ds-card-title">Warmth from materials</span></div>
+        <div class="ds-card-body">Verdigris, terracotta, olive, cream — the surfaces themselves are the aesthetic. Colour carries meaning; materials carry trust.</div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-card-header" style="margin-bottom:var(--space-2)"><span class="ds-card-title">Structure as ornament</span></div>
+        <div class="ds-card-body">Visible grid, exposed system language, architectural wayfinding. The load-bearing walls are the decoration. Nothing cosmetic that doesn't work.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelectorAll('.ds-theme-toggle button').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('aria-label').toLowerCase().includes(theme));
+  });
+}
+document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
+</script>
+</body>
+</html>

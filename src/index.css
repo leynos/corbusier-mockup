@@ -11,12 +11,6 @@
     --font-body: var(--font-family-body);
     --font-mono: var(--font-family-mono);
 
-    /* Punch-card chamfer clip sizes */
-    --clip-sm: 8px;
-    --clip-md: 12px;
-    --clip-lg: 16px;
-    --clip-xl: 20px;
-
     /* Transition speed tokens */
     --transition-fast: 100ms;
     --transition-base: 150ms;
@@ -44,107 +38,32 @@
 }
 
 @layer components {
-  /* ── Punch-card chamfer: standard orientation (top-right bevel) ── */
-  .chamfer-sm {
-    border-radius: var(--radius-lg) var(--clip-sm) var(--radius-lg) var(--radius-lg);
-    corner-shape: round bevel round round;
+  /* ── Punch-card chamfer: SVG frame approach ──
+     An inline SVG polygon with preserveAspectRatio="none" stretches
+     to fill the card. vector-effect: non-scaling-stroke keeps the
+     border width constant regardless of element size. Works in all
+     modern browsers without feature-detection fallbacks. */
+  .chamfer-card {
+    position: relative;
   }
 
-  .chamfer-md {
-    border-radius: var(--radius-lg) var(--clip-md) var(--radius-lg) var(--radius-lg);
-    corner-shape: round bevel round round;
+  .chamfer-card__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 
-  .chamfer-lg {
-    border-radius: var(--radius-lg) var(--clip-lg) var(--radius-lg) var(--radius-lg);
-    corner-shape: round bevel round round;
+  .chamfer-card__frame polygon {
+    fill: transparent;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
   }
 
-  .chamfer-xl {
-    border-radius: var(--radius-lg) var(--clip-xl) var(--radius-lg) var(--radius-lg);
-    corner-shape: round bevel round round;
-  }
-
-  /* ── Chamfer: reversed orientation (top-left bevel, blocked state) ── */
-  .chamfer-reversed-sm {
-    border-radius: var(--clip-sm) var(--radius-lg) var(--radius-lg) var(--radius-lg);
-    corner-shape: bevel round round round;
-  }
-
-  .chamfer-reversed-md {
-    border-radius: var(--clip-md) var(--radius-lg) var(--radius-lg) var(--radius-lg);
-    corner-shape: bevel round round round;
-  }
-
-  /* ── Chamfer: clip-path fallback for Firefox/Safari ── */
-  @supports not (corner-shape: bevel) {
-    .chamfer-sm,
-    .chamfer-md,
-    .chamfer-lg,
-    .chamfer-xl {
-      border: none;
-      border-radius: 0;
-    }
-
-    .chamfer-sm {
-      box-shadow: inset 0 0 0 1px var(--color-base-300);
-      clip-path: polygon(
-        0 0,
-        calc(100% - var(--clip-sm)) 0,
-        100% var(--clip-sm),
-        100% 100%,
-        0 100%
-      );
-    }
-
-    .chamfer-md {
-      box-shadow: inset 0 0 0 1px var(--color-base-300);
-      clip-path: polygon(
-        0 0,
-        calc(100% - var(--clip-md)) 0,
-        100% var(--clip-md),
-        100% 100%,
-        0 100%
-      );
-    }
-
-    .chamfer-lg {
-      box-shadow: inset 0 0 0 1px var(--color-base-300);
-      clip-path: polygon(
-        0 0,
-        calc(100% - var(--clip-lg)) 0,
-        100% var(--clip-lg),
-        100% 100%,
-        0 100%
-      );
-    }
-
-    .chamfer-xl {
-      box-shadow: inset 0 0 0 1px var(--color-base-300);
-      clip-path: polygon(
-        0 0,
-        calc(100% - var(--clip-xl)) 0,
-        100% var(--clip-xl),
-        100% 100%,
-        0 100%
-      );
-    }
-
-    .chamfer-reversed-sm,
-    .chamfer-reversed-md {
-      border: none;
-      border-radius: 0;
-    }
-
-    .chamfer-reversed-sm {
-      box-shadow: inset 0 0 0 1px var(--color-error);
-      clip-path: polygon(var(--clip-sm) 0, 100% 0, 100% 100%, 0 100%, 0 var(--clip-sm));
-    }
-
-    .chamfer-reversed-md {
-      box-shadow: inset 0 0 0 1px var(--color-error);
-      clip-path: polygon(var(--clip-md) 0, 100% 0, 100% 100%, 0 100%, 0 var(--clip-md));
-    }
+  .chamfer-card__content {
+    position: relative;
+    z-index: 1;
   }
 
   /* Floating drawer for global controls (theme + display). */
