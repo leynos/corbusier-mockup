@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Task - Step 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .tool-card input[type="checkbox"]:checked + label {
+            border-color: #4A6FA5;
+            background-color: #F0F4FA;
+        }
+        .hook-item input[type="checkbox"]:checked + label {
+            border-color: #4B8F8C;
+            background-color: #F0F9F8;
+        }
+        .channel-item input[type="checkbox"]:checked + label {
+            border-color: #E09F3E;
+            background-color: #FEF8F0;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="wizard-header" class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">Start New Task</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-tools text-sm text-corbusier-teal"></i>
+                        <span class="text-sm">Configure tools, policy hooks, and notification channels with permission-aware options</span>
+                    </p>
+                </div>
+                <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                </button>
+            </div>
+
+            <div id="progress-indicator" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-blue rounded-full flex items-center justify-center text-white font-bold">3</div>
+                        <div>
+                            <p class="font-bold text-corbusier-charcoal">Tools & Policy Configuration</p>
+                            <p class="text-xs text-corbusier-gray">Select tools, hooks, and notification channels</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-corbusier-blue"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-blue rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">4</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">5</div>
+                    </div>
+                </div>
+                <div class="w-full bg-corbusier-border rounded-full h-2">
+                    <div class="bg-corbusier-blue h-2 rounded-full transition-all duration-300" style="width: 60%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-corbusier-gray font-mono">
+                    <span>Step 3 of 5</span>
+                    <span>60% Complete</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="context-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-corbusier-charcoal flex items-center gap-2">
+                        <i class="fa-solid fa-info-circle text-corbusier-blue"></i>
+                        Configuration Summary
+                    </h3>
+                    <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit Previous
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Origin</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold font-mono">ISSUE-1847</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Project</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">Platform API v3</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Agent Backend</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">UX Pilot 3.5 Sonnet</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Status</p>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">
+                            <i class="fa-solid fa-check-circle"></i>Validated
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tool-catalogue" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-toolbox text-corbusier-blue"></i>
+                                Tool Catalogue Selection
+                            </h2>
+                            <p class="text-sm text-corbusier-gray">Choose tools the agent can use during task execution. Tools are filtered based on your permissions and project context.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono text-corbusier-gray">8 selected</span>
+                            <button class="px-3 py-1.5 bg-corbusier-cream border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors">
+                                <i class="fa-solid fa-filter mr-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 mb-6 flex-wrap">
+                        <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-xs font-semibold">All Tools (24)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">VCS (5)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">Database (4)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">Testing (3)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">Deployment (4)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">Monitoring (3)</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-xs font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">Communication (5)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-git" name="tool" value="git" class="hidden" checked>
+                        <label for="tool-git" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-git-alt text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Git Operations</h4>
+                                        <p class="text-xs text-corbusier-gray">Branch, commit, merge, rebase</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">VCS</span>
+                                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 font-semibold rounded">Required</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: GitHub Enterprise | Permissions: Read/Write</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-database" name="tool" value="database" class="hidden" checked>
+                        <label for="tool-database" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-corbusier-blue to-ibm-blue rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-database text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Database Query</h4>
+                                        <p class="text-xs text-corbusier-gray">Execute SQL, migrations, schema</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Database</span>
+                                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 font-semibold rounded">Required</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: PostgreSQL 15 | Permissions: Read/Write (Staging)</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-docker" name="tool" value="docker" class="hidden" checked>
+                        <label for="tool-docker" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-docker text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Docker Container</h4>
+                                        <p class="text-xs text-corbusier-gray">Build, run, manage containers</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Deployment</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Docker Hub | Permissions: Build/Deploy</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-slack" name="tool" value="slack" class="hidden" checked>
+                        <label for="tool-slack" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-slack text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Slack Integration</h4>
+                                        <p class="text-xs text-corbusier-gray">Post messages, threads, reactions</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Communication</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Slack Workspace | Permissions: Post Messages</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-pytest" name="tool" value="pytest" class="hidden" checked>
+                        <label for="tool-pytest" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-vial text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">PyTest Runner</h4>
+                                        <p class="text-xs text-corbusier-gray">Execute tests, generate reports</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Testing</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Local Runner | Permissions: Execute Tests</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-jira" name="tool" value="jira" class="hidden" checked>
+                        <label for="tool-jira" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-jira text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Jira API</h4>
+                                        <p class="text-xs text-corbusier-gray">Create, update, transition issues</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Communication</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Jira Cloud | Permissions: Read/Write Issues</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-terraform" name="tool" value="terraform" class="hidden" checked>
+                        <label for="tool-terraform" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-server text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Terraform</h4>
+                                        <p class="text-xs text-corbusier-gray">Plan, apply infrastructure changes</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Deployment</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Terraform Cloud | Permissions: Plan/Apply (Staging)</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card">
+                        <input type="checkbox" id="tool-datadog" name="tool" value="datadog" class="hidden" checked>
+                        <label for="tool-datadog" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-chart-line text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Datadog Monitor</h4>
+                                        <p class="text-xs text-corbusier-gray">Query metrics, logs, traces</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-green-600">Active</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded">Monitoring</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Provider: Datadog | Permissions: Read Metrics</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card opacity-60">
+                        <input type="checkbox" id="tool-aws" name="tool" value="aws" class="hidden" disabled>
+                        <label for="tool-aws" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-not-allowed">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-aws text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">AWS CLI</h4>
+                                        <p class="text-xs text-corbusier-gray">Manage AWS resources</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fa-solid fa-lock text-corbusier-orange text-sm"></i>
+                                    <span class="text-xs font-semibold text-corbusier-orange">Restricted</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-gray-100 text-gray-600 font-semibold rounded">Deployment</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Requires elevated permissions. Contact admin for access.</p>
+                        </label>
+                    </div>
+
+                    <div class="tool-card opacity-60">
+                        <input type="checkbox" id="tool-kubernetes" name="tool" value="kubernetes" class="hidden" disabled>
+                        <label for="tool-kubernetes" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-not-allowed">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-dharmachakra text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-corbusier-charcoal text-sm">Kubernetes</h4>
+                                        <p class="text-xs text-corbusier-gray">Deploy, scale, manage pods</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fa-solid fa-lock text-corbusier-orange text-sm"></i>
+                                    <span class="text-xs font-semibold text-corbusier-orange">Restricted</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="px-2 py-0.5 bg-gray-100 text-gray-600 font-semibold rounded">Deployment</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Production access restricted. Team Lead approval required.</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-info-circle text-corbusier-blue text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Tool Selection Guidance</h4>
+                            <p class="text-xs text-corbusier-gray">Selected tools will be available to the agent during task execution. Required tools are pre-selected based on task origin and cannot be removed. Restricted tools require additional permissions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="policy-hooks" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-gavel text-corbusier-teal"></i>
+                        Required Policy Hooks
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Governance hooks that will be triggered at specific stages of task execution. Some hooks are mandatory based on project policies.</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-prestart" name="hook" value="prestart" class="hidden" checked disabled>
+                        <label for="hook-prestart" class="block p-4 border-2 border-corbusier-teal rounded-lg">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-corbusier-teal rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-shield-halved text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Pre-Start Validation</h4>
+                                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Required</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Validates task configuration, permissions, and resource availability before execution starts</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: pre_start_validation | Trigger: Task Init</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-lock text-corbusier-teal text-sm"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-code-review" name="hook" value="code-review" class="hidden" checked disabled>
+                        <label for="hook-code-review" class="block p-4 border-2 border-corbusier-teal rounded-lg">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-corbusier-teal rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-code text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Automated Code Review</h4>
+                                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Required</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Runs static analysis, linting, and security scans on generated code before commit</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: code_review | Trigger: Before Commit</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-lock text-corbusier-teal text-sm"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-security" name="hook" value="security" class="hidden" checked>
+                        <label for="hook-security" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-teal transition-all">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-user-shield text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Security Compliance Scan</h4>
+                                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded">Recommended</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Checks for secrets, vulnerabilities, and compliance violations in code and dependencies</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: security_scan | Trigger: Before PR Creation</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-budget" name="hook" value="budget" class="hidden" checked>
+                        <label for="hook-budget" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-teal transition-all">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-dollar-sign text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Budget Threshold Alert</h4>
+                                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded">Recommended</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Monitors task cost and sends alerts when approaching budget limits</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: budget_check | Trigger: Every 10 minutes</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-quality" name="hook" value="quality" class="hidden">
+                        <label for="hook-quality" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-teal transition-all">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-chart-bar text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Code Quality Gate</h4>
+                                            <span class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded">Optional</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Enforces code coverage, complexity, and maintainability thresholds</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: quality_gate | Trigger: Before Merge</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="hook-item">
+                        <input type="checkbox" id="hook-approval" name="hook" value="approval" class="hidden">
+                        <label for="hook-approval" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-teal transition-all">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-user-check text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <h4 class="font-bold text-corbusier-charcoal text-sm">Manual Approval Gate</h4>
+                                            <span class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded">Optional</span>
+                                        </div>
+                                        <p class="text-xs text-corbusier-gray mb-2">Requires human approval before proceeding to deployment or merge</p>
+                                        <p class="text-xs font-mono text-corbusier-gray">Hook: manual_approval | Trigger: Before Deploy</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-exclamation-triangle text-corbusier-mustard text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Policy Warning</h4>
+                            <p class="text-xs text-corbusier-gray">Required hooks cannot be disabled. They are enforced by project governance policies. Disabling recommended hooks may result in audit findings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="notification-channels" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bell text-corbusier-mustard"></i>
+                        Notification Channels
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Configure where task updates, alerts, and completion notifications should be sent</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="channel-item">
+                        <input type="checkbox" id="channel-slack" name="channel" value="slack" class="hidden" checked>
+                        <label for="channel-slack" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-mustard transition-all">
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-brands fa-slack text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-corbusier-charcoal text-sm mb-1">Slack</h4>
+                                    <p class="text-xs text-corbusier-gray mb-3">Real-time updates in Slack channels</p>
+                                    <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                                        <option value="">#platform-api-alerts</option>
+                                        <option value="">#engineering-tasks</option>
+                                        <option value="">#devops-notifications</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0" checked>
+                                    <span class="text-corbusier-gray">Start</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0" checked>
+                                    <span class="text-corbusier-gray">Complete</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0" checked>
+                                    <span class="text-corbusier-gray">Error</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Progress</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="channel-item">
+                        <input type="checkbox" id="channel-email" name="channel" value="email" class="hidden" checked>
+                        <label for="channel-email" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-mustard transition-all">
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-envelope text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-corbusier-charcoal text-sm mb-1">Email</h4>
+                                    <p class="text-xs text-corbusier-gray mb-3">Digest notifications via email</p>
+                                    <input type="email" value="john.doe@acme.com" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Start</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0" checked>
+                                    <span class="text-corbusier-gray">Complete</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0" checked>
+                                    <span class="text-corbusier-gray">Error</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Progress</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="channel-item">
+                        <input type="checkbox" id="channel-webhook" name="channel" value="webhook" class="hidden">
+                        <label for="channel-webhook" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-mustard transition-all">
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-700 rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-webhook text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-corbusier-charcoal text-sm mb-1">Webhook</h4>
+                                    <p class="text-xs text-corbusier-gray mb-3">HTTP POST to external endpoint</p>
+                                    <input type="url" placeholder="https://api.example.com/webhook" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Start</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Complete</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Error</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Progress</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="channel-item">
+                        <input type="checkbox" id="channel-pagerduty" name="channel" value="pagerduty" class="hidden">
+                        <label for="channel-pagerduty" class="block p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-mustard transition-all">
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-bell-concierge text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-corbusier-charcoal text-sm mb-1">PagerDuty</h4>
+                                    <p class="text-xs text-corbusier-gray mb-3">Critical alerts to on-call team</p>
+                                    <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                                        <option value="">Platform API Service</option>
+                                        <option value="">Engineering Escalation</option>
+                                        <option value="">DevOps On-Call</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs">
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Start</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Complete</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Error</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" class="w-3 h-3 text-corbusier-blue border-corbusier-border rounded focus:ring-0">
+                                    <span class="text-corbusier-gray">Progress</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-lightbulb text-corbusier-blue text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Notification Best Practices</h4>
+                            <p class="text-xs text-corbusier-gray">Enable Slack for real-time updates and Email for completion summaries. Use PagerDuty only for critical production tasks. Configure event filters to reduce notification fatigue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="configuration-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-corbusier-blue"></i>
+                        Configuration Summary
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Review your selections before proceeding to workspace setup</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-tools text-corbusier-blue"></i>
+                            <h4 class="font-bold text-corbusier-charcoal text-sm">Tools Selected</h4>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Total</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">8</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Required</span>
+                                <span class="font-mono font-bold text-purple-700">2</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Optional</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-gavel text-corbusier-teal"></i>
+                            <h4 class="font-bold text-corbusier-charcoal text-sm">Policy Hooks</h4>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Total</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">4</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Required</span>
+                                <span class="font-mono font-bold text-purple-700">2</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Recommended</span>
+                                <span class="font-mono font-bold text-orange-600">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-bell text-corbusier-mustard"></i>
+                            <h4 class="font-bold text-corbusier-charcoal text-sm">Notifications</h4>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Channels</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">2</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Slack</span>
+                                <span class="font-mono font-bold text-green-600">Active</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-corbusier-gray">Email</span>
+                                <span class="font-mono font-bold text-green-600">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Configuration Valid</h4>
+                            <p class="text-xs text-green-800">All required tools and policy hooks are selected. Configuration meets project governance requirements. Ready to proceed to workspace setup.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizard-actions" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-floppy-disk mr-2"></i>Save Draft
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                            Next: Workspace Setup <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const toolCheckboxes = document.querySelectorAll('.tool-card input[type="checkbox"]');
+            const hookCheckboxes = document.querySelectorAll('.hook-item input[type="checkbox"]');
+            const channelCheckboxes = document.querySelectorAll('.channel-item input[type="checkbox"]');
+
+            toolCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    console.log('Tool selection changed:', this.value, this.checked);
+                });
+            });
+
+            hookCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    console.log('Hook selection changed:', this.value, this.checked);
+                });
+            });
+
+            channelCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    console.log('Channel selection changed:', this.value, this.checked);
+                });
+            });
+
+            console.log('Start Task Wizard - Step 3 loaded - Tools, hooks, and notification configuration active');
+        });
+    </script>
+
+</body>
+</html>

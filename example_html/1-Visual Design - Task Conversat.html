@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Conversation Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .real-time-indicator {
+            animation: blink 1.5s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .chat-container {
+            height: calc(100vh - 400px);
+            min-height: 500px;
+        }
+        .message-bubble {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .typing-indicator span {
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        .tool-result-expandable {
+            max-height: 200px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .tool-result-expandable.expanded {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="breadcrumb-section" class="mb-6">
+            <div class="flex items-center gap-2 text-sm text-corbusier-gray">
+                <a href="#" class="hover:text-corbusier-blue transition-colors">Dashboard</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <a href="#" class="hover:text-corbusier-blue transition-colors">Projects</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <a href="#" class="hover:text-corbusier-blue transition-colors">Platform API v3</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <a href="#" class="hover:text-corbusier-blue transition-colors">ISSUE-1834</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <span class="text-corbusier-charcoal font-semibold">Conversation</span>
+            </div>
+        </section>
+
+        <section id="console-header" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-corbusier-blue to-ibm-blue rounded-xl flex items-center justify-center text-white shadow-retro flex-shrink-0">
+                            <i class="fa-solid fa-comments text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h1 class="text-2xl md:text-3xl font-bold text-corbusier-charcoal">Agent Console</h1>
+                                <div class="flex items-center gap-2 px-3 py-1 bg-green-100 border border-green-200 rounded-full">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full real-time-indicator"></div>
+                                    <span class="text-xs font-bold text-green-700">ACTIVE</span>
+                                </div>
+                            </div>
+                            <p class="text-corbusier-gray">ISSUE-1834: Migrate database connection pool to pgBouncer</p>
+                            <div class="flex items-center gap-4 mt-2 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-robot text-corbusier-blue"></i>
+                                    <span class="text-corbusier-charcoal font-mono">UX Pilot-3.5-sonnet</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-layer-group text-corbusier-teal"></i>
+                                    <span class="text-corbusier-charcoal">Iteration 23/50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>Back to Task
+                        </button>
+                        <button class="px-4 py-2 bg-corbusier-teal text-white rounded-md text-sm font-bold hover:bg-teal-700 transition-colors shadow-card flex items-center gap-2">
+                            <i class="fa-solid fa-code-pull-request"></i>View Delivery
+                        </button>
+                        <button class="px-4 py-2 bg-corbusier-orange text-white rounded-md text-sm font-bold hover:bg-red-600 transition-colors shadow-card flex items-center gap-2">
+                            <i class="fa-solid fa-stop"></i>Stop Agent
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <div class="lg:col-span-3">
+
+                <section id="conversation-section" class="bg-white rounded-xl border border-corbusier-border shadow-card overflow-hidden">
+                    <div class="border-b border-corbusier-border p-4 bg-corbusier-cream">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-message text-corbusier-blue"></i>
+                                <h2 class="text-lg font-bold text-corbusier-charcoal">Live Conversation</h2>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                    <i class="fa-solid fa-filter"></i>
+                                </button>
+                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                                <button class="p-2 text-corbusier-gray hover:text-corbusier-charcoal hover:bg-white rounded-md transition-colors">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chat-messages" class="chat-container overflow-y-auto p-6 space-y-6">
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-play text-purple-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Task Started</span>
+                                        <span class="text-xs text-corbusier-gray">1 day ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal">Task execution initiated with UX Pilot-3.5-sonnet backend. Policy: engineering-standard. Workspace: platform-api-workspace.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-corbusier-blue"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Agent</span>
+                                        <span class="text-xs text-corbusier-gray">1 day ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal mb-3">I'll help you migrate the database connection pool to pgBouncer. Let me start by analyzing the current implementation and checking the repository structure.</p>
+                                    <div class="text-xs text-corbusier-gray flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 font-bold rounded">Iteration 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-terminal text-green-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-green-50 rounded-lg border border-green-200 overflow-hidden">
+                                    <div class="p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm font-bold text-corbusier-charcoal">Tool Execution</span>
+                                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">bash_execute</span>
+                                            </div>
+                                            <span class="text-xs text-corbusier-gray">23 hours ago</span>
+                                        </div>
+                                        <p class="text-sm text-corbusier-charcoal font-mono mb-3">find src/ -name "*connection*" -o -name "*pool*"</p>
+                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-1">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <span>View Results</span>
+                                        </button>
+                                    </div>
+                                    <div id="tool-result-1" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                        <pre>src/database/connectionPool.js
+src/database/poolManager.js
+src/config/databaseConfig.js
+src/middleware/dbConnection.js
+src/utils/poolMonitor.js
+
+Exit code: 0
+Execution time: 0.34s</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-corbusier-blue"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Agent</span>
+                                        <span class="text-xs text-corbusier-gray">23 hours ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal mb-3">Found the connection pool implementation. Now I'll review the current configuration and create a pgBouncer setup. I'll need to:</p>
+                                    <ul class="space-y-1 text-sm text-corbusier-charcoal ml-4 mb-3">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-circle text-[6px] text-corbusier-blue mt-1.5"></i>
+                                            <span>Create pgBouncer configuration file</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-circle text-[6px] text-corbusier-blue mt-1.5"></i>
+                                            <span>Update application connection strings</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-circle text-[6px] text-corbusier-blue mt-1.5"></i>
+                                            <span>Add health check endpoints</span>
+                                        </li>
+                                    </ul>
+                                    <div class="text-xs text-corbusier-gray flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 font-bold rounded">Iteration 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0">
+                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Mike Wilson</span>
+                                        <span class="text-xs text-corbusier-gray">20 hours ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal">Make sure to use transaction-level pooling mode. Session pooling won't work with our prepared statements.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-corbusier-blue"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Agent</span>
+                                        <span class="text-xs text-corbusier-gray">20 hours ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal mb-3">Understood. I'll configure pgBouncer with pool_mode = transaction. This will ensure compatibility with prepared statements while still providing connection pooling benefits.</p>
+                                    <div class="text-xs text-corbusier-gray flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 font-bold rounded">Iteration 5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-file-code text-yellow-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-yellow-50 rounded-lg border border-yellow-200 overflow-hidden">
+                                    <div class="p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm font-bold text-corbusier-charcoal">File Created</span>
+                                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded">file_create</span>
+                                            </div>
+                                            <span class="text-xs text-corbusier-gray">18 hours ago</span>
+                                        </div>
+                                        <p class="text-sm text-corbusier-charcoal font-mono mb-3">config/pgbouncer.ini</p>
+                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-2">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <span>View File Content</span>
+                                        </button>
+                                    </div>
+                                    <div id="tool-result-2" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                        <pre>[databases]
+platform_api = host=postgres-primary.internal port=5432 dbname=platform_api
+
+[pgbouncer]
+listen_addr = 0.0.0.0
+listen_port = 6432
+auth_type = md5
+auth_file = /etc/pgbouncer/userlist.txt
+pool_mode = transaction
+max_client_conn = 1000
+default_pool_size = 25
+reserve_pool_size = 5
+reserve_pool_timeout = 3
+max_db_connections = 50
+server_idle_timeout = 600
+server_lifetime = 3600
+server_connect_timeout = 15
+log_connections = 1
+log_disconnections = 1
+stats_period = 60</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-terminal text-green-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-green-50 rounded-lg border border-green-200 overflow-hidden">
+                                    <div class="p-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm font-bold text-corbusier-charcoal">Tool Execution</span>
+                                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">bash_execute</span>
+                                            </div>
+                                            <span class="text-xs text-corbusier-gray">2 hours ago</span>
+                                        </div>
+                                        <p class="text-sm text-corbusier-charcoal font-mono mb-3">npm run test:integration -- --grep "connection pool"</p>
+                                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-3">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <span>View Test Results</span>
+                                        </button>
+                                    </div>
+                                    <div id="tool-result-3" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                        <pre>Running integration tests for connection pool...
+
+  Connection Pool Tests
+    ✓ should establish connection through pgBouncer (145ms)
+    ✓ should handle concurrent connections (892ms)
+    ✓ should respect pool size limits (456ms)
+    ✓ should reconnect on connection loss (1234ms)
+    ✓ should track pool metrics (234ms)
+
+  5 passing (3.2s)
+
+Exit code: 0</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-corbusier-blue"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Agent</span>
+                                        <span class="text-xs text-corbusier-gray">2 hours ago</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal mb-3">Integration tests passing! pgBouncer configuration is working correctly. Now running load tests to validate performance under high traffic conditions.</p>
+                                    <div class="text-xs text-corbusier-gray flex items-center gap-2">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 font-bold rounded">Iteration 23</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 message-bubble">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <div class="typing-indicator flex gap-1">
+                                    <span class="w-2 h-2 bg-corbusier-blue rounded-full"></span>
+                                    <span class="w-2 h-2 bg-corbusier-blue rounded-full"></span>
+                                    <span class="w-2 h-2 bg-corbusier-blue rounded-full"></span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-corbusier-charcoal">Agent is typing...</span>
+                                        <div class="w-2 h-2 bg-green-500 rounded-full real-time-indicator"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="border-t border-corbusier-border p-4 bg-corbusier-cream">
+                        <div class="flex items-start gap-3">
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-card flex-shrink-0" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                            <div class="flex-1">
+                                <div class="relative">
+                                    <textarea id="message-input" placeholder="Type a message or use /command..." rows="2" class="w-full px-4 py-3 pr-12 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
+                                    <button class="absolute right-3 bottom-3 p-2 bg-corbusier-blue text-white rounded-md hover:bg-ibm-blue transition-colors">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="flex items-center gap-2 text-xs text-corbusier-gray">
+                                        <span class="font-mono">/help</span>
+                                        <span class="font-mono">/status</span>
+                                        <span class="font-mono">/logs</span>
+                                        <span class="font-mono">/stop</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
+                                            <i class="fa-solid fa-paperclip"></i>
+                                        </button>
+                                        <button class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
+                                            <i class="fa-solid fa-code"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="space-y-6">
+
+                <section id="timeline-section" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-corbusier-charcoal flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-corbusier-mustard"></i>Timeline
+                        </h3>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="relative pl-6 pb-4 border-l-2 border-green-300">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">2 hours ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">Load Tests</p>
+                            <p class="text-xs text-corbusier-gray">Running performance validation</p>
+                        </div>
+                        <div class="relative pl-6 pb-4 border-l-2 border-green-300">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">2 hours ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">Integration Tests</p>
+                            <p class="text-xs text-green-600">5/5 passed</p>
+                        </div>
+                        <div class="relative pl-6 pb-4 border-l-2 border-green-300">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">18 hours ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">Config Created</p>
+                            <p class="text-xs text-corbusier-gray">pgbouncer.ini configured</p>
+                        </div>
+                        <div class="relative pl-6 pb-4 border-l-2 border-green-300">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">20 hours ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">User Feedback</p>
+                            <p class="text-xs text-corbusier-gray">Mike Wilson commented</p>
+                        </div>
+                        <div class="relative pl-6 pb-4 border-l-2 border-green-300">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">23 hours ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">Analysis Complete</p>
+                            <p class="text-xs text-corbusier-gray">Repository structure reviewed</p>
+                        </div>
+                        <div class="relative pl-6">
+                            <div class="absolute -left-2 top-0 w-4 h-4 bg-purple-500 rounded-full border-2 border-white"></div>
+                            <p class="text-xs text-corbusier-gray mb-1">1 day ago</p>
+                            <p class="text-sm font-semibold text-corbusier-charcoal">Task Started</p>
+                            <p class="text-xs text-corbusier-gray">Agent initialized</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="agent-status-section" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-corbusier-charcoal flex items-center gap-2">
+                            <i class="fa-solid fa-robot text-corbusier-blue"></i>Agent Status
+                        </h3>
+                        <div class="flex items-center gap-2 px-3 py-1 bg-green-100 border border-green-200 rounded-full">
+                            <div class="w-2 h-2 bg-green-500 rounded-full real-time-indicator"></div>
+                            <span class="text-xs font-bold text-green-700">RUNNING</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between text-sm mb-2">
+                                <span class="text-corbusier-gray font-semibold">Progress</span>
+                                <span class="font-mono text-xs text-corbusier-gray">23/50 iterations</span>
+                            </div>
+                            <div class="w-full bg-corbusier-border rounded-full h-3">
+                                <div class="bg-corbusier-blue h-3 rounded-full" style="width: 46%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-corbusier-gray">Backend</span>
+                                    <span class="font-mono text-corbusier-charcoal">UX Pilot-3.5-sonnet</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-corbusier-gray">Policy</span>
+                                    <span class="font-mono text-corbusier-charcoal">engineering-standard</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-corbusier-gray">Uptime</span>
+                                    <span class="font-mono text-corbusier-charcoal">1d 2h 15m</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-corbusier-gray">Last Activity</span>
+                                    <span class="font-mono text-corbusier-charcoal">12s ago</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-corbusier-gray uppercase font-semibold mb-2">Current Task</p>
+                            <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                <p class="text-sm text-corbusier-charcoal">Running load tests to validate connection pool performance</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="quick-actions-section" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                    <h3 class="text-lg font-bold text-corbusier-charcoal mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-corbusier-mustard"></i>Quick Actions
+                    </h3>
+
+                    <div class="space-y-2">
+                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-corbusier-blue"></i>
+                            <span>Jump to Overview</span>
+                        </button>
+                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-teal"></i>
+                            <span>View Dependencies</span>
+                        </button>
+                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-code-pull-request text-corbusier-teal"></i>
+                            <span>Open Pull Request</span>
+                        </button>
+                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-code-branch text-corbusier-blue"></i>
+                            <span>View Branch</span>
+                        </button>
+                        <button class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-lg text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-corbusier-mustard"></i>
+                            <span>Activity Log</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="slash-commands-section" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                    <h3 class="text-lg font-bold text-corbusier-charcoal mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-corbusier-orange"></i>Slash Commands
+                    </h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div class="bg-corbusier-cream rounded-lg p-3 border border-corbusier-border">
+                            <p class="font-mono text-corbusier-blue mb-1">/help</p>
+                            <p class="text-xs text-corbusier-gray">Show available commands</p>
+                        </div>
+                        <div class="bg-corbusier-cream rounded-lg p-3 border border-corbusier-border">
+                            <p class="font-mono text-corbusier-blue mb-1">/status</p>
+                            <p class="text-xs text-corbusier-gray">Display agent status</p>
+                        </div>
+                        <div class="bg-corbusier-cream rounded-lg p-3 border border-corbusier-border">
+                            <p class="font-mono text-corbusier-blue mb-1">/logs</p>
+                            <p class="text-xs text-corbusier-gray">View execution logs</p>
+                        </div>
+                        <div class="bg-corbusier-cream rounded-lg p-3 border border-corbusier-border">
+                            <p class="font-mono text-corbusier-blue mb-1">/stop</p>
+                            <p class="text-xs text-corbusier-gray">Stop agent execution</p>
+                        </div>
+                        <div class="bg-corbusier-cream rounded-lg p-3 border border-corbusier-border">
+                            <p class="font-mono text-corbusier-blue mb-1">/rollback</p>
+                            <p class="text-xs text-corbusier-gray">Rollback to previous state</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const chatContainer = document.getElementById('chat-messages');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            const expandButtons = document.querySelectorAll('.expand-tool-result');
+            expandButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('expanded');
+                        const icon = this.querySelector('i');
+                        const text = this.querySelector('span');
+                        if (targetElement.classList.contains('expanded')) {
+                            icon.classList.remove('fa-chevron-down');
+                            icon.classList.add('fa-chevron-up');
+                            text.textContent = 'Hide Results';
+                        } else {
+                            icon.classList.remove('fa-chevron-up');
+                            icon.classList.add('fa-chevron-down');
+                            text.textContent = 'View Results';
+                        }
+                    }
+                });
+            });
+
+            const messageInput = document.getElementById('message-input');
+            if (messageInput) {
+                messageInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        const message = this.value.trim();
+                        if (message) {
+                            console.log('Sending message:', message);
+                            if (message.startsWith('/')) {
+                                console.log('Slash command detected:', message);
+                            }
+                            this.value = '';
+                        }
+                    }
+                });
+            }
+
+            setInterval(() => {
+                const lastActivity = document.querySelectorAll('.font-mono.text-corbusier-charcoal');
+                lastActivity.forEach(element => {
+                    if (element.textContent.includes('ago')) {
+                        const seconds = Math.floor(Math.random() * 30) + 10;
+                        element.textContent = `${seconds}s ago`;
+                    }
+                });
+            }, 5000);
+
+            console.log('Task Conversation Console initialized - Real-time updates active');
+            console.log('Slash commands enabled: /help, /status, /logs, /stop, /rollback');
+            console.log('Deep linking to task sections and delivery artifacts available');
+        });
+    </script>
+
+</body>
+</html>

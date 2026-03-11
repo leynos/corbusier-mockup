@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Workspace Kanban</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .kanban-column {
+            min-width: 320px;
+            max-width: 320px;
+        }
+        .kanban-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .kanban-card.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+        .real-time-indicator {
+            animation: blink 1.5s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .filter-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .filter-dropdown.active {
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[1920px] mx-auto px-4 md:px-6 py-6">
+
+        <section id="project-header" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-corbusier-blue to-ibm-blue rounded-xl flex items-center justify-center text-white shadow-retro flex-shrink-0">
+                            <i class="fa-solid fa-layer-group text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h1 class="text-2xl md:text-3xl font-bold text-corbusier-charcoal">Platform API v3</h1>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold uppercase rounded-full border border-green-200">Active</span>
+                            </div>
+                            <p class="text-corbusier-gray mb-3">Main production API service with advanced caching and authentication</p>
+                            <div class="flex flex-wrap items-center gap-4 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-code-branch text-corbusier-blue"></i>
+                                    <span class="font-mono text-corbusier-charcoal">acme-corp/platform-api-v3</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-corbusier-teal"></i>
+                                    <span class="text-corbusier-charcoal">12 Contributors</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar text-corbusier-mustard"></i>
+                                    <span class="text-corbusier-charcoal">Q1 2024 Performance</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <button class="w-full sm:w-auto px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                            <i class="fa-solid fa-plus mr-2"></i>New Task
+                        </button>
+                        <button class="w-full sm:w-auto px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-gear mr-2"></i>Settings
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-corbusier-gray uppercase font-semibold">Total Tasks</span>
+                            <i class="fa-solid fa-list-check text-corbusier-blue"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-corbusier-charcoal">47</p>
+                        <p class="text-xs text-corbusier-gray mt-1">Across all stages</p>
+                    </div>
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-corbusier-gray uppercase font-semibold">In Progress</span>
+                            <i class="fa-solid fa-spinner text-corbusier-teal"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-corbusier-charcoal">12</p>
+                        <p class="text-xs text-corbusier-gray mt-1">Active development</p>
+                    </div>
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-corbusier-gray uppercase font-semibold">Blocked</span>
+                            <i class="fa-solid fa-triangle-exclamation text-corbusier-orange"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-corbusier-charcoal">3</p>
+                        <p class="text-xs text-corbusier-gray mt-1">Needs attention</p>
+                    </div>
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-corbusier-gray uppercase font-semibold">Completed</span>
+                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-corbusier-charcoal">28</p>
+                        <p class="text-xs text-corbusier-gray mt-1">This milestone</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kanban-controls" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-4">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 text-sm">
+                            <div class="w-2 h-2 bg-green-500 rounded-full real-time-indicator"></div>
+                            <span class="text-corbusier-gray">Real-time updates</span>
+                            <span class="font-mono text-xs text-corbusier-gray ml-2">Last sync: 2s ago</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative">
+                            <button id="filter-assignee-btn" class="px-4 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Assignee</span>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="relative">
+                            <button id="filter-label-btn" class="px-4 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-tag"></i>
+                                <span>Labels</span>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="relative">
+                            <button id="filter-priority-btn" class="px-4 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-flag"></i>
+                                <span>Priority</span>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="relative">
+                            <button id="filter-milestone-btn" class="px-4 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-border transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Milestone</span>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                        </div>
+
+                        <div class="w-px h-8 bg-corbusier-border hidden md:block"></div>
+
+                        <button id="bulk-operations-btn" class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>Bulk Actions</span>
+                        </button>
+
+                        <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="active-filters" class="mt-4 hidden">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-corbusier-gray font-semibold">Active Filters:</span>
+                        <span class="px-3 py-1 bg-corbusier-blue text-white text-xs font-semibold rounded-full flex items-center gap-2">
+                            <span>Sarah Chen</span>
+                            <button class="hover:text-corbusier-cream"><i class="fa-solid fa-xmark"></i></button>
+                        </span>
+                        <span class="px-3 py-1 bg-corbusier-orange text-white text-xs font-semibold rounded-full flex items-center gap-2">
+                            <span>High Priority</span>
+                            <button class="hover:text-corbusier-cream"><i class="fa-solid fa-xmark"></i></button>
+                        </span>
+                        <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold">Clear All</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kanban-board" class="overflow-x-auto pb-6">
+            <div class="flex gap-4 min-w-max">
+
+                <div id="column-backlog" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-gray-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">Backlog</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-gray-200 text-gray-700 text-xs font-bold rounded">8</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Not started</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1892</span>
+                                        <i class="fa-brands fa-github text-xs text-corbusier-gray"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Implement WebSocket connection pooling</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Add connection pooling to reduce overhead and improve real-time performance</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Backend</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Performance</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Mike Wilson</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1901</span>
+                                        <i class="fa-brands fa-github text-xs text-corbusier-gray"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add rate limiting to public endpoints</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Implement token bucket algorithm for API rate limiting</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">API</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Sarah Chen</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Medium
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1908</span>
+                                        <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded flex items-center gap-1">
+                                            <i class="fa-solid fa-robot"></i>AI
+                                        </span>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Update API documentation</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Sync OpenAPI specs with recent endpoint changes</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">Documentation</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 bg-corbusier-gray rounded-full flex items-center justify-center text-white text-xs font-bold">U</div>
+                                        <span class="text-xs text-corbusier-gray">Unassigned</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Low
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="column-todo" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-blue-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-corbusier-blue rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">To Do</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-blue-200 text-blue-700 text-xs font-bold rounded">6</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Ready to start</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1847</span>
+                                        <i class="fa-brands fa-github text-xs text-corbusier-gray"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Optimize API response caching mechanism</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Implement Redis-based caching layer for frequently accessed endpoints</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Performance</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Backend</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-corbusier-gray mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="flex items-center gap-1"><i class="fa-solid fa-link"></i>2</span>
+                                        <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i>4</span>
+                                    </div>
+                                    <span class="flex items-center gap-1"><i class="fa-solid fa-paperclip"></i>3 files</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">John Doe</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1856</span>
+                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                            <i class="fa-solid fa-code-branch"></i>PR
+                                        </span>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Refactor authentication middleware</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Separate JWT validation into reusable module</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded">Refactor</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Sarah Chen</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1873</span>
+                                        <i class="fa-solid fa-calendar text-xs text-corbusier-mustard"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add health check endpoints</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Implement /health and /ready endpoints for orchestration</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded">DevOps</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">API</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Alex Kim</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Medium
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="column-inprogress" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-yellow-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-corbusier-mustard rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">In Progress</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-yellow-200 text-yellow-700 text-xs font-bold rounded">12</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Active work</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border-2 border-corbusier-blue p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1834</span>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fa-solid fa-robot text-xs text-corbusier-blue"></i>
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Agent Active</span>
+                                        </div>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Migrate database connection pool to pgBouncer</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Replace native connection pooling with pgBouncer for better performance</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Database</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">Migration</span>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="flex items-center justify-between text-xs text-corbusier-gray mb-1">
+                                        <span>Progress: 45%</span>
+                                        <span>23/50 iterations</span>
+                                    </div>
+                                    <div class="w-full bg-corbusier-border rounded-full h-2">
+                                        <div class="bg-corbusier-blue h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Mike Wilson</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1841</span>
+                                        <i class="fa-brands fa-github text-xs text-corbusier-gray"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add request logging middleware</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Structured logging for all API requests with correlation IDs</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded">Observability</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Backend</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-corbusier-gray mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="flex items-center gap-1"><i class="fa-solid fa-code-branch"></i>PR #234</span>
+                                        <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i>7</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Sarah Chen</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Medium
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1859</span>
+                                        <i class="fa-solid fa-calendar text-xs text-corbusier-mustard"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Implement GraphQL subscriptions</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Add real-time subscription support for live data updates</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">GraphQL</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Feature</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Alex Kim</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Medium
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="column-review" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-purple-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">Review</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-purple-200 text-purple-700 text-xs font-bold rounded">9</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Awaiting review</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1823</span>
+                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                            <i class="fa-solid fa-code-branch"></i>PR #229
+                                        </span>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add comprehensive error handling</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Standardized error responses across all endpoints</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Error Handling</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">API</span>
+                                </div>
+                                <div class="bg-green-50 border border-green-200 rounded p-2 mb-3">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-green-700 font-semibold flex items-center gap-1">
+                                            <i class="fa-solid fa-check-circle"></i>All checks passed
+                                        </span>
+                                        <span class="text-corbusier-gray">2/2 approvals</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">John Doe</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1829</span>
+                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                            <i class="fa-solid fa-code-branch"></i>PR #231
+                                        </span>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Update dependencies to latest versions</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Security patches and performance improvements</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded">Maintenance</span>
+                                </div>
+                                <div class="bg-yellow-50 border border-yellow-200 rounded p-2 mb-3">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-yellow-700 font-semibold flex items-center gap-1">
+                                            <i class="fa-solid fa-clock"></i>Checks running
+                                        </span>
+                                        <span class="text-corbusier-gray">1/2 approvals</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Mike Wilson</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Medium
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-corbusier-border p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1837</span>
+                                        <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded flex items-center gap-1">
+                                            <i class="fa-solid fa-shield-halved"></i>Policy
+                                        </span>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add input validation middleware</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Validate request payloads using JSON schema</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Validation</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Sarah Chen</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="column-blocked" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-red-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-corbusier-orange rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">Blocked</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-red-200 text-red-700 text-xs font-bold rounded">3</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Needs attention</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border-2 border-corbusier-orange p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1812</span>
+                                        <i class="fa-solid fa-triangle-exclamation text-xs text-corbusier-orange"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Database migration failing in staging</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Schema changes incompatible with existing data</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Critical</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Database</span>
+                                </div>
+                                <div class="bg-red-50 border border-red-200 rounded p-2 mb-3">
+                                    <p class="text-xs text-red-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-link"></i>Blocked by ISSUE-1807
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Mike Wilson</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>Critical
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border-2 border-corbusier-orange p-4 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1819</span>
+                                        <i class="fa-solid fa-triangle-exclamation text-xs text-corbusier-orange"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Third-party API rate limits exceeded</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Need to upgrade external service plan or implement caching</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">External</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Integration</span>
+                                </div>
+                                <div class="bg-yellow-50 border border-yellow-200 rounded p-2 mb-3">
+                                    <p class="text-xs text-yellow-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-clock"></i>Waiting on vendor response
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
+                                        <span class="text-xs text-corbusier-gray">Alex Kim</span>
+                                    </div>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-flag"></i>High
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="column-done" class="kanban-column">
+                    <div class="bg-white rounded-xl border border-corbusier-border shadow-card">
+                        <div class="p-4 border-b border-corbusier-border bg-green-50 rounded-t-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <h3 class="font-bold text-corbusier-charcoal">Done</h3>
+                                </div>
+                                <span class="px-2 py-1 bg-green-200 text-green-700 text-xs font-bold rounded">9</span>
+                            </div>
+                            <p class="text-xs text-corbusier-gray">Completed (Last 7 days)</p>
+                        </div>
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
+                            
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-green-200 p-4 opacity-75 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1801</span>
+                                        <i class="fa-solid fa-check-circle text-xs text-green-600"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Implement OAuth2 refresh token rotation</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Enhanced security with automatic token refresh</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Auth</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-corbusier-gray">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-code-merge"></i>Merged 2 days ago
+                                    </span>
+                                    <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-green-200 p-4 opacity-75 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1795</span>
+                                        <i class="fa-solid fa-check-circle text-xs text-green-600"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Add Prometheus metrics endpoints</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Custom metrics for monitoring and alerting</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded">Observability</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Monitoring</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-corbusier-gray">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-code-merge"></i>Merged 3 days ago
+                                    </span>
+                                    <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                                </div>
+                            </div>
+
+                            <div class="kanban-card bg-corbusier-paper rounded-lg border border-green-200 p-4 opacity-75 cursor-move" draggable="true">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-mono text-corbusier-gray">ISSUE-1788</span>
+                                        <i class="fa-solid fa-check-circle text-xs text-green-600"></i>
+                                    </div>
+                                    <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2 line-clamp-2">Upgrade Node.js to v20 LTS</h4>
+                                <p class="text-xs text-corbusier-gray mb-3 line-clamp-2">Performance improvements and security patches</p>
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded">Maintenance</span>
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Infrastructure</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-corbusier-gray">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-solid fa-code-merge"></i>Merged 5 days ago
+                                    </span>
+                                    <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            console.log('Project Workspace Kanban loaded - Real-time updates active');
+
+            let draggedCard = null;
+
+            const cards = document.querySelectorAll('.kanban-card');
+            cards.forEach(card => {
+                card.addEventListener('dragstart', function(e) {
+                    draggedCard = this;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                card.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    draggedCard = null;
+                });
+
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        console.log('Navigate to Task Detail for:', this.querySelector('.font-mono').textContent);
+                    }
+                });
+            });
+
+            const columns = document.querySelectorAll('.kanban-column');
+            columns.forEach(column => {
+                column.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
+                column.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (draggedCard) {
+                        const cardContainer = this.querySelector('.space-y-3');
+                        cardContainer.appendChild(draggedCard);
+                        console.log('Card moved - Optimistic update, syncing with server...');
+                    }
+                });
+            });
+
+            setInterval(() => {
+                const syncTime = document.querySelector('.real-time-indicator').nextElementSibling.nextElementSibling;
+                if (syncTime) {
+                    const seconds = Math.floor(Math.random() * 10) + 1;
+                    syncTime.textContent = `Last sync: ${seconds}s ago`;
+                }
+            }, 5000);
+
+            console.log('Drag-and-drop initialized with optimistic updates');
+        });
+    </script>
+
+</body>
+</html>

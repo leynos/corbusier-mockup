@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Task - Step 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .radio-card input[type="radio"]:checked + label {
+            border-color: #4A6FA5;
+            background-color: #F0F4FA;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="wizard-header" class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">Start New Task</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm text-corbusier-mustard"></i>
+                        <span class="text-sm">Configure task origin, workspace context, and source validation</span>
+                    </p>
+                </div>
+                <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                </button>
+            </div>
+
+            <div id="progress-indicator" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-blue rounded-full flex items-center justify-center text-white font-bold">1</div>
+                        <div>
+                            <p class="font-bold text-corbusier-charcoal">Origin Selection</p>
+                            <p class="text-xs text-corbusier-gray">Choose task source and context</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-blue rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">2</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">3</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">4</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">5</div>
+                    </div>
+                </div>
+                <div class="w-full bg-corbusier-border rounded-full h-2">
+                    <div class="bg-corbusier-blue h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-corbusier-gray font-mono">
+                    <span>Step 1 of 5</span>
+                    <span>20% Complete</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="origin-type-selection" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-corbusier-blue"></i>
+                        Select Task Origin Type
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Choose how you want to create this task</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="radio-card">
+                        <input type="radio" id="origin-issue" name="origin-type" value="issue" class="hidden" checked>
+                        <label for="origin-issue" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-circle-exclamation text-corbusier-blue text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-corbusier-charcoal mb-1">From Issue</h3>
+                                    <p class="text-xs text-corbusier-gray">Link to an existing issue or bug report</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="radio-card">
+                        <input type="radio" id="origin-milestone" name="origin-type" value="milestone" class="hidden">
+                        <label for="origin-milestone" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="w-16 h-16 bg-teal-100 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-flag-checkered text-corbusier-teal text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-corbusier-charcoal mb-1">From Milestone</h3>
+                                    <p class="text-xs text-corbusier-gray">Create from project milestone or epic</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="radio-card">
+                        <input type="radio" id="origin-adhoc" name="origin-type" value="adhoc" class="hidden">
+                        <label for="origin-adhoc" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-plus-circle text-purple-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-corbusier-charcoal mb-1">Ad Hoc Task</h3>
+                                    <p class="text-xs text-corbusier-gray">Create a standalone task from scratch</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="project-workspace-context" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-folder-tree text-corbusier-teal"></i>
+                        Project & Workspace Context
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Define the project and workspace boundaries for this task</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Project <span class="text-red-500">*</span>
+                        </label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="">Select a project...</option>
+                            <option value="platform-api">Platform API v3</option>
+                            <option value="mobile-app">Mobile App v2</option>
+                            <option value="data-pipeline">Data Pipeline Upgrade</option>
+                            <option value="security-audit">Security Audit 2024</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-info-circle"></i>
+                            Tasks are scoped to project boundaries
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Workspace <span class="text-red-500">*</span>
+                        </label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="">Select workspace...</option>
+                            <option value="main">main (default)</option>
+                            <option value="development">development</option>
+                            <option value="staging">staging</option>
+                            <option value="feature-auth">feature/auth-refactor</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-info-circle"></i>
+                            Defines the working environment for task execution
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-shield-halved text-corbusier-blue text-lg mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">RBAC & Tenant Scoping</h4>
+                            <p class="text-xs text-corbusier-gray">Your task will inherit permissions and policies from the selected project and workspace. Ensure you have appropriate access rights.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="source-picker" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-link text-corbusier-orange"></i>
+                        Source Selection
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Link this task to an existing issue or milestone (optional for ad hoc tasks)</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Source Type
+                        </label>
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-circle-exclamation mr-2"></i>Issue
+                            </button>
+                            <button class="flex-1 px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-flag-checkered mr-2"></i>Milestone
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Search Issues
+                        </label>
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray"></i>
+                            <input type="text" placeholder="Search by issue ID or title..." class="w-full pl-10 pr-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        </div>
+                    </div>
+
+                    <div class="border border-corbusier-border rounded-lg overflow-hidden">
+                        <div class="bg-corbusier-cream px-4 py-2 border-b border-corbusier-border">
+                            <p class="text-xs font-semibold text-corbusier-gray uppercase">Recent Issues</p>
+                        </div>
+                        <div class="divide-y divide-corbusier-border max-h-64 overflow-y-auto">
+                            <label class="flex items-center gap-4 p-4 hover:bg-corbusier-cream cursor-pointer transition-colors">
+                                <input type="radio" name="source-issue" class="w-4 h-4 text-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-mono text-sm font-bold text-corbusier-blue">ISSUE-1847</span>
+                                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded">High Priority</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal font-semibold">Database connection pool exhaustion during peak hours</p>
+                                    <p class="text-xs text-corbusier-gray mt-1">Platform API v3 • Reported 2 hours ago</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-4 p-4 hover:bg-corbusier-cream cursor-pointer transition-colors">
+                                <input type="radio" name="source-issue" class="w-4 h-4 text-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-mono text-sm font-bold text-corbusier-blue">ISSUE-1848</span>
+                                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-bold rounded">Security</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal font-semibold">Missing file validation on user upload endpoints</p>
+                                    <p class="text-xs text-corbusier-gray mt-1">Mobile App v2 • Reported 5 hours ago</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-4 p-4 hover:bg-corbusier-cream cursor-pointer transition-colors">
+                                <input type="radio" name="source-issue" class="w-4 h-4 text-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-mono text-sm font-bold text-corbusier-blue">ISSUE-1849</span>
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded">Enhancement</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal font-semibold">Refactor authentication middleware for better maintainability</p>
+                                    <p class="text-xs text-corbusier-gray mt-1">Platform API v3 • Reported 1 day ago</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-4 p-4 hover:bg-corbusier-cream cursor-pointer transition-colors">
+                                <input type="radio" name="source-issue" class="w-4 h-4 text-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-mono text-sm font-bold text-corbusier-blue">ISSUE-1850</span>
+                                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold rounded">Testing</span>
+                                    </div>
+                                    <p class="text-sm text-corbusier-charcoal font-semibold">Add integration tests for payment flow</p>
+                                    <p class="text-xs text-corbusier-gray mt-1">Mobile App v2 • Reported 3 days ago</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="validation-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-corbusier-mustard"></i>
+                        Validation & Summary
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Review your selections before proceeding</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Origin Type</p>
+                                <p class="text-corbusier-charcoal font-semibold flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-exclamation text-corbusier-blue"></i>
+                                    From Issue
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Project</p>
+                                <p class="text-corbusier-charcoal font-semibold">Platform API v3</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Workspace</p>
+                                <p class="text-corbusier-charcoal font-semibold">main (default)</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Source Issue</p>
+                                <p class="text-corbusier-charcoal font-semibold font-mono">ISSUE-1847</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                            <div>
+                                <h4 class="font-semibold text-green-900 text-sm mb-1">Validation Passed</h4>
+                                <ul class="space-y-1 text-xs text-green-800">
+                                    <li class="flex items-center gap-2">
+                                        <i class="fa-solid fa-check text-green-600"></i>
+                                        Project and workspace are accessible with current permissions
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <i class="fa-solid fa-check text-green-600"></i>
+                                        Source issue exists and is not already linked to an active task
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <i class="fa-solid fa-check text-green-600"></i>
+                                        RBAC policies allow task creation in selected workspace
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <i class="fa-solid fa-check text-green-600"></i>
+                                        No conflicting tasks detected for this issue
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizard-actions" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-center justify-between">
+                    <button class="px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <button class="px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-floppy-disk mr-2"></i>Save Draft
+                        </button>
+                        <button class="px-6 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                            Next: Agent Backend <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const radioCards = document.querySelectorAll('.radio-card input[type="radio"]');
+            radioCards.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Origin type selected:', this.value);
+                });
+            });
+
+            console.log('Start Task Wizard - Step 1 loaded - Origin selection and validation active');
+        });
+    </script>
+
+</body>
+</html>

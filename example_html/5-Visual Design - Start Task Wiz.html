@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Task - Step 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .workspace-card input[type="radio"]:checked + label {
+            border-color: #4A6FA5;
+            background-color: #F0F4FA;
+        }
+        .degraded-state {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="wizard-header" class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">Start New Task</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-folder-tree text-sm text-corbusier-teal"></i>
+                        <span class="text-sm">Configure workspace, repository selection, branch naming, environment variables, and compute resources</span>
+                    </p>
+                </div>
+                <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                </button>
+            </div>
+
+            <div id="progress-indicator" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-blue rounded-full flex items-center justify-center text-white font-bold">4</div>
+                        <div>
+                            <p class="font-bold text-corbusier-charcoal">Workspace Setup</p>
+                            <p class="text-xs text-corbusier-gray">Repository, branch, environment, and resource configuration</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-corbusier-blue"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-blue rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">5</div>
+                    </div>
+                </div>
+                <div class="w-full bg-corbusier-border rounded-full h-2">
+                    <div class="bg-corbusier-blue h-2 rounded-full transition-all duration-300" style="width: 80%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-corbusier-gray font-mono">
+                    <span>Step 4 of 5</span>
+                    <span>80% Complete</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="context-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-corbusier-charcoal flex items-center gap-2">
+                        <i class="fa-solid fa-info-circle text-corbusier-blue"></i>
+                        Configuration Summary
+                    </h3>
+                    <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit Previous
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Origin</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold font-mono">ISSUE-1847</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Project</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">Platform API v3</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Agent Backend</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">UX Pilot 3.5 Sonnet</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Tools</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">8 Selected</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Status</p>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">
+                            <i class="fa-solid fa-check-circle"></i>Validated
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="repository-selection" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                                <i class="fa-brands fa-github text-corbusier-charcoal"></i>
+                                Repository & Workspace Selection
+                            </h2>
+                            <p class="text-sm text-corbusier-gray">Choose the repository and workspace where the task will execute. Only repositories with appropriate permissions are shown.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+                            <span class="text-xs font-semibold text-green-600">VCS Connected</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 mb-6">
+                    <div class="workspace-card">
+                        <input type="radio" id="workspace-main" name="workspace" value="main" class="hidden" checked>
+                        <label for="workspace-main" class="block p-5 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-github text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <h4 class="font-bold text-corbusier-charcoal">acme-corp/platform-api-v3</h4>
+                                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded">Primary</span>
+                                            <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded">Active</span>
+                                        </div>
+                                        <p class="text-sm text-corbusier-gray mb-3">Main production repository for Platform API v3 - Full read/write access</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Default Branch</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">main</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Last Commit</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">2 hours ago</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Open PRs</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">12</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Contributors</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">24</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end gap-2">
+                                    <i class="fa-solid fa-check-circle text-corbusier-blue text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 pt-3 border-t border-corbusier-border">
+                                <i class="fa-solid fa-shield-halved text-green-600 text-sm"></i>
+                                <span class="text-xs text-corbusier-gray">Permissions: Read, Write, Create Branch, Create PR, Merge</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="workspace-card">
+                        <input type="radio" id="workspace-staging" name="workspace" value="staging" class="hidden">
+                        <label for="workspace-staging" class="block p-5 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-github text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <h4 class="font-bold text-corbusier-charcoal">acme-corp/platform-api-staging</h4>
+                                            <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded">Staging</span>
+                                        </div>
+                                        <p class="text-sm text-corbusier-gray mb-3">Staging environment repository for testing and validation</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Default Branch</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">develop</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Last Commit</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">5 hours ago</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Open PRs</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">7</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Contributors</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">18</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 pt-3 border-t border-corbusier-border">
+                                <i class="fa-solid fa-shield-halved text-green-600 text-sm"></i>
+                                <span class="text-xs text-corbusier-gray">Permissions: Read, Write, Create Branch, Create PR</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="workspace-card opacity-60">
+                        <input type="radio" id="workspace-prod" name="workspace" value="prod" class="hidden" disabled>
+                        <label for="workspace-prod" class="block p-5 border-2 border-corbusier-border rounded-lg cursor-not-allowed">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center text-white">
+                                        <i class="fa-brands fa-github text-2xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <h4 class="font-bold text-corbusier-charcoal">acme-corp/platform-api-production</h4>
+                                            <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded">Production</span>
+                                            <i class="fa-solid fa-lock text-corbusier-orange text-sm"></i>
+                                        </div>
+                                        <p class="text-sm text-corbusier-gray mb-3">Production repository - Restricted access, requires team lead approval</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Default Branch</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">release</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Last Commit</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">1 day ago</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Open PRs</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">2</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-corbusier-gray mb-1">Contributors</p>
+                                                <p class="font-mono font-semibold text-corbusier-charcoal">8</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 pt-3 border-t border-corbusier-border">
+                                <i class="fa-solid fa-lock text-corbusier-orange text-sm"></i>
+                                <span class="text-xs text-corbusier-gray">Insufficient permissions for direct access</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-info-circle text-corbusier-blue text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Repository Selection</h4>
+                            <p class="text-xs text-corbusier-gray">Selected repository determines available branches, permissions, and workspace configuration. Changes to production repositories require additional approval workflows.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="branch-configuration" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-code-branch text-corbusier-teal"></i>
+                        Branch Configuration
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Define branch naming strategy and base branch for the task workspace</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Base Branch</label>
+                            <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                                <option value="main" selected>main (default)</option>
+                                <option value="develop">develop</option>
+                                <option value="staging">staging</option>
+                                <option value="feature/api-v3">feature/api-v3</option>
+                            </select>
+                            <p class="text-xs text-corbusier-gray mt-2">Branch to create the task workspace from</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Branch Naming Pattern</label>
+                            <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                                <option value="issue" selected>task/{issue-id}-{slug}</option>
+                                <option value="feature">feature/{slug}</option>
+                                <option value="bugfix">bugfix/{issue-id}-{slug}</option>
+                                <option value="custom">Custom pattern...</option>
+                            </select>
+                            <p class="text-xs text-corbusier-gray mt-2">Naming convention for the new branch</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Generated Branch Name</label>
+                        <div class="relative">
+                            <input type="text" value="task/1847-optimize-api-response-caching" class="w-full px-4 py-3 bg-corbusier-cream border border-corbusier-border rounded-md text-sm font-mono focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-corbusier-blue hover:text-ibm-blue">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-check-circle text-green-600 text-sm"></i>
+                            <p class="text-xs text-green-600 font-semibold">Branch name is valid and available</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <h4 class="text-sm font-bold text-corbusier-charcoal mb-3">Branch Preview</h4>
+                        <div class="space-y-3 text-xs font-mono">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-code-branch text-corbusier-gray"></i>
+                                <span class="text-corbusier-gray">main</span>
+                                <i class="fa-solid fa-arrow-right text-corbusier-gray text-xs"></i>
+                                <span class="text-corbusier-blue font-semibold">task/1847-optimize-api-response-caching</span>
+                            </div>
+                            <div class="flex items-center gap-3 pl-8">
+                                <i class="fa-solid fa-user text-corbusier-gray"></i>
+                                <span class="text-corbusier-gray">Created by: John Doe (you)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pl-8">
+                                <i class="fa-solid fa-clock text-corbusier-gray"></i>
+                                <span class="text-corbusier-gray">Created: On task start</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="environment-variables" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-key text-corbusier-mustard"></i>
+                                Environment Variables & Secrets
+                            </h2>
+                            <p class="text-sm text-corbusier-gray">Configure environment-specific variables and secrets for task execution</p>
+                        </div>
+                        <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-semibold hover:bg-ibm-blue transition-colors">
+                            <i class="fa-solid fa-plus mr-2"></i>Add Variable
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-10 h-10 bg-corbusier-blue rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-database"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="font-mono font-bold text-corbusier-charcoal text-sm">DATABASE_URL</h4>
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded">Required</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">PostgreSQL connection string for staging database</p>
+                                </div>
+                            </div>
+                            <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="password" value="postgresql://staging:****@db.staging.acme.com:5432/platform" class="flex-1 px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-mono focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue" readonly>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-semibold hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-shield-halved text-green-600 text-xs"></i>
+                            <span class="text-xs text-green-600">Encrypted at rest</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-10 h-10 bg-corbusier-teal rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-server"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="font-mono font-bold text-corbusier-charcoal text-sm">API_BASE_URL</h4>
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded">Required</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Base URL for API endpoints in staging environment</p>
+                                </div>
+                            </div>
+                            <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" value="https://api.staging.acme.com/v3" class="flex-1 px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-mono focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-semibold hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="font-mono font-bold text-corbusier-charcoal text-sm">JWT_SECRET</h4>
+                                        <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-semibold rounded">Secret</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">JWT signing secret for authentication tokens</p>
+                                </div>
+                            </div>
+                            <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="password" value="********************************" class="flex-1 px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-mono focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue" readonly>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-semibold hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-shield-halved text-green-600 text-xs"></i>
+                            <span class="text-xs text-green-600">Encrypted at rest • Vault managed</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-gear"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="font-mono font-bold text-corbusier-charcoal text-sm">NODE_ENV</h4>
+                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded">Optional</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Node.js environment mode</p>
+                                </div>
+                            </div>
+                            <button class="text-corbusier-gray hover:text-corbusier-charcoal">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select class="flex-1 px-3 py-2 bg-white border border-corbusier-border rounded-md text-xs font-mono focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                                <option value="development" selected>development</option>
+                                <option value="staging">staging</option>
+                                <option value="production">production</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-exclamation-triangle text-corbusier-mustard text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Security Notice</h4>
+                            <p class="text-xs text-corbusier-gray">All secrets are encrypted at rest and in transit. Required variables must be set before task execution. Changes to secrets require governance approval.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="compute-resources" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-corbusier-blue"></i>
+                        Compute Resources & Limits
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Allocate CPU, memory, and execution time limits for the task workspace</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-3">CPU Allocation</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 p-4 bg-corbusier-cream rounded-lg border border-corbusier-border cursor-pointer hover:border-corbusier-blue transition-all">
+                                <input type="radio" name="cpu" value="1" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">1 vCPU</span>
+                                        <span class="text-xs font-mono text-corbusier-gray">Standard</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Suitable for most development tasks</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-blue-50 rounded-lg border-2 border-corbusier-blue cursor-pointer">
+                                <input type="radio" name="cpu" value="2" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue" checked>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">2 vCPUs</span>
+                                        <span class="text-xs font-mono text-corbusier-blue font-semibold">Recommended</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Balanced performance for API tasks</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-corbusier-cream rounded-lg border border-corbusier-border cursor-pointer hover:border-corbusier-blue transition-all">
+                                <input type="radio" name="cpu" value="4" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">4 vCPUs</span>
+                                        <span class="text-xs font-mono text-corbusier-gray">High Performance</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">For compute-intensive operations</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-3">Memory Allocation</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 p-4 bg-corbusier-cream rounded-lg border border-corbusier-border cursor-pointer hover:border-corbusier-blue transition-all">
+                                <input type="radio" name="memory" value="2" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">2 GB</span>
+                                        <span class="text-xs font-mono text-corbusier-gray">Minimal</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Basic operations and testing</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-blue-50 rounded-lg border-2 border-corbusier-blue cursor-pointer">
+                                <input type="radio" name="memory" value="4" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue" checked>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">4 GB</span>
+                                        <span class="text-xs font-mono text-corbusier-blue font-semibold">Recommended</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Standard for API development</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-corbusier-cream rounded-lg border border-corbusier-border cursor-pointer hover:border-corbusier-blue transition-all">
+                                <input type="radio" name="memory" value="8" class="w-4 h-4 text-corbusier-blue border-corbusier-border focus:ring-corbusier-blue">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-semibold text-corbusier-charcoal text-sm">8 GB</span>
+                                        <span class="text-xs font-mono text-corbusier-gray">High Memory</span>
+                                    </div>
+                                    <p class="text-xs text-corbusier-gray">Large datasets and builds</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Max Execution Time</label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="30">30 minutes</option>
+                            <option value="60" selected>1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="240">4 hours</option>
+                            <option value="480">8 hours</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-2">Maximum runtime before auto-termination</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Disk Storage</label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="10">10 GB</option>
+                            <option value="20" selected>20 GB</option>
+                            <option value="50">50 GB</option>
+                            <option value="100">100 GB</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-2">Workspace storage allocation</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">Network Bandwidth</label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="standard" selected>Standard (100 Mbps)</option>
+                            <option value="high">High (1 Gbps)</option>
+                            <option value="unlimited">Unlimited</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-2">Network transfer limits</p>
+                    </div>
+                </div>
+
+                <div class="bg-corbusier-cream rounded-lg p-6 border border-corbusier-border">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-sm font-bold text-corbusier-charcoal">Resource Summary & Cost Estimate</h4>
+                        <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold">
+                            <i class="fa-solid fa-calculator mr-1"></i>Recalculate
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs text-corbusier-gray mb-1">CPU</p>
+                            <p class="font-mono font-bold text-corbusier-charcoal">2 vCPUs</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray mb-1">Memory</p>
+                            <p class="font-mono font-bold text-corbusier-charcoal">4 GB</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray mb-1">Storage</p>
+                            <p class="font-mono font-bold text-corbusier-charcoal">20 GB</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray mb-1">Max Runtime</p>
+                            <p class="font-mono font-bold text-corbusier-charcoal">1 hour</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-corbusier-gray mb-1">Estimated Cost per Hour</p>
+                                <p class="text-2xl font-bold text-corbusier-charcoal">$0.24</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-corbusier-gray mb-1">Budget Remaining</p>
+                                <p class="text-lg font-bold text-green-600">$847.50</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="degraded-state-notice" class="mb-6 degraded-state" style="display: none;">
+            <div class="bg-orange-50 border-2 border-orange-300 rounded-xl shadow-card p-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-corbusier-orange rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                            Degraded State Detected
+                            <span class="px-2 py-1 bg-orange-200 text-orange-800 text-xs font-bold rounded">VCS API Unavailable</span>
+                        </h3>
+                        <p class="text-sm text-corbusier-gray mb-4">Unable to connect to GitHub API. Some repository information may be unavailable or outdated. You can proceed with cached data or retry the connection.</p>
+                        <div class="bg-white rounded-lg p-4 border border-orange-200 mb-4">
+                            <h4 class="text-sm font-semibold text-corbusier-charcoal mb-2">Affected Features:</h4>
+                            <ul class="space-y-2 text-xs text-corbusier-gray">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-xmark text-orange-600"></i>
+                                    <span>Real-time branch validation</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-xmark text-orange-600"></i>
+                                    <span>Latest commit information</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                                    <span>Cached repository list (available)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                                    <span>Local workspace configuration (available)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button class="px-4 py-2 bg-corbusier-orange text-white rounded-md text-sm font-semibold hover:bg-red-600 transition-colors">
+                                <i class="fa-solid fa-rotate-right mr-2"></i>Retry Connection
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                Proceed with Cached Data
+                            </button>
+                            <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold ml-auto">
+                                View System Status <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="workspace-validation" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-corbusier-teal"></i>
+                        Workspace Configuration Validation
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Verify all workspace settings before proceeding to review</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Repository Access</p>
+                                <p class="text-xs text-corbusier-gray">Valid permissions for selected repository</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">VALID</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Branch Configuration</p>
+                                <p class="text-xs text-corbusier-gray">Branch name available and follows naming convention</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">VALID</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Environment Variables</p>
+                                <p class="text-xs text-corbusier-gray">All required variables configured and encrypted</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">VALID</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Compute Resources</p>
+                                <p class="text-xs text-corbusier-gray">Resource allocation within budget and limits</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">VALID</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Network Connectivity</p>
+                                <p class="text-xs text-corbusier-gray">VCS and runtime APIs accessible</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">VALID</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-circle-check text-green-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Workspace Configuration Valid</h4>
+                            <p class="text-xs text-green-800">All workspace settings validated successfully. Repository access confirmed, branch name available, environment variables configured, and compute resources allocated. Ready to proceed to final review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizard-actions" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-floppy-disk mr-2"></i>Save Draft
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                            Next: Review & Start <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const workspaceRadios = document.querySelectorAll('input[name="workspace"]');
+            const cpuRadios = document.querySelectorAll('input[name="cpu"]');
+            const memoryRadios = document.querySelectorAll('input[name="memory"]');
+            const degradedNotice = document.getElementById('degraded-state-notice');
+
+            workspaceRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Workspace selection changed:', this.value);
+                });
+            });
+
+            cpuRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('CPU allocation changed:', this.value);
+                });
+            });
+
+            memoryRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Memory allocation changed:', this.value);
+                });
+            });
+
+            const retryButton = document.querySelector('[class*="Retry Connection"]');
+            if (retryButton) {
+                retryButton.addEventListener('click', function() {
+                    console.log('Retrying VCS connection...');
+                });
+            }
+
+            console.log('Start Task Wizard - Step 4 loaded - Workspace setup configuration active');
+        });
+    </script>
+
+</body>
+</html>

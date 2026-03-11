@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .punchcard-pattern {
+            background-image: radial-gradient(#D1CDC4 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <div id="signin-container" class="min-h-screen flex items-center justify-center px-4 py-8 punchcard-pattern opacity-30 relative">
+        <div class="absolute inset-0 bg-gradient-to-br from-corbusier-cream/95 to-corbusier-paper/95"></div>
+        
+        <div class="relative z-10 w-full max-w-6xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                
+                <div id="signin-branding" class="text-center lg:text-left mb-8 lg:mb-0">
+                    <div class="inline-flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-corbusier-orange rounded-xl flex items-center justify-center text-white font-mono font-bold text-3xl md:text-4xl shadow-retro">C</div>
+                        <div>
+                            <h1 class="font-mono font-bold text-3xl md:text-4xl tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-sm md:text-base text-corbusier-gray font-mono mt-1">Engineering Orchestration Platform</p>
+                        </div>
+                    </div>
+                    
+                    <div class="hidden lg:block mt-12 space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-corbusier-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-bolt text-corbusier-blue text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <h3 class="font-bold text-corbusier-charcoal mb-1">Real-time Task Orchestration</h3>
+                                <p class="text-sm text-corbusier-gray">Intelligent agent-driven workflows with live status updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-corbusier-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-shield-halved text-corbusier-teal text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <h3 class="font-bold text-corbusier-charcoal mb-1">Enterprise-Grade Security</h3>
+                                <p class="text-sm text-corbusier-gray">RBAC, audit trails, and policy enforcement</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-corbusier-mustard/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-chart-line text-corbusier-mustard text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <h3 class="font-bold text-corbusier-charcoal mb-1">AI-Powered Insights</h3>
+                                <p class="text-sm text-corbusier-gray">Proactive suggestions and intelligent recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="signin-form-container" class="w-full">
+                    <div class="bg-white rounded-2xl border border-corbusier-border shadow-floating p-8 md:p-10">
+                        
+                        <div class="mb-8">
+                            <h2 class="text-2xl md:text-3xl font-bold text-corbusier-charcoal mb-2">Welcome back</h2>
+                            <p class="text-corbusier-gray">Sign in to your workspace to continue</p>
+                        </div>
+
+                        <div id="sso-section" class="mb-8">
+                            <div class="space-y-3">
+                                <button class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-corbusier-border rounded-lg font-semibold text-corbusier-charcoal hover:bg-corbusier-cream hover:border-corbusier-blue transition-all">
+                                    <i class="fa-brands fa-google text-xl text-red-500"></i>
+                                    <span>Continue with Google</span>
+                                </button>
+                                <button class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-corbusier-border rounded-lg font-semibold text-corbusier-charcoal hover:bg-corbusier-cream hover:border-corbusier-blue transition-all">
+                                    <i class="fa-brands fa-microsoft text-xl text-blue-600"></i>
+                                    <span>Continue with Microsoft</span>
+                                </button>
+                                <button class="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-corbusier-border rounded-lg font-semibold text-corbusier-charcoal hover:bg-corbusier-cream hover:border-corbusier-blue transition-all">
+                                    <i class="fa-solid fa-building text-xl text-corbusier-blue"></i>
+                                    <span>Continue with SSO</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative mb-8">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-corbusier-border"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-white text-corbusier-gray font-medium">Or continue with email</span>
+                            </div>
+                        </div>
+
+                        <form id="signin-form" class="space-y-5">
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-corbusier-charcoal mb-2">Email address</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-corbusier-gray"></i>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        placeholder="you@company.com"
+                                        class="w-full pl-12 pr-4 py-3.5 bg-white border border-corbusier-border rounded-lg focus:outline-none focus:border-corbusier-blue focus:ring-2 focus:ring-corbusier-blue/20 transition-all"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="password" class="block text-sm font-semibold text-corbusier-charcoal mb-2">Password</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-corbusier-gray"></i>
+                                    <input 
+                                        type="password" 
+                                        id="password" 
+                                        name="password" 
+                                        placeholder="Enter your password"
+                                        class="w-full pl-12 pr-12 py-3.5 bg-white border border-corbusier-border rounded-lg focus:outline-none focus:border-corbusier-blue focus:ring-2 focus:ring-corbusier-blue/20 transition-all"
+                                    >
+                                    <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-corbusier-gray hover:text-corbusier-charcoal transition-colors">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="remember" name="remember" class="w-4 h-4 rounded border-corbusier-border text-corbusier-blue focus:ring-2 focus:ring-corbusier-blue/20">
+                                    <span class="text-sm text-corbusier-charcoal">Remember this device</span>
+                                </label>
+                                <a href="#" class="text-sm font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="w-full bg-corbusier-blue text-white px-6 py-3.5 rounded-lg font-bold hover:bg-ibm-blue transition-colors shadow-card hover:shadow-floating">
+                                Sign in to workspace
+                            </button>
+                        </form>
+
+                        <div id="workspace-selector" class="mt-6 p-4 bg-corbusier-cream/50 rounded-lg border border-corbusier-border">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm font-semibold text-corbusier-charcoal">Recent Workspaces</p>
+                                <button class="text-xs font-mono text-corbusier-blue hover:text-ibm-blue transition-colors">View all</button>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="w-full flex items-center gap-3 p-3 bg-white rounded-lg border border-corbusier-border hover:border-corbusier-blue hover:shadow-card transition-all text-left">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-corbusier-blue to-ibm-blue rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AC</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-semibold text-corbusier-charcoal text-sm truncate">Acme Corporation</p>
+                                        <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-corbusier-gray text-sm"></i>
+                                </button>
+                                <button class="w-full flex items-center gap-3 p-3 bg-white rounded-lg border border-corbusier-border hover:border-corbusier-blue hover:shadow-card transition-all text-left">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-corbusier-teal to-green-600 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">DV</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-semibold text-corbusier-charcoal text-sm truncate">DevOps Team</p>
+                                        <p class="text-xs text-corbusier-gray font-mono">devops.corbusier.io</p>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-corbusier-gray text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-corbusier-gray">
+                                Don't have an account? 
+                                <a href="#" class="font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors">Request access</a>
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div id="error-state" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-triangle-exclamation text-red-600 text-lg mt-0.5"></i>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-red-900 mb-1">Authentication Failed</h4>
+                                <p class="text-sm text-red-700">Invalid credentials. Please check your email and password and try again.</p>
+                            </div>
+                            <button class="text-red-600 hover:text-red-800 transition-colors">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sso-error-state" class="hidden mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-exclamation text-corbusier-orange text-lg mt-0.5"></i>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-corbusier-orange mb-1">SSO Provider Unavailable</h4>
+                                <p class="text-sm text-orange-700">We're experiencing issues connecting to your identity provider. Please try email/password authentication or contact your administrator.</p>
+                                <button class="mt-2 text-sm font-semibold text-corbusier-orange hover:text-orange-800 transition-colors">
+                                    Retry SSO connection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <p class="text-xs text-corbusier-gray font-mono mb-2">SECURE ENTERPRISE LOGIN</p>
+                        <div class="flex items-center justify-center gap-4 text-xs text-corbusier-gray">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield-halved text-corbusier-teal"></i>
+                                <span>256-bit SSL</span>
+                            </div>
+                            <div class="w-px h-4 bg-corbusier-border"></div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock text-corbusier-teal"></i>
+                                <span>SOC 2 Compliant</span>
+                            </div>
+                            <div class="w-px h-4 bg-corbusier-border"></div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-check-double text-corbusier-teal"></i>
+                                <span>RBAC Enforced</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
