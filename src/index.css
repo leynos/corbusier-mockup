@@ -5,6 +5,22 @@
   :root {
     font-family: var(--font-family-body);
     min-height: 100%;
+
+    /* Font family aliases for component use */
+    --font-display: var(--font-family-display);
+    --font-body: var(--font-family-body);
+    --font-mono: var(--font-family-mono);
+
+    /* Punch-card chamfer clip sizes */
+    --clip-sm: 8px;
+    --clip-md: 12px;
+    --clip-lg: 16px;
+    --clip-xl: 20px;
+
+    /* Transition speed tokens */
+    --transition-fast: 100ms;
+    --transition-base: 150ms;
+    --transition-slow: 200ms;
   }
 
   html,
@@ -18,6 +34,12 @@
 
   #root {
     min-height: 100%;
+  }
+
+  /* Global focus-visible styles: 3px solid teal, 2px offset */
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
   }
 }
 
