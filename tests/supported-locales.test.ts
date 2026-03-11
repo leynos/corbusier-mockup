@@ -1,4 +1,6 @@
 import { describe, expect, it } from "bun:test";
+import { readdir } from "node:fs/promises";
+import { resolve } from "node:path";
 
 import {
   DEFAULT_LOCALE,
@@ -9,6 +11,18 @@ import {
 } from "../src/app/i18n/supported-locales";
 
 describe("supported locale metadata", () => {
+  it("matches the shipped Fluent bundle directories", async () => {
+    const localesDir = resolve(process.cwd(), "public/locales");
+    const entries = await readdir(localesDir, { withFileTypes: true });
+    const shippedCodes = entries
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+    const configuredCodes = [...SUPPORTED_LOCALES].map((locale) => locale.code).sort();
+
+    expect(configuredCodes).toEqual(shippedCodes);
+  });
+
   it("exposes a default locale present in the supported list", () => {
     expect(DEFAULT_LOCALE).toBe(SUPPORTED_LOCALES[0].code);
   });
@@ -21,11 +35,11 @@ describe("supported locale metadata", () => {
   });
 
   it("matches locales in a case-insensitive manner", () => {
-    expect(getLocaleMetadata("ES").code).toBe("es");
+    expect(getLocaleMetadata("EN-gb").code).toBe("en-GB");
   });
 
   it("falls back to language-only matches when the region is unsupported", () => {
-    expect(getLocaleMetadata("fr-CA").code).toBe("fr");
+    expect(getLocaleMetadata("en-AU").code).toBe("en-GB");
   });
 
   it("returns the default locale when no match can be made", () => {
@@ -39,9 +53,9 @@ describe("supported locale metadata", () => {
 });
 
 describe("locale direction helpers", () => {
-  it("surfaces RTL direction metadata when languages require it", () => {
-    expect(getLocaleDirection("ar")).toBe("rtl");
-    expect(isRtlLocale("he")).toBe(true);
+  it("keeps the shipped locale in left-to-right mode", () => {
+    expect(getLocaleDirection("en-GB")).toBe("ltr");
+    expect(isRtlLocale("en-GB")).toBe(false);
   });
 
   it("defaults to ltr when a locale is undefined or unsupported", () => {

@@ -25,12 +25,12 @@ describe("i18n runtime configuration", () => {
     expect(readBodyDirection()).toBe("ltr");
   });
 
-  it("updates direction metadata when applying an RTL locale", () => {
-    applyDocumentLocale("ar");
+  it("keeps left-to-right metadata for the shipped locale", () => {
+    applyDocumentLocale(DEFAULT_LOCALE);
 
-    expect(document.documentElement.lang).toBe("ar");
-    expect(document.documentElement.dir).toBe("rtl");
-    expect(readBodyDirection()).toBe("rtl");
+    expect(document.documentElement.lang).toBe(DEFAULT_LOCALE);
+    expect(document.documentElement.dir).toBe("ltr");
+    expect(readBodyDirection()).toBe("ltr");
   });
 
   it("falls back to the default locale metadata when a locale is missing", () => {
