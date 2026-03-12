@@ -983,22 +983,30 @@ Query that the relevant data is now stale. If there is an active useQuery hook
 for that data, a background refetch will be triggered automatically.
 
 ```javascript
-// In a top-level component
-useEffect(() => {
-  const socket = new WebSocket('wss://your-server.com');
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-  socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    
-    if (message.event === 'todo_updated') {
-      // Invalidate the specific todo detail query and all todo lists
-      queryClient.invalidateQueries({ queryKey: ['todos', 'detail', message.id] });
-      queryClient.invalidateQueries({ queryKey: ['todos', 'list'] });
-    }
-  };
+function TodoSocketBridge() {
+  const queryClient = useQueryClient();
 
-  return () => socket.close();
-}, [queryClient]);
+  useEffect(() => {
+    const socket = new WebSocket('wss://your-server.com');
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      if (message.event === 'todo_updated') {
+        // Invalidate the specific todo detail query and all todo lists
+        queryClient.invalidateQueries({ queryKey: ['todos', 'detail', message.id] });
+        queryClient.invalidateQueries({ queryKey: ['todos', 'list'] });
+      }
+    };
+
+    return () => socket.close();
+  }, [queryClient]);
+
+  return null;
+}
 
 ```
 
@@ -1010,29 +1018,37 @@ directly injects this data into the cache using queryClient.setQueryData. This
 avoids the second HTTP request, making the UI update feel instantaneous.
 
 ```javascript
-// In a top-level component
-useEffect(() => {
-  const socket = new WebSocket('wss://your-server.com');
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-  socket.onmessage = (event) => {
-    const newTodo = JSON.parse(event.data);
-    
-    // Directly update the cache for the specific todo
-    queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo);
+function TodoSocketBridge() {
+  const queryClient = useQueryClient();
 
-    // Also update the list cache to include/update the new todo
-    queryClient.setQueryData(['todos', 'list'], (oldData = []) => {
-      const exists = oldData.some(todo => todo.id === newTodo.id);
-      if (exists) {
-        return oldData.map(todo => (todo.id === newTodo.id ? newTodo : todo));
-      }
+  useEffect(() => {
+    const socket = new WebSocket('wss://your-server.com');
 
-      return [...oldData, newTodo];
-    });
-  };
+    socket.onmessage = (event) => {
+      const newTodo = JSON.parse(event.data);
 
-  return () => socket.close();
-}, [queryClient]);
+      // Directly update the cache for the specific todo
+      queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo);
+
+      // Also update the list cache to include/update the new todo
+      queryClient.setQueryData(['todos', 'list'], (oldData = []) => {
+        const exists = oldData.some(todo => todo.id === newTodo.id);
+        if (exists) {
+          return oldData.map(todo => (todo.id === newTodo.id ? newTodo : todo));
+        }
+
+        return [...oldData, newTodo];
+      });
+    };
+
+    return () => socket.close();
+  }, [queryClient]);
+
+  return null;
+}
 
 ```
 
