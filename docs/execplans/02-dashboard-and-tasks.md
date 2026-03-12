@@ -161,6 +161,13 @@ all passing. `bun run ff` gate green throughout.
 Files created: 18 new files, well within the 20-file tolerance.
 All files under the 400-line limit.
 
+**Migration note:** Plan 02 entities (Task, KpiMetric, AgentBackend,
+DashboardEvent, Subtask) were implemented with flat string fields and
+Fluent translation keys. These entities will be migrated to the
+`EntityLocalizations` pattern as the first milestone of plan 03
+(Phase 0 of the data model-driven card architecture migration
+roadmap).
+
 ## Context and orientation
 
 This plan depends on `01-foundation.md` being complete. The app shell,

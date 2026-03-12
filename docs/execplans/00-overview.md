@@ -67,6 +67,13 @@ observable, testable output before the next begins.
 - **Mock data**: All data is static fixture data — no backend. Fixture
   files live under `src/data/` and model the domain entities described
   in `docs/concept.md`.
+- **Data model-driven card architecture**: All entity fixtures use the
+  `EntityLocalizations` pattern from
+  `docs/data-model-driven-card-architecture.md`. Entity models own
+  their localized strings; Fluent bundles keep only UI chrome. The
+  shared types (`EntityLocalizations`, `LocalizedStringSet`,
+  `pickLocalization`) and descriptor registries are introduced in
+  plan 03 and used in all subsequent plans.
 
 ## How to use these plans
 

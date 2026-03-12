@@ -1,56 +1,59 @@
 # Data model-driven card architecture
 
-Last updated: 25 November 2025
+Last updated: 12 March 2026
 
 ## Purpose
 
-Every card in the mockup must render from a concrete entity data model that
-already contains its localized strings and International System of Units
-(SI)-based measurements.
-Locale bundles should keep only UI chrome and formatting scaffolding. This
-document audits current card usages and defines the schemas, localization
-rules, and migration steps to align the codebase.
+Every card in the mockup must render from a concrete entity data model
+that already contains its localized strings and SI-based measurements.
+Locale bundles should keep only UI chrome and formatting scaffolding.
+This document defines the schemas, localization rules, and migration
+steps for the Corbusier front end.
 
-For a backend-compatible perspective on hexagonal domain boundaries and ports,
-see `docs/concept.md`. For offline-first persistence patterns, see
-`docs/local-first-react.md`.
+This architecture applies to all v2a stack front ends. For a
+backend-compatible perspective on hexagonal domain boundaries and ports,
+see `docs/concept.md`. For the cross-application summary of the shared
+card primitives, see `docs/v2a-front-end-stack.md`.
 
 ## Principles to enforce
 
-- Entity models own their names, descriptions, badges, and imagery per locale.
+- Entity models own their names, descriptions, badges, and imagery
+  per locale.
 - Attribute labels come from stable internal identifiers resolved via
-  descriptor registries (difficulties, interests, surfaces, tags).
-- Numeric values are stored in SI base units; conversion happens at render
-  time via the existing unit-format helpers.
-- Counts stay as integers; pluralization belongs to the translation system.
-- Components receive fully formed entities and only format/present them.
+  descriptor registries (labels, priorities, states, health statuses).
+- Numeric values are stored in SI base units; conversion happens at
+  render time via format helpers.
+- Counts stay as integers; pluralization belongs to the translation
+  system.
+- Components receive fully formed entities and only format/present
+  them.
 
 ## Card inventory and current data sources
 
-- **Explore screen (`explore-sections.tsx`)**: category chips, featured walk,
-  popular theme cards, curated collection cards, trending route cards,
-  community pick panel. Data comes from `data/explore.ts`; names/descriptions
-  live directly in fixtures (English only).
-- **Discover screen (`discover-screen.tsx`)**: interest chips driven by
-  `resolveDiscoverInterests` over the interest registry; labels drawn from
-  Fluent keys.
-- **Customize screen (`customize-sections.tsx`)**: segment toggle cards,
-  surface option cards, route preview cards, advanced preference toggle cards.
-  Text is currently split between fixtures and Fluent keys.
-- **Offline screen (`offline-screen.tsx`)**: offline suggestion cards, offline
-  download cards, undo cards, auto-management preference cards; strings are
-  hard-coded in `data/stage-four.ts` with some UI copy in Fluent.
-- **Safety screen (`safety-accessibility-screen.tsx`)**: accordion sections and
-  toggle rows plus preset chips; labels sourced from Fluent keys defined in
-  `data/stage-four.ts`.
-- **Walk complete screen (`walk-complete-screen.tsx`)**: hero summary card,
-  primary and secondary stat cards, favourite moment cards, share chip row;
-  entity text held in `data/stage-four.ts`.
-- **Saved route screen (`map/saved/saved-screen.tsx`)**: saved route summary
-  panel and POI list cards; data from `data/map.ts` with English strings.
-- **Wizard step 3 (`wizard/step-three`)**: generated route summary card,
-  highlight chips, featured stops list; strings live in `data/wizard.ts` but
-  echoed into Fluent defaults.
+- **Dashboard (`dashboard-screen.tsx`)**: system health status panel,
+  KPI cards, recent activity feed, agent utilization summary. Data
+  comes from `data/dashboard.ts`.
+- **My Tasks (`tasks-screen.tsx`)**: filterable task queue with state,
+  priority, and project filters. Data from `data/tasks.ts`.
+- **Task Detail (`task-detail-screen.tsx`)**: task header, dependency
+  hierarchy, state machine controls, subtask checklist, dependency
+  panels, branch/PR, activity timeline, metadata panel, related tasks.
+- **Task Dependencies (`task-deps-screen.tsx`)**: hierarchy view,
+  dependency graph, current task focus.
+- **Project List (`projects-screen.tsx`)**: project cards with name,
+  lead, date range, status, team avatars.
+- **Kanban Board (`kanban-screen.tsx`)**: five columns of task cards
+  with punch-card chamfer.
+- **Conversation List and Detail**: message timeline, tool execution
+  cards, agent status badges, slash-command input, handoff annotations.
+- **Directives Registry**: slash command definition cards.
+- **AI Suggestions**: suggestion cards with confidence badges, priority
+  grouping, AI insights panel.
+- **System Pages**: personnel directory, agent backend registry, MCP
+  tool registry, hooks & policies, monitoring dashboard, tenant
+  management.
+- **Settings and Global**: command palette results, notification
+  entries, integration cards, user menu.
 
 ## Shared model building blocks
 
@@ -59,15 +62,12 @@ Use these primitives across entities:
 ```ts
 export type LocaleCode =
   | "en-GB"
-  | "en-US"
-  | "fr"
+  | "ar"
   | "de"
   | "es"
-  | "fi"
-  | "da"
-  | "el"
-  | "cy"
-  | "ar";
+  | "hi"
+  | "ja"
+  | "zh-CN";
 
 export type LocalizedStringSet = {
   readonly name: string;
@@ -75,8 +75,11 @@ export type LocalizedStringSet = {
   readonly shortLabel?: string;
 };
 
-export type EntityLocalizations = Partial<Record<LocaleCode, LocalizedStringSet>>;
-export type LocalizedAltText = Partial<Record<LocaleCode, string>>;
+export type EntityLocalizations =
+  Partial<Record<LocaleCode, LocalizedStringSet>>;
+
+export type LocalizedAltText =
+  Partial<Record<LocaleCode, string>>;
 
 export type ImageAsset = {
   readonly url: string;
@@ -84,147 +87,246 @@ export type ImageAsset = {
 };
 ```
 
-Fallback rule: prefer the current user locale, fall back to `en-GB` then any
-available locale. Components must not construct names from translation keys.
-The same fallback chain resolves localized image alt text when the current
-locale is absent.
+Fallback rule: prefer the current user locale, fall back to `en-GB`
+then any available locale. Components must not construct names from
+translation keys. The same fallback chain resolves localized image alt
+text when the current locale is absent.
 
 ## Entity schemas by card type
 
-- **Route (featured, trending, saved, wizard routes)**
-  - `id: RouteId` (stable slug)
+### Orchestration domain
+
+- **Task (task cards, Kanban cards, task detail, dependency panels)**
+  - `id: TaskId` (e.g. `"TASK-1001"`)
+  - `localizations: EntityLocalizations` (name = title, description)
+  - `state: TaskState`
+  - `priority: Priority`
+  - `projectSlug: string`
+  - `assignee: Assignee`
+  - `dueDate: string` (ISO 8601)
+  - `estimate?: string`
+  - `labelIds: LabelId[]` (resolved via label descriptor registry)
+  - `subtasks: Subtask[]`
+  - `dependencies: Dependencies`
+  - `branchRef?: string`
+  - `pullRequestRef?: string`
+  - `activityLog: ActivityEvent[]`
+  - `hierarchy: TaskHierarchy`
+- **Subtask**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = title)
+  - `done: boolean`
+- **ActivityEvent (activity timeline entries)**
+  - `id: string`
+  - `kind: EventKind`
+  - `timestamp: string` (ISO 8601)
+  - `actor: string`
+  - `localizations: EntityLocalizations` (name = description)
+- **Project (project cards, sidebar entries)**
+  - `slug: string`
   - `localizations: EntityLocalizations` (name, description)
-  - `heroImage: ImageAsset`
-  - `distanceMetres: number` (SI)
-  - `durationSeconds: number` (SI)
-  - `rating: number` (0–5)
-  - `badges: string[]` (badge descriptor ids)
-  - `difficultyId?: DifficultyId`
-  - `interests?: InterestId[]`
-- **RouteCollection (curated collection cards)**
-  - `id`, `localizations`
-  - `leadImage: ImageAsset`
-  - `mapPreview: ImageAsset`
-  - `distanceRangeMetres: [number, number]`
-  - `durationRangeSeconds: [number, number]`
-  - `difficultyId: DifficultyId`
-  - `routeIds: RouteId[]`
-- **RouteCategory (category chips)**
-  - `id`
-  - `localizations` (name only)
-  - `iconToken: string`
-  - `gradientClass: string`
-  - `routeCount: number`
-- **Theme (popular theme cards)**
-  - `id`, `localizations`, `image: ImageAsset`
-  - `walkCount: number`
-  - `distanceRangeMetres: [number, number]`
-  - `rating: number`
-- **CommunityPick (community panel)**
-  - `id`, `localizations`
-  - `curator: { localizations; avatar: ImageAsset }`
-  - `distanceMetres`, `durationSeconds`, `saves: number`, `rating: number`
-- **DiscoverInterest (chips)**
-  - Continue using descriptor registry; ensure registry entries embed
-    `localizations` instead of Fluent labels.
-- **Customize options**
-  - `SegmentOption` and `SurfaceOption` gain `localizations`.
-  - `RoutePreviewOption` becomes a light `Route` projection referencing
-    `routeId` rather than duplicating metrics.
-  - `AdvancedToggleOption` stores `localizations` and `iconToken`.
-- **Offline entities**
-  - `OfflineMapArea`: `id`, `localizations`, `sizeBytes: number`,
-    `progress: number`, `status: "complete" | "updating" | "downloading"`,
-    `image: ImageAsset`, `lastUpdated: Instant`
-  - `OfflineSuggestion`: `id`, `localizations`, `ctaLocalizations` (call-to-action,
-    CTA),
-    `accentClass`, `iconToken`
-  - `AutoManagementOption`: `id`, `localizations`, `iconToken`,
-    `defaultEnabled: boolean`, optional numeric parameters (`days`, etc.) in SI
-    units
-- **Safety preferences**
-  - `SafetyToggle`: `id`, `localizations`, `iconToken`, `accentClass`,
-    `defaultChecked: boolean`
-  - `SafetyPreset`: `id`, `localizations`, `iconToken`, `accentClass`,
-    `appliedToggleIds: string[]`
-  - Accordion sections become descriptors referencing toggle ids instead of
-    storing text keys.
-- **PointOfInterest (POI cards)**
-  - `id`, `localizations`
-  - `categoryId: TagId` (resolved via descriptor registry)
-  - `tagIds: TagId[]`
-  - `rating?: number`, `openHours?: { opensAt: string; closesAt: string }`
-  - `image?: ImageAsset`
-- **Walk completion**
-  - `WalkCompletionStat`: `id`, `kind`, SI value, `iconToken`,
-    `localizations: EntityLocalizations` (use `name` for the label)
-  - `WalkCompletionMoment`: `id`, `localizations`, `image: ImageAsset`,
-    `iconToken?`
-  - `WalkCompletionShareOption`: `id`, `localizations`, `iconToken`,
-    `accentClass`
-- **Wizard generated content**
-  - `WizardGeneratedStop`: `id`, `localizations`, `noteLocalizations`,
-    `noteDistanceMetres?: number`, `iconToken`, `accentClass`
-  - `WizardRouteSummary`: `routeId` link plus `badgeLocalization` and stat
-    projections; remove per-stat translation keys.
+  - `lead: Assignee`
+  - `dateRange: { start: string; end: string }`
+  - `status: "active" | "inactive" | "completed"`
+  - `team: readonly Assignee[]`
+
+### Dashboard domain
+
+- **KpiMetric (KPI cards)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = label,
+    description = context)
+  - `value: string`
+  - `trend: TrendDirection`
+  - `trendLocalizations: EntityLocalizations` (name = trend label)
+- **SystemHealth**
+  - `overall: HealthStatus`
+  - `lastChecked: string` (ISO 8601)
+  - `components: ComponentHealth[]`
+- **ComponentHealth**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name)
+  - `status: HealthStatus`
+- **AgentBackend (dashboard summary, system registry)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = display name,
+    description)
+  - `status: AgentStatus`
+  - `turnCount: number`
+  - `vendor?: string`
+  - `version?: string`
+  - `capabilities?: string[]`
+
+### Conversation domain
+
+- **Conversation**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = title)
+  - `taskId: string`
+  - `projectSlug: string`
+  - `messages: readonly Message[]`
+  - `agentBackend: string`
+  - `status: "active" | "idle"`
+- **Message**
+  - `id: string`
+  - `role: MessageRole`
+  - `content: string` (raw content, not localized)
+  - `timestamp: string`
+  - `agentBackend?: string`
+  - `toolCall?: ToolCallInfo`
+- **Directive (slash command definitions)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = command name,
+    description)
+  - `parameters: DirectiveParameter[]`
+  - `template: string`
+  - `exampleExpansions: string[]`
+
+### AI domain
+
+- **Suggestion (suggestion cards)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = title,
+    description = rationale)
+  - `projectSlug: string`
+  - `priority: "high" | "medium" | "low"`
+  - `confidence: number` (0–100)
+  - `categoryTagIds: TagId[]`
+  - `dependencyLocalizations: EntityLocalizations`
+    (name = context summary)
+  - `estimatedDuration: string`
+  - `suggestedAssignees: readonly Assignee[]`
+- **AiInsight (insight panel bullets)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = observation)
+  - `severity: "info" | "warning" | "critical"`
+
+### System administration domain
+
+- **Personnel / User**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name)
+  - `role: "viewer" | "developer" | "team_lead" | "admin"`
+  - `assignedTaskCount: number`
+  - `lastActive: string` (ISO 8601)
+  - `avatar?: ImageAsset`
+- **McpServer (tool registry)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name, description)
+  - `transport: string`
+  - `lifecycleState: "registered" | "running" | "stopped"`
+  - `healthStatus: HealthStatus`
+  - `toolCatalog: McpTool[]`
+- **HookDefinition**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name, description)
+  - `triggerType: string`
+  - `predicate: string`
+  - `actions: string[]`
+  - `priority: number`
+  - `enabled: boolean`
+- **MonitoringMetric**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = metric label)
+  - `value: number`
+  - `unit: string`
+  - `threshold?: number`
+- **Tenant**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = display name)
+  - `slug: string`
+  - `status: "active" | "suspended"`
+
+### Settings and global domain
+
+- **Notification (bell dropdown entries)**
+  - `id: string`
+  - `localizations: EntityLocalizations` (name = notification text)
+  - `kind: NotificationKind`
+  - `timestamp: string` (ISO 8601)
+  - `read: boolean`
+
+## Descriptor registries
+
+Descriptors resolve stable internal identifiers to localized display
+strings. Each registry entry owns its `localizations`.
+
+- **LabelDescriptor** — `backend`, `agent`, `schema`, `hooks`,
+  `policy`, `streaming`, `frontend`, `ui`, `testing`, `devops`,
+  `governance`, `dashboard`, `parser`, `security`, `automation`,
+  `a11y`, `monitoring`, `settings`.
+- **PriorityDescriptor** — `low`, `medium`, `high`, `critical`.
+- **TaskStateDescriptor** — `draft`, `in_progress`, `in_review`,
+  `paused`, `done`, `abandoned`.
+- **HealthStatusDescriptor** — `healthy`, `degraded`, `critical`.
+- **AgentStatusDescriptor** — `active`, `inactive`, `error`.
+- **EventKindDescriptor** — `state_change`, `subtask_completed`,
+  `comment`, `agent_action`, `branch_associated`, `pr_opened`.
 
 ## Visual model references
 
-Figure 1 illustrates the entity relationships for routes, collections, and
-highlights, mapping how cards should compose their data inputs.
+Figure 1 illustrates the entity relationships for the orchestration
+domain, mapping how cards compose their data inputs.
 
 ```mermaid
 erDiagram
-  ROUTE {
+  TASK {
     string id
-    number distanceMetres
-    number durationSeconds
-    number rating
+    string state
+    string priority
+    string dueDate
   }
 
-  ROUTE_CATEGORY {
+  PROJECT {
+    string slug
+    string status
+  }
+
+  SUBTASK {
     string id
-    number routeCount
+    boolean done
   }
 
-  ROUTE_COLLECTION {
+  ACTIVITY_EVENT {
     string id
-    number distanceRangeMinMetres
-    number distanceRangeMaxMetres
-    number durationRangeMinSeconds
-    number durationRangeMaxSeconds
+    string kind
+    string timestamp
   }
 
-  ROUTE_COLLECTION_ROUTE {
-    string collectionId
-    string routeId
-  }
-
-  TRENDING_ROUTE_HIGHLIGHT {
-    string routeId
-    string trendDelta
-  }
-
-  COMMUNITY_PICK {
+  KPI_METRIC {
     string id
-    number distanceMetres
-    number durationSeconds
-    number rating
-    number saves
+    string value
+    string trend
   }
 
-  ROUTE ||--o{ ROUTE_COLLECTION_ROUTE : has
-  ROUTE_COLLECTION ||--o{ ROUTE_COLLECTION_ROUTE : contains
+  AGENT_BACKEND {
+    string id
+    string status
+    number turnCount
+  }
 
-  ROUTE ||--o{ TRENDING_ROUTE_HIGHLIGHT : is_highlighted_in
+  SUGGESTION {
+    string id
+    string priority
+    number confidence
+  }
 
-  ROUTE_CATEGORY ||--o{ ROUTE : categorizes
+  CONVERSATION {
+    string id
+    string status
+  }
 
-  COMMUNITY_PICK ||--|| ROUTE : is_based_on_optional
+  PROJECT ||--o{ TASK : contains
+  TASK ||--o{ SUBTASK : has
+  TASK ||--o{ ACTIVITY_EVENT : logs
+  TASK }o--o{ TASK : blocks
+  CONVERSATION }o--|| TASK : linked_to
+  CONVERSATION }o--|| PROJECT : scoped_to
+  SUGGESTION }o--|| PROJECT : targets
 ```
 
-Figure 2 sketches the class-level model with localization-aware fields and
-asset references that underpin the card architecture.
+Figure 2 sketches the class-level model with localization-aware fields
+and asset references that underpin the card architecture.
 
 ```mermaid
 classDiagram
@@ -241,207 +343,135 @@ classDiagram
     +PartialRecord~LocaleCode|LocalizedStringSet~
   }
 
-  class LocalizedAltText {
-    <<type alias>>
-    +PartialRecord~LocaleCode|string~
-  }
-
-  class ImageAsset {
-    +string url
-    +LocalizedAltText alt
-  }
-
-  class Route {
+  class Task {
     +string id
     +EntityLocalizations localizations
-    +ImageAsset heroImage
-    +number distanceMetres
-    +number durationSeconds
-    +number rating
-    +BadgeId[] badges
-    +DifficultyId difficultyId?
-    +InterestId[] interests?
+    +TaskState state
+    +Priority priority
+    +string projectSlug
+    +Assignee assignee
+    +Subtask[] subtasks
+    +Dependencies dependencies
+    +ActivityEvent[] activityLog
   }
 
-  class RouteCategory {
+  class Project {
+    +string slug
+    +EntityLocalizations localizations
+    +Assignee lead
+    +Assignee[] team
+  }
+
+  class KpiMetric {
     +string id
     +EntityLocalizations localizations
-    +number routeCount
-    +string iconToken
-    +string gradientClass
+    +string value
+    +TrendDirection trend
+    +EntityLocalizations trendLocalizations
   }
 
-  class Theme {
+  class AgentBackend {
     +string id
     +EntityLocalizations localizations
-    +ImageAsset image
-    +number walkCount
-    +number[2] distanceRangeMetres
-    +number rating
+    +AgentStatus status
+    +number turnCount
   }
 
-  class RouteCollection {
+  class Suggestion {
     +string id
     +EntityLocalizations localizations
-    +ImageAsset leadImage
-    +ImageAsset mapPreview
-    +number[2] distanceRangeMetres
-    +number[2] durationRangeSeconds
-    +DifficultyId difficultyId
-    +RouteId[] routeIds
+    +string priority
+    +number confidence
+    +EntityLocalizations dependencyLocalizations
   }
 
-  class TrendingRouteHighlight {
-    +RouteId routeId
-    +string trendDelta
-    +EntityLocalizations subtitleLocalizations
-  }
-
-  class CommunityPick {
+  class Conversation {
     +string id
     +EntityLocalizations localizations
-    +CommunityCurator curator
-    +number rating
-    +number distanceMetres
-    +number durationSeconds
-    +number saves
+    +Message[] messages
   }
 
-  class CommunityCurator {
-    +EntityLocalizations localizations
-    +ImageAsset avatar
-  }
-
-  class InterestDescriptor {
+  class LabelDescriptor {
     +string id
     +EntityLocalizations localizations
-    +string iconToken
-    +string iconBackgroundClass
-    +string iconColorClass
   }
 
-  class ResolvedInterestDescriptor {
-    +string id
-    +EntityLocalizations localizations
-    +string iconToken
-    +string iconBackgroundClass
-    +string iconColorClass
-    +LocalizedStringSet localization
-  }
-
-  class BadgeDescriptor {
-    +string id
-    +EntityLocalizations localizations
-    +string accentClass?
-  }
-
-  class ResolvedBadgeDescriptor {
-    +string id
-    +EntityLocalizations localizations
-    +string accentClass?
-    +LocalizedStringSet localization
-  }
-
-  class ExploreScreenHelpers {
+  class PickLocalizationHelper {
     +pickLocalization(localizations, locale)
-    +formatRating(input)
   }
 
-  Route "many" --> "one" ImageAsset : heroImage
-  Theme "many" --> "one" ImageAsset : image
-  RouteCollection "many" --> "one" ImageAsset : leadImage
-  RouteCollection "many" --> "one" ImageAsset : mapPreview
-  CommunityPick "1" --> "1" CommunityCurator : curator
-  CommunityCurator "1" --> "1" ImageAsset : avatar
+  Task "*" --> "1" EntityLocalizations
+  Project "*" --> "1" EntityLocalizations
+  KpiMetric "*" --> "1" EntityLocalizations
+  AgentBackend "*" --> "1" EntityLocalizations
+  Suggestion "*" --> "1" EntityLocalizations
+  Conversation "*" --> "1" EntityLocalizations
+  LabelDescriptor "*" --> "1" EntityLocalizations
 
-  InterestDescriptor "*" --> "1" EntityLocalizations
-  ResolvedInterestDescriptor --|> InterestDescriptor
-  ResolvedInterestDescriptor "1" --> "1" LocalizedStringSet : localization
-
-  BadgeDescriptor "*" --> "1" EntityLocalizations
-  ResolvedBadgeDescriptor --|> BadgeDescriptor
-  ResolvedBadgeDescriptor "1" --> "1" LocalizedStringSet : localization
-
-  Route "*" --> "*" InterestDescriptor : interests
-  Route "*" --> "*" BadgeDescriptor : badges
-
-  ExploreScreenHelpers ..> LocalizedStringSet : uses
-  ExploreScreenHelpers ..> EntityLocalizations : uses
-  ExploreScreenHelpers ..> LocalizedAltText : uses
-  ExploreScreenHelpers ..> ImageAsset : uses
-
+  PickLocalizationHelper ..> LocalizedStringSet : resolves
+  PickLocalizationHelper ..> EntityLocalizations : reads
 ```
 
 ## Localization handling rules
 
-- Every entity exposes `localizations`; UI selects the matching locale once per
-  render using a `pickLocalization(entity, locale)` helper.
-- Fluent bundles keep only chrome (button labels, aria labels, unit labels,
-  plural rules). Remove entity names, descriptions, and badges from
-  `public/locales/*/common.ftl` once migration lands.
-- Descriptor registries remain in `data/registries/*` but store
-  `localizations` instead of `labelKey/defaultLabel`.
-- Component props shift from `title`/`description` strings to entire entity
-  objects. Helpers (e.g., `formatDistance`) continue to format numbers with
-  translated unit labels.
+- Every entity exposes `localizations`; UI selects the matching locale
+  once per render using a `pickLocalization(entity, locale)` helper.
+- Fluent bundles keep only chrome (button labels, aria labels, section
+  headings, format strings with pluralization). Remove entity names,
+  descriptions, and state labels from `public/locales/*/common.ftl`
+  once migration lands.
+- Descriptor registries live in `src/data/registries/` and store
+  `localizations` instead of Fluent label keys.
+- Component props shift from `title`/`description` strings to entire
+  entity objects. Helpers (e.g., `formatTimestamp`) continue to format
+  values with translated unit labels.
 
 ## Attribute identifier strategy
 
-- Continue to use descriptor ids (`interestId`, `difficultyId`, `tagId`) as the
-  canonical internal keys.
-- Introduce a `tagDescriptors` registry to replace ad-hoc tag strings used in
-  POIs and highlights; each tag owns its `localizations` and icon metadata.
-- Badge chips on routes/themes use `badgeDescriptors` (teal line, sunset pick,
-  etc.) rather than free text.
+- Continue to use descriptor ids (`labelId`, `priorityId`, `stateId`)
+  as the canonical internal keys.
+- The `labelDescriptors` registry resolves task label tags (backend,
+  agent, schema, hooks, etc.) to localized display names.
+- Status badges, priority tags, and health indicators resolve their
+  display strings from the corresponding descriptor registries rather
+  than from hard-coded Fluent keys.
 
 ## Proposed folder layout
 
 - `src/app/domain/entities/` for TypeScript models and shared helpers
-- `src/app/data/entities/` for fixture instances in the new shape
-- `src/app/data/registries/` extended with tag and badge descriptor registries
-- `src/app/i18n/` keeps Fluent plumbing; UI strings remain there
+- `src/data/entities/` for fixture instances in the new shape
+- `src/data/registries/` for label, state, priority, health, and
+  event kind descriptor registries
+- `src/app/i18n/` keeps Fluent plumbing; UI chrome strings remain
+  there
 
-## Appendix A: migration roadmap
+## Migration roadmap
 
-- **Phase 0: foundations**
-  - Add shared types (`EntityLocalizations`, `ImageAsset`, locale list) and a
-    `pickLocalization` helper with deterministic fallback.
-  - Introduce `tagDescriptors` and `badgeDescriptors` registries.
-- **Phase 1: explore & discover**
-  - Reshape `data/explore.ts` into new entity shapes with localization maps.
-  - Update `explore-sections` components to consume entities and call
-    `pickLocalization`; drop related keys from Fluent bundles.
-  - Move Discover interest labels into the registry and remove interest keys
-    from Fluent.
-  - Status (27 Nov 2025): Explore routes, themes, collections, categories, and
-    community picks now ship localization maps and the Explore UI resolves them
-    through `pickLocalization`. Discover interest labels are read from the
-    registry only, and the `interest-*` Fluent keys have been removed.
-- **Phase 2: customize & safety**
-  - Convert customize sliders, segment options, route previews, and advanced
-    toggles to entity-based inputs; replace per-option translation keys.
-  - Refactor safety accordion sections to reference `SafetyToggle` entities and
-    presets with localization maps; prune Fluent keys.
-- Status (1 Dec 2025): Customize sliders, chips, route previews, and advanced
-    toggles now resolve names/descriptions from localization maps; safety
-    sections draw from `SafetyToggle` entities with preset toggle mappings and
-    the redundant Fluent messages have been removed.
-- **Phase 3: offline & map**
-  - Migrate offline suggestions and downloads to SI/numeric fields and
-    localization maps; update cards and undo states.
-  - Reshape `WalkPointOfInterest` and saved routes; ensure tags use registries
-    and unit formatting covers all numerical values.
-- Status (6 Dec 2025): Offline suggestions/downloads now expose
-  localization maps with SI sizes and relative timestamps; saved routes/POIs
-  resolve tags via registries and route metrics render through the unit
-  formatters.
-- **Phase 4: wizard & completion**
-  - Move wizard route summary and generated stops to the shared route/stop
-    schemas; delete entity strings from Fluent.
-  - Apply the same to walk-complete stats and moment cards.
-- **Phase 5: hardening**
-  - Write unit tests for `pickLocalization` fallbacks and descriptor resolution.
-  - Run `bun fmt`, `bun lint`, `bun check:types`, and `bun test` to enforce
-    quality gates.
-  - Remove obsolete translation keys and document the schema in
-    `docs/pure-accessible-and-localizable-react-components.md`.
+- **Phase 0: foundations** (first milestone of plan 03)
+  - Add shared types (`EntityLocalizations`, `ImageAsset`, locale
+    list) and a `pickLocalization` helper with deterministic fallback.
+  - Introduce descriptor registries for labels, priorities, states,
+    health statuses, and event kinds.
+  - Migrate existing plan-02 entities (Task, KpiMetric, AgentBackend,
+    DashboardEvent, Subtask) to use `localizations` maps.
+  - Move entity strings out of Fluent bundles; keep only UI chrome.
+- **Phase 1: projects & kanban** (plan 03, remaining milestones)
+  - Create Project entities with localization maps.
+  - Kanban columns resolve task localizations via `pickLocalization`.
+- **Phase 2: conversations & directives** (plan 04)
+  - Conversation and Directive entities with localization maps.
+  - Message content stays as raw strings (not localized entity data).
+- **Phase 3: AI suggestions** (plan 05)
+  - Suggestion and AiInsight entities with localization maps for title,
+    rationale, and dependency context.
+- **Phase 4: system pages** (plan 06)
+  - Personnel, McpServer, HookDefinition, MonitoringMetric, and Tenant
+    entities with localization maps.
+- **Phase 5: settings & global** (plan 07)
+  - Notification entities with localization maps.
+  - Settings forms continue to use Fluent for form labels (chrome).
+- **Phase 6: hardening**
+  - Unit tests for `pickLocalization` fallbacks and descriptor
+    resolution.
+  - Remove obsolete Fluent keys.
+  - Document the final schema in this architecture doc.

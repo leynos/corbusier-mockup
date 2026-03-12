@@ -114,6 +114,11 @@ components: status badges, data table styling, activity timelines).
 The data table pattern from the design system HTML reference is the
 primary component used across these pages.
 
+The shared data model types (`EntityLocalizations`,
+`pickLocalization`, descriptor registries) introduced in plan 03
+milestone 0 are used throughout this plan. Entity-owned strings live
+in `localizations` maps, not Fluent bundles.
+
 ### Key files this plan creates
 
 Fixture data:
@@ -148,22 +153,28 @@ Page components (replacing placeholders):
 
 Create fixture files for each entity:
 
-- **Personnel**: 6–8 users with name, role (Viewer/Developer/Team
-  Lead/Admin), assigned task count, last active timestamp, and
-  activity history.
+- **Personnel**: 6–8 users with
+  `localizations: EntityLocalizations` (name), role
+  (Viewer/Developer/Team Lead/Admin), assigned task count, last
+  active timestamp, and activity history.
 - **Agent backends**: 3 backends (Claude Code SDK, Codex CLI, Custom
-  Backend) with name, vendor, version, status (Active/Inactive),
+  Backend) with `localizations: EntityLocalizations` (name,
+  description), vendor, version, status (Active/Inactive),
   capability flags (supports_streaming, supports_tools).
 - **MCP servers**: 3 servers (workspace_tools, weaver_mcp,
-  podbot_runtime) with name, transport, lifecycle state, health
-  status, tool catalog, and health history.
-- **Hooks**: 4–5 hook definitions with trigger type, predicate,
-  action chain, priority, enabled status, and execution log entries.
+  podbot_runtime) with `localizations: EntityLocalizations` (name,
+  description), transport, lifecycle state, health status, tool
+  catalog, and health history.
+- **Hooks**: 4–5 hook definitions with
+  `localizations: EntityLocalizations` (name, description), trigger
+  type, predicate, action chain, priority, enabled status, and
+  execution log entries.
 - **Monitoring**: Metric data for HTTP request rate, agent turn
   latency (P50/P95/P99), tool execution throughput, DB connection
   pool utilisation. Active alerts. Health check statuses.
-- **Tenant**: A single tenant with ID, slug, display name, status,
-  and owning user.
+- **Tenant**: A single tenant with ID, slug,
+  `localizations: EntityLocalizations` (name = display name),
+  status, and owning user.
 
 ### Milestone 2: Shared system page components
 
@@ -265,4 +276,73 @@ export interface DataTableProps<T> {
 }
 
 export function DataTable<T>(props: DataTableProps<T>): JSX.Element;
+```
+
+In `src/data/personnel.ts`:
+
+```tsx
+export interface Personnel {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly role: "viewer" | "developer" | "team_lead" | "admin";
+  readonly assignedTaskCount: number;
+  readonly lastActive: string;
+  readonly avatar?: ImageAsset;
+}
+```
+
+In `src/data/mcp-servers.ts`:
+
+```tsx
+export interface McpTool {
+  readonly name: string;
+  readonly localizations: EntityLocalizations;
+  readonly inputSchema: string;
+}
+
+export interface McpServer {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly transport: string;
+  readonly lifecycleState: "registered" | "running" | "stopped";
+  readonly healthStatus: HealthStatus;
+  readonly toolCatalog: readonly McpTool[];
+}
+```
+
+In `src/data/hooks.ts`:
+
+```tsx
+export interface HookDefinition {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly triggerType: string;
+  readonly predicate: string;
+  readonly actions: readonly string[];
+  readonly priority: number;
+  readonly enabled: boolean;
+}
+```
+
+In `src/data/monitoring.ts`:
+
+```tsx
+export interface MonitoringMetric {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly value: number;
+  readonly unit: string;
+  readonly threshold?: number;
+}
+```
+
+In `src/data/tenant.ts`:
+
+```tsx
+export interface Tenant {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly slug: string;
+  readonly status: "active" | "suspended";
+}
 ```

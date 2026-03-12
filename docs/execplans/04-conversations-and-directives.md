@@ -112,6 +112,12 @@ This plan depends on plans 01 (foundation) and 02 (reusable
 components). The status badge, avatar stack, and activity timeline
 components from plan 02 are reused here.
 
+The shared data model types (`EntityLocalizations`,
+`pickLocalization`, descriptor registries) introduced in plan 03
+milestone 0 are used throughout this plan. Entity-owned strings
+(conversation titles, directive names and descriptions) live in
+`localizations` maps, not Fluent bundles.
+
 ### Key files this plan creates
 
 - `src/data/conversations.ts` — Fixture data for conversations with
@@ -145,7 +151,8 @@ Create `src/data/conversations.ts` defining:
   system), `content`, `timestamp`, `agentBackend` (for assistant
   messages), `toolCall` (for tool messages: `callId`, `toolName`,
   `status`, `duration`, `input`, `output`).
-- A `Conversation` interface with: `id`, `title`, `taskId`,
+- A `Conversation` interface with: `id`,
+  `localizations: EntityLocalizations` (name = title), `taskId`,
   `projectSlug`, `messages`, `agentBackend`, `status` (active/idle),
   `handoffs` (array of `{position, fromBackend, toBackend}`).
 - 3–4 fixture conversations with 10–20 messages each, including
@@ -153,9 +160,10 @@ Create `src/data/conversations.ts` defining:
 
 Create `src/data/directives.ts` defining:
 
-- A `Directive` interface with: `name`, `description`, `parameters`
-  (array of `{name, type, required, description}`), `template`,
-  `exampleExpansions`.
+- A `Directive` interface with: `id`,
+  `localizations: EntityLocalizations` (name = command name,
+  description), `parameters` (array of `{name, type, required,
+  description}`), `template`, `exampleExpansions`.
 - 5–6 fixture directives: `/task`, `/review`, `/deploy`, `/search`,
   `/status`, `/rollback`.
 
@@ -265,11 +273,30 @@ export interface Message {
 
 export interface Conversation {
   readonly id: string;
-  readonly title: string;
+  readonly localizations: EntityLocalizations;
   readonly taskId: string;
   readonly projectSlug: string;
   readonly messages: readonly Message[];
   readonly agentBackend: string;
   readonly status: "active" | "idle";
+}
+```
+
+In `src/data/directives.ts`:
+
+```tsx
+export interface DirectiveParameter {
+  readonly name: string;
+  readonly type: string;
+  readonly required: boolean;
+  readonly description: string;
+}
+
+export interface Directive {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly parameters: readonly DirectiveParameter[];
+  readonly template: string;
+  readonly exampleExpansions: readonly string[];
 }
 ```
