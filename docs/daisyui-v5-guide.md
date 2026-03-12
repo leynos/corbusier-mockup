@@ -613,7 +613,7 @@ Divider will be used to separate content vertically or horizontally
 
 ### dock
 
-Dock (also know as Bottom navigation or Bottom bar) is a UI element that provides navigation options to the user. Dock sticks to the bottom of the screen
+Dock (also known as Bottom navigation or Bottom bar) is a UI element that provides navigation options to the user. Dock sticks to the bottom of the screen
 
 [dock docs](https://daisyui.com/components/dock/)
 
@@ -643,7 +643,7 @@ where content is a list of buttons:
 
 - {MODIFIER} is optional and can have one of the size class names
 - To make a button active, add `dock-active` class to the button
-- add `<meta name="viewport" content="viewport-fit=cover">` is required for responsivness of the dock in iOS
+- add `<meta name="viewport" content="viewport-fit=cover">` is required for responsiveness of the dock in iOS
 
 ### drawer
 
@@ -804,7 +804,7 @@ Using CSS focus
 
 ### fab
 
-FAB (Floating Action Button) stays in the bottom corner of screen. It includes a focusable and accessible element with button role. Clicking or focusing it shows additional buttons (known as Speed Dial buttons) in a vertical arrangement or a flower shape (quarter circle)
+FAB (Floating Action Button) stays in the bottom corner of screen. It includes a focusable and accessible native `<button>` element. Clicking or focusing it shows additional buttons (known as Speed Dial buttons) in a vertical arrangement or a flower shape (quarter circle)
 
 [fab docs](https://daisyui.com/components/fab/)
 
@@ -948,7 +948,7 @@ Fieldset is a container for grouping related form elements. It includes fieldset
 
 ### file-input
 
-File Input is a an input field for uploading files
+File Input is an input field for uploading files
 
 [file-input docs](https://daisyui.com/components/file-input/)
 
@@ -1578,7 +1578,7 @@ Radial progress can be used to show the progress of a task or to show the passin
 #### Syntax
 
 ```html
-<div class="radial-progress" style="--value:70;" aria-valuenow="70" role="progressbar">70%</div>
+<div class="radial-progress" style="--value:70;" aria-label="Progress" aria-valuenow="70" role="progressbar">70%</div>
 ```
 
 #### Rules
@@ -1990,7 +1990,7 @@ Timeline component shows a list of events in chronological order
 #### Rules
 
 - {MODIFIER} is optional and can have one of the modifier/direction class names
-- To make a vertical timeline, add the `timeline-vertical` class to the `ul` element or just do nothing (because its the default style.)
+- To make a vertical timeline, add the `timeline-vertical` class to the `ul` element or just do nothing (because it's the default style.)
 - Add `timeline-snap-icon` to snap the icon to the start instead of middle
 - Add the `timeline-compact` class to force all items on one side
 
