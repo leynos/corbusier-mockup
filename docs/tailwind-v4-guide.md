@@ -80,8 +80,8 @@ npm install tailwindcss @tailwindcss/vite
 ### Legacy Config Support (if needed)
 
 ```css
-@import "tailwindcss";
 @config "./tailwind.config.js";
+@import "tailwindcss";
 ```
 
 ## Breaking Changes from v3
@@ -287,7 +287,7 @@ v4 uses OKLCH colour space for wider gamut support:
 </div>
 ```
 
-### 2. Leverage the New Color System
+### 2. Leverage the New Colour System
 
 ```html
 <!-- Better contrast and vibrancy with OKLCH -->
@@ -306,11 +306,14 @@ v4 uses OKLCH colour space for wider gamut support:
 
 ```html
 <!-- Native cascade layers -->
-<div class="layer-[utilities]:z-10">Proper layer management</div>
+<div class="z-10">Standard utility layering</div>
 
 <!-- Color mixing -->
 <div class="bg-blue-500/50">Uses color-mix() under the hood</div>
 ```
+
+Manage cascade layers with native CSS `@layer base`, `@layer components`, and
+`@layer utilities` blocks when custom ordering is required.
 
 ## Performance Optimizations
 
@@ -737,7 +740,7 @@ bg-clip-border, bg-clip-padding, bg-clip-content, bg-clip-text
 
 #### Background Color
 
-All color utilities work with `bg-` prefix (same as text colors above)
+All colour utilities work with `bg-` prefix (same as text colours above)
 
 #### Background Origin
 
@@ -816,7 +819,7 @@ border-0, border-2, border-4, border-8, border, border-x, border-y, border-s, bo
 
 #### Border Color
 
-All color utilities work with `border-` prefix (same as text/bg colors)
+All colour utilities work with `border-` prefix (same as text/bg colours)
 
 #### Border Style
 
@@ -832,7 +835,7 @@ divide-x-0, divide-x-2, divide-x-4, divide-x-8, divide-x, divide-y-0, divide-y-2
 
 #### Divide Color
 
-All color utilities work with `divide-` prefix
+All colour utilities work with `divide-` prefix
 
 #### Divide Style
 
@@ -848,7 +851,7 @@ outline-0, outline-1, outline-2, outline-4, outline-8
 
 #### Outline Color
 
-All color utilities work with `outline-` prefix
+All colour utilities work with `outline-` prefix
 
 #### Outline Style
 
@@ -870,7 +873,7 @@ ring-0, ring-1, ring-2, ring, ring-4, ring-8, ring-inset
 
 #### Ring Color
 
-All color utilities work with `ring-` prefix
+All colour utilities work with `ring-` prefix
 
 #### Ring Offset Width
 
@@ -880,7 +883,7 @@ ring-offset-0, ring-offset-1, ring-offset-2, ring-offset-4, ring-offset-8
 
 #### Ring Offset Color
 
-All color utilities work with `ring-offset-` prefix
+All colour utilities work with `ring-offset-` prefix
 
 ### Effects
 
@@ -892,7 +895,7 @@ shadow-xs, shadow-sm, shadow, shadow-md, shadow-lg, shadow-xl, shadow-2xl, shado
 
 #### Box Shadow Color
 
-All color utilities work with `shadow-` prefix
+All colour utilities work with `shadow-` prefix
 
 #### Drop Shadow (NEW colored support in v4)
 
@@ -1178,7 +1181,7 @@ perspective-origin-center, perspective-origin-top, perspective-origin-top-right,
 
 ```text
 accent-auto, accent-inherit, accent-current, accent-transparent, accent-black, accent-white
-accent-{color} (all color utilities work with accent- prefix)
+accent-{color} (all colour utilities work with accent- prefix)
 ```
 
 #### Appearance
@@ -1195,7 +1198,7 @@ cursor-auto, cursor-default, cursor-pointer, cursor-wait, cursor-text, cursor-mo
 
 #### Caret Color
 
-All color utilities work with `caret-` prefix
+All colour utilities work with `caret-` prefix
 
 #### Pointer Events
 
@@ -1271,14 +1274,14 @@ will-change-auto, will-change-scroll, will-change-contents, will-change-transfor
 
 ```text
 fill-none, fill-inherit, fill-current, fill-transparent, fill-black, fill-white
-fill-{color} (all color utilities work with fill- prefix)
+fill-{color} (all colour utilities work with fill- prefix)
 ```
 
 #### Stroke
 
 ```text
 stroke-none, stroke-inherit, stroke-current, stroke-transparent, stroke-black, stroke-white
-stroke-{color} (all color utilities work with stroke- prefix)
+stroke-{color} (all colour utilities work with stroke- prefix)
 ```
 
 #### Stroke Width
@@ -1392,7 +1395,7 @@ content-none, content-['text']
 
 ### Arbitrary Values
 
-You can use arbitrary values with square brackets for any property:
+Arbitrary values may be specified with square brackets for any property:
 
 ```text
 w-[123px], h-[456px], text-[#bada55], bg-[url('...')], top-[117px], left-[344px]
@@ -1441,7 +1444,7 @@ m-[12px], p-[24px], grid-cols-[200px_minmax(900px,_1fr)_100px]
 - Use automatic content detection (no manual `content` config needed)
 - Prefer container queries over viewport queries for true component responsiveness
 - Use CSS variables from `@theme` for dynamic styling
-- Leverage the new OKLCH color system for better color consistency
+- Leverage the new OKLCH colour system for better colour consistency
 
 ### Efficient Class Usage
 
@@ -1546,7 +1549,7 @@ npx @tailwindcss/upgrade
 - [ ] Verify custom component styles
 - [ ] Check 3D transform support
 - [ ] Test mask utilities if used
-- [ ] Validate color consistency (OKLCH vs RGB)
+- [ ] Validate colour consistency (OKLCH vs RGB)
 
 ### Testing
 

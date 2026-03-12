@@ -126,7 +126,7 @@ and executed outside of the component's main body. React provides two primary
    interactions, such as a button click. They are the ideal place for side
    effects that are a direct result of a user action, like submitting a
    form.[^4]
-2. **The **`useEffect`** Hook:** This hook is used for side effects that need
+2. **The `useEffect` Hook:** This hook is used for side effects that need
    to synchronize with the component's lifecycle, such as fetching data when
    the component mounts or subscribing to an external data source. The function
    passed to `useEffect` runs _after_ the component has rendered and the DOM
@@ -149,7 +149,7 @@ these updates are efficient, minimizing unnecessary computation and DOM
 manipulation. Memoization is a key technique for achieving this performance by
 caching the results of expensive operations, including component rendering.
 
-#### From ,`PureComponent`, to ,`React.memo`
+#### From `PureComponent` to `React.memo`
 
 In the era of class-based components, React provided `React.PureComponent` as a
 base class for optimization. It implemented the `shouldComponentUpdate`
@@ -298,7 +298,7 @@ clarity in a large codebase. For any given feature component, such as a
 This co-location of related files makes the component's architecture explicit
 and easy to navigate.
 
-### 2.2 Managing Complex Component State: ,`useReducer`, and State Machines
+### 2.2 Managing Complex Component State: `useReducer` and State Machines
 
 While `useState` is sufficient for simple, independent state variables, its
 limitations become apparent as component logic grows in complexity. When the
@@ -313,13 +313,13 @@ scattered logic and potential bugs.[^11] In these scenarios,
 The choice between `useState` and `useReducer` should be a deliberate one,
 based on the nature of the state being managed.
 
-- **Prefer **`useState`** when:**
+- **Prefer `useState` when:**
 
 - The state consists of simple JavaScript primitives (string, number,
   boolean).[^12]
 - The state updates are simple and do not depend on the previous state.
 - The component manages multiple, uncorrelated pieces of state.
-- **Prefer **`useReducer`** when:**
+- **Prefer `useReducer` when:**
 
 - The state is a complex object or array with multiple sub-values.[^12]
 - The next state is derived from the previous state.
@@ -796,7 +796,7 @@ interior regardless of writing mode. MapLibre also loads the published RTL text
 plugin via `setRTLTextPlugin` during lazy import, so Arabic and Hebrew labels
 render with proper glyph shaping.
 
-#### The ,`useTranslation`, Hook and ,`<Trans>`, Component
+#### The `useTranslation` Hook and `<Trans>` Component
 
 The `useTranslation` hook still returns the familiar `t` helper; the difference
 is that it now resolves Fluent messages while honouring namespaces.[^21][^27]

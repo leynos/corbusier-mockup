@@ -251,7 +251,7 @@ Each file inverts a common misuse, e.g.
 }
 ```
 
-The duplication keeps messages targeted whilst Biome’s current Grit plugin limits us to one pattern per file.
+The duplication keeps messages targeted whilst Biome’s current Grit plugin restricts repositories to one pattern per file.
 
 ### D) Repetition → extract with `@apply`
 
@@ -567,7 +567,7 @@ semantic fixes over ad hoc opt-outs.
 - **Semantic & a11y**
   - No clickable `div/span` without role+keyboard; prefer `<button>/<a>`.
   - Use `<nav>/<main>/<header>/<footer>` over `div[role=...]`.
-  - Inputs must be labeled (`<label for=...>` or `aria-label`).
+  - Inputs must be labelled (`<label for=...>` or `aria-label`).
 
 - **DaisyUI composition**
   - `btn` belongs on interactive elements.

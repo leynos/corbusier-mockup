@@ -20,10 +20,10 @@
         ```
 
     *   Theme values are defined as CSS custom properties (variables). Tailwind uses these to generate corresponding utility classes (e.g., `font-sans`, `bg-brand-500`, `lg:p-(--spacing-4)`) and also makes these variables globally available for use in custom CSS or arbitrary values (e.g., `var(--color-brand-500)`).
-    *   The default theme is still provided but can be extended, overridden, or entirely replaced using this CSS-native approach. For instance, `--color-*: initial;` within `@theme` will remove all default color utilities, allowing a fully custom palette.
+    *   The default theme is still provided but can be extended, overridden, or entirely replaced using this CSS-native approach. For instance, `--color-*: initial;` within `@theme` will remove all default colour utilities, allowing a fully custom palette.
 3.  **Modern CSS Baseline:**
     *   Targets **Safari 16.4+, Chrome 111+, Firefox 128+**. This is non-negotiable as v4 relies on features like `@property`, `color-mix()`, and modern cascade layers. Older browser support requires sticking to v3.4.
-    *   The default color palette leverages OKLCH for more vibrant, perceptually uniform colors out-of-the-box.
+    *   The default colour palette leverages OKLCH for more vibrant, perceptually uniform colours out-of-the-box.
 
 ### II. Build & Integration
 
@@ -39,7 +39,7 @@
 ### III. Key Migration Considerations & API Changes (v3 -> v4)
 
 1.  **Configuration File Shift:**
-    *   While `tailwind.config.js` can still be used for plugin definitions or complex setups (loaded via `@config "path/to/config.js";`), theme customization (colors, spacing, fonts, breakpoints) should primarily occur in CSS via `@theme`.
+    *   While `tailwind.config.js` can still be used for plugin definitions or complex setups (loaded via `@config "path/to/config.js";`), theme customization (colours, spacing, fonts, breakpoints) should primarily occur in CSS via `@theme`.
     *   The `content` array is no longer used for source scanning in Tailwind v4. Source discovery is automatic by default and remains a CSS concern managed with directives such as `@source` or `source()` in `@import "tailwindcss" source("../src")`, even when `@config` loads a legacy JS config file.
 2.  **Utility Deprecations & Renames:**
     *   The `npx @tailwindcss/upgrade` tool is highly recommended and automates most of this.
@@ -47,8 +47,8 @@
     *   Scales for `shadow`, `rounded`, and `blur` have been normalized (e.g., `shadow` -> `shadow-sm`, `shadow-sm` -> `shadow-xs`).
     *   `ring` default width is now `1px` (was `3px`); use `ring-3` for the old default.
 3.  **Default Value Adjustments:**
-    *   Default border color is now `currentColor`. Explicitly add color classes like `border-gray-200` when the v3 default gray was previously relied upon.
-    *   Default ring color is `currentColor` (was `blue-500`).
+    *   Default border colour is now `currentColor`. Explicitly add colour classes like `border-gray-200` when the v3 default gray was previously relied upon.
+    *   Default ring colour is `currentColor` (was `blue-500`).
 4.  **Selector Modifications:**
     *   `space-x-*`/`space-y-*` utilities now use `margin-bottom`/`margin-right` on `:not(:last-child)` for performance. This might affect inline elements or layouts with existing tweaked margins. Flex/grid `gap` is often a better alternative.
     *   Variant stacking order is now left-to-right (e.g., `dark:md:hover:bg-red-500`) for CSS-like consistency.

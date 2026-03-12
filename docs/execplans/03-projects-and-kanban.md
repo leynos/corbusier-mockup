@@ -13,9 +13,8 @@ After this plan is complete, a developer can navigate to:
 
 - **`/projects`** — and see a card grid of projects with name, lead,
   date range, status badge, and team avatar stack.
-- **`/projects/:slug`** — and land on the Kanban Board (default view)
-  with a view switcher tabbar offering Backlog, Kanban, Calendar,
-  List, and Timeline tabs.
+- **`/projects/:slug`** — and be redirected to the canonical
+  **`/projects/:slug/kanban`** route.
 - **`/projects/:slug/kanban`** — and see a Kanban board with five
   columns (To-Do, Planned, In Progress, In Review, Done), task cards
   with the punch-card chamfer, priority and category tags, progress
@@ -132,14 +131,10 @@ Create `src/data/projects.ts` defining:
 
 - A `Project` interface with: `slug`, `name`, `lead` (assignee),
   `dateRange`, `status` (active/inactive/completed), `description`,
-  `team` (array of assignees), `taskCounts` per board column.
+  and `team` (array of assignees).
 - 3 fixture projects: Apollo-Guidance (active, space navigation
-  system, `taskCounts: { todo: 2, planned: 2, in_progress: 3,
-  in_review: 2, done: 5 }`), Manhattan-Logistics (active, supply
-  chain orchestration, `taskCounts: { todo: 1, planned: 2,
-  in_progress: 4, in_review: 1, done: 6 }`), Skunkworks-Alpha
-  (inactive, experimental agent framework, `taskCounts: { todo: 1,
-  planned: 1, in_progress: 0, in_review: 0, done: 1 }`).
+  system), Manhattan-Logistics (active, supply chain orchestration),
+  and Skunkworks-Alpha (inactive, experimental agent framework).
 - A function to get tasks grouped by state for a given project (using
   the task fixtures from plan 02), returning both grouped task arrays
   and the derived `taskCounts` object used by the Kanban headers.
@@ -156,11 +151,11 @@ shows:
 - Short description.
 - Task count summary (e.g., "12 tasks · 3 in progress · 2 blocked").
 
-Clicking a project card navigates to `/projects/:slug`.
+Clicking a project card navigates to `/projects/:slug/kanban`.
 
 ### Milestone 3: Project landing with view switcher
 
-The project landing page (`/projects/:slug`) renders:
+The canonical project landing page (`/projects/:slug/kanban`) renders:
 
 - A project header with name, lead, status badge, date range, and
   team avatars.
@@ -170,7 +165,9 @@ The project landing page (`/projects/:slug`) renders:
 
 The view switcher tabs link to sub-routes:
 `/projects/:slug/backlog`, `/projects/:slug/kanban`, etc. TanStack
-Router handles the nesting; the tabs reflect the current path.
+Router handles the nesting; `/projects/:slug` redirects to the
+canonical `/projects/:slug/kanban` path and the tabs reflect the
+current sub-route.
 
 ### Milestone 4: Kanban board
 
@@ -269,49 +266,27 @@ export interface Project {
   readonly status: "active" | "inactive" | "completed";
   readonly description: string;
   readonly team: readonly Assignee[];
-  readonly taskCounts: Readonly<Record<KanbanColumnId, number>>;
 }
 ```
 
-Fixture data in `src/data/projects.ts` should include `taskCounts` for
-Apollo-Guidance, Manhattan-Logistics, and Skunkworks-Alpha, while the
-grouping helper recomputes those counts from the task fixtures so the
-view model stays aligned with the documented source of truth.
+Fixture data in `src/data/projects.ts` should omit `taskCounts`.
+Apollo-Guidance, Manhattan-Logistics, and Skunkworks-Alpha rely on the
+grouping helper to recompute those counts from the task fixtures, so
+the view model keeps a single documented source of truth.
 
 ```tsx
 export const PROJECT_FIXTURES: readonly Project[] = [
   {
     slug: "apollo-guidance",
     name: "Apollo-Guidance",
-    taskCounts: {
-      todo: 2,
-      planned: 2,
-      in_progress: 3,
-      in_review: 2,
-      done: 5,
-    },
   },
   {
     slug: "manhattan-logistics",
     name: "Manhattan-Logistics",
-    taskCounts: {
-      todo: 1,
-      planned: 2,
-      in_progress: 4,
-      in_review: 1,
-      done: 6,
-    },
   },
   {
     slug: "skunkworks-alpha",
     name: "Skunkworks-Alpha",
-    taskCounts: {
-      todo: 1,
-      planned: 1,
-      in_progress: 0,
-      in_review: 0,
-      done: 1,
-    },
   },
 ];
 

@@ -186,8 +186,10 @@ constraints; the following apply everywhere.
   Router's `Link` component type-checks `to` against registered routes.
   Evidence: TypeScript errors when using `<Link to="/projects">` before routes
   are registered.
-  Impact: Created a thin wrapper that casts `to: string` props to bypass
-  strict route typing.
+  Impact: The wrapper should stay fully type-safe by accepting
+  `ValidateLinkOptions<RegisteredRouter, TOptions>` and forwarding
+  `linkOptions` directly into `<Link {...linkOptions}>` without string casts on
+  `to`, `params`, or `search`.
 
 ## Decision log
 
@@ -210,7 +212,8 @@ constraints; the following apply everywhere.
 
 ## Outcomes & retrospective
 
-All 7 milestones delivered. The app shell renders with:
+6 of 7 milestones are delivered. Milestone 7 remains open whilst the app shell
+renders with:
 
 - Polychromie Architecturale colour palette (cream/charcoal surfaces, teal
   primary, terracotta secondary) across both light and dark themes.
@@ -224,9 +227,9 @@ All 7 milestones delivered. The app shell renders with:
   and layout behaviour.
 
 Gate results: `bun lint`, `bun check:types`, `bun test`, `bun run test:a11y`,
-and `bun run semantic` all pass. The required E2E gate still fails due to
-missing Playwright Chromium in WSL2 (known environment limitation), so this
-plan remains partial.
+and `bun run semantic` all pass. The required Playwright E2E gate still fails
+due to missing Playwright Chromium in WSL2 (known environment limitation), so
+the overall plan remains partial until that environment blocker is cleared.
 
 ## Context and orientation
 

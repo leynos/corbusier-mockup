@@ -320,9 +320,11 @@ Keep docs close to code.
 - **daisyUI v5**: Keep theme tokens in sync with Tailwind config. Extend rather
   than override where possible; avoid deep custom CSS that fights component
   variables.
-- **Design tokens**: Define a single source of truth (CSS variables) for
-  colour, spacing, radius, and typography. Expose tokens to Tailwind via
-  `theme.extend` to keep utilities aligned with design.
+- **Design tokens**: Define a single source of truth as CSS custom properties
+  for colour, spacing, radius, and typography in global or component-scoped
+  stylesheets. Expose those tokens to Tailwind via the CSS-first `@theme`
+  directive so utilities are generated from the same values that remain
+  available at runtime.
 - **A11y**: Use semantic HTML first. Prefer daisyUI components only where they
   don’t harm semantics. Audit focus states and colour contrast with automated
   checks.
