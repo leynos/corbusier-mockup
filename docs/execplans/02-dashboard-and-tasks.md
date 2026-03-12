@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: IN PROGRESS
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -109,23 +109,57 @@ stacks, and state machine controls.
 - [x] Milestone 1: Fixture data for tasks and dashboard
 - [x] Milestone 2: Reusable UI components (badges, KPI cards,
       timelines, progress bars, avatar stacks)
-- [ ] Milestone 3: Dashboard page
-- [ ] Milestone 4: My Tasks page
-- [ ] Milestone 5: Task Detail page
-- [ ] Milestone 6: Task Dependencies page
-- [ ] Milestone 7: Tests and validation
+- [x] Milestone 3: Dashboard page
+- [x] Milestone 4: My Tasks page
+- [x] Milestone 5: Task Detail page
+- [x] Milestone 6: Task Dependencies page
+- [x] Milestone 7: Tests and validation
 
 ## Surprises & discoveries
 
-(None yet.)
+- Night theme semantic colours (`text-success` #7A9060, `text-error`
+  #C65A48) fail WCAG AA contrast (3.98:1) against `bg-base-100`
+  (#262D30). Supplementary text that conveys meaning via icons/labels
+  should use `text-base-content/80` (7.47:1) instead.
+- `text-base-content/50` gives exactly 4.5:1 in night theme — axe
+  may flag this due to rounding. Use `/60` (4.9:1) as the minimum
+  safe opacity for secondary text.
+- `role="progressbar"` requires an accessible name; defaulting the
+  `label` prop to `"Progress"` fixed the axe violation.
+- `<section>` elements only become `region` landmarks when they have
+  an accessible name (via `aria-label` or `aria-labelledby`). Added
+  `aria-labelledby` with `useId()` to the Section wrapper component.
 
 ## Decision log
 
-(None yet.)
+- Used `text-base-content/80` instead of semantic colours for KPI
+  trend labels and agent status text. Semantic colour is carried by
+  icons (which are `aria-hidden` and exempt from contrast rules).
+- Decomposed Task Detail into 8 sub-components under
+  `src/app/features/tasks/components/` to stay within the 400-line
+  file limit.
+- Filter chips on My Tasks use `useState` with string arrays rather
+  than URL search params, since this is a static mockup.
+- Section wrapper uses `useId()` + `aria-labelledby` rather than
+  `aria-label` to avoid duplicating the heading text.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 7 milestones delivered. Four pages implemented:
+
+- `/` — Dashboard with system health, KPI cards, activity feed,
+  agent utilisation summary.
+- `/tasks` — My Tasks with state/priority/project filter chips.
+- `/tasks/:id` — Task Detail with state machine controls, dependency
+  hierarchy, subtask checklist, branch/PR, activity timeline.
+- `/projects/:slug/tasks/:id/dependencies` — Dependency view with
+  hierarchy, dependency graph, related tasks.
+
+Test coverage: 59 unit tests, 9 E2E tests (including 3 axe sweeps),
+all passing. `bun run ff` gate green throughout.
+
+Files created: 18 new files, well within the 20-file tolerance.
+All files under the 400-line limit.
 
 ## Context and orientation
 
