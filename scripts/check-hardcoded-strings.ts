@@ -27,6 +27,11 @@ interface Violation {
   kind: "jsx-text" | "attribute";
 }
 
+interface LintDirectives {
+  readonly disabledLines: Set<number>;
+  readonly fileLevelDisabled: boolean;
+}
+
 const CONFIG_PATH = "tools/semantic-lint.config.json";
 const PROJECT_ROOT = process.cwd();
 
@@ -83,7 +88,92 @@ function isInsideTCall(node: ts.Node): boolean {
   return false;
 }
 
-function analyseFile(
+function hasI18nIgnoreAttribute(element: ts.JsxOpeningLikeElement): boolean {
+  return element.attributes.properties.some((attribute) => {
+    if (!ts.isJsxAttribute(attribute)) {
+      return false;
+    }
+
+    return attribute.name.getText() === "data-i18n-ignore";
+  });
+}
+
+function isIgnoredJsxElement(node: ts.Node): boolean {
+  if (ts.isJsxElement(node)) {
+    const tagName = node.openingElement.tagName.getText();
+    return tagName === "code" || tagName === "pre" || hasI18nIgnoreAttribute(node.openingElement);
+  }
+
+  if (ts.isJsxSelfClosingElement(node)) {
+    const tagName = node.tagName.getText();
+    return tagName === "code" || tagName === "pre" || hasI18nIgnoreAttribute(node);
+  }
+
+  return false;
+}
+
+function collectLintDirectives(sourceText: string, source: ts.SourceFile): LintDirectives {
+  const disabledLines = new Set<number>();
+  let fileLevelDisabled = false;
+  const seenRanges = new Set<string>();
+  const disablePattern = /semantic-lint:disable\s+hardcoded-strings(?:\s+(\w+))?/u;
+
+  const markRange = (range: ts.CommentRange): void => {
+    const key = `${range.pos}:${range.end}`;
+    if (seenRanges.has(key)) {
+      return;
+    }
+    seenRanges.add(key);
+
+    const raw = sourceText.slice(range.pos, range.end);
+    const match = disablePattern.exec(raw);
+    if (!match) {
+      return;
+    }
+
+    const line = source.getLineAndCharacterOfPosition(range.pos).line + 1;
+    const scope = match[1];
+
+    if (scope === "file") {
+      fileLevelDisabled = true;
+      return;
+    }
+
+    disabledLines.add(line + 1);
+  };
+
+  const scanRanges = (ranges: readonly ts.CommentRange[] | undefined): void => {
+    if (!ranges) {
+      return;
+    }
+
+    for (const range of ranges) {
+      markRange(range);
+    }
+  };
+
+  const visit = (node: ts.Node): void => {
+    scanRanges(ts.getLeadingCommentRanges(sourceText, node.pos));
+    scanRanges(ts.getTrailingCommentRanges(sourceText, node.end));
+    ts.forEachChild(node, visit);
+  };
+
+  scanRanges(ts.getLeadingCommentRanges(sourceText, 0));
+  visit(source);
+
+  return { disabledLines, fileLevelDisabled };
+}
+
+function shouldSkipNode(node: ts.Node, source: ts.SourceFile, directives: LintDirectives): boolean {
+  if (directives.fileLevelDisabled) {
+    return true;
+  }
+
+  const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+  return directives.disabledLines.has(line);
+}
+
+export function analyseFile(
   filePath: string,
   wordRegex: RegExp,
   attrSet: Set<string>,
@@ -97,11 +187,16 @@ function analyseFile(
     true,
     ts.ScriptKind.TSX,
   );
+  const directives = collectLintDirectives(sourceText, source);
 
   const visit = (node: ts.Node) => {
+    if (isIgnoredJsxElement(node)) {
+      return;
+    }
+
     // 1. JsxText — raw text between JSX tags
     if (ts.isJsxText(node) && wordRegex.test(node.text)) {
-      if (!isInsideTCall(node)) {
+      if (!isInsideTCall(node) && !shouldSkipNode(node, source, directives)) {
         const { line, character } = source.getLineAndCharacterOfPosition(node.getStart());
         results.push({
           file: filePath,
@@ -118,7 +213,11 @@ function analyseFile(
       const attrName = ts.isIdentifier(node.name) ? node.name.text : node.name.getText();
       if (attrSet.has(attrName) && ts.isStringLiteral(node.initializer)) {
         const text = node.initializer.text;
-        if (wordRegex.test(text) && !isInsideTCall(node)) {
+        if (
+          wordRegex.test(text) &&
+          !isInsideTCall(node) &&
+          !shouldSkipNode(node, source, directives)
+        ) {
           const { line, character } = source.getLineAndCharacterOfPosition(node.getStart());
           results.push({
             file: filePath,
@@ -164,4 +263,6 @@ function main(): void {
   }
 }
 
-main();
+if (import.meta.main) {
+  main();
+}

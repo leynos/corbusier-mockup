@@ -15,6 +15,7 @@ import { AvatarStack } from "../../components/avatar-stack";
 import { PriorityTag } from "../../components/priority-tag";
 import { StatusBadge } from "../../components/status-badge";
 import { pickLocalization } from "../../domain/entities/localization";
+import { formatShortDate } from "../../utils/date-formatting";
 
 /* ── Filter types ─────────────────────────────────────────────────── */
 
@@ -28,19 +29,14 @@ const PROJECT_SLUGS: readonly string[] = [...new Set(TASKS.map((t) => t.projectS
 
 /* ── Filter chip ──────────────────────────────────────────────────── */
 
-interface FilterChipProps<T extends string> {
+interface FilterChipProps {
   readonly label: string;
-  readonly value: T;
+  readonly value: string;
   readonly selected: boolean;
-  readonly onSelect: (value: T) => void;
+  readonly onSelect: (value: string) => void;
 }
 
-function FilterChip<T extends string>({
-  label,
-  value,
-  selected,
-  onSelect,
-}: FilterChipProps<T>): JSX.Element {
+function FilterChip({ label, value, selected, onSelect }: FilterChipProps): JSX.Element {
   return (
     <button
       type="button"
@@ -56,19 +52,48 @@ function FilterChip<T extends string>({
   );
 }
 
-/* ── Task row ─────────────────────────────────────────────────────── */
+interface FilterOption<T extends string> {
+  readonly value: T;
+  readonly label: string;
+}
 
-function formatDueDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+interface FilterGroupProps<T extends string> {
+  readonly label: string;
+  readonly icon?: JSX.Element;
+  readonly value: T;
+  readonly onChange: (value: T) => void;
+  readonly options: readonly FilterOption<T>[];
+}
+
+function FilterGroup<T extends string>({
+  label,
+  icon,
+  value,
+  onChange,
+  options,
+}: FilterGroupProps<T>): JSX.Element {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="flex items-center gap-1 text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
+        {icon}
+        {label}
+      </span>
+      {options.map((option) => (
+        <FilterChip
+          key={option.value}
+          label={option.label}
+          value={option.value}
+          selected={value === option.value}
+          onSelect={(selectedValue) => onChange(selectedValue as T)}
+        />
+      ))}
+    </div>
+  );
 }
 
 function TaskRow({ task }: { readonly task: Task }): JSX.Element {
   const { i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   return (
     <Link
@@ -100,7 +125,7 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
       {/* Due date */}
       <div className="flex shrink-0 items-center gap-1 text-[length:var(--font-size-xs)] text-base-content/60">
         <IconCalendar size={14} stroke={1.5} aria-hidden="true" />
-        <time dateTime={task.dueDate}>{formatDueDate(task.dueDate)}</time>
+        <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, locale)}</time>
       </div>
 
       {/* Assignee */}
@@ -115,7 +140,7 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
 
 export function TasksScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   const [stateFilter, setStateFilter] = useState<StateFilter>("all");
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all");
@@ -136,6 +161,29 @@ export function TasksScreen(): JSX.Element {
     setProjectFilter("all");
   };
 
+  const allLabel = t("task-filter-all", { defaultValue: "All" });
+  const stateOptions: readonly FilterOption<StateFilter>[] = [
+    { value: "all", label: allLabel },
+    ...Object.values(TaskState).map((state) => ({
+      value: state,
+      label: pickLocalization(taskStateDescriptors[state]?.localizations, locale).name,
+    })),
+  ];
+  const priorityOptions: readonly FilterOption<PriorityFilter>[] = [
+    { value: "all", label: allLabel },
+    ...Object.values(Priority).map((priority) => ({
+      value: priority,
+      label: pickLocalization(priorityDescriptors[priority]?.localizations, locale).name,
+    })),
+  ];
+  const projectOptions: readonly FilterOption<ProjectFilter>[] = [
+    { value: "all", label: allLabel },
+    ...PROJECT_SLUGS.map((slug) => ({
+      value: slug,
+      label: pickLocalization(projectDescriptors[slug]?.localizations, locale).name,
+    })),
+  ];
+
   return (
     <div>
       <h1 className="mb-6 font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
@@ -148,72 +196,25 @@ export function TasksScreen(): JSX.Element {
         className="card mb-6 border border-base-300 bg-base-100 shadow-sm"
       >
         <div className="card-body gap-3 p-4">
-          {/* State filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="flex items-center gap-1 text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              <IconFilter size={14} stroke={1.5} aria-hidden="true" />
-              {t("task-filter-state", { defaultValue: "State" })}
-            </span>
-            <FilterChip
-              label={t("task-filter-all", { defaultValue: "All" })}
-              value="all"
-              selected={stateFilter === "all"}
-              onSelect={setStateFilter}
-            />
-            {Object.values(TaskState).map((s) => (
-              <FilterChip
-                key={s}
-                label={pickLocalization(taskStateDescriptors[s]?.localizations, locale).name}
-                value={s}
-                selected={stateFilter === s}
-                onSelect={setStateFilter}
-              />
-            ))}
-          </div>
-
-          {/* Priority filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("task-filter-priority", { defaultValue: "Priority" })}
-            </span>
-            <FilterChip
-              label={t("task-filter-all", { defaultValue: "All" })}
-              value="all"
-              selected={priorityFilter === "all"}
-              onSelect={setPriorityFilter}
-            />
-            {Object.values(Priority).map((p) => (
-              <FilterChip
-                key={p}
-                label={pickLocalization(priorityDescriptors[p]?.localizations, locale).name}
-                value={p}
-                selected={priorityFilter === p}
-                onSelect={setPriorityFilter}
-              />
-            ))}
-          </div>
-
-          {/* Project filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("task-filter-project", { defaultValue: "Project" })}
-            </span>
-            <FilterChip
-              label={t("task-filter-all", { defaultValue: "All" })}
-              value="all"
-              selected={projectFilter === "all"}
-              onSelect={setProjectFilter}
-            />
-            {PROJECT_SLUGS.map((slug) => (
-              <FilterChip
-                key={slug}
-                label={pickLocalization(projectDescriptors[slug]?.localizations, locale).name}
-                value={slug}
-                selected={projectFilter === slug}
-                onSelect={setProjectFilter}
-              />
-            ))}
-          </div>
+          <FilterGroup
+            label={t("task-filter-state", { defaultValue: "State" })}
+            icon={<IconFilter size={14} stroke={1.5} aria-hidden="true" />}
+            value={stateFilter}
+            onChange={setStateFilter}
+            options={stateOptions}
+          />
+          <FilterGroup
+            label={t("task-filter-priority", { defaultValue: "Priority" })}
+            value={priorityFilter}
+            onChange={setPriorityFilter}
+            options={priorityOptions}
+          />
+          <FilterGroup
+            label={t("task-filter-project", { defaultValue: "Project" })}
+            value={projectFilter}
+            onChange={setProjectFilter}
+            options={projectOptions}
+          />
 
           {/* Reset */}
           {hasFilters ? (

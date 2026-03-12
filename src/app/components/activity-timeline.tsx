@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import type { ActivityEventKind } from "../../data/tasks";
 import type { EntityLocalizations } from "../domain/entities/localization";
 import { pickLocalization } from "../domain/entities/localization";
+import { formatTimelineTimestamp } from "../utils/date-formatting";
 
 export interface TimelineEntry {
   readonly id: string;
@@ -31,20 +32,9 @@ interface ActivityTimelineProps {
   readonly className?: string;
 }
 
-function formatTimestamp(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-}
-
 export function ActivityTimeline({ entries, className = "" }: ActivityTimelineProps): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   return (
     <ol
       className={`relative space-y-4 ${className}`}
@@ -72,7 +62,7 @@ export function ActivityTimeline({ entries, className = "" }: ActivityTimelinePr
               dateTime={entry.timestamp}
               className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60"
             >
-              {formatTimestamp(entry.timestamp)}
+              {formatTimelineTimestamp(entry.timestamp, locale)}
             </time>
           </div>
         </li>

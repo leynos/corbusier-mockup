@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import type { Subtask } from "../../../../data/tasks";
 import { ProgressBar } from "../../../components/progress-bar";
 import { pickLocalization } from "../../../domain/entities/localization";
+import { getSubtaskStats } from "../../../utils/task-metrics";
 
 interface SubtaskChecklistProps {
   readonly subtasks: readonly Subtask[];
@@ -14,12 +15,11 @@ interface SubtaskChecklistProps {
 
 export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Element | null {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   if (subtasks.length === 0) return null;
 
-  const done = subtasks.filter((s) => s.done).length;
-  const pct = Math.round((done / subtasks.length) * 100);
+  const { done, total, percentage } = getSubtaskStats(subtasks);
 
   return (
     <div>
@@ -28,10 +28,10 @@ export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Eleme
           {t("task-subtask-heading", { defaultValue: "Subtasks" })}
         </h3>
         <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-          {String(done)}/{String(subtasks.length)}
+          {String(done)}/{String(total)}
         </span>
       </div>
-      <ProgressBar value={pct} className="mb-3" />
+      <ProgressBar value={percentage} className="mb-3" />
       <ul className="space-y-1">
         {subtasks.map((sub) => (
           <li key={sub.id} className="flex items-center gap-2 py-1">

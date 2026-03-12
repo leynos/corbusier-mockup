@@ -7,17 +7,10 @@ import type { Task } from "../../../../data/tasks";
 import { CategoryTag } from "../../../components/category-tag";
 import { PriorityTag } from "../../../components/priority-tag";
 import { pickLocalization } from "../../../domain/entities/localization";
+import { formatShortDate } from "../../../utils/date-formatting";
 
 interface TaskMetadataPanelProps {
   readonly task: Task;
-}
-
-function formatDueDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
 }
 
 interface MetaRowProps {
@@ -38,7 +31,7 @@ function MetaRow({ label, children }: MetaRowProps): JSX.Element {
 
 export function TaskMetadataPanel({ task }: TaskMetadataPanelProps): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   return (
     <dl className="divide-y divide-base-300/50">
@@ -49,7 +42,7 @@ export function TaskMetadataPanel({ task }: TaskMetadataPanelProps): JSX.Element
         </span>
       </MetaRow>
       <MetaRow label={t("task-meta-due", { defaultValue: "Due" })}>
-        <time dateTime={task.dueDate}>{formatDueDate(task.dueDate)}</time>
+        <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, locale)}</time>
       </MetaRow>
       <MetaRow label={t("task-meta-priority", { defaultValue: "Priority" })}>
         <PriorityTag priority={task.priority} />

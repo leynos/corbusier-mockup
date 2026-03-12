@@ -9,22 +9,15 @@ import { AvatarStack } from "../../../components/avatar-stack";
 import { PriorityTag } from "../../../components/priority-tag";
 import { StatusBadge } from "../../../components/status-badge";
 import { pickLocalization } from "../../../domain/entities/localization";
+import { formatShortDate } from "../../../utils/date-formatting";
 
 interface TaskHeaderProps {
   readonly task: Task;
 }
 
-function formatDueDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
 export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
   const { i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -44,7 +37,7 @@ export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
       <div className="flex shrink-0 items-center gap-4">
         <div className="flex items-center gap-1 text-[length:var(--font-size-xs)] text-base-content/60">
           <IconCalendar size={14} stroke={1.5} aria-hidden="true" />
-          <time dateTime={task.dueDate}>{formatDueDate(task.dueDate)}</time>
+          <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, locale)}</time>
         </div>
         <AvatarStack assignees={[task.assignee]} />
       </div>

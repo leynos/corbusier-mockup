@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { labelDescriptors } from "../../data/registries";
 import type { Task } from "../../data/tasks";
 import { pickLocalization } from "../domain/entities/localization";
+import { getTaskSubtaskStats } from "../utils/task-metrics";
 import { AvatarStack } from "./avatar-stack";
 import { CategoryTag } from "./category-tag";
 import { ChamferCard } from "./chamfer-card";
@@ -21,21 +22,13 @@ interface TaskCardProps {
   readonly className?: string;
 }
 
-function subtaskProgress(task: Task): number {
-  if (task.subtasks.length === 0) return 0;
-  const done = task.subtasks.filter((s) => s.done).length;
-  return Math.round((done / task.subtasks.length) * 100);
-}
-
 export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   const isBlocked = task.dependencies.blockedBy.length > 0;
   const reversed = isBlocked;
   const strokeClass = isBlocked ? "stroke-error" : "stroke-base-300";
-  const progress = subtaskProgress(task);
-  const done = task.subtasks.filter((s) => s.done).length;
-  const total = task.subtasks.length;
+  const { done, total, percentage } = getTaskSubtaskStats(task);
 
   return (
     <ChamferCard
@@ -78,11 +71,11 @@ export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
       {total > 0 ? (
         <div className="mb-3">
           <ProgressBar
-            value={progress}
+            value={percentage}
             fillClassName={isBlocked ? "bg-error" : "bg-primary"}
             label={t("task-card-progress", {
-              progress: String(progress),
-              defaultValue: `${String(progress)}% subtasks complete`,
+              progress: String(percentage),
+              defaultValue: `${String(percentage)}% subtasks complete`,
             })}
           />
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/50">

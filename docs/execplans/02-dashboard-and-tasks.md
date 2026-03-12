@@ -57,7 +57,8 @@ stacks, and state machine controls.
   5. Branch & PR association
   6. Activity timeline
   7. Task metadata (reference data)
-- Status badges must always combine icon + text + colour (WCAG 1.4.1
+- Status badges must always combine icon + text + colour (Web Content
+  Accessibility Guidelines (WCAG) 1.4.1
   — colour must not be the sole means of conveying information).
 - Task cards carry the punch-card chamfer. Information cards (KPI,
   registry) use standard rounded corners.
@@ -118,7 +119,8 @@ stacks, and state machine controls.
 ## Surprises & discoveries
 
 - Night theme semantic colours (`text-success` #7A9060, `text-error`
-  #C65A48) fail WCAG AA contrast (3.98:1) against `bg-base-100`
+  #C65A48) fail Web Content Accessibility Guidelines (WCAG) AA
+  contrast (3.98:1) against `bg-base-100`
   (#262D30). Supplementary text that conveys meaning via icons/labels
   should use `text-base-content/80` (7.47:1) instead.
 - `text-base-content/50` gives exactly 4.5:1 in night theme — axe
@@ -151,12 +153,13 @@ All 7 milestones delivered. Four pages implemented:
   agent utilisation summary.
 - `/tasks` — My Tasks with state/priority/project filter chips.
 - `/tasks/:id` — Task Detail with state machine controls, dependency
-  hierarchy, subtask checklist, branch/PR, activity timeline.
+  hierarchy, subtask checklist, branch/pull request (PR), activity
+  timeline.
 - `/projects/:slug/tasks/:id/dependencies` — Dependency view with
   hierarchy, dependency graph, related tasks.
 
-Test coverage: 59 unit tests, 9 E2E tests (including 3 axe sweeps),
-all passing. `bun run ff` gate green throughout.
+Test coverage: 59 unit tests, 9 end-to-end (E2E) tests (including 3
+axe sweeps), all passing. `bun run ff` gate green throughout.
 
 Files created: 18 new files, well within the 20-file tolerance.
 All files under the 400-line limit.

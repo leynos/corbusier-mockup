@@ -7,139 +7,23 @@
  * 4. Agent utilization summary
  */
 
-import {
-  IconActivity,
-  IconAlertTriangle,
-  IconCircleCheck,
-  IconCircleX,
-  IconRobot,
-} from "@tabler/icons-react";
+import { IconActivity } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  AGENT_BACKENDS,
-  type AgentBackend,
-  type HealthStatus,
-  KPI_METRICS,
-  RECENT_ACTIVITY,
-  SYSTEM_HEALTH,
-} from "../../../data/dashboard";
-import { agentStatusDescriptors, healthStatusDescriptors } from "../../../data/registries";
+import { KPI_METRICS } from "../../../data/dashboard";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { KpiCard } from "../../components/kpi-card";
 import { pickLocalization } from "../../domain/entities/localization";
-
-/* ── System health panel ───────────────────────────────────────────── */
-
-const HEALTH_ICON: Record<HealthStatus, typeof IconCircleCheck> = {
-  healthy: IconCircleCheck,
-  degraded: IconAlertTriangle,
-  critical: IconCircleX,
-};
-
-const HEALTH_COLOUR: Record<HealthStatus, string> = {
-  healthy: "text-success",
-  degraded: "text-warning",
-  critical: "text-error",
-};
-
-function SystemHealthPanel(): JSX.Element {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const Icon = HEALTH_ICON[SYSTEM_HEALTH.overall];
-  const colour = HEALTH_COLOUR[SYSTEM_HEALTH.overall];
-  const label = pickLocalization(
-    healthStatusDescriptors[SYSTEM_HEALTH.overall]?.localizations,
-    locale,
-  ).name;
-
-  return (
-    <section
-      aria-label={t("dashboard-health-region", { defaultValue: "System health" })}
-      className="card bg-base-100 border border-base-300 shadow-sm"
-    >
-      <div className="card-body flex-row items-center gap-4 p-5">
-        <Icon size={32} stroke={1.5} className={colour} aria-hidden="true" />
-        <div>
-          <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content">
-            {t("dashboard-health-status", {
-              label,
-              defaultValue: `System Status: ${label}`,
-            })}
-          </p>
-          <p className="text-[length:var(--font-size-xs)] text-base-content/60">
-            {t("dashboard-health-last-checked", { defaultValue: "Last checked:" })}{" "}
-            <time dateTime={SYSTEM_HEALTH.lastChecked}>
-              {new Date(SYSTEM_HEALTH.lastChecked).toLocaleTimeString("en-GB", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </time>
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Agent utilization panel ───────────────────────────────────────── */
-
-const INACTIVE_STYLE = { dot: "bg-base-content/30", text: "text-base-content/60" } as const;
-
-const AGENT_STATUS_STYLE: Record<string, { readonly dot: string; readonly text: string }> = {
-  active: { dot: "bg-success", text: "text-base-content/80" },
-  inactive: INACTIVE_STYLE,
-  error: { dot: "bg-error", text: "text-base-content/80" },
-};
-
-function AgentRow({ agent }: { readonly agent: AgentBackend }): JSX.Element {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const style = AGENT_STATUS_STYLE[agent.status] ?? INACTIVE_STYLE;
-  return (
-    <li className="flex items-center gap-3 py-2">
-      <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
-      <span className="flex-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content">
-        {pickLocalization(agent.localizations, locale).name}
-      </span>
-      <span className={`text-[length:var(--font-size-xs)] font-semibold ${style.text}`}>
-        {pickLocalization(agentStatusDescriptors[agent.status]?.localizations, locale).name}
-      </span>
-      <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-        {String(agent.turnCount)} {t("dashboard-agent-turns", { defaultValue: "turns" })}
-      </span>
-    </li>
-  );
-}
-
-function AgentUtilizationPanel(): JSX.Element {
-  const { t } = useTranslation();
-  return (
-    <section
-      aria-label={t("dashboard-agent-region", { defaultValue: "Agent utilization" })}
-      className="card bg-base-100 border border-base-300 shadow-sm"
-    >
-      <div className="card-body p-5">
-        <h2 className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          <IconRobot size={16} stroke={1.5} aria-hidden="true" />
-          {t("dashboard-agent-heading", { defaultValue: "Agent Utilization" })}
-        </h2>
-        <ul className="divide-y divide-base-300/50">
-          {AGENT_BACKENDS.map((a) => (
-            <AgentRow key={a.id} agent={a} />
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
+import { getRecentActivityEntries } from "./activity-adapter";
+import { AgentUtilizationPanel } from "./components/agent-utilization-panel";
+import { SystemHealthPanel } from "./components/system-health-panel";
 
 /* ── Dashboard screen ──────────────────────────────────────────────── */
 
 export function DashboardScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
 
   return (
     <div>
@@ -179,15 +63,7 @@ export function DashboardScreen(): JSX.Element {
               <IconActivity size={16} stroke={1.5} aria-hidden="true" />
               {t("dashboard-activity-heading", { defaultValue: "Recent Activity" })}
             </h2>
-            <ActivityTimeline
-              entries={RECENT_ACTIVITY.slice(0, 10).map((e) => ({
-                id: e.id,
-                kind: e.kind === "tool_call" || e.kind === "agent_turn" ? "agent_action" : e.kind,
-                timestamp: e.timestamp,
-                actor: e.actor,
-                localizations: e.localizations,
-              }))}
-            />
+            <ActivityTimeline entries={getRecentActivityEntries()} />
           </div>
         </section>
 

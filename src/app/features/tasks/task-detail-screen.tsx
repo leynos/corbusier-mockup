@@ -10,11 +10,12 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
-import { type JSX, useId } from "react";
+import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
+import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
 import { BranchPrPanel } from "./components/branch-pr-panel";
 import { DependencyHierarchy } from "./components/dependency-hierarchy";
@@ -29,40 +30,11 @@ import { TaskMetadataPanel } from "./components/task-metadata-panel";
 
 const routeApi = getRouteApi("/tasks/$id");
 
-/* ── Section wrapper ──────────────────────────────────────────────── */
-
-interface SectionProps {
-  readonly icon: typeof IconActivity;
-  readonly title: string;
-  readonly children: React.ReactNode;
-}
-
-function Section({ icon: Icon, title, children }: SectionProps): JSX.Element {
-  const headingId = useId();
-  return (
-    <section
-      className="card border border-base-300 bg-base-100 shadow-sm"
-      aria-labelledby={headingId}
-    >
-      <div className="card-body p-5">
-        <h2
-          id={headingId}
-          className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60"
-        >
-          <Icon size={16} stroke={1.5} aria-hidden="true" />
-          {title}
-        </h2>
-        {children}
-      </div>
-    </section>
-  );
-}
-
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -95,31 +67,31 @@ export function TaskDetailScreen(): JSX.Element {
         {/* Main content — 2/3 */}
         <div className="space-y-6 lg:col-span-2">
           {/* 3. Dependencies */}
-          <Section
+          <SectionCard
             icon={IconNetwork}
             title={t("task-section-dependencies", { defaultValue: "Dependencies" })}
           >
             <DependencyPanel task={task} />
-          </Section>
+          </SectionCard>
 
           {/* 4. Subtasks */}
-          <Section
+          <SectionCard
             icon={IconListCheck}
             title={t("task-section-progress", { defaultValue: "Progress" })}
           >
             <SubtaskChecklist subtasks={task.subtasks} />
-          </Section>
+          </SectionCard>
 
           {/* 5. Branch & PR */}
-          <Section
+          <SectionCard
             icon={IconGitBranch}
             title={t("task-section-source-control", { defaultValue: "Source Control" })}
           >
             <BranchPrPanel branchRef={task.branchRef} pullRequestRef={task.pullRequestRef} />
-          </Section>
+          </SectionCard>
 
           {/* 6. Activity timeline */}
-          <Section
+          <SectionCard
             icon={IconActivity}
             title={t("task-section-activity", { defaultValue: "Activity" })}
           >
@@ -132,33 +104,36 @@ export function TaskDetailScreen(): JSX.Element {
                 localizations: e.localizations,
               }))}
             />
-          </Section>
+          </SectionCard>
         </div>
 
         {/* Sidebar — 1/3 */}
         <div className="space-y-6">
           {/* 7. Metadata */}
-          <Section icon={IconTag} title={t("task-section-details", { defaultValue: "Details" })}>
+          <SectionCard
+            icon={IconTag}
+            title={t("task-section-details", { defaultValue: "Details" })}
+          >
             <TaskMetadataPanel task={task} />
-          </Section>
+          </SectionCard>
 
           {/* Description */}
-          <Section
+          <SectionCard
             icon={IconHierarchy2}
             title={t("task-section-description", { defaultValue: "Description" })}
           >
             <p className="text-[length:var(--font-size-sm)] text-base-content/80">
               {pickLocalization(task.localizations, locale).description ?? ""}
             </p>
-          </Section>
+          </SectionCard>
 
           {/* Related tasks */}
-          <Section
+          <SectionCard
             icon={IconUsers}
             title={t("task-section-related", { defaultValue: "Related Tasks" })}
           >
             <RelatedTasks taskIds={task.relatedTasks} />
-          </Section>
+          </SectionCard>
         </div>
       </div>
     </div>

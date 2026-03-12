@@ -8,101 +8,27 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
-import { type JSX, useId } from "react";
+import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
-import { ProgressBar } from "../../components/progress-bar";
-import { StatusBadge } from "../../components/status-badge";
+import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
 import { DependencyHierarchy } from "../tasks/components/dependency-hierarchy";
 import { DependencyPanel } from "../tasks/components/dependency-panel";
 import { RelatedTasks } from "../tasks/components/related-tasks";
+import { TaskFocusPanel } from "../tasks/components/task-focus-panel";
 
 /* ── Route API ────────────────────────────────────────────────────── */
 
 const routeApi = getRouteApi("/projects/$slug/tasks/$id/dependencies");
 
-/* ── Section wrapper ──────────────────────────────────────────────── */
-
-interface SectionProps {
-  readonly icon: typeof IconActivity;
-  readonly title: string;
-  readonly children: React.ReactNode;
-}
-
-function Section({ icon: Icon, title, children }: SectionProps): JSX.Element {
-  const headingId = useId();
-  return (
-    <section
-      className="card border border-base-300 bg-base-100 shadow-sm"
-      aria-labelledby={headingId}
-    >
-      <div className="card-body p-5">
-        <h2
-          id={headingId}
-          className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60"
-        >
-          <Icon size={16} stroke={1.5} aria-hidden="true" />
-          {title}
-        </h2>
-        {children}
-      </div>
-    </section>
-  );
-}
-
-/* ── Task focus panel ─────────────────────────────────────────────── */
-
-interface TaskFocusPanelProps {
-  readonly task: ReturnType<typeof findTask> & object;
-}
-
-function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const done = task.subtasks.filter((s) => s.done).length;
-  const total = task.subtasks.length;
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-
-  return (
-    <div>
-      <div className="mb-3 flex items-center gap-3">
-        <StatusBadge state={task.state} />
-        <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content">
-          {pickLocalization(task.localizations, locale).name}
-        </h2>
-      </div>
-      <p className="mb-3 text-[length:var(--font-size-sm)] text-base-content/80">
-        {pickLocalization(task.localizations, locale).description ?? ""}
-      </p>
-      {total > 0 ? (
-        <div>
-          <div className="mb-1 flex items-center justify-between text-[length:var(--font-size-xs)] text-base-content/60">
-            <span>{t("task-deps-subtask-progress", { defaultValue: "Subtask progress" })}</span>
-            <span className="font-[family-name:var(--font-mono)]">
-              {String(done)}/{String(total)}
-            </span>
-          </div>
-          <ProgressBar value={pct} />
-        </div>
-      ) : null}
-      {task.estimate !== undefined ? (
-        <p className="mt-2 text-[length:var(--font-size-xs)] text-base-content/60">
-          {t("task-deps-estimate-label", { defaultValue: "Estimate:" })}{" "}
-          <span className="font-semibold text-base-content">{task.estimate}</span>
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDepsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -125,27 +51,27 @@ export function TaskDepsScreen(): JSX.Element {
       <DependencyHierarchy task={task} />
 
       {/* Current task focus */}
-      <Section
+      <SectionCard
         icon={IconHierarchy2}
         title={t("task-section-current", { defaultValue: "Current Task" })}
       >
         <TaskFocusPanel task={task} />
-      </Section>
+      </SectionCard>
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main — 2/3 */}
         <div className="space-y-6 lg:col-span-2">
           {/* Dependency graph */}
-          <Section
+          <SectionCard
             icon={IconNetwork}
             title={t("task-section-dependencies", { defaultValue: "Dependencies" })}
           >
             <DependencyPanel task={task} />
-          </Section>
+          </SectionCard>
 
           {/* Activity timeline */}
-          <Section
+          <SectionCard
             icon={IconActivity}
             title={t("task-section-activity", { defaultValue: "Activity" })}
           >
@@ -158,14 +84,14 @@ export function TaskDepsScreen(): JSX.Element {
                 localizations: e.localizations,
               }))}
             />
-          </Section>
+          </SectionCard>
         </div>
 
         {/* Sidebar — 1/3 */}
         <div className="space-y-6">
           {/* Subtask summary */}
           {task.subtasks.length > 0 ? (
-            <Section
+            <SectionCard
               icon={IconListCheck}
               title={t("task-section-subtasks", { defaultValue: "Subtasks" })}
             >
@@ -179,16 +105,16 @@ export function TaskDepsScreen(): JSX.Element {
                   </li>
                 ))}
               </ul>
-            </Section>
+            </SectionCard>
           ) : null}
 
           {/* Related tasks */}
-          <Section
+          <SectionCard
             icon={IconUsers}
             title={t("task-section-related", { defaultValue: "Related Tasks" })}
           >
             <RelatedTasks taskIds={task.relatedTasks} />
-          </Section>
+          </SectionCard>
         </div>
       </div>
     </div>
