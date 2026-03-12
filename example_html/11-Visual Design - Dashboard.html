@@ -186,7 +186,7 @@
         <section id="summary-cards" class="mb-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <div id="tasks-today-card" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer">
+                <button type="button" id="tasks-today-card" class="w-full appearance-none bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer text-left p-0" aria-label="Tasks due today summary card">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="w-12 h-12 bg-corbusier-blue/10 rounded-lg flex items-center justify-center">
@@ -202,14 +202,14 @@
                         </div>
                     </div>
                     <div class="border-t border-corbusier-border px-6 py-3 bg-corbusier-cream/30">
-                        <button type="button" class="text-sm font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors flex items-center gap-2">
+                        <span class="text-sm font-semibold text-corbusier-blue transition-colors flex items-center gap-2">
                             <span>View all tasks</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </button>
+                        </span>
                     </div>
-                </div>
+                </button>
 
-                <div id="blocked-tasks-card" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer">
+                <button type="button" id="blocked-tasks-card" class="w-full appearance-none bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer text-left p-0" aria-label="Blocked tasks summary card">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
@@ -231,14 +231,14 @@
                         </div>
                     </div>
                     <div class="border-t border-corbusier-border px-6 py-3 bg-corbusier-cream/30">
-                        <button type="button" class="text-sm font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors flex items-center gap-2">
+                        <span class="text-sm font-semibold text-corbusier-blue transition-colors flex items-center gap-2">
                             <span>Resolve blockers</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </button>
+                        </span>
                     </div>
-                </div>
+                </button>
 
-                <div id="active-conversations-card" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer">
+                <button type="button" id="active-conversations-card" class="w-full appearance-none bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer text-left p-0" aria-label="Active conversations summary card">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="w-12 h-12 bg-corbusier-teal/10 rounded-lg flex items-center justify-center">
@@ -253,14 +253,14 @@
                         </div>
                     </div>
                     <div class="border-t border-corbusier-border px-6 py-3 bg-corbusier-cream/30">
-                        <button type="button" class="text-sm font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors flex items-center gap-2">
+                        <span class="text-sm font-semibold text-corbusier-blue transition-colors flex items-center gap-2">
                             <span>Open console</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </button>
+                        </span>
                     </div>
-                </div>
+                </button>
 
-                <div id="project-health-card" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer">
+                <button type="button" id="project-health-card" class="w-full appearance-none bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all cursor-pointer text-left p-0" aria-label="Project health summary card">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -276,12 +276,12 @@
                         <p class="text-xs text-corbusier-gray">4 active projects</p>
                     </div>
                     <div class="border-t border-corbusier-border px-6 py-3 bg-corbusier-cream/30">
-                        <button type="button" class="text-sm font-semibold text-corbusier-blue hover:text-ibm-blue transition-colors flex items-center gap-2">
+                        <span class="text-sm font-semibold text-corbusier-blue transition-colors flex items-center gap-2">
                             <span>View projects</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </button>
+                        </span>
                     </div>
-                </div>
+                </button>
 
             </div>
         </section>
