@@ -119,7 +119,7 @@ For the fuller v2a application stack, the state split is broader:
 
 - **Zustand** owns interactive client and UI state,
 - **TanStack Query** owns server and synchronized domain state, and
-- **XState** is the right fit for explicit multi-step workflows or
+- **XState** is the right fit for explicit multistep workflows or
   long-running interaction logic that benefits from a formal state machine.
 
 ## Styling and design system

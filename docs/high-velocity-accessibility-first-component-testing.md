@@ -193,7 +193,7 @@ describe('ThemeProvider integration', () => {
     // Check that the theme data attribute was applied globally
     expect(document.documentElement.getAttribute('data-theme')).toBe('wildside-night');
     expect(document.body.getAttribute('data-theme')).toBe('wildside-night');
-    
+
     root.unmount();
   });
 });
@@ -254,7 +254,7 @@ expect.extend(toHaveNoViolations);
 
 test('Button has no accessibility violations and is properly labelled', async () => {
   const { container } = render(<Button>Click Me</Button>);
-  
+
   const results = await axe(container);
   expect(results).toHaveNoViolations();  // Custom matcher asserts zero axe issues
 
@@ -377,7 +377,7 @@ that label.
 #### 2.3.1 Exemplars awaiting refactor
 
 There are still a handful of high-visibility suites leaning on test IDs and
-DOM structure hooks. They are valuable targets when socialising the upcoming
+DOM structure hooks. They are valuable targets when socializing the upcoming
 lint rule:
 
 - `tests/routes.stage1.test.tsx` (quick-map and offline manager flows) uses
@@ -540,11 +540,11 @@ test('Home page header is fully keyboard-navigable', async ({ page }) => {
   await page.keyboard.press('Tab');
   let focused = await page.evaluate(() => document.activeElement?.textContent);
   expect(focused).toMatch(/Products/i);  // focus on "Products" link
-  
+
   await page.keyboard.press('Tab');
   focused = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
   expect(focused).toBe('Search');  // now search box is focused (identified by its aria-label)
-  
+
   await page.keyboard.press('Tab');
   focused = await page.evaluate(() => document.activeElement?.textContent);
   expect(focused).toMatch(/My Account/i);  // now "My Account" button is focused
@@ -810,7 +810,7 @@ test('app supports English and Spanish locales', async ({ page }) => {
   // Default is English
   expect(await page.locator('html').getAttribute('lang')).toBe('en');
   await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible();
-  
+
   // Switch locale via UI control (assuming a button or menu)
   await page.getByRole('button', { name: 'Español' }).click();
   // Now the page should be in Spanish
@@ -1024,7 +1024,7 @@ To adopt this framework, a phased rollout is advisable:
   generate the baseline screenshot. Commit this baseline image to the repo
   because reference snapshots are generally tracked over time. Ensure that
   small pixel differences do not cause noise by adjusting thresholds or
-  screenshot options if needed (such as disabling anti-aliasing via CSS in
+  screenshot options if needed (such as disabling antialiasing via CSS in
   test).
 
 - **Accessibility Snapshots:** Implement the `toMatchAriaSnapshot` matcher.
