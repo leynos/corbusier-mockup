@@ -25,8 +25,10 @@ import {
   RECENT_ACTIVITY,
   SYSTEM_HEALTH,
 } from "../../../data/dashboard";
+import { agentStatusDescriptors, healthStatusDescriptors } from "../../../data/registries";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { KpiCard } from "../../components/kpi-card";
+import { pickLocalization } from "../../domain/entities/localization";
 
 /* ── System health panel ───────────────────────────────────────────── */
 
@@ -42,19 +44,15 @@ const HEALTH_COLOUR: Record<HealthStatus, string> = {
   critical: "text-error",
 };
 
-const HEALTH_DEFAULTS: Record<HealthStatus, string> = {
-  healthy: "HEALTHY",
-  degraded: "DEGRADED",
-  critical: "CRITICAL",
-};
-
 function SystemHealthPanel(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const Icon = HEALTH_ICON[SYSTEM_HEALTH.overall];
   const colour = HEALTH_COLOUR[SYSTEM_HEALTH.overall];
-  const label = t(`dashboard-health-${SYSTEM_HEALTH.overall}`, {
-    defaultValue: HEALTH_DEFAULTS[SYSTEM_HEALTH.overall],
-  });
+  const label = pickLocalization(
+    healthStatusDescriptors[SYSTEM_HEALTH.overall]?.localizations,
+    locale,
+  ).name;
 
   return (
     <section
@@ -96,18 +94,17 @@ const AGENT_STATUS_STYLE: Record<string, { readonly dot: string; readonly text: 
 };
 
 function AgentRow({ agent }: { readonly agent: AgentBackend }): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const style = AGENT_STATUS_STYLE[agent.status] ?? INACTIVE_STYLE;
   return (
     <li className="flex items-center gap-3 py-2">
       <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden="true" />
       <span className="flex-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content">
-        {t(`agent-${agent.name.replace(/_/g, "-")}`, { defaultValue: agent.displayName })}
+        {pickLocalization(agent.localizations, locale).name}
       </span>
       <span className={`text-[length:var(--font-size-xs)] font-semibold ${style.text}`}>
-        {agent.status === "active"
-          ? t("dashboard-agent-active", { defaultValue: "Active" })
-          : t("dashboard-agent-inactive", { defaultValue: "Inactive" })}
+        {pickLocalization(agentStatusDescriptors[agent.status]?.localizations, locale).name}
       </span>
       <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
         {String(agent.turnCount)} {t("dashboard-agent-turns", { defaultValue: "turns" })}
@@ -130,7 +127,7 @@ function AgentUtilizationPanel(): JSX.Element {
         </h2>
         <ul className="divide-y divide-base-300/50">
           {AGENT_BACKENDS.map((a) => (
-            <AgentRow key={a.name} agent={a} />
+            <AgentRow key={a.id} agent={a} />
           ))}
         </ul>
       </div>
@@ -141,7 +138,8 @@ function AgentUtilizationPanel(): JSX.Element {
 /* ── Dashboard screen ──────────────────────────────────────────────── */
 
 export function DashboardScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <div>
@@ -160,11 +158,11 @@ export function DashboardScreen(): JSX.Element {
         {KPI_METRICS.map((m) => (
           <KpiCard
             key={m.id}
-            label={t(`kpi-${m.id}-label`, { defaultValue: m.label })}
+            label={pickLocalization(m.localizations, locale).name}
             value={m.value}
-            context={t(`kpi-${m.id}-context`, { defaultValue: m.context })}
+            context={pickLocalization(m.localizations, locale).description ?? ""}
             trend={m.trend}
-            trendLabel={t(`kpi-${m.id}-trend`, { defaultValue: m.trendLabel })}
+            trendLabel={pickLocalization(m.trendLocalizations, locale).name}
           />
         ))}
       </section>
@@ -187,9 +185,7 @@ export function DashboardScreen(): JSX.Element {
                 kind: e.kind === "tool_call" || e.kind === "agent_turn" ? "agent_action" : e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                localizations: {
-                  "en-GB": { name: t(`${e.id}-description`, { defaultValue: e.description }) },
-                },
+                localizations: e.localizations,
               }))}
             />
           </div>

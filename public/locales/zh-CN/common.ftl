@@ -187,9 +187,6 @@ task-card-subtasks = { $done }/{ $total } 个子任务
 
 ## Dashboard
 
-dashboard-health-healthy = 正常
-dashboard-health-degraded = 降级
-dashboard-health-critical = 严重
 dashboard-health-status = 系统状态：{ $label }
 dashboard-health-region = 系统健康
 dashboard-health-last-checked = 上次检查：
@@ -198,47 +195,9 @@ dashboard-activity-region = 近期动态
 dashboard-activity-heading = 近期动态
 dashboard-agent-region = 代理利用率
 dashboard-agent-heading = 代理利用率
-dashboard-agent-active = 活跃
-dashboard-agent-inactive = 闲置
 dashboard-agent-turns = 轮次
 
 ## Shared components
 
 activity-timeline-label = 动态时间线
 progress-label = 进度
-
-## Fixture — agent backends
-
-agent-claude-code-sdk = Claude Code SDK
-agent-codex-cli = Codex CLI
-agent-custom-backend = Custom Backend
-
-## Fixture — KPI metrics
-
-kpi-active-tasks-label = Active Tasks
-kpi-active-tasks-context = across 4 projects
-kpi-active-tasks-trend = +3 this week
-kpi-agent-utilization-label = Agent Utilization
-kpi-agent-utilization-context = 2 of 3 backends active
-kpi-agent-utilization-trend = +5% from yesterday
-kpi-tool-success-rate-label = Tool Success Rate
-kpi-tool-success-rate-context = last 24 hours
-kpi-tool-success-rate-trend = stable
-kpi-sla-p95-label = SLA P95 Latency
-kpi-sla-p95-context = target: <1000ms
-kpi-sla-p95-trend = -40ms from last week
-
-## Fixture — dashboard events
-
-da-1-description = Transitioned TASK-1001 to In Progress
-da-2-description = Associated branch feature/claude-sdk-backend
-da-3-description = Completed subtask: Define agent adapter interface
-da-4-description = Invoked file_write on src/agent/adapter.ts
-da-5-description = Completed turn 142 — 3 tool calls, 0 errors
-da-6-description = Opened PR #251 for tool registry schema
-da-7-description = Transitioned TASK-1002 to In Review
-da-8-description = Left comment on TASK-1006: Tool call panel needs expand/collapse
-da-9-description = Completed turn 87 — schema validation pass
-da-10-description = Transitioned TASK-1007 to Done
-da-11-description = Invoked bash: bun test — all passing
-da-12-description = Completed subtask: Implement scope middleware

@@ -187,9 +187,6 @@ task-card-subtasks = { $done }/{ $total } مهمة فرعية
 
 ## Dashboard
 
-dashboard-health-healthy = سليم
-dashboard-health-degraded = متدهور
-dashboard-health-critical = حرج
 dashboard-health-status = حالة النظام: { $label }
 dashboard-health-region = صحة النظام
 dashboard-health-last-checked = آخر فحص:
@@ -198,47 +195,9 @@ dashboard-activity-region = النشاط الأخير
 dashboard-activity-heading = النشاط الأخير
 dashboard-agent-region = استخدام الوكلاء
 dashboard-agent-heading = استخدام الوكلاء
-dashboard-agent-active = نشط
-dashboard-agent-inactive = غير نشط
 dashboard-agent-turns = دورات
 
 ## Shared components
 
 activity-timeline-label = سجل النشاط الزمني
 progress-label = التقدم
-
-## Fixture — agent backends
-
-agent-claude-code-sdk = Claude Code SDK
-agent-codex-cli = Codex CLI
-agent-custom-backend = Custom Backend
-
-## Fixture — KPI metrics
-
-kpi-active-tasks-label = Active Tasks
-kpi-active-tasks-context = across 4 projects
-kpi-active-tasks-trend = +3 this week
-kpi-agent-utilization-label = Agent Utilization
-kpi-agent-utilization-context = 2 of 3 backends active
-kpi-agent-utilization-trend = +5% from yesterday
-kpi-tool-success-rate-label = Tool Success Rate
-kpi-tool-success-rate-context = last 24 hours
-kpi-tool-success-rate-trend = stable
-kpi-sla-p95-label = SLA P95 Latency
-kpi-sla-p95-context = target: <1000ms
-kpi-sla-p95-trend = -40ms from last week
-
-## Fixture — dashboard events
-
-da-1-description = Transitioned TASK-1001 to In Progress
-da-2-description = Associated branch feature/claude-sdk-backend
-da-3-description = Completed subtask: Define agent adapter interface
-da-4-description = Invoked file_write on src/agent/adapter.ts
-da-5-description = Completed turn 142 — 3 tool calls, 0 errors
-da-6-description = Opened PR #251 for tool registry schema
-da-7-description = Transitioned TASK-1002 to In Review
-da-8-description = Left comment on TASK-1006: Tool call panel needs expand/collapse
-da-9-description = Completed turn 87 — schema validation pass
-da-10-description = Transitioned TASK-1007 to Done
-da-11-description = Invoked bash: bun test — all passing
-da-12-description = Completed subtask: Implement scope middleware

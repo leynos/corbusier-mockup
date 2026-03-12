@@ -9,7 +9,7 @@ describe("dashboard fixture data", () => {
     expect(KPI_METRICS).toHaveLength(4);
     for (const m of KPI_METRICS) {
       expect(m.value).toBeTruthy();
-      expect(m.label).toBeTruthy();
+      expect(m.localizations).toBeTruthy();
     }
   });
 

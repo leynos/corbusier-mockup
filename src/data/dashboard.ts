@@ -2,7 +2,18 @@
  *
  * All values are static fixtures rendered on the dashboard. The data
  * shapes mirror what a real SSE-fed dashboard would receive.
+ *
+ * Entity strings live in `localizations` maps per the data model-driven
+ * card architecture. Fluent retains only UI chrome.
  */
+
+import type { EntityLocalizations } from "../app/domain/entities/localization";
+
+/** Shorthand: build an en-GB-only localisation entry. */
+function loc(name: string, description?: string): EntityLocalizations {
+  const entry = description !== undefined ? { name, description } : { name };
+  return { "en-GB": entry };
+}
 
 /* ── KPI data ──────────────────────────────────────────────────────── */
 
@@ -10,45 +21,42 @@ export type TrendDirection = "up" | "down" | "flat";
 
 export interface KpiMetric {
   readonly id: string;
-  readonly label: string;
+  readonly localizations: EntityLocalizations;
   readonly value: string;
-  readonly context: string;
   readonly trend: TrendDirection;
-  readonly trendLabel: string;
+  readonly trendLocalizations: EntityLocalizations;
 }
 
 export const KPI_METRICS: readonly KpiMetric[] = [
   {
     id: "active-tasks",
-    label: "Active Tasks",
+    localizations: { "en-GB": { name: "Active Tasks", description: "across 4 projects" } },
     value: "47",
-    context: "across 4 projects",
     trend: "up",
-    trendLabel: "+3 this week",
+    trendLocalizations: loc("+3 this week"),
   },
   {
     id: "agent-utilization",
-    label: "Agent Utilization",
+    localizations: {
+      "en-GB": { name: "Agent Utilization", description: "2 of 3 backends active" },
+    },
     value: "83%",
-    context: "2 of 3 backends active",
     trend: "up",
-    trendLabel: "+5% from yesterday",
+    trendLocalizations: loc("+5% from yesterday"),
   },
   {
     id: "tool-success-rate",
-    label: "Tool Success Rate",
+    localizations: { "en-GB": { name: "Tool Success Rate", description: "last 24 hours" } },
     value: "98.2%",
-    context: "last 24 hours",
     trend: "flat",
-    trendLabel: "stable",
+    trendLocalizations: loc("stable"),
   },
   {
     id: "sla-p95",
-    label: "SLA P95 Latency",
+    localizations: { "en-GB": { name: "SLA P95 Latency", description: "target: <1000ms" } },
     value: "820ms",
-    context: "target: <1000ms",
     trend: "down",
-    trendLabel: "-40ms from last week",
+    trendLocalizations: loc("-40ms from last week"),
   },
 ];
 
@@ -57,7 +65,7 @@ export const KPI_METRICS: readonly KpiMetric[] = [
 export type HealthStatus = "healthy" | "degraded" | "critical";
 
 export interface ComponentHealth {
-  readonly name: string;
+  readonly localizations: EntityLocalizations;
   readonly status: HealthStatus;
 }
 
@@ -71,11 +79,11 @@ export const SYSTEM_HEALTH: SystemHealth = {
   overall: "healthy",
   lastChecked: "2026-03-12T09:14:00Z",
   components: [
-    { name: "Agent Gateway", status: "healthy" },
-    { name: "Tool Registry", status: "healthy" },
-    { name: "Hook Engine", status: "healthy" },
-    { name: "Event Bus", status: "healthy" },
-    { name: "Audit Store", status: "degraded" },
+    { localizations: loc("Agent Gateway"), status: "healthy" },
+    { localizations: loc("Tool Registry"), status: "healthy" },
+    { localizations: loc("Hook Engine"), status: "healthy" },
+    { localizations: loc("Event Bus"), status: "healthy" },
+    { localizations: loc("Audit Store"), status: "degraded" },
   ],
 };
 
@@ -95,7 +103,7 @@ export interface DashboardEvent {
   readonly kind: DashboardEventKind;
   readonly timestamp: string;
   readonly actor: string;
-  readonly description: string;
+  readonly localizations: EntityLocalizations;
   readonly taskRef: string | undefined;
 }
 
@@ -105,7 +113,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "state_change",
     timestamp: "2026-03-12T09:14:00Z",
     actor: "Ava Chen",
-    description: "Transitioned TASK-1001 to In Progress",
+    localizations: loc("Transitioned TASK-1001 to In Progress"),
     taskRef: "TASK-1001",
   },
   {
@@ -113,7 +121,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "branch_associated",
     timestamp: "2026-03-12T09:15:00Z",
     actor: "Ava Chen",
-    description: "Associated branch feature/claude-sdk-backend",
+    localizations: loc("Associated branch feature/claude-sdk-backend"),
     taskRef: "TASK-1001",
   },
   {
@@ -121,7 +129,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "subtask_completed",
     timestamp: "2026-03-12T11:42:00Z",
     actor: "Ava Chen",
-    description: "Completed subtask: Define agent adapter interface",
+    localizations: loc("Completed subtask: Define agent adapter interface"),
     taskRef: "TASK-1001",
   },
   {
@@ -129,7 +137,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "tool_call",
     timestamp: "2026-03-12T12:05:00Z",
     actor: "claude_code_sdk",
-    description: "Invoked file_write on src/agent/adapter.ts",
+    localizations: loc("Invoked file_write on src/agent/adapter.ts"),
     taskRef: "TASK-1001",
   },
   {
@@ -137,7 +145,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "agent_turn",
     timestamp: "2026-03-12T12:06:00Z",
     actor: "claude_code_sdk",
-    description: "Completed turn 142 — 3 tool calls, 0 errors",
+    localizations: loc("Completed turn 142 — 3 tool calls, 0 errors"),
     taskRef: "TASK-1001",
   },
   {
@@ -145,7 +153,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "pr_opened",
     timestamp: "2026-03-12T14:32:00Z",
     actor: "Marcus Webb",
-    description: "Opened PR #251 for tool registry schema",
+    localizations: loc("Opened PR #251 for tool registry schema"),
     taskRef: "TASK-1002",
   },
   {
@@ -153,7 +161,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "state_change",
     timestamp: "2026-03-12T14:30:00Z",
     actor: "Marcus Webb",
-    description: "Transitioned TASK-1002 to In Review",
+    localizations: loc("Transitioned TASK-1002 to In Review"),
     taskRef: "TASK-1002",
   },
   {
@@ -161,7 +169,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "comment",
     timestamp: "2026-03-12T15:00:00Z",
     actor: "Priya Sharma",
-    description: "Left comment on TASK-1006: Tool call panel needs expand/collapse",
+    localizations: loc("Left comment on TASK-1006: Tool call panel needs expand/collapse"),
     taskRef: "TASK-1006",
   },
   {
@@ -169,7 +177,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "agent_turn",
     timestamp: "2026-03-12T15:30:00Z",
     actor: "codex_cli",
-    description: "Completed turn 87 — schema validation pass",
+    localizations: loc("Completed turn 87 — schema validation pass"),
     taskRef: "TASK-1016",
   },
   {
@@ -177,7 +185,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "state_change",
     timestamp: "2026-03-12T16:00:00Z",
     actor: "Elena Rossi",
-    description: "Transitioned TASK-1007 to Done",
+    localizations: loc("Transitioned TASK-1007 to Done"),
     taskRef: "TASK-1007",
   },
   {
@@ -185,7 +193,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "tool_call",
     timestamp: "2026-03-12T16:15:00Z",
     actor: "claude_code_sdk",
-    description: "Invoked bash: bun test — all passing",
+    localizations: loc("Invoked bash: bun test — all passing"),
     taskRef: "TASK-1011",
   },
   {
@@ -193,7 +201,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     kind: "subtask_completed",
     timestamp: "2026-03-12T16:45:00Z",
     actor: "Tomás Herrera",
-    description: "Completed subtask: Implement scope middleware",
+    localizations: loc("Completed subtask: Implement scope middleware"),
     taskRef: "TASK-1011",
   },
 ];
@@ -203,28 +211,28 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
 export type AgentStatus = "active" | "inactive" | "error";
 
 export interface AgentBackend {
-  readonly name: string;
-  readonly displayName: string;
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
   readonly status: AgentStatus;
   readonly turnCount: number;
 }
 
 export const AGENT_BACKENDS: readonly AgentBackend[] = [
   {
-    name: "claude_code_sdk",
-    displayName: "Claude Code SDK",
+    id: "claude_code_sdk",
+    localizations: loc("Claude Code SDK"),
     status: "active",
     turnCount: 142,
   },
   {
-    name: "codex_cli",
-    displayName: "Codex CLI",
+    id: "codex_cli",
+    localizations: loc("Codex CLI"),
     status: "active",
     turnCount: 87,
   },
   {
-    name: "custom_backend",
-    displayName: "Custom Backend",
+    id: "custom_backend",
+    localizations: loc("Custom Backend"),
     status: "inactive",
     turnCount: 0,
   },
