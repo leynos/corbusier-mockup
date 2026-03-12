@@ -220,7 +220,7 @@ language tsx
 // Input without associated label (simple heuristic)
 `<input $attrs />`
 where { not(match($attrs, /aria-label=|id=/)) }
-=> diag("Inputs need a label: use <label for=...> or aria-label.")
+=> diag("Inputs need a label: use <label htmlFor=...> in TSX (or <label for=...> in plain HTML) or aria-label.")
 ```
 
 ### C) DaisyUI usage sanity
@@ -431,14 +431,14 @@ rules:
   # Raw Tailwind color utilities instead of semantic roles
   - id: tailwind-raw-color-class
     patterns:
-      - pattern-regex: "\b(text|bg|border)-(red|blue|green|gray|slate|zinc|stone|amber|rose)-[0-9]{2,3}\b"
+      - pattern-regex: "\\b(text|bg|border)-(red|blue|green|gray|slate|zinc|stone|amber|rose)-[0-9]{2,3}\\b"
     message: "Prefer DaisyUI role classes (e.g., bg-primary, text-base-content) over raw Tailwind color scale."
     languages: [javascript, typescript, jsx, tsx, html]
     severity: WARNING
 
   # Dynamic daisyUI token in template literal (build-time discovery issue)
   - id: daisyui-dynamic-token
-    pattern-regex: "`[^`]*\\b(btn|badge|alert|tab)-\${[^}]+}[^`]*`"
+    pattern-regex: "`[^`]*\\b(btn|badge|alert|tab)-\\${[^}]+}[^`]*`"
     message: "Avoid dynamic DaisyUI token names (e.g. `btn-${color}`) — Tailwind cannot statically include them."
     languages: [javascript, typescript, jsx, tsx]
     severity: WARNING
@@ -567,7 +567,7 @@ semantic fixes over ad hoc opt-outs.
 - **Semantic & a11y**
   - No clickable `div/span` without role+keyboard; prefer `<button>/<a>`.
   - Use `<nav>/<main>/<header>/<footer>` over `div[role=...]`.
-  - Inputs must be labelled (`<label for=...>` or `aria-label`).
+  - Inputs must be labelled (`<label htmlFor=...>` in TSX, `<label for=...>` in plain HTML, or `aria-label`).
 
 - **DaisyUI composition**
   - `btn` belongs on interactive elements.

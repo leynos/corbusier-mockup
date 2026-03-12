@@ -1263,22 +1263,22 @@ local-first and real-time applications.[^34]
 
 Tanstack DB builds directly on top of Tanstack Query, extending it with a set
 of primitives that formalize the patterns manually constructed in this
-guide[^36]:
+guide[^35]:
 
 - **Collections:** A formal local store primitive that acts as the client-side
   database. Collections can be populated by Tanstack Query, a real-time sync
   engine, or local-only data, providing a unified interface for all application
-  data.[^37]
+  data.[^36]
 - **Live Queries:** These are reactive queries that run directly against the
   local collections. When the data in a collection changes (whether from a user
   action or a background sync), any component using a live query on that
   collection will automatically and efficiently re-render. This abstracts away
-  the need for manual cache invalidation or updates.[^37]
+  the need for manual cache invalidation or updates.[^36]
 - **Transactional Mutations:** Tanstack DB introduces mutations that are
   transactional, meaning they can be applied atomically across multiple
   collections. They are also more tightly integrated with the lifecycle of a
   sync engine, providing better support for managing optimistic state and
-  rollbacks.[^37]
+  rollbacks.[^36]
 
 The patterns documented in this report are powerful and effective, but they
 require significant manual implementation and a deep understanding of the
@@ -1438,11 +1438,11 @@ August 20, 2025,
 [^20]: TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/v4/docs/react/community/tkdodos-blog](https://tanstack.com/query/v4/docs/react/community/tkdodos-blog)
 
-[^36]: Local-first sync with TanStack DB and Electric | ElectricSQL, accessed on
+[^35]: Local-first sync with TanStack DB and Electric | ElectricSQL, accessed on
 August 20, 2025,
 [https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db](https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db)
 
-[^37]: TanStack/db: A reactive client store for building super fast apps on sync
+[^36]: TanStack/db: A reactive client store for building super fast apps on sync
 GitHub, accessed on August 20, 2025,
 [https://github.com/TanStack/db](https://github.com/TanStack/db)
 
