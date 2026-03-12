@@ -431,7 +431,7 @@ Cards are used to group and display content
 
 - {MODIFIER} is optional and can have one of the modifier class names and one of the size class names
 - `<figure>` and `<div class="card-body">` are optional
-- can use `sm:card-horizontal` for responsive layouts
+- can use `sm:card-side` for responsive layouts
 - If image is placed after `card-body`, the image will be placed at the bottom
 
 ### carousel
