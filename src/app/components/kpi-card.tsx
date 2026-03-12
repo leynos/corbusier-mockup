@@ -17,8 +17,8 @@ const TREND_STYLES: Record<
   TrendDirection,
   { readonly text: string; readonly icon: typeof IconTrendingUp | null }
 > = {
-  up: { text: "text-success", icon: IconTrendingUp },
-  down: { text: "text-error", icon: IconTrendingDown },
+  up: { text: "text-base-content/80", icon: IconTrendingUp },
+  down: { text: "text-base-content/80", icon: IconTrendingDown },
   flat: { text: "text-base-content/60", icon: null },
 };
 

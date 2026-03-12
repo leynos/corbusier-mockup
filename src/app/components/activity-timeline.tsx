@@ -62,7 +62,7 @@ export function ActivityTimeline({ entries, className = "" }: ActivityTimelinePr
             </p>
             <time
               dateTime={entry.timestamp}
-              className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/50"
+              className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60"
             >
               {formatTimestamp(entry.timestamp)}
             </time>

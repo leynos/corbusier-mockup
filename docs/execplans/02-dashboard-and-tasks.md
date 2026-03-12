@@ -106,8 +106,8 @@ stacks, and state machine controls.
 
 ## Progress
 
-- [ ] Milestone 1: Fixture data for tasks and dashboard
-- [ ] Milestone 2: Reusable UI components (badges, KPI cards,
+- [x] Milestone 1: Fixture data for tasks and dashboard
+- [x] Milestone 2: Reusable UI components (badges, KPI cards,
       timelines, progress bars, avatar stacks)
 - [ ] Milestone 3: Dashboard page
 - [ ] Milestone 4: My Tasks page
