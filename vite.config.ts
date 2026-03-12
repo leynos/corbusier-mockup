@@ -1,7 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
@@ -40,5 +39,7 @@ function watchGeneratedTokens() {
 export default defineConfig({
   // Allow deployments to customise the served base path (e.g., GitHub Pages).
   base: basePath,
-  plugins: [tailwindcss(), react(), watchGeneratedTokens()],
+  // Tailwind runs through PostCSS for both dev and build. This avoids Bun/Vite
+  // dev sessions serving raw `@apply` and `@tailwind` directives to the browser.
+  plugins: [react(), watchGeneratedTokens()],
 });

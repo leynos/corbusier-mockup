@@ -66,8 +66,8 @@ data architecture.
   server.
 - **React integration:** `@vitejs/plugin-react` handles JSX and React Fast
   Refresh.
-- **Tailwind integration:** `@tailwindcss/vite` is enabled in `vite.config.ts`,
-  so Tailwind participates directly in the Vite pipeline.
+- **Tailwind integration:** Tailwind v4 runs through `postcss.config.cjs`,
+  which Vite uses during both development and production builds.
 - **Module format:** The project is ESM-only (`"type": "module"` in
   `package.json`).
 - **Base-path handling:** `vite.config.ts`, `src/i18n.ts`, and
