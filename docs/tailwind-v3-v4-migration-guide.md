@@ -40,7 +40,7 @@
 
 1.  **Configuration File Shift:**
     *   While `tailwind.config.js` can still be used for plugin definitions or complex setups (loaded via `@config "path/to/config.js";`), theme customization (colors, spacing, fonts, breakpoints) should primarily occur in CSS via `@theme`.
-    *   The `content` array for source file scanning is still primarily configured via JS config if used, or Tailwind attempts automatic detection. Use `@source` in CSS for explicit path additions/exclusions.
+    *   The `content` array is no longer used for source scanning in Tailwind v4. Source discovery is automatic by default and remains a CSS concern managed with directives such as `@source` or `source()` in `@import "tailwindcss" source("../src")`, even when `@config` loads a legacy JS config file.
 2.  **Utility Deprecations & Renames:**
     *   The `npx @tailwindcss/upgrade` tool is highly recommended and automates most of this.
     *   Opacity syntax is now consistently `bg-black/50` (no more `bg-opacity-50`).

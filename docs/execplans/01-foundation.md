@@ -160,7 +160,7 @@ constraints; the following apply everywhere.
 - [x] (2026-03-11) Milestone 4: App shell layout (sidebar + header + content)
 - [x] (2026-03-11) Milestone 5: Route tree scaffold (33 placeholder screens, 4 route segment files)
 - [x] (2026-03-11) Milestone 6: Punch-card chamfer utility classes
-- [x] (2026-03-11) Milestone 7: Tests and validation (11 new tests, all 37 passing)
+- [ ] (2026-03-11) Milestone 7: Tests and validation (Playwright E2E still blocks completion despite the passing unit and accessibility suites)
 
 ## Surprises & discoveries
 

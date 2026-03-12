@@ -73,7 +73,7 @@ SR (screen reader) output without extra ceremony.
 
 ## 3) Semantic class names: where they help
 
-Create **domain‑level** classes only when they encode intent you reuse (CTA buttons, product cards, page headers) or when you’re bridging third‑party markup.
+Create **domain‑level** classes only when they encode reused intent (CTA buttons, product cards, page headers) or when bridging third‑party markup.
 
 ```css
 /* app.css */
@@ -198,7 +198,7 @@ Example for a menu item:
 
 ## 6) `@apply` vs `@utility` (v4 reality)
 
-- Use **`@apply`** to inline Tailwind **utilities** into CSS when you must style third‑party DOM, author CSS Modules / Vue `<style>` blocks, or reduce repetition inside a semantic wrapper. Pair it with `@reference` when applying inside component‑scoped styles.
+- Use **`@apply`** to inline Tailwind **utilities** into CSS when styling third‑party DOM, authoring CSS Modules / Vue `<style>` blocks, or reducing repetition inside a semantic wrapper. Pair it with `@reference` when applying inside component‑scoped styles.
 - Use **`@utility`** to register a **custom utility** (or a small family of
   them) that participates in Tailwind’s variant system (`hover:`, `md:`,
   `data-[state=…]:`, etc.). Prefer this for *project-specific shorthands* that
@@ -223,7 +223,7 @@ Examples:
 
 ### 6.1 Encode state with selectors, not variant `@apply`
 
-Tailwind v4 only inlines **plain utilities** when you call `@apply`. Variant
+Tailwind v4 only inlines **plain utilities** when `@apply` is used. Variant
 helpers such as `hover:`, `group-…`, or `data-[state=…]:…` are *not* expanded,
 which means the rule below will quietly drop the interactive parts:
 
@@ -268,17 +268,17 @@ Markup stays semantic:
 > **Ordering hint:** When markup keeps Tailwind utilities (e.g. `bg-base-200/60`
 > or `text-base-content/70`) alongside a semantic class, place the stateful
 > selectors in the `@layer utilities` block so they compile *after* the inline
-> utilities. Otherwise those utilities will win the cascade and your state
+> utilities. Otherwise those utilities will win the cascade and the state
 > styles will never show up.
 
 ---
 
 ## 7) Cascading styles without fights
 
-- Keep specificity low. Where you write selectors, prefer `:where()` wrappers and attributes over IDs.
+- Keep specificity low. Where selectors are needed, prefer `:where()` wrappers and attributes over IDs.
 - Let utilities win locally. If a component wrapper sets padding, expect a nearby `px-*`/`py-*` to override it in markup.
 - Encapsulate scope with attributes. For example, theme a section: `<section data-theme="retro">…`.
-- When you truly need a project‑wide variant, mint one:
+- When a project‑wide variant is truly needed, mint one:
 
 ```css
 @custom-variant scheme-midnight (&:where([data-theme="midnight"] *));
@@ -333,7 +333,8 @@ export function PlanCard() {
 
 - `@apply` inside CSS Modules/Svelte/Vue: add `@reference "../../app.css";` at the top of the scoped style block so Tailwind can resolve tokens/utilities.
 - Variant prefixes won’t apply to non‑utility classes: use utilities in the variant (e.g., `data-[state=open]:bg-primary`) or compute classes in JS/TS.
-- If a class isn’t generated, ensure the literal string exists in your sources or safelist via `@source inline("class-name")`.
+- If a class isn’t generated, ensure the literal string exists in project
+  source files or is safelisted via `@source inline("class-name")`.
 
 ---
 
@@ -341,7 +342,7 @@ export function PlanCard() {
 
 - Build with daisyUI component classes for structure.
 - Reach for Tailwind utilities for local, stateful, and responsive tweaks.
-- Add a small set of semantic wrappers for concepts you name in your product language.
+- Add a small set of semantic wrappers for concepts named in the product language.
 - Let Radix drive state through `data-*` and style it with utilities.
 
 
@@ -355,7 +356,7 @@ export function PlanCard() {
 ### 11.1 Token taxonomy (keep it small and sane)
 
 - **Primitive tokens**: raw scales (colour, spacing, radius, shadows, typography). These are technology‑agnostic values.
-- **Semantic tokens**: role‑based names you actually design with (primary, surface, brand, danger, info).
+- **Semantic tokens**: role‑based names used in the design language (primary, surface, brand, danger, info).
 - **Component tokens**: per‑component knobs (field radius, selector radius, border thickness) — daisyUI already ships many.
 
 > Keep **primitive** tokens in Tailwind’s `@theme`. Map **semantic** tokens to daisyUI roles (primary, base‑100, etc.). Only introduce **component** tokens when the design needs them.
@@ -389,7 +390,7 @@ export function PlanCard() {
 **Use them immediately:**
 
 ```html
-<!-- Color utilities from your tokens -->
+<!-- Colour utilities from project tokens -->
 <div class="bg-brand-500 text-white/90 rounded-card shadow-card p-6">Hello</div>
 
 <!-- In custom CSS, use functions that read theme tokens -->
@@ -398,7 +399,7 @@ export function PlanCard() {
 
 ### 11.3 Mapping semantics to daisyUI roles
 
-daisyUI v5 exposes **role tokens** like `--color-primary`, `--color-base-100`, `--radius-field`, etc. Set those from your primitives so daisyUI components and role utilities (`bg-primary`, `text-primary-content`, `rounded-field`) line up with your brand.
+daisyUI v5 exposes **role tokens** like `--color-primary`, `--color-base-100`, `--radius-field`, etc. Set those from shared primitives so daisyUI components and role utilities (`bg-primary`, `text-primary-content`, `rounded-field`) line up with the project brand.
 
 ```css
 /* 2) Semantic roles (per theme). You can scope by [data-theme] */
@@ -432,9 +433,9 @@ without writing `var()` directly:
 
 ```html
 <!-- Shorthand for bg-[var(--color-primary)] -->
-<div class="bg-(--color-primary) text-(color:--color-primary-content)">Tokenised</div>
+<div class="bg-(--color-primary) text-(color:--color-primary-content)">Tokenized</div>
 
-<!-- Tokenised outline and ring -->
+<!-- Tokenized outline and ring -->
 <button class="ring-(--color-primary) ring-2 outline-(--color-primary)">Focus</button>
 ```
 
@@ -469,7 +470,7 @@ Usage:
 
 ### 11.6 Tokens × Radix state
 
-Radix sets `data-state`, `data-disabled`, `data-highlighted`, etc. Pair those with tokenised utilities for consistent theming and good contrast.
+Radix sets `data-state`, `data-disabled`, `data-highlighted`, etc. Pair those with tokenized utilities for consistent theming and good contrast.
 
 ```tsx
 <Toggle.Root
@@ -531,7 +532,7 @@ To create matching Tailwind utilities, back them with `@theme`:
 ```
 
 
-**b) Tokenised prose**
+**b) Tokenized prose**
 
 ```css
 @utility prose-muted { color: color-mix(in oklab, var(--color-base-content) 65%, transparent); }
@@ -550,7 +551,7 @@ To create matching Tailwind utilities, back them with `@theme`:
 
 - If a `bg-foo-500`‑style class doesn’t exist, ensure the token is declared in
   the right **namespace** under `@theme` (e.g., `--color-foo-500`).
-- In component‑scoped styles, add `@reference "../app.css";` before using `@apply` so Tailwind can resolve your tokens.
+- In component‑scoped styles, add `@reference "../app.css";` before using `@apply` so Tailwind can resolve project tokens.
 - Don’t `@apply` plugin component classes (`btn`, `card`); compose them in markup or rebuild with tokens.
 
 **Bottom line:** put *values* in `@theme`, map *roles* to daisyUI tokens, and style *states* with Radix data‑attrs + utility variants. One vocabulary, zero fights.

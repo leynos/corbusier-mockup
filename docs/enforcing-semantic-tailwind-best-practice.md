@@ -9,7 +9,7 @@
 ## 0) Scope & Philosophy
 
 - **Files:** `.tsx`, `.html`, `.css` (Tailwind v4 + DaisyUI v5).
-- **Primary tool:** **BiomeJS** linter with **GritQL** rules (diagnostics only).  
+- **Primary tool:** **BiomeJS** linter with **GritQL** rules (diagnostics only).
 - **Fallbacks:**
   - **Stylelint** — design‑token enforcement, CSS `@apply` hygiene, units/specificity.
   - **Semgrep** — simple cross‑language regex/AST patterns (HTML/JSX) where easier than GritQL.
@@ -55,12 +55,15 @@ CSS‑first configuration in `app.css`.
 ## 2) Tailwind v4 + DaisyUI v5 baseline (CSS‑first)
 
 **`src/styles/app.css`**
+
 ```css
 @import "tailwindcss";
 
 /* DaisyUI themes */
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+  themes:
+    light --default,
+    dark --prefersdark;
 }
 
 /* Tailwind v4: optionally hint sources if needed */
@@ -68,11 +71,13 @@ CSS‑first configuration in `app.css`.
 ```
 
 **Where to put semantic classes** — `src/styles/semantic.css` (imported from
-the entry) and built with:
+the entry). Apply DaisyUI component classes directly in markup, and only use
+`@apply` with Tailwind utility classes when defining semantic wrappers:
+
 ```css
-/* Example semantic classes built from utilities */
-.btn-primary {
-  @apply btn btn-primary;  /* DaisyUI base + role */
+/* Prefer DaisyUI roles directly in markup: class="btn btn-primary" */
+.primary-action {
+  @apply inline-flex items-center justify-center rounded-field px-4 py-2 font-semibold bg-primary text-primary-content;
 }
 .form-section-title {
   @apply text-lg font-semibold text-base-content;
@@ -84,6 +89,7 @@ the entry) and built with:
   @apply text-primary;
 }
 ```
+
 > Use semantic classes for **repeated patterns**; keep one‑offs directly in markup.
 
 ---
@@ -91,11 +97,13 @@ the entry) and built with:
 ## 3) Configure BiomeJS + GritQL
 
 **Install** (example):
+
 ```bash
 pnpm add -D @biomejs/biome
 ```
 
 **`biome.jsonc`** (excerpt from the repository today)
+
 ```jsonc
 {
   "$schema": "https://biomejs.dev/schemas/stable/schema.json",
@@ -131,17 +139,17 @@ pnpm add -D @biomejs/biome
     "./tools/grit/rule-heading-semantic-h1.grit",
     "./tools/grit/rule-heading-semantic-h2.grit",
     "./tools/grit/rule-heading-semantic-h3.grit",
-    "./tools/grit/rule-heading-semantic-h4.grit"
+    "./tools/grit/rule-heading-semantic-h4.grit",
   ],
-  "linter": { "enabled": true, "rules": { "recommended": true } }
+  "linter": { "enabled": true, "rules": { "recommended": true } },
 }
 ```
 
 > Biome’s current Grit integration accepts one pattern per file. The repository therefore keeps the rules granular (for example, separate files for `<div>` and `<span>` button misuse). If the plugin grows support for multi‑pattern files, this list can be collapsed into fewer modules.
-
 > When a Biome build does not natively load GritQL, use a small Node wrapper that executes Grit rules and prints Biome‑style diagnostics. Maintain the same paths and thresholds.
 
 **`tools/semantic-lint.config.json`** (thresholds & policy)
+
 ```json
 {
   "repeatMinClasses": 4,
@@ -180,6 +188,7 @@ pnpm add -D @biomejs/biome
 > exact grammar. Keep messages **actionable**.
 
 ### A) Semantic interactivity (no clickable `<div>` / `<span>`)
+
 Files:
 
 - `tools/grit/rule-a11y.grit`
@@ -201,6 +210,7 @@ Each file targets a common attribute ordering, for example:
 ```
 
 ### B) Landmarks & labels (gentle suggestions)
+
 ```grit
 language tsx
 
@@ -214,6 +224,7 @@ where { not(match($attrs, /aria-label=|id=/)) }
 ```
 
 ### C) DaisyUI usage sanity
+
 Files:
 
 - `tools/grit/rule-daisyui-btn-div.grit`
@@ -243,6 +254,7 @@ Each file inverts a common misuse, e.g.
 The duplication keeps messages targeted whilst Biome’s current Grit plugin limits us to one pattern per file.
 
 ### D) Repetition → extract with `@apply`
+
 - `scripts/check-classlist-length.ts`
 - `scripts/find-near-duplicate-classes.ts`
 
@@ -283,36 +295,42 @@ similarity. Each item describes what to detect, why it matters, and the
 preferred fix to recommend in future lint passes.
 
 ### 1) “Div/span soup” (utility-only wrapper chains)
+
 - **Signal**: Two or more nested `<div>`/`<span>` nodes whose only attribute is a utility-heavy `className` (no `role`, `aria-*`, `id`, `data-*`, event handlers).
-- **Meaning**: The wrapper is expressing a *layout concept* (stack, cluster, surface) without naming it.
+- **Meaning**: The wrapper is expressing a _layout concept_ (stack, cluster, surface) without naming it.
 - **Action**: Warn and suggest extracting a named container class (e.g. `.stack`, `.cluster`, `.card__body`) via `@apply`.
 - **Implementation notes**: GritQL rule that walks parent/child utility-only nodes and fires when depth ≥ 2; fallback AST walker if needed.
 
 ### 2) Landmarks and slot semantics
+
 - **Signal**: Utility-only child elements inside semantic regions such as `<nav>`, `<header>`, `<ul>`, `<form>`.
-- **Meaning**: These are *slots* (navigation links, menu items, form controls) that deserve a named semantic class.
+- **Meaning**: These are _slots_ (navigation links, menu items, form controls) that deserve a named semantic class.
 - **Action**: Suggest contextual names like `.nav__link`, `.nav__link--active`, `.menu__item`, `.form__label`.
 - **Implementation notes**: GritQL ancestor constraint rules that tailor the suggestion to the enclosing landmark.
 
 ### 3) Repeated sibling pattern (loop intent)
+
 - **Signal**: Identical or near-identical class lists applied to siblings, especially those produced by `.map()` in TSX.
 - **Meaning**: Indicates a row/tile/card abstraction that should become a shared class.
 - **Action**: Recommend extracting both a container class (e.g. `.card-grid`) and an item class (e.g. `.card`).
 - **Implementation notes**: Extend the existing near-duplicate script to consider siblings grouped by parent, or add a dedicated GritQL rule for `.map()` return values.
 
 ### 4) Token-to-concept mapping
+
 - **Signal**: Utility combinations that scream a known component (button, chip, badge, toolbar, tabs trigger).
 - **Meaning**: The element already behaves like a component but lacks a semantic name.
 - **Action**: Issue prescriptive suggestions derived from a concept dictionary (e.g. `.chip`, `.toolbar`, `.tabs__trigger`).
 - **Implementation notes**: Dictionary-driven matcher in the companion script or GritQL predicates that match presence/absence token sets.
 
 ### 5) Stateful slots (Radix/DaisyUI attributes)
+
 - **Signal**: Elements with `data-state`, `aria-selected`, `aria-current`, `role="tab"` and long utility lists.
 - **Meaning**: State-driven UI pieces should expose a semantic class for styling the base and active states.
 - **Action**: Recommend classes like `.tabs__trigger` plus state modifiers in CSS.
 - **Implementation notes**: GritQL rule watching for state attributes plus utility load.
 
 ### 6) Anonymous layout wrappers
+
 - **Signal**: Elements using only layout utilities (flex/grid/gap/justify/space) without semantics.
 - **Meaning**: These are layout patterns (stack/cluster/switcher) that deserve named abstractions.
 - **Action**: Suggest layout semantics (e.g. `.stack`, `.cluster`, `.sidebar`).
@@ -320,12 +338,14 @@ preferred fix to recommend in future lint passes.
   sets; fire in GritQL or the script.
 
 ### 7) Heading/title repetition
+
 - **Signal**: The same utility bundle repeated across multiple headings (`<h1>`-`<h4>`) or section titles.
 - **Meaning**: Editorial roles should be expressed via `.section-title`, `.card__title`, etc.
 - **Action**: Recommend extracted title classes with `@apply`.
 - **Implementation notes**: GritQL rule that tracks heading class repetition counts.
 
 ### 8) Utility load vs. semantic signal score
+
 - **Signal**: Elements with heavy utility usage but little semantic metadata (no role/id/aria/data).
 - **Meaning**: Frequent offender list for “this should have a name”.
 - **Action**: Soft warning nudging authors to introduce a semantic class
@@ -350,11 +370,13 @@ predicates.
 ## 5) Stylelint (focused rules only)
 
 **Install**
+
 ```bash
 pnpm add -D stylelint stylelint-declaration-strict-value
 ```
 
 **`tools/stylelint.config.cjs`**
+
 ```js
 module.exports = {
   plugins: ["stylelint-declaration-strict-value"],
@@ -364,18 +386,28 @@ module.exports = {
     "color-named": "never",
 
     // Enforce tokens for key props (allow CSS variables + keywords)
-    "scale-unlimited/declaration-strict-value": [[
-      ["/^color$/", "^background(-color)?$", "^border(-.*)?-color$", "fill", "stroke", "outline-color"],
-    ], { ignoreValues: ["transparent", "currentColor", "/^var\\(--/" ] }],
+    "scale-unlimited/declaration-strict-value": [
+      [
+        [
+          "/^color$/",
+          "^background(-color)?$",
+          "^border(-.*)?-color$",
+          "fill",
+          "stroke",
+          "outline-color",
+        ],
+      ],
+      { ignoreValues: ["transparent", "currentColor", "/^var\\(--/"] },
+    ],
 
     // Discourage !important; keep specificity sane
     "declaration-no-important": true,
 
     // Optional unit policy (px allowed in borders etc.)
     "declaration-property-unit-disallowed-list": {
-      "/^(margin|padding|gap|inset|top|right|bottom|left)$/": ["px"]
-    }
-  }
+      "/^(margin|padding|gap|inset|top|right|bottom|left)$/": ["px"],
+    },
+  },
 };
 ```
 
@@ -387,11 +419,13 @@ module.exports = {
 ## 6) Semgrep (targeted HTML/JSX checks)
 
 **Install & config**
+
 ```bash
 uv tool install semgrep
 ```
 
 **`tools/semgrep-semantic.yml`**
+
 ```yaml
 rules:
   # Raw Tailwind color utilities instead of semantic roles
@@ -422,6 +456,7 @@ rules:
 ## 7) Unified CLI & Dev Workflow
 
 **`package.json`** (current scripts)
+
 ```json
 {
   "scripts": {
@@ -497,18 +532,30 @@ semantic fixes over ad hoc opt-outs.
 2. **Name the concept:** choose a **semantic** name that reflects purpose, not
    appearance: e.g., `.nav__link`.
 3. **Define once:** in `src/styles/semantic.css`:
+
    ```css
-   .nav__link { @apply inline-flex items-center gap-2 text-sm font-medium text-base-content hover:text-primary; }
-   .nav__link--active { @apply text-primary; }
+   .nav__link {
+     @apply inline-flex items-center gap-2 text-sm font-medium text-base-content hover:text-primary;
+   }
+   .nav__link--active {
+     @apply text-primary;
+   }
    ```
+
 4. **Replace usages:** change `className` to the new class (keep any **unique** one-off utilities alongside if needed: `className="nav__link md:pl-3"`).
 5. **Use cascades where logical:** if a set of children share typography/spacing, apply a parent class and let children inherit or use low‑specificity selectors:
+
    ```css
-   .form-section { @apply space-y-3; }
-   .form-section .form-section-title { @apply text-lg font-semibold; }
+   .form-section {
+     @apply space-y-3;
+   }
+   .form-section .form-section-title {
+     @apply text-lg font-semibold;
+   }
    ```
 
 **Naming guidance:**
+
 - Mirror DaisyUI where it fits: `.btn`, `.btn-primary`, `.card`, `.card-title`.
 - For bespoke patterns: BEM‑ish and role‑based, e.g. `.walk-card`, `.walk-card__title`; or `.nav__link--active`.
 - Prefer **role tokens** (`primary`, `secondary`, `accent`, `success`, `error`) to color words.
@@ -560,7 +607,7 @@ A: Only repeated patterns are extracted. Tailwind still tree‑shakes
 class‑based styles; the few semantic classes added remain minimal and
 intentionally reused.
 
-**Q: When is it *okay* to keep utilities inline?**  
+**Q: When is it _okay_ to keep utilities inline?**  
 A: One‑offs, quick prototypes, and tiny adjustments local to a component. Once the same chunk appears twice, prefer extracting it.
 
 **Q: How strict are thresholds?**  
@@ -570,8 +617,8 @@ A: Configurable. Start with `repeatMinClasses=4`, `repeatMinOccurrences=2`. Tigh
 
 ## 15) Ready-to-run checklist
 
-1) Add files: `tools/grit/*.grit`, `tools/semantic-lint.config.json`, `tools/stylelint.config.cjs`, `tools/semgrep-semantic.yml`.
-2) Wire **Biome** plugin or wrapper to execute Grit rules (paths above).
-3) Add **`semantic.css`** and begin extracting repeated patterns with `@apply`.
-4) Add **`semantic:lint`** as the primary script and the CI workflow.
-5) Iterate on thresholds, allowlist prefixes, and rule messages as the team gains patterns.
+1. Add files: `tools/grit/*.grit`, `tools/semantic-lint.config.json`, `tools/stylelint.config.cjs`, `tools/semgrep-semantic.yml`.
+2. Wire **Biome** plugin or wrapper to execute Grit rules (paths above).
+3. Add **`semantic.css`** and begin extracting repeated patterns with `@apply`.
+4. Add **`semantic:lint`** as the primary script and the CI workflow.
+5. Iterate on thresholds, allowlist prefixes, and rule messages as the team gains patterns.

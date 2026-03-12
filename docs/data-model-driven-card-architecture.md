@@ -148,7 +148,7 @@ locale is absent.
   - `SafetyPreset`: `id`, `localizations`, `iconToken`, `accentClass`,
     `appliedToggleIds: string[]`
   - Accordion sections become descriptors referencing toggle ids instead of
-    storing their own text keys.
+    storing text keys.
 - **PointOfInterest (POI cards)**
   - `id`, `localizations`
   - `categoryId: TagId` (resolved via descriptor registry)

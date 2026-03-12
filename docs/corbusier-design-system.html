@@ -376,7 +376,7 @@ body {
 .ds-palette-input input::placeholder { color: var(--text-tertiary); }
 .ds-palette-results { padding: var(--space-2) 0; max-height: 300px; overflow-y: auto; }
 .ds-palette-group-label { font-family: var(--font-body); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-tertiary); padding: var(--space-2) var(--space-4); }
-.ds-palette-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-4); cursor: pointer; transition: background var(--transition-fast); }
+.ds-palette-item { display: flex; align-items: center; gap: var(--space-3); width: 100%; padding: var(--space-2) var(--space-4); border: 0; background: none; text-align: left; cursor: pointer; transition: background var(--transition-fast); }
 .ds-palette-item:hover, .ds-palette-item-active { background: var(--surface-sidebar); }
 .ds-palette-item-icon { width: 16px; height: 16px; color: var(--text-tertiary); flex-shrink: 0; }
 .ds-palette-item-text { font-size: 14px; color: var(--text-primary); }
@@ -919,22 +919,22 @@ body {
         </div>
         <div class="ds-palette-results">
           <div class="ds-palette-group-label">Tasks</div>
-          <div class="ds-palette-item ds-palette-item-active">
+          <button type="button" class="ds-palette-item ds-palette-item-active">
             <i data-lucide="check-square" class="ds-palette-item-icon"></i>
             <span class="ds-palette-item-text">Implement branch tracking</span>
             <span class="ds-palette-item-meta">TASK-200</span>
-          </div>
-          <div class="ds-palette-item">
+          </button>
+          <button type="button" class="ds-palette-item">
             <i data-lucide="check-square" class="ds-palette-item-icon"></i>
             <span class="ds-palette-item-text">Branch association unit tests</span>
             <span class="ds-palette-item-meta">TASK-215</span>
-          </div>
+          </button>
           <div class="ds-palette-group-label">Commands</div>
-          <div class="ds-palette-item">
+          <button type="button" class="ds-palette-item">
             <i data-lucide="terminal" class="ds-palette-item-icon"></i>
             <span class="ds-palette-item-text">/task action=start</span>
             <span class="ds-palette-item-meta">Slash command</span>
-          </div>
+          </button>
         </div>
         <div class="ds-palette-footer">
           <span><span class="ds-kbd">↑↓</span> Navigate</span>

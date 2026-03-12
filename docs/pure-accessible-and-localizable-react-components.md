@@ -17,14 +17,14 @@ The technology stack presented herein is not an arbitrary collection of popular
 libraries but a deliberate architectural choice, with each element serving a
 distinct and complementary purpose in a layered system.
 
-- **The Behavioral Layer: Radix UI.** At the foundation of every interactive
+- **The Behavioural Layer: Radix UI.** At the foundation of every interactive
   component lies Radix UI. It provides a set of unstyled, "headless" primitives
-  that deliver complex behaviors and full WAI-ARIA compliance out of the box.
+  that deliver complex behaviours and full WAI-ARIA compliance out of the box.
   By abstracting away the intricate logic of accessibility—including focus
   management, keyboard navigation, and ARIA attribute wiring—Radix establishes
-  a robust and reliable behavioral contract for all components.[^1]
+  a robust and reliable behavioural contract for all components.[^1]
 - **The Presentational and Responsive Layer: DaisyUI 5 & Tailwind CSS.**
-  Building upon the behavioral foundation of Radix, DaisyUI 5, as a plugin for
+  Building upon the behavioural foundation of Radix, DaisyUI 5, as a plugin for
   Tailwind CSS, constitutes the presentational layer. It offers a
   utility-first, themeable styling system that provides high-level component
   classes while retaining the granular control of Tailwind. This layer is
@@ -261,7 +261,7 @@ In this architecture, every non-trivial component is composed of two parts:
 #### Responsibilities of the Custom Hook
 
 The custom hook serves as the single source of truth for the component's
-behavior. Its responsibilities are clearly defined:
+behaviour. Its responsibilities are clearly defined:
 
 1. **Local State Management:** It encapsulates all calls to `useState` and
    `useReducer` to manage the component's internal state.
@@ -388,7 +388,7 @@ const reducer = (state: State, action: Action): State => {
 
 ```
 
-This structure makes the component's behavior explicit and predictable. The
+This structure makes the component's behaviour explicit and predictable. The
 reducer function becomes a single, centralized location for all state
 transition logic, making it easier to reason about, debug, and test in
 isolation.[^13]
@@ -428,16 +428,16 @@ management hook based on key architectural considerations.
 This section provides a practical, layer-by-layer guide to constructing a
 component that integrates the principles of purity and decoupling with the
 chosen technology stack. This layered approach ensures that each architectural
-concern—behavior, state, and presentation—is handled independently, leading to
+concern—behaviour, state, and presentation—is handled independently, leading to
 a highly modular and flexible system.
 
 ### 3.1 Layer 1: The Accessible Foundation with Radix UI
 
-The foundation of any interactive component is its behavior and accessibility.
+The foundation of any interactive component is its behaviour and accessibility.
 Building accessible components from scratch is an incredibly difficult and
 error-prone task.[^14] Radix UI primitives solve this by providing a "headless"
 component library. Headless components encapsulate all the complex logic for
-behavior and accessibility while leaving the visual styling completely to the
+behaviour and accessibility while leaving the visual styling completely to the
 developer.[^14] This philosophy makes Radix the ideal base layer for a custom
 design system.
 
@@ -498,7 +498,7 @@ that is handled automatically.[^15]
 
 ### 3.2 Layer 2: Server State Management with Tanstack Query
 
-With the behavioral foundation in place, the next layer is state management,
+With the behavioural foundation in place, the next layer is state management,
 handled within the custom logic hook. This layer is responsible for all data
 fetching and mutation operations, acting as the bridge between the UI and the
 backend API. Tanstack Query is the ideal tool for this, as it declaratively
@@ -581,7 +581,7 @@ mismatched data shapes between the client and server.[^18]
 
 ### 3.3 Layer 3: Responsive Styling with DaisyUI 5 and Tailwind CSS
 
-The final layer is presentation. With behavior and state handled by the lower
+The final layer is presentation. With behaviour and state handled by the lower
 layers, the React component can focus exclusively on rendering the UI. DaisyUI,
 as a Tailwind CSS plugin, provides a powerful and efficient way to apply a
 consistent and responsive design system.
@@ -651,7 +651,7 @@ component code.
 
 This layered composition creates a system of "controlled inheritance." Each
 layer builds upon the one below it without tight coupling. Radix provides the
-behavioral contract ("This acts like a modal"). The custom hook provides the
+behavioural contract ("This acts like a modal"). The custom hook provides the
 data contract ("Here is the data for the modal"). The JSX component with
 DaisyUI provides the presentational contract ("This is how the modal looks").
 This separation allows for independent evolution: the design system can be
@@ -853,7 +853,7 @@ user settings.
 
 **Step-by-Step Implementation:**
 
-1. **Foundation (Behavioral Layer):** The component's structure is defined
+1. **Foundation (Behavioural Layer):** The component's structure is defined
     using Radix UI primitives. `AlertDialog.Root` creates the modal context,
     and `Form.Root` provides the accessible form structure. This initial step
     produces an unstyled but fully functional and accessible component.
@@ -959,14 +959,14 @@ modern React components that are pure, reactive, responsive, accessible, and
 localizable. The core of this architecture is a strict, layered separation of
 concerns, where each layer has a distinct and well-defined responsibility:
 
-1. **The Behavioral Layer (Radix UI):** Provides an unstyled, accessible
+1. **The Behavioural Layer (Radix UI):** Provides an unstyled, accessible
    foundation for all interactive components, handling complex WAI-ARIA
    compliance out of the box.
 2. **The State and Logic Layer (Custom Hooks, Tanstack, TypeScript):**
    Encapsulates all state management, side effects, and server communication,
    exposing a clean API to the view.
 3. **The Presentational Layer (DaisyUI, Tailwind CSS):** Applies a responsive,
-   themeable design system to the behavioral primitives, focusing solely on
+   themeable design system to the behavioural primitives, focusing solely on
    visual representation.
 
 By adhering to the principles of purity and immutability, this architecture
@@ -984,7 +984,7 @@ targeted testing strategy. Each layer can and should be tested independently:
   without JSX, can be tested in isolation using a library like
   `@testing-library/react`. Tests should focus on verifying state transitions
   in the reducer, correct API calls via mocked service workers (MSW), and the
-  overall behavior of the hook's public API.
+  overall behaviour of the hook's public API.
 - **Presentational Components:** The pure view components should be tested
   using visual regression tools and component explorers like Storybook. By
   passing a comprehensive set of mocked props, one can verify that the

@@ -47,6 +47,7 @@ bun init --react=tailwind
 ```
 
 The scaffold provides:
+
 - React + TS/JS wired up for Bun’s **HTML‑first** dev server.
 - Tailwind preconfigured with the v4 CSS-first entry and automatic source
   detection.
@@ -73,9 +74,11 @@ Fast Refresh).
 ---
 
 ## 3) Hello React + Tailwind
+
 The template includes a basic app. If starting from a blank template, here’s the minimal shape.
 
 **`index.html`** (HTML import entry; Bun resolves and bundles dependencies):
+
 ```html
 <!doctype html>
 <html>
@@ -93,12 +96,14 @@ The template includes a basic app. If starting from a blank template, here’s t
 ```
 
 **`src/index.css`** (Tailwind v4 CSS-first entry):
+
 ```css
 @import "tailwindcss";
 /* Add @source only when templates live outside Tailwind's automatic scan roots. */
 ```
 
 **`src/main.tsx`**:
+
 ```tsx
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -125,6 +130,7 @@ createRoot(document.getElementById("root")!).render(<App />);
 Tailwind config (`tailwind.config.{js,ts}`) should omit `content` globs. Add
 `@source` directives in CSS only when scan roots are outside Tailwind's
 automatic detection, e.g.:
+
 ```js
 export default {
   theme: { extend: {} },
@@ -135,21 +141,25 @@ export default {
 ---
 
 ## 4) Build for production
+
 Bun bundles HTML, TS/JS, CSS assets. Use `--production` for minification and tree‑shaking.
 
 ```bash
 bun build ./index.html --production --outdir=dist
 ```
 
-The result is a *fully bundled* `dist/` directory ready to host anywhere.
+The result is a _fully bundled_ `dist/` directory ready to host anywhere.
 
 ---
 
 ## 5) Serve the production build
+
 ### Easiest: any static file host
+
 - Copy `dist/` to S3/Cloudflare Pages/Netlify/Vercel/nginx/Apache. Done.
 
 ### With Bun itself (simple static server)
+
 For local preview or DIY hosting, a tiny Bun server can serve the `dist` folder. Example SPA‑safe server that falls back to `index.html`:
 
 ```ts
@@ -174,6 +184,7 @@ serve({
 ```
 
 Run it:
+
 ```bash
 bun run server.ts
 ```
@@ -181,6 +192,7 @@ bun run server.ts
 ---
 
 ## 6) (Optional) One‑process full‑stack dev
+
 For a single process serving the SPA **and** APIs during development, use HTML
 imports + `Bun.serve()` routes.
 
@@ -199,6 +211,7 @@ serve({
 ```
 
 Start it:
+
 ```bash
 bun run dev-serve.ts
 ```
@@ -209,6 +222,7 @@ CORS faff.
 ---
 
 ## 7) Troubleshooting
+
 - **Tailwind classes not applying**: ensure `index.css` is linked in
   `index.html`; add an `@source` directive only when templates are stored
   outside Tailwind's automatic scan roots.
@@ -219,6 +233,7 @@ CORS faff.
 ---
 
 ## 8) Bonus: compile to a single executable (advanced)
+
 A self‑contained binary can serve the app:
 
 ```bash
@@ -231,6 +246,7 @@ Use this for kiosk‑style SPAs or internal tools where “download and run” b
 ---
 
 ## That’s it
+
 The flow is: scaffold → dev server with HMR → Tailwind styling → production
 bundle → optional Bun‑served hosting. Compact, fast, and pleasantly free of
 yak‑hair.

@@ -76,7 +76,7 @@ suites can run independently. A typical workflow might include two NPM
 scripts: one for the **fast tests** (`npm run test:unit` using Bun) and one
 for the **a11y tests** (`npm run test:a11y` using Node). In continuous
 integration, these can run in parallel or in sequence, but they remain
-logically isolated. This prevents any slow-down of the primary suite; if
+logically isolated. This prevents any slowdown of the primary suite; if
 accessibility scans are a bit slower due to JSDOM’s overhead, they do not make
 the core test run slower. It also provides flexibility: rapid prototyping can
 rely on the Bun tests alone, with axe checks run when needed or in a
@@ -972,6 +972,7 @@ Below is a summary of the two major layers and their roles:
 | Defects Caught | **Structural/Semantic issues:** missing labels, incorrect roles, improper ARIA, form associations, and basic functional bugs in components. *(Visual/style issues generally are not caught here due to Happy DOM/JSDOM limits.)* | **Visual & Interactive issues:** colour-contrast failures, element focus order, keyboard traps, missing focus outlines, responsive layout breakages, incorrect `lang` attributes, integration issues, and end-to-end flows such as modals and navigation. |
 | When to Run | On every code change or commit (developer inner loop); each PR as a quick check | On each PR merge request (CI gating) and nightly full runs; also useful locally before major releases |
 | CI Role | Fast feedback that fails the build quickly if a core test or axe rule fails, preventing bad code early | Final quality gate that ensures the merged product is accessible in reality and produces review artifacts such as screenshots and traces |
+
 This model ensures **accessibility is woven into every stage**: immediate IDE
 or terminal feedback catches obvious issues, and CI catches anything that
 requires a real browser to detect.
