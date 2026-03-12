@@ -15,13 +15,28 @@ import {
   IconUsers,
   IconWebhook,
 } from "@tabler/icons-react";
+import type { RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-router";
 import { Link, useRouterState } from "@tanstack/react-router";
-import type { ComponentProps, JSX, ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+
+type SidebarStaticRoute =
+  | "/"
+  | "/tasks"
+  | "/suggestions"
+  | "/projects"
+  | "/system/personnel"
+  | "/system/reports"
+  | "/system/agents"
+  | "/system/tools"
+  | "/system/hooks"
+  | "/system/monitoring"
+  | "/system/tenants"
+  | "/settings";
 
 interface NavItem {
   readonly label: string;
-  readonly to: string;
+  readonly to: SidebarStaticRoute;
   readonly icon: ReactNode;
   /** When true, match only when the path is an exact match. */
   readonly exact?: boolean;
@@ -36,15 +51,11 @@ interface ProjectItem {
 const ICON_SIZE = 18;
 const ICON_STROKE = 1.5;
 
-/**
- * Thin wrapper accepting any path string. The full route tree is
- * registered incrementally (Milestone 5); this avoids type errors
- * for routes not yet declared in the tree.
- */
-function SidebarLink(
-  props: Omit<ComponentProps<typeof Link>, "to"> & { readonly to: string },
+/** Use `ValidateLinkOptions` so sidebar links keep full route type-safety. */
+function SidebarLink<TOptions>(
+  props: ValidateLinkOptions<RegisteredRouter, TOptions>,
 ): JSX.Element {
-  return <Link {...(props as ComponentProps<typeof Link>)} />;
+  return <Link {...props} />;
 }
 
 function ZoneLabel({ children }: { readonly children: ReactNode }): JSX.Element {
@@ -85,7 +96,8 @@ function ProjectLink({ project }: { readonly project: ProjectItem }): JSX.Elemen
 
   return (
     <SidebarLink
-      to={to}
+      to="/projects/$slug"
+      params={{ slug: project.slug }}
       className={`flex items-center gap-3 rounded-md px-3 py-1.5 text-[length:var(--font-size-sm)] transition-colors duration-[var(--transition-fast)] ${
         isActive
           ? "border-s-2 border-primary bg-primary/10 ps-[10px] font-semibold text-primary"

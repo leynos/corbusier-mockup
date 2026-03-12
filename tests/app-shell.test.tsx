@@ -63,4 +63,17 @@ describe("AppShell", () => {
     expect(screen.getByRole("group", { name: /theme/i })).toBeTruthy();
     expect(screen.getByRole("combobox", { name: /language/i })).toBeTruthy();
   });
+
+  it("provides a focusable descendant inside the scrollable main region", async () => {
+    renderWithRouter(
+      <AppShell>
+        <p>Content</p>
+      </AppShell>,
+    );
+
+    const main = await screen.findByRole("main");
+    const skipLink = await screen.findByRole("link", { name: /skip to page content/i });
+    expect(main.contains(skipLink)).toBe(true);
+    expect(skipLink.getAttribute("href")).toBe("#app-shell-content");
+  });
 });
