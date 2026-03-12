@@ -115,9 +115,9 @@ root scrollbar gutter is excluded. `daisy-` prefix is used for all daisyUI class
 - `accent-content`: Foreground content color to use on accent color
 - `neutral`: Neutral dark color, For not-saturated parts of UI
 - `neutral-content`: Foreground content color to use on neutral color
-- `base-100`:-100 Base surface color of page, used for blank backgrounds
-- `base-200`:-200 Base color, darker shade, to create elevations
-- `base-300`:-300 Base color, even more darker shade, to create elevations
+- `base-100` Base surface color of page, used for blank backgrounds
+- `base-200` Base color, darker shade, to create elevations
+- `base-300` Base color, even darker shade, to create elevations
 - `base-content`: Foreground content color to use on base color
 - `info`: Info color, For informative/helpful messages
 - `info-content`: Foreground content color to use on info color
@@ -180,10 +180,10 @@ A CSS file with Tailwind CSS, daisyUI and a custom daisyUI theme looks like this
   --radius-box: 0.5rem; /* border radius of boxes (card, modal, alert) */
   /* preferred values for --radius-* : 0rem, 0.25rem, 0.5rem, 1rem, 2rem */
 
-  --size-selector: 0.25rem; /* base size of selectors (checkbox, toggle, badge). Value must be 0.25rem unless we intentionally want bigger selectors. In so it can be 0.28125 or 0.3125. If we intentionally want smaller selectors, it can be 0.21875 or 0.1875 */
-  --size-field: 0.25rem; /* base size of fields (button, input, select, tab). Value must be 0.25rem unless we intentionally want bigger fields. In so it can be 0.28125 or 0.3125. If we intentionally want smaller fields, it can be 0.21875 or 0.1875 */
+  --size-selector: 0.25rem; /* base size of selectors (checkbox, toggle, badge). Allowed larger values are 0.28125rem or 0.3125rem. Allowed smaller values are 0.21875rem or 0.1875rem. */
+  --size-field: 0.25rem; /* base size of fields (button, input, select, tab). Allowed larger values are 0.28125rem or 0.3125rem. Allowed smaller values are 0.21875rem or 0.1875rem. */
 
-  --border: 1px; /* border size. Value must be 1px unless we intentionally want thicker borders. In so it can be 1.5px or 2px. If we intentionally want thinner borders, it can be 0.5px */
+  --border: 1px; /* border size. Allowed thicker values are 1.5px or 2px. Allowed thinner values are 0.5px. */
 
   --depth: 1; /* only 0 or 1 – Adds a shadow and subtle 3D depth effect to components */
   --noise: 0; /* only 0 or 1 - Adds a subtle noise (grain) effect to components */
@@ -1286,7 +1286,7 @@ Loading shows an animation to indicate that something is loading
 
 #### Rules
 
-- {MODIFIER} is optional and can have one of the style, modifier, or placement class names
+- {MODIFIER} is optional and can have one of the style or size class names
 
 ### mask
 
@@ -1584,7 +1584,7 @@ Radial progress can be used to show the progress of a task or to show the passin
 #### Rules
 
 - The `--value` CSS variable and text must be a number between 0 and 100
-- Add `aria-valuenow="{value}"`, `aria-valuenow={value}` so screen readers can properly read the value and identify it as a progress element
+- Add `aria-valuenow="{value}"`, `role="progressbar"`, and an accessible name via `aria-label` or `aria-labelledby` so screen readers can properly read the value and identify the progress element
 - Use `div` instead of progress because browsers can't show text inside progress tag
 - Use `--size` for setting size (default 5rem) and `--thickness` to set how thick the indicator is
 
