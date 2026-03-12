@@ -356,7 +356,7 @@ Each proposal will ship with a concrete class name suggestion and will
 reference `src/styles/semantic.css` (or `@utility` helpers) so fixes are
 straightforward.
 
-### E) Class allowlist (Tailwind, DaisyUI, project semantics)
+### F) Class allowlist (Tailwind, DaisyUI, project semantics)
 
 The current Biome plugin does not yet expose helpers such as
 `split_classes`. Until that changes, the repository enforces the allowlist via
@@ -588,7 +588,7 @@ semantic fixes over ad hoc opt-outs.
 - Enable Tailwind IntelliSense for class hints and token names.
 - Configure Biome to format on save; run `bun run semantic:lint` before
   commits.
-- Consider an editor task to open `semantic.css` quickly when a repetition warning appears.
+- Configure an editor task to open `semantic.css` quickly when a repetition warning appears.
 
 ---
 

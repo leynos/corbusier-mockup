@@ -692,7 +692,7 @@ Begin by installing the Fluent plug-in, its backend, and the usual
 `react-i18next` stack.
 
 ```bash
-pnpm add react-i18next i18next i18next-browser-languagedetector \
+bun add react-i18next i18next i18next-browser-languagedetector \
   i18next-fluent i18next-fluent-backend @fluent/bundle
 
 ```
@@ -743,6 +743,15 @@ export default i18n;
 > in its own element with `dir` attributes) and layout relies on logical CSS
 > properties, disabling Fluent’s automatic isolation still preserves RTL
 > rendering while keeping the markup predictable.
+>
+> Projects without those typography constraints should prefer the default
+> `useIsolating: true`. When `false` is retained globally, review every
+> `t(...)`, `<Trans>`, and custom formatter that inserts user-controlled text,
+> and require one of these patterns:
+>
+> - wrap the interpolated fragment in `<bdi dir="auto">...</bdi>`;
+> - render the containing element with `dir="auto"` when the whole message is
+>   direction-sensitive.
 
 Import this module inside `main.tsx` and keep the root wrapped in `Suspense` so
 React can pause rendering until the `.ftl` file for the active locale has been
@@ -806,7 +815,7 @@ const { t } = useTranslation('userProfile');
 
 <label>{t('user-settings-name-label')}</label>
 <button>{t('user-settings-submit-button')}</button>
-<p>{t('user-settings-greeting', { name: session.userName })}</p>
+<p dir="auto">{t('user-settings-greeting', { name: session.userName })}</p>
 
 ```
 
@@ -824,7 +833,7 @@ ecosystem.
 
 | Feature                    | `react-i18next`                          | `react-intl` (FormatJS)  | `LinguiJS`              |
 | -------------------------- | ---------------------------------------- | ------------------------ | ----------------------- |
-| **Bundle Size**            | ~22.2 kB                                 | ~17.8 kB                 | ~10.4 kB                |
+| **Bundle Size**            | Moderate                                 | Moderate                 | Smaller                 |
 | **Pluralization Support**  | Built-in, ICU via add-ons                | Excellent (ICU Native)   | Excellent (ICU Native)  |
 | **Date/Number Formatting** | Built-in (`Intl` API)                    | Excellent (ICU Native)   | Good (`Intl` API)       |
 | **Message Extraction CLI** | Via add-ons                              | Yes (First-party)        | Yes (First-party)       |
@@ -923,9 +932,9 @@ user settings.
 
       return {
         // State for the view
-        title: t('settingsTitle'),
-        nameLabel: t('nameLabel'),
-        submitButtonText: t('submitButton'),
+        title: t('user-settings-title'),
+        nameLabel: t('user-settings-name-label'),
+        submitButtonText: t('user-settings-submit-button'),
         //... other translated strings
         formState,
         isLoading,
@@ -1104,8 +1113,8 @@ but also adaptable and maintainable for the future.
     accessed on 17 August 2025,
     [https://www.youtube.com/watch?v=LFaFPORPmeo](https://www.youtube.com/watch?v=LFaFPORPmeo)
 
-[^24]: i18next-fluent-backend — README, accessed on 12 November 2025,
-    [https://github.com/i18next/i18next-fluent-backend](https://github.com/i18next/i18next-fluent-backend)
+[^24]: react-i18next `react-fluent` example, accessed on 12 March 2026,
+    [https://github.com/i18next/react-i18next/tree/master/example/react-fluent](https://github.com/i18next/react-i18next/tree/master/example/react-fluent)
 [^25]: i18next-fluent — README, accessed on 12 November 2025,
     [https://github.com/i18next/i18next-fluent](https://github.com/i18next/i18next-fluent)
 
