@@ -209,7 +209,7 @@ easier to maintain at scale.
 
 ### Core Concepts: The `create` API
 
-Zustand's API is intentionally minimalist, centered around a single function:
+Zustand's API is intentionally minimalist, centred around a single function:
 `create`. This function takes a "creator" function as an argument, which
 defines the initial state and the actions that can modify it.[^7] The
 
@@ -923,9 +923,13 @@ export function useUpdateTodo() {
       const previousTodos = queryClient.getQueryData(queryKey);
 
       // 3. Optimistically update to the new value
-      queryClient.setQueryData(queryKey, (old) =>
-        old.map(todo => (todo.id === updatedTodo.id? updatedTodo : todo))
-      );
+      queryClient.setQueryData(queryKey, (old) => {
+        if (!Array.isArray(old)) {
+          return old;
+        }
+
+        return old.map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo));
+      });
 
       // 4. Return a context object with the snapshotted value
       return { previousTodos };
@@ -1064,7 +1068,7 @@ The core concepts include[^24]:
 - **Actors:** Long-running processes or side effects that can be invoked by the
   machine.[^24]
 
-By modeling logic this way, XState makes complex flows visualizable, easier to
+By modelling logic this way, XState makes complex flows visualizable, easier to
 reason about, and more robust, especially for features like multi-step forms,
 onboarding flows, or intricate UI interactions.[^26]
 
@@ -1079,7 +1083,7 @@ understanding their distinct roles is key to using them effectively.[^27]
   Think of it as a lightweight, global key-value store. Examples include the
   status of a modal (`isOpen`), the content of a search input, or a theme
   preference.[^28]
-- **XState is for modeling _state flows_.** It excels at managing
+- **XState is for modelling _state flows_.** It excels at managing
   complex, interdependent states where the sequence of operations and the
   transitions between states are critical. It defines the _behaviour_ of a
   system, ensuring that only valid transitions can occur.[^29]
@@ -1485,9 +1489,8 @@ Medium, accessed on August 21, 2025,
 [https://medium.com/@danieloberman770/effective-state-management-in-react-with-xstate-775d27ee1445](https://medium.com/@danieloberman770/effective-state-management-in-react-with-xstate-775d27ee1445)
 
 [^31]: How do you use XState with React Query (or other data-fetching/caching
-libs)? Should they even be used together? : r/reactjs
-
-- Reddit, accessed on August 21, 2025,
+libs)? Should they even be used together? : r/reactjs - Reddit, accessed on
+August 21, 2025,
 [https://www.reddit.com/r/reactjs/comments/1m2g5n9/how_do_you_use_xstate_with_react_query_or_other/](https://www.reddit.com/r/reactjs/comments/1m2g5n9/how_do_you_use_xstate_with_react_query_or_other/)
 
 [^32]: biowaffeln/zustand-middleware-xstate - GitHub, accessed on August 21,

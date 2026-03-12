@@ -33,6 +33,9 @@ corbusier-mockup/
 │     ├─ tokens.css          # (generated or hand-written tokens)
 │     ├─ semantic.css        # project semantic classes using @apply
 │     └─ utilities.css       # optional @utility shorthands (Tailwind v4)
+├─ scripts/
+│  ├─ check-classlist-length.ts
+│  └─ find-near-duplicate-classes.ts
 ├─ tools/
 │  ├─ grit/
 │  │  ├─ rule-a11y.grit
@@ -460,7 +463,7 @@ rules:
 ```json
 {
   "scripts": {
-    "semantic:lint": "bunx biome ci src tests tools docs && bun run lint:classlist && bun run lint:class-duplicates && uvx semgrep --config tools/semgrep-semantic.yml --include src/**/*.tsx --include tests/**/*.tsx && bunx stylelint 'src/**/*.css' --config tools/stylelint.config.cjs",
+    "semantic:lint": "bunx biome ci src tests tools docs && bun run lint:classlist && bun run lint:class-duplicates && uvx semgrep --config tools/semgrep-semantic.yml --include src/**/*.tsx --include tests/**/*.tsx --include '**/*.html' && bunx stylelint 'src/**/*.css' --config tools/stylelint.config.cjs",
     "semantic": "bun run semantic:lint",
     "lint:classlist": "bun run scripts/check-classlist-length.ts",
     "lint:class-duplicates": "bun run scripts/find-near-duplicate-classes.ts"
