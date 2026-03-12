@@ -711,3 +711,8 @@ export const TASKS: readonly Task[] = [
 export function findTask(id: string): Task | undefined {
   return TASKS.find((t) => t.id === id);
 }
+
+/** Look up a task by project slug and task ID. Returns undefined if not found. */
+export function findProjectTask(projectSlug: string, id: string): Task | undefined {
+  return TASKS.find((task) => task.projectSlug === projectSlug && task.id === id);
+}

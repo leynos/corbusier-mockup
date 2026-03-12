@@ -11,7 +11,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findTask } from "../../../data/tasks";
+import { findProjectTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -29,8 +29,8 @@ const routeApi = getRouteApi("/projects/$slug/tasks/$id/dependencies");
 export function TaskDepsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-  const { id } = routeApi.useParams();
-  const task = findTask(id);
+  const { id, slug } = routeApi.useParams();
+  const task = findProjectTask(slug, id);
 
   if (task === undefined) {
     return (
