@@ -60,5 +60,7 @@ describe("AppShell", () => {
 
     const searchBtn = await screen.findByRole("button", { name: /search directives/i });
     expect(searchBtn).toBeTruthy();
+    expect(screen.getByRole("group", { name: /theme/i })).toBeTruthy();
+    expect(screen.getByRole("combobox", { name: /language/i })).toBeTruthy();
   });
 });

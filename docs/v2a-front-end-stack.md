@@ -109,10 +109,8 @@ library such as Redux, Zustand, or XState in `package.json`. State is managed
 through:
 
 - React component state and hooks,
-- Context providers such as `ThemeProvider`,
-  `DisplayModeProvider`, and `UnitPreferencesProvider`, and
-- feature-local stores such as the map state module in
-  `src/app/features/map/map-state.tsx`.
+- the checked-in `ThemeProvider` plus the i18n runtime, and
+- route-local and component-local state for shell and screen behaviour.
 
 That keeps the checked-in mockup closer to a React-plus-context architecture
 than a state-machine or data-cache architecture.

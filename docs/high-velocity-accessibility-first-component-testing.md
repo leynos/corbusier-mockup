@@ -84,7 +84,10 @@ In these Bun-driven tests, we cover things like:
 
 - **Basic Accessibility attributes:** If a component is supposed to have certain ARIA attributes or roles, are they present in the rendered output?
 
-For example, suppose we have a `<ThemeProvider>` context and a `<MobileShell>` layout component. A Bun test might verify that when the theme context is applied, the DOM gets a `data-theme` attribute on the `<html>` element:
+For example, suppose a `<ThemeProvider>` context and the desktop
+`<AppShell>` layout are under test. A Bun test might verify that when the
+theme context is applied, the DOM gets a `data-theme` attribute on the
+`<html>` element:
 
 ```
 tsxCopy code`import { describe, it, expect } from 'bun:test';
@@ -217,16 +220,20 @@ Playwright. If a semantic selector is genuinely impossible, add an
 `// biome-ignore lint/test/no-testid-selectors` suppression so reviewers can
 see the trade-off.
 
-*Example:* In the `GlobalControls` component test, instead of selecting a toggle button by an ID or class, we query it by its accessible name:
+*Example:* In the `HeaderBar` component test, instead of selecting a theme
+button by an ID or class, query it by its accessible name:
 
 ```tsx
-const displayToggle = screen.getByRole("button", {
-  name: "Switch to Full View",
+const dayThemeButton = screen.getByRole("button", {
+  name: "Day",
 });
-expect(displayToggle).toBeInTheDocument();
+expect(dayThemeButton).toBeInTheDocument();
 ```
 
-Here we rely on the presence of `aria-label="Switch to Full View"` on the button. If that label were missing or changed, the test would fail – which is good, because the accessible contract of the UI changed. In a future refactor, we might rewrite such a query using Testing Library’s `getByRole('button', { name: 'Switch to Full View' })` for clarity. Either way, the test asserts something a screen reader user would care about: that there is a button with that label.
+Here we rely on the visible label on the theme button. If that label were
+missing or changed, the test would fail, which is good because the accessible
+contract of the UI changed. Either way, the test asserts something a screen
+reader user would care about: that there is a button with that label.
 
 #### 2.3.1 Exemplars awaiting refactor
 
@@ -241,10 +248,9 @@ rule:
   buttons “Delete {map name}”, and then switch the tests to
   `getByRole('tabpanel', { name: /stops/i })` or
   `getAllByRole('button', { name: /delete .* offline map/i })`.
-- `tests/global-controls.test.tsx` relies on a hidden
-  `<span data-testid="mode-probe">` shim to assert state transitions. Replace
-  this with assertions against the real control’s `aria-pressed` state and
-  visible label (`getByRole('button', { name: /display mode/i })`).
+- `tests/header-bar.test.tsx` should continue asserting theme state through
+  the real controls, for example by checking the active button’s
+  `aria-pressed` state rather than a DOM-only hook.
 - `tests/quick-map-fragment.test.tsx` queries map panels via
   `[data-testid='quick-walk-map-container']`. Once the container has a sensible
   label (for example `aria-label="Quick walk map"`), the test can use

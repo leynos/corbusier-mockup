@@ -4,6 +4,8 @@ import { IconBell, IconSearch, IconUserCircle } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import { HeaderControls } from "./header-controls";
+
 export function HeaderBar(): JSX.Element {
   const { t } = useTranslation();
 
@@ -24,6 +26,8 @@ export function HeaderBar(): JSX.Element {
           ⌘K
         </kbd>
       </button>
+
+      <HeaderControls />
 
       <button
         type="button"
