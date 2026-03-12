@@ -516,9 +516,7 @@ To make SPA routing accessible, developers must manually replicate the browser's
 
 1.  **Update the Page Title:** Immediately after the new content is rendered, the page title must be updated via JavaScript to reflect the new view's content. This is essential for user orientation and is a requirement of WCAG SC 2.4.2 (Page Titled).
 
-    JavaScript
-
-    ```
+    ```javascript
     document.title = 'New Page Title | App Name';
 
     ```
