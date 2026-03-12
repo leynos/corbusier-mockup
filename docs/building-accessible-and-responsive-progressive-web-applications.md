@@ -328,7 +328,7 @@ While older responsive techniques relied on floats and clever positioning, moder
 
 CSS Flexible Box Layout, or Flexbox, is a layout model designed for distributing space and aligning items in a single dimension---either as a row or a column. To use Flexbox, one applies `display: flex` to a container element. Its direct children then become "flex items" that can be arranged along a main axis and a cross axis.
 
-Key properties like `justify-content` (for alignment on the main axis), `align-items` (for alignment on the cross axis), and the `flex` shorthand property (which controls `flex-grow`, `flex-shrink`, and `flex-basis`) give developers precise control over how items expand to fill space, shrink to fit, and are distributed within their container. Flexbox is exceptionally well-suited for component-level layouts, such as navigation bars, card layouts, and vertical centering of content.
+Key properties like `justify-content` (for alignment on the main axis), `align-items` (for alignment on the cross axis), and the `flex` shorthand property (which controls `flex-grow`, `flex-shrink`, and `flex-basis`) give developers precise control over how items expand to fill space, shrink to fit, and are distributed within their container. Flexbox is exceptionally well-suited for component-level layouts, such as navigation bars, card layouts, and vertical centring of content.
 
 #### Grid for Two-Dimensional Layout
 
