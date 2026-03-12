@@ -593,7 +593,7 @@ component classes and Tailwind's utility classes directly to them. This
 composition combines the best of both worlds: Radix's accessibility and
 DaisyUI's aesthetics.
 
-Revisiting the form example, we can now apply the presentation layer:
+Revisiting the form example, the presentation layer can now be applied:
 
 ```typescript
 // Styled, accessible, and responsive form
@@ -751,7 +751,7 @@ streamed.[^26]
 #### Structuring Translations
 
 Store Fluent resources under `public/locales/<language>/<namespace>.ftl`.
-Namespaces still let you split domains (for example, `common.ftl` and
+Namespaces allow domain splitting (for example, `common.ftl` and
 `userProfile.ftl`), but every file now contains Fluent messages instead of
 JSON.[^25]
 
