@@ -149,19 +149,19 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     taskRef: "TASK-1001",
   },
   {
-    id: "da-6",
-    kind: "pr_opened",
-    timestamp: "2026-03-12T14:32:00Z",
-    actor: "Marcus Webb",
-    localizations: loc("Opened PR #251 for tool registry schema"),
-    taskRef: "TASK-1002",
-  },
-  {
     id: "da-7",
     kind: "state_change",
     timestamp: "2026-03-12T14:30:00Z",
     actor: "Marcus Webb",
     localizations: loc("Transitioned TASK-1002 to In Review"),
+    taskRef: "TASK-1002",
+  },
+  {
+    id: "da-6",
+    kind: "pr_opened",
+    timestamp: "2026-03-12T14:32:00Z",
+    actor: "Marcus Webb",
+    localizations: loc("Opened PR #251 for tool registry schema"),
     taskRef: "TASK-1002",
   },
   {

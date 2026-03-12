@@ -37,6 +37,7 @@ export function DashboardScreen(): JSX.Element {
       {/* 2. KPI cards */}
       <section
         aria-label={t("dashboard-kpi-region", { defaultValue: "Key metrics" })}
+        data-testid="dashboard-kpi-region"
         className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         {KPI_METRICS.map((m) => (
@@ -56,6 +57,7 @@ export function DashboardScreen(): JSX.Element {
         {/* Activity feed — 2/3 width */}
         <section
           aria-label={t("dashboard-activity-region", { defaultValue: "Recent activity" })}
+          data-testid="dashboard-activity-region"
           className="card bg-base-100 border border-base-300 shadow-sm lg:col-span-2"
         >
           <div className="card-body p-5">

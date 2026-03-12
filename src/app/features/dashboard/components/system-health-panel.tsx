@@ -34,6 +34,7 @@ export function SystemHealthPanel(): JSX.Element {
   return (
     <section
       aria-label={t("dashboard-health-region", { defaultValue: "System health" })}
+      data-testid="dashboard-health-region"
       className="card border border-base-300 bg-base-100 shadow-sm"
     >
       <div className="card-body flex-row items-center gap-4 p-5">

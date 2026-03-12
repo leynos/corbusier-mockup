@@ -29,7 +29,11 @@ export function AvatarStack({ assignees, max = 3, className = "" }: AvatarStackP
         </span>
       ))}
       {overflow > 0 ? (
-        <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-base-100 bg-base-300 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] font-bold text-base-content/70">
+        <div
+          role="img"
+          aria-label={`${String(overflow)} more assignees`}
+          className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-base-100 bg-base-300 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] font-bold text-base-content/70"
+        >
           +{overflow}
         </div>
       ) : null}

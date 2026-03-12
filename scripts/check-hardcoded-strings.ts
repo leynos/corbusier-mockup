@@ -68,8 +68,8 @@ function getTsxFiles(): string[] {
   return Array.from(glob.scanSync(PROJECT_ROOT));
 }
 
-function buildWordRegex(minLength: number): RegExp {
-  return new RegExp(`[a-zA-Z]{${minLength},}`, "u");
+export function buildWordRegex(minLength: number): RegExp {
+  return new RegExp(`\\p{L}{${minLength},}`, "u");
 }
 
 /** Return true when the node sits inside a `t(…)` call expression. */
@@ -211,9 +211,23 @@ export function analyseFile(
     // 2. JsxAttribute with a string literal in a user-facing attribute
     if (ts.isJsxAttribute(node) && node.initializer) {
       const attrName = ts.isIdentifier(node.name) ? node.name.text : node.name.getText();
-      if (attrSet.has(attrName) && ts.isStringLiteral(node.initializer)) {
-        const text = node.initializer.text;
+      if (attrSet.has(attrName)) {
+        const initializer = node.initializer;
+        let text: string | undefined;
+
+        if (ts.isStringLiteral(initializer)) {
+          text = initializer.text;
+        } else if (
+          ts.isJsxExpression(initializer) &&
+          initializer.expression !== undefined &&
+          (ts.isStringLiteral(initializer.expression) ||
+            ts.isNoSubstitutionTemplateLiteral(initializer.expression))
+        ) {
+          text = initializer.expression.text;
+        }
+
         if (
+          text !== undefined &&
           wordRegex.test(text) &&
           !isInsideTCall(node) &&
           !shouldSkipNode(node, source, directives)

@@ -92,7 +92,7 @@ stacks, and state machine controls.
   file limit if implemented as a single component.
   Severity: medium
   Likelihood: high
-  Mitigation: Decompose into sub-components: `TaskHeader`,
+  Mitigation: Decompose into subcomponents: `TaskHeader`,
   `DependencyHierarchy`, `SubtaskChecklist`, `DependencyPanel`,
   `BranchPrAssociation`, `ActivityTimeline`, `RelatedTasks`,
   `StateMachineControls`. Each in its own file under
@@ -137,7 +137,7 @@ stacks, and state machine controls.
 - Used `text-base-content/80` instead of semantic colours for KPI
   trend labels and agent status text. Semantic colour is carried by
   icons (which are `aria-hidden` and exempt from contrast rules).
-- Decomposed Task Detail into 8 sub-components under
+- Decomposed Task Detail into 8 subcomponents under
   `src/app/features/tasks/components/` to stay within the 400-line
   file limit.
 - Filter chips on My Tasks use `useState` with string arrays rather
@@ -150,7 +150,7 @@ stacks, and state machine controls.
 All 7 milestones delivered. Four pages implemented:
 
 - `/` — Dashboard with system health, KPI cards, activity feed,
-  agent utilisation summary.
+  agent utilization summary.
 - `/tasks` — My Tasks with state/priority/project filter chips.
 - `/tasks/:id` — Task Detail with state machine controls, dependency
   hierarchy, subtask checklist, branch/pull request (PR), activity
@@ -296,7 +296,7 @@ Replace the placeholder with a task list view:
 ### Milestone 5: Task Detail page
 
 Replace the placeholder with the full task detail implementation.
-Decompose into sub-components under
+Decompose into subcomponents under
 `src/app/features/tasks/components/`:
 
 - **`task-header.tsx`** — Title, state badge, assignee, due date,
@@ -318,7 +318,7 @@ Decompose into sub-components under
 
 The screen component (`task-detail-screen.tsx`) reads the task ID from
 the route params, looks up the fixture data, and assembles these
-sub-components.
+subcomponents.
 
 ### Milestone 6: Task Dependencies page
 

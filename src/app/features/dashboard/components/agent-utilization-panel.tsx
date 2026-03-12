@@ -1,4 +1,4 @@
-/** @file Dashboard panel showing current agent backend utilisation. */
+/** @file Dashboard panel showing current agent backend utilization. */
 
 import { IconRobot } from "@tabler/icons-react";
 import type { JSX } from "react";
@@ -54,6 +54,7 @@ export function AgentUtilizationPanel(): JSX.Element {
   return (
     <section
       aria-label={t("dashboard-agent-region", { defaultValue: "Agent utilization" })}
+      data-testid="dashboard-agent-region"
       className="card border border-base-300 bg-base-100 shadow-sm"
     >
       <div className="card-body p-5">

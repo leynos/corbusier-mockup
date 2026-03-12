@@ -27,7 +27,7 @@ export function KpiCard({ label, value, context, trend, trendLabel }: KpiCardPro
   const TrendIcon = trendStyle.icon;
 
   return (
-    <div className="card bg-base-100 border border-base-300 shadow-sm">
+    <div data-testid="kpi-card" className="card bg-base-100 border border-base-300 shadow-sm">
       <div className="card-body gap-1 p-5">
         <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
           {label}

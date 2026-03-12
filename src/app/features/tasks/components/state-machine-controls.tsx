@@ -9,8 +9,7 @@ interface StateMachineControlsProps {
   readonly currentState: TaskState;
 }
 
-const ACTION_KEYS: Record<TaskState, string> = {
-  [TaskState.Draft]: "task-action-draft",
+const ACTION_KEYS: Partial<Record<TaskState, string>> = {
   [TaskState.InProgress]: "task-action-start",
   [TaskState.InReview]: "task-action-submit-review",
   [TaskState.Paused]: "task-action-pause",
@@ -18,8 +17,7 @@ const ACTION_KEYS: Record<TaskState, string> = {
   [TaskState.Abandoned]: "task-action-abandon",
 };
 
-const ACTION_DEFAULTS: Record<TaskState, string> = {
-  [TaskState.Draft]: "Draft",
+const ACTION_DEFAULTS: Partial<Record<TaskState, string>> = {
   [TaskState.InProgress]: "Start",
   [TaskState.InReview]: "Submit for Review",
   [TaskState.Paused]: "Pause",
@@ -51,7 +49,9 @@ export function StateMachineControls({ currentState }: StateMachineControlsProps
   return (
     <div className="flex flex-wrap gap-2">
       {transitions.map((target) => {
-        const label = t(ACTION_KEYS[target], { defaultValue: ACTION_DEFAULTS[target] });
+        const label = t(ACTION_KEYS[target] ?? `task-action-${target}`, {
+          defaultValue: ACTION_DEFAULTS[target] ?? target,
+        });
         return (
           <button
             key={target}

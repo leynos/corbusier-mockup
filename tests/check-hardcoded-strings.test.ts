@@ -6,10 +6,10 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { analyseFile } from "../scripts/check-hardcoded-strings";
+import { analyseFile, buildWordRegex } from "../scripts/check-hardcoded-strings";
 
 const attrSet = new Set(["aria-label", "title"]);
-const wordRegex = /[a-zA-Z]{2,}/u;
+const wordRegex = buildWordRegex(2);
 const tempDirs: string[] = [];
 
 function analyseFixture(sourceText: string) {
@@ -99,5 +99,33 @@ describe("check-hardcoded-strings", () => {
     `);
 
     expect(results).toHaveLength(0);
+  });
+
+  it("flags JSX expression attributes with string and template literals", () => {
+    const results = analyseFixture(`
+      export function Demo() {
+        return (
+          <div>
+            <button aria-label={"Hello world"} />
+            <button title={\`Bonjour monde\`} />
+          </div>
+        );
+      }
+    `);
+
+    expect(results).toHaveLength(2);
+    expect(results[0]?.kind).toBe("attribute");
+    expect(results[1]?.kind).toBe("attribute");
+  });
+
+  it("matches letters in non-Latin scripts", () => {
+    const results = analyseFixture(`
+      export function Demo() {
+        return <p>Привет мир</p>;
+      }
+    `);
+
+    expect(results).toHaveLength(1);
+    expect(results[0]?.text).toContain("Привет");
   });
 });

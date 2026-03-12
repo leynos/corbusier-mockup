@@ -3,9 +3,9 @@
 import {
   IconActivity,
   IconHierarchy2,
+  IconLink,
   IconListCheck,
   IconNetwork,
-  IconUsers,
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import type { JSX } from "react";
@@ -110,7 +110,7 @@ export function TaskDepsScreen(): JSX.Element {
 
           {/* Related tasks */}
           <SectionCard
-            icon={IconUsers}
+            icon={IconLink}
             title={t("task-section-related", { defaultValue: "Related Tasks" })}
           >
             <RelatedTasks taskIds={task.relatedTasks} />

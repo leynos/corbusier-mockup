@@ -1,6 +1,6 @@
 /** @file Task metadata panel — assignee, due date, priority, estimate, labels. */
 
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { labelDescriptors } from "../../../../data/registries";
 import type { Task } from "../../../../data/tasks";
@@ -15,7 +15,7 @@ interface TaskMetadataPanelProps {
 
 interface MetaRowProps {
   readonly label: string;
-  readonly children: React.ReactNode;
+  readonly children: ReactNode;
 }
 
 function MetaRow({ label, children }: MetaRowProps): JSX.Element {

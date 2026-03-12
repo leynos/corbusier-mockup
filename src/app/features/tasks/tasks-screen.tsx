@@ -41,6 +41,7 @@ function FilterChip({ label, value, selected, onSelect }: FilterChipProps): JSX.
     <button
       type="button"
       onClick={() => onSelect(value)}
+      aria-pressed={selected}
       className={`rounded-full px-3 py-1 text-[length:var(--font-size-xs)] font-semibold transition-colors ${
         selected
           ? "bg-primary text-primary-content"
