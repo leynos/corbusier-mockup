@@ -8,9 +8,9 @@ export interface AgentStatusDescriptor {
   readonly localizations: EntityLocalizations;
 }
 
-export const agentStatusDescriptors: Record<string, AgentStatusDescriptor> = {
+export const agentStatusDescriptors: Record<AgentStatus, AgentStatusDescriptor> = {
   active: {
-    id: "active" as AgentStatus,
+    id: "active",
     localizations: {
       "en-GB": { name: "Active" },
       ar: { name: "نشط" },
@@ -22,7 +22,7 @@ export const agentStatusDescriptors: Record<string, AgentStatusDescriptor> = {
     },
   },
   inactive: {
-    id: "inactive" as AgentStatus,
+    id: "inactive",
     localizations: {
       "en-GB": { name: "Inactive" },
       ar: { name: "غير نشط" },
@@ -34,7 +34,7 @@ export const agentStatusDescriptors: Record<string, AgentStatusDescriptor> = {
     },
   },
   error: {
-    id: "error" as AgentStatus,
+    id: "error",
     localizations: {
       "en-GB": { name: "Error" },
       ar: { name: "خطأ" },
