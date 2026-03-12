@@ -51,7 +51,7 @@ deliver.[^1]
    cloud-centric applications, creating a fluid and responsive user
    experience.[^1] Data synchronization with other devices or collaborators
    occurs quietly and asynchronously in the background.
-2. **Your work is not trapped on one device.** While the primary copy of the
+2. **Work is not trapped on a single device.** While the primary copy of the
    data resides locally, a core tenet of modern computing is the ability to
    access information from multiple devices. Local-first applications achieve
    this by ensuring that data is seamlessly synchronized across all of a user's
@@ -63,7 +63,7 @@ deliver.[^1]
    data without interruption. When a network connection becomes available, the
    application opportunistically synchronizes any local changes with the server
    and pulls down updates from other clients.[^1]
-4. **Seamless collaboration with your colleagues.** Local-first architecture
+4. **Seamless collaboration among colleagues.** Local-first architecture
    does not sacrifice the collaborative capabilities that have made cloud
    applications indispensable. The goal is to support real-time, multi-user
    collaboration that is on par with, or even superior to, existing cloud-based
@@ -84,7 +84,7 @@ deliver.[^1]
    via a server, it can be end-to-end encrypted. This ensures that the server
    operator cannot access the content of the user's data, only store the
    encrypted blobs.[^1]
-7. **You retain ultimate ownership and control.** Perhaps the most profound
+7. **Users retain ultimate ownership and control.** Perhaps the most profound
    philosophical shift is the restoration of data ownership to the user.
    Because the data resides in files on their local device, users have ultimate
    agency. They can back it up, move it, manipulate it with other tools, or
@@ -605,7 +605,7 @@ export function useProducts() {
   return useQuery({
     // The search term is part of the query key.
     // When it changes, Tanstack Query will automatically refetch.
-    queryKey:,
+    queryKey: ['products', 'list', { search: searchTerm }],
     queryFn: () => fetchProducts({ search: searchTerm }),
     // keepPreviousData is useful here to prevent UI flashes while new data loads
     keepPreviousData: true, 
@@ -651,7 +651,7 @@ typically done using a `useEffect` hook that watches the `data` returned from
 ```javascript
 // ANTI-PATTERN: DO NOT DO THIS
 const useProductStore = create((set) => ({
-  products:,
+  products: [],
   setProducts: (data) => set({ products: data }),
 }));
 
@@ -1012,16 +1012,16 @@ useEffect(() => {
     const newTodo = JSON.parse(event.data);
     
     // Directly update the cache for the specific todo
-    queryClient.setQueryData(, newTodo);
+    queryClient.setQueryData(['todos', 'detail', newTodo.id], newTodo);
 
     // Also update the list cache to include/update the new todo
-    queryClient.setQueryData(['todos', 'list'], (oldData) => {
+    queryClient.setQueryData(['todos', 'list'], (oldData = []) => {
       const exists = oldData.some(todo => todo.id === newTodo.id);
       if (exists) {
-        return oldData.map(todo => todo.id === newTodo.id? newTodo : todo);
-      } else {
-        return;
+        return oldData.map(todo => (todo.id === newTodo.id ? newTodo : todo));
       }
+
+      return [...oldData, newTodo];
     });
   };
 
@@ -1037,8 +1037,8 @@ application features involve complex, multi-step processes, intricate user
 flows, or behaviors with a finite number of well-defined states. For these
 scenarios, a more robust solution is needed to prevent bugs and manage
 complexity. This is where XState, a library for creating and managing state
-machines and statecharts, becomes an invaluable addition to our
-architecture.[^44]
+machines and statecharts, becomes an invaluable addition to the
+architecture.[^44][^45]
 
 ### Introducing XState: Beyond State Management to State Orchestration
 
@@ -1354,216 +1354,217 @@ an even broader range of applications.
 
 ## Works cited
 
-[^1] Local-first software: You own your data, in spite of the cloud, accessed
+[^1]: Local-first software: You own your data, in spite of the cloud, accessed
 on August 20, 2025,
 [https://www.inkandswitch.com/essay/local-first/](https://www.inkandswitch.com/essay/local-first/)
 
-[^2] Why Local-First Software Is the Future and its Limitations | RxDB -
+[^2]: Why Local-First Software Is the Future and its Limitations | RxDB -
 JavaScript Database, accessed on August 20, 2025,
 [https://rxdb.info/articles/local-first-future.html](https://rxdb.info/articles/local-first-future.html)
 
-[^3] Overview | TanStack Query React Docs, accessed on August 20, 2025,
+[^3]: Overview | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/v5/docs/react/overview](https://tanstack.com/query/v5/docs/react/overview)
 
-[^4] Mastering Local-First Apps: The Ultimate Guide to Offline-First
+[^4]: Mastering Local-First Apps: The Ultimate Guide to Offline-First
 Development with Seamless Cloud Sync | by M Mahdi Ramadhan, M. Si | Medium,
 accessed on August 20, 2025,
 [https://medium.com/@Mahdi_ramadhan/mastering-local-first-apps-the-ultimate-guide-to-offline-first-development-with-seamless-cloud-be656167f43f](https://medium.com/@Mahdi_ramadhan/mastering-local-first-apps-the-ultimate-guide-to-offline-first-development-with-seamless-cloud-be656167f43f)
 
-[^5] Downsides of Local First / Offline First | RxDB - JavaScript Database,
+[^5]: Downsides of Local First / Offline First | RxDB - JavaScript Database,
 accessed on August 20, 2025,
 [https://rxdb.info/downsides-of-offline-first.html](https://rxdb.info/downsides-of-offline-first.html)
 
-[^6] Does TanStack Query replace Redux, MobX or other global state managers?,
+[^6]: Does TanStack Query replace Redux, MobX or other global state managers?,
 accessed on August 20, 2025,
 [https://tanstack.com/query/v5/docs/react/guides/does-this-replace-client-state](https://tanstack.com/query/v5/docs/react/guides/does-this-replace-client-state)
 
-[^7] Zustand vs tanstack query : r/reactjs - Reddit, accessed on August 20,
+[^7]: Zustand vs tanstack query : r/reactjs - Reddit, accessed on August 20,
 2025,
 [https://www.reddit.com/r/reactjs/comments/1mugweq/zustand_vs_tanstack_query/](https://www.reddit.com/r/reactjs/comments/1mugweq/zustand_vs_tanstack_query/)
 
-[^8] How to structure Next.js project with Zustand and React Query | by …,
+[^8]: How to structure Next.js project with Zustand and React Query | by …,
 accessed on August 20, 2025,
 [https://medium.com/@zerebkov.artjom/how-to-structure-next-js-project-with-zustand-and-react-query-c4949544b0fe](https://medium.com/@zerebkov.artjom/how-to-structure-next-js-project-with-zustand-and-react-query-c4949544b0fe)
 
-[^9] Separating Concerns with Zustand and TanStack Query, accessed on August
+[^9]: Separating Concerns with Zustand and TanStack Query, accessed on August
 20, 2025,
 [https://volodymyrrudyi.com/blog/separating-concerns-with-zustand-and-tanstack-query/](https://volodymyrrudyi.com/blog/separating-concerns-with-zustand-and-tanstack-query/)
 
-[^10] React State Management — using Zustand | by Chikku George | Globant -
+[^10]: React State Management — using Zustand | by Chikku George | Globant -
 Medium, accessed on August 20, 2025,
 [https://medium.com/globant/react-state-management-b0c81e0cbbf3](https://medium.com/globant/react-state-management-b0c81e0cbbf3)
 
-[^11] Managing React state with Zustand | by Dzmitry Ihnatovich - Medium,
+[^11]: Managing React state with Zustand | by Dzmitry Ihnatovich - Medium,
 accessed on August 20, 2025,
 [https://medium.com/@ignatovich.dm/managing-react-state-with-zustand-4e4d6bb50722](https://medium.com/@ignatovich.dm/managing-react-state-with-zustand-4e4d6bb50722)
 
-[^12] Modernizing Your React Applications: From Redux to Zustand, TanStack
+[^12]: Modernizing Your React Applications: From Redux to Zustand, TanStack
 Query, and Redux Toolkit - Makepath, accessed on August 20, 2025,
 [https://makepath.com/modernizing-your-react-applications-from-redux-to-zustand-tanstack-query-and-redux-toolkit/](https://makepath.com/modernizing-your-react-applications-from-redux-to-zustand-tanstack-query-and-redux-toolkit/)
 
-[^13] Introduction - Zustand, accessed on August 20, 2025,
+[^13]: Introduction - Zustand, accessed on August 20, 2025,
 [https://zustand.docs.pmnd.rs/getting-started/introduction](https://zustand.docs.pmnd.rs/getting-started/introduction)
 
-[^14] Zustand vs. RTK Query vs. TanStack Query: Unpacking the React State
+[^14]: Zustand vs. RTK Query vs. TanStack Query: Unpacking the React State
 Management Toolbox | by Imran Rafeek | Medium, accessed on August 20, 2025,
 [https://medium.com/@imranrafeek/zustand-vs-rtk-query-vs-tanstack-query-unpacking-the-react-state-management-toolbox-d47893479742](https://medium.com/@imranrafeek/zustand-vs-rtk-query-vs-tanstack-query-unpacking-the-react-state-management-toolbox-d47893479742)
 
-[^15] TanStack Query: A Powerful Tool for Data Management in React - Medium,
+[^15]: TanStack Query: A Powerful Tool for Data Management in React - Medium,
 accessed on August 20, 2025,
 [https://medium.com/@ignatovich.dm/tanstack-query-a-powerful-tool-for-data-management-in-react-0c5ae6ef037c](https://medium.com/@ignatovich.dm/tanstack-query-a-powerful-tool-for-data-management-in-react-0c5ae6ef037c)
 
-[^16] Asynchronous State Management with TanStack Query - Atlantbh Sarajevo,
+[^16]: Asynchronous State Management with TanStack Query - Atlantbh Sarajevo,
 accessed on August 20, 2025,
 [https://www.atlantbh.com/asynchronous-state-management-with-tanstack-query/](https://www.atlantbh.com/asynchronous-state-management-with-tanstack-query/)
 
-[^17] TanStack | High Quality Open-Source Software for Web Developers, accessed
+[^17]: TanStack | High Quality Open-Source Software for Web Developers, accessed
 on August 20, 2025, [https://tanstack.com/](https://tanstack.com/)
 
-[^18] useQuery | TanStack Query React Docs, accessed on August 20, 2025,
+[^18]: useQuery | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/v4/docs/react/reference/useQuery](https://tanstack.com/query/v4/docs/react/reference/useQuery)
 
-[^19] Cache storage in Tanstack query. Introduction | by Akilesh Rao -
+[^19]: Cache storage in Tanstack query. Introduction | by Akilesh Rao -
 JavaScript in Plain English, accessed on August 20, 2025,
 [https://javascript.plainenglish.io/cache-storage-in-tanstack-query-bdfd89fa4705](https://javascript.plainenglish.io/cache-storage-in-tanstack-query-bdfd89fa4705)
 
-[^20] Query Invalidation | TanStack Query React Docs, accessed on August 20,
+[^20]: Query Invalidation | TanStack Query React Docs, accessed on August 20,
 2025,
 [https://tanstack.com/query/v5/docs/react/guides/query-invalidation](https://tanstack.com/query/v5/docs/react/guides/query-invalidation)
 
-[^21] React Query Cache Invalidation: Why Your Mutations Work But Your UI
+[^21]: React Query Cache Invalidation: Why Your Mutations Work But Your UI
 Doesn't Update, accessed on August 20, 2025,
 [https://medium.com/@kennediowusu/react-query-cache-invalidation-why-your-mutations-work-but-your-ui-doesnt-update-a1ad23bc7ef1](https://medium.com/@kennediowusu/react-query-cache-invalidation-why-your-mutations-work-but-your-ui-doesnt-update-a1ad23bc7ef1)
 
-[^22] Managing Query Keys for Cache Invalidation in React Query - Wisp CMS,
+[^22]: Managing Query Keys for Cache Invalidation in React Query - Wisp CMS,
 accessed on August 20, 2025,
 [https://www.wisp.blog/blog/managing-query-keys-for-cache-invalidation-in-react-query](https://www.wisp.blog/blog/managing-query-keys-for-cache-invalidation-in-react-query)
 
-[^23] How to use zustand to store the result of a query - Stack Overflow,
+[^23]: How to use zustand to store the result of a query - Stack Overflow,
 accessed on August 20, 2025,
 [https://stackoverflow.com/questions/68690221/how-to-use-zustand-to-store-the-result-of-a-query](https://stackoverflow.com/questions/68690221/how-to-use-zustand-to-store-the-result-of-a-query)
 
-[^24] Behavior of onSuccess and idea for callbacks · TanStack query - GitHub,
+[^24]: Behavior of onSuccess and idea for callbacks · TanStack query - GitHub,
 accessed on August 20, 2025,
 [https://github.com/TanStack/query/discussions/5034](https://github.com/TanStack/query/discussions/5034)
 
-[^25] persistQueryClient | TanStack Query React Docs, accessed on August 20,
+[^25]: persistQueryClient | TanStack Query React Docs, accessed on August 20,
 2025,
 [https://tanstack.com/query/v4/docs/react/plugins/persistQueryClient](https://tanstack.com/query/v4/docs/react/plugins/persistQueryClient)
 
-[^26] Building Offline-First React Native Apps with React Query and …, accessed
+[^26]: Building Offline-First React Native Apps with React Query and …, accessed
 on August 20, 2025,
 [https://www.whitespectre.com/ideas/how-to-build-offline-first-react-native-apps-with-react-query-and-typescript/](https://www.whitespectre.com/ideas/how-to-build-offline-first-react-native-apps-with-react-query-and-typescript/)
 
-[^27] Cache Persistence in IndexedDB · TanStack query · Discussion #1638 -
+[^27]: Cache Persistence in IndexedDB · TanStack query · Discussion #1638 -
 GitHub, accessed on August 20, 2025,
 [https://github.com/TanStack/query/discussions/1638](https://github.com/TanStack/query/discussions/1638)
 
-[^28] Understanding offline example · TanStack query · Discussion #4296 -
+[^28]: Understanding offline example · TanStack query · Discussion #4296 -
 GitHub, accessed on August 20, 2025,
 [https://github.com/TanStack/query/discussions/4296](https://github.com/TanStack/query/discussions/4296)
 
-[^29] Offline caching with AWS Amplify, Tanstack, AppSync and MongoDB Atlas,
+[^29]: Offline caching with AWS Amplify, Tanstack, AppSync and MongoDB Atlas,
 accessed on August 20, 2025,
 [https://aws.amazon.com/blogs/mobile/offline-caching-with-aws-amplify-tanstack-appsync-and-mongodb-atlas/](https://aws.amazon.com/blogs/mobile/offline-caching-with-aws-amplify-tanstack-appsync-and-mongodb-atlas/)
 
-[^30] Adding Offline Capabilities to React Native Apps with TanStack Query
+[^30]: Adding Offline Capabilities to React Native Apps with TanStack Query
 Benoit Paul, accessed on August 20, 2025,
 [https://www.benoitpaul.com/blog/react-native/offline-first-tanstack-query/](https://www.benoitpaul.com/blog/react-native/offline-first-tanstack-query/)
 
-[^31] WebSocket vs REST: Key differences and which to use - Ably, accessed on
+[^31]: WebSocket vs REST: Key differences and which to use - Ably, accessed on
 August 20, 2025,
 [https://ably.com/topic/websocket-vs-rest](https://ably.com/topic/websocket-vs-rest)
 
-[^32] Websocket vs REST when sending data to server - Stack Overflow, accessed
+[^32]: Websocket vs REST when sending data to server - Stack Overflow, accessed
 on August 20, 2025,
 [https://stackoverflow.com/questions/45460734/websocket-vs-rest-when-sending-data-to-server](https://stackoverflow.com/questions/45460734/websocket-vs-rest-when-sending-data-to-server)
 
-[^33] REST API vs. WebSocket API - JDoodle Blog | Latest Updates, Industry News
+[^33]: REST API vs. WebSocket API - JDoodle Blog | Latest Updates, Industry News
 & more, accessed on August 20, 2025,
 [https://www.jdoodle.com/blog/rest-vs-websocket](https://www.jdoodle.com/blog/rest-vs-websocket)
 
-[^34] What is the difference between RESTful APIs and WebSockets? -
+[^34]: What is the difference between RESTful APIs and WebSockets? -
 [Polygon.io](http://Polygon.io), accessed on August 20, 2025,
 [https://polygon.io/knowledge-base/article/what-is-the-difference-between-restful-apis-and-websockets](https://polygon.io/knowledge-base/article/what-is-the-difference-between-restful-apis-and-websockets)
 
-[^35] TanStack Query and WebSockets: Real-time React data fetching - LogRocket
+[^35]: TanStack Query and WebSockets: Real-time React data fetching - LogRocket
 Blog, accessed on August 20, 2025,
 [https://blog.logrocket.com/tanstack-query-websockets-real-time-react-data-fetching/](https://blog.logrocket.com/tanstack-query-websockets-real-time-react-data-fetching/)
 
-[^36] Optimistic Updates | TanStack Query React Docs, accessed on August 20,
+[^36]: Optimistic Updates | TanStack Query React Docs, accessed on August 20,
 2025,
 [https://tanstack.com/query/v5/docs/react/guides/optimistic-updates](https://tanstack.com/query/v5/docs/react/guides/optimistic-updates)
 
-[^37] TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
+[^37]: TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/v4/docs/react/community/tkdodos-blog](https://tanstack.com/query/v4/docs/react/community/tkdodos-blog)
 
-[^38] TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
+[^38]: TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/latest/docs/react/community/tkdodos-blog](https://tanstack.com/query/latest/docs/react/community/tkdodos-blog)
 
-[^39] Using WebSockets with React Query | TkDodo's blog, accessed on August 20,
+[^39]: Using WebSockets with React Query | TkDodo's blog, accessed on August 20,
 2025,
 [https://tkdodo.eu/blog/using-web-sockets-with-react-query](https://tkdodo.eu/blog/using-web-sockets-with-react-query)
 
-[^40] Using Websockets with React Query - Jon Bellah, accessed on August 20,
+[^40]: Using Websockets with React Query - Jon Bellah, accessed on August 20,
 2025,
 [https://jonbellah.com/articles/websockets-with-react-query](https://jonbellah.com/articles/websockets-with-react-query)
 
-[^41] How do you guys build offline-first apps with React Native? - Reddit,
+[^41]: How do you guys build offline-first apps with React Native? - Reddit,
 accessed on August 20, 2025,
 [https://www.reddit.com/r/reactnative/comments/1arlfkd/how_do_you_guys_build_offlinefirst_apps_with/](https://www.reddit.com/r/reactnative/comments/1arlfkd/how_do_you_guys_build_offlinefirst_apps_with/)
 
-[^42] TanStack/db: A reactive client store for building super fast apps on sync
+[^42]: TanStack/db: A reactive client store for building super fast apps on sync
 GitHub, accessed on August 20, 2025,
 [https://github.com/TanStack/db](https://github.com/TanStack/db)
 
-[^43] Local-first sync with TanStack DB and Electric | ElectricSQL, accessed on
+[^43]: Local-first sync with TanStack DB and Electric | ElectricSQL, accessed on
 August 20, 2025,
 [https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db](https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db)
 
-[^44] XState | Stately, accessed on August 21, 2025,
-[https://stately.ai/docs/xstate](https://stately.ai/docs/xstate) [^45]
-statelyai/xstate: Actor-based state management & orchestration for complex app
+[^44]: XState | Stately, accessed on August 21, 2025,
+[https://stately.ai/docs/xstate](https://stately.ai/docs/xstate)
+
+[^45]: statelyai/xstate: Actor-based state management & orchestration for complex app
 logic. - GitHub, accessed on August 21, 2025,
 [https://github.com/statelyai/xstate](https://github.com/statelyai/xstate)
 
-[^46] Do You use XState? Pros and cons? When use it ? : r/reactjs - Reddit,
+[^46]: Do You use XState? Pros and cons? When use it ? : r/reactjs - Reddit,
 accessed on August 21, 2025,
 [https://www.reddit.com/r/reactjs/comments/16l39r5/do_you_use_xstate_pros_and_cons_when_use_it/](https://www.reddit.com/r/reactjs/comments/16l39r5/do_you_use_xstate_pros_and_cons_when_use_it/)
 
-[^47] XState for React Developers, accessed on August 21, 2025,
+[^47]: XState for React Developers, accessed on August 21, 2025,
 [https://www.xstateforreactdevelopers.com/](https://www.xstateforreactdevelopers.com/)
 
-[^48] Mastering State Management with XState React: Best Practices for
+[^48]: Mastering State Management with XState React: Best Practices for
 Developers - DhiWise, accessed on August 21, 2025,
 [https://www.dhiwise.com/post/mastering-state-management-with-xstate-react-best-practices](https://www.dhiwise.com/post/mastering-state-management-with-xstate-react-best-practices)
 
-[^49] This Library Makes State Management So Much Easier - YouTube, accessed on
+[^49]: This Library Makes State Management So Much Easier - YouTube, accessed on
 August 21, 2025,
 [https://www.youtube.com/watch?v=s0h34OkEVUE](https://www.youtube.com/watch?v=s0h34OkEVUE)
 
-[^50] How do you actually use xstate? : r/reactjs - Reddit, accessed on August
+[^50]: How do you actually use xstate? : r/reactjs - Reddit, accessed on August
 21, 2025,
 [https://www.reddit.com/r/reactjs/comments/1hggghc/how_do_you_actually_use_xstate/](https://www.reddit.com/r/reactjs/comments/1hggghc/how_do_you_actually_use_xstate/)
 
-[^51] What's the deal with XState? : r/reactjs - Reddit, accessed on August 21,
+[^51]: What's the deal with XState? : r/reactjs - Reddit, accessed on August 21,
 2025,
 [https://www.reddit.com/r/reactjs/comments/yjaqhi/whats_the_deal_with_xstate/](https://www.reddit.com/r/reactjs/comments/yjaqhi/whats_the_deal_with_xstate/)
 
-[^52] pmndrs/zustand: Bear necessities for state management in React - GitHub,
+[^52]: pmndrs/zustand: Bear necessities for state management in React - GitHub,
 accessed on August 21, 2025,
 [https://github.com/pmndrs/zustand](https://github.com/pmndrs/zustand)
 
-[^53] Effective State Management in React with XState | by Daniel Oberman |
+[^53]: Effective State Management in React with XState | by Daniel Oberman |
 Medium, accessed on August 21, 2025,
 [https://medium.com/@danieloberman770/effective-state-management-in-react-with-xstate-775d27ee1445](https://medium.com/@danieloberman770/effective-state-management-in-react-with-xstate-775d27ee1445)
 
-[^54] How do you use XState with React Query (or other data-fetching/caching
+[^54]: How do you use XState with React Query (or other data-fetching/caching
 libs)? Should they even be used together? : r/reactjs
 
 - Reddit, accessed on August 21, 2025,
 [https://www.reddit.com/r/reactjs/comments/1m2g5n9/how_do_you_use_xstate_with_react_query_or_other/](https://www.reddit.com/r/reactjs/comments/1m2g5n9/how_do_you_use_xstate_with_react_query_or_other/)
 
-[^55] biowaffeln/zustand-middleware-xstate - GitHub, accessed on August 21,
+[^55]: biowaffeln/zustand-middleware-xstate - GitHub, accessed on August 21,
 2025,
 [https://github.com/biowaffeln/zustand-middleware-xstate](https://github.com/biowaffeln/zustand-middleware-xstate)

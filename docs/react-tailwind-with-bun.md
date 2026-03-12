@@ -48,7 +48,8 @@ bun init --react=tailwind
 
 The scaffold provides:
 - React + TS/JS wired up for Bun’s **HTML‑first** dev server.
-- Tailwind preconfigured (content paths, `@tailwind` directives, PostCSS config).
+- Tailwind preconfigured with the v4 CSS-first entry and automatic source
+  detection.
 
 ---
 
@@ -93,9 +94,8 @@ The template includes a basic app. If starting from a blank template, here’s t
 
 **`src/index.css`** (Tailwind v4 CSS-first entry):
 ```css
-@config "../tailwind.config.js";
 @import "tailwindcss";
-@source "./**/*.{ts,tsx,js,jsx}";
+/* Add @source only when templates live outside Tailwind's automatic scan roots. */
 ```
 
 **`src/main.tsx`**:
@@ -122,8 +122,9 @@ function App() {
 createRoot(document.getElementById("root")!).render(<App />);
 ```
 
-Tailwind config (`tailwind.config.{js,ts}`) should omit `content` globs when
-scan roots are declared with `@source`, e.g.:
+Tailwind config (`tailwind.config.{js,ts}`) should omit `content` globs. Add
+`@source` directives in CSS only when scan roots are outside Tailwind's
+automatic detection, e.g.:
 ```js
 export default {
   theme: { extend: {} },
@@ -208,7 +209,9 @@ CORS faff.
 ---
 
 ## 7) Troubleshooting
-- **Tailwind classes not applying**: check `content` globs; ensure `index.css` is linked in `index.html`.
+- **Tailwind classes not applying**: ensure `index.css` is linked in
+  `index.html`; add an `@source` directive only when templates are stored
+  outside Tailwind's automatic scan roots.
 - **404s in production for client‑side routes**: add the SPA fallback (see server example) or configure your static host’s rewrite rules.
 - **HMR not triggering**: ensure you started via `bun './**/*.html'` or a `Bun.serve()` with `development.hmr: true`.
 - **TypeScript module quirks**: Bun defaults to `"module": "Preserve"`; avoid incompatible TS transforms in your own config.

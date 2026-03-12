@@ -42,12 +42,13 @@ corbusier-mockup/
 │  ├─ semgrep-semantic.yml
 │  ├─ stylelint.config.cjs
 │  └─ semantic-lint.config.json   # thresholds & allowlists
-├─ biome.json
+├─ biome.jsonc
 ├─ package.json
-└─ .github/workflows/lint.yml
+└─ .github/workflows/semantic-lint.yml
 ```
 
-`semantic.css` is where you add reusable classes via `@apply`. Use Tailwind v4 CSS‑first configuration in `app.css`.
+`semantic.css` stores reusable classes via `@apply`. Use Tailwind v4
+CSS‑first configuration in `app.css`.
 
 ---
 
@@ -66,7 +67,8 @@ corbusier-mockup/
 @source "../**/*.{ts,tsx,js,jsx,html}";
 ```
 
-**Where to put semantic classes** — `src/styles/semantic.css` (import it from your entry) and build with:
+**Where to put semantic classes** — `src/styles/semantic.css` (imported from
+the entry) and built with:
 ```css
 /* Example semantic classes built from utilities */
 .btn-primary {
@@ -174,7 +176,8 @@ pnpm add -D @biomejs/biome
 
 ## 4) GritQL rules (practical starters)
 
-> Syntax below illustrates intent; adapt to your Grit adapter’s exact grammar. Keep messages **actionable**.
+> Syntax below illustrates intent; adapt to the configured Grit adapter’s
+> exact grammar. Keep messages **actionable**.
 
 ### A) Semantic interactivity (no clickable `<div>` / `<span>`)
 Files:
@@ -243,13 +246,21 @@ The duplication keeps messages targeted whilst Biome’s current Grit plugin lim
 - `scripts/check-classlist-length.ts`
 - `scripts/find-near-duplicate-classes.ts`
 
-We rely on lightweight TypeScript checkers (run as part of `bun run semantic`) to flag class strings that exceed the configured threshold **and** to warn about near-duplicate utility sets. The scripts read thresholds from `tools/semantic-lint.config.json`, normalise whitespace, and report literals that violate the agreed limits.
+Lightweight TypeScript checkers (run as part of `bun run semantic`) flag class
+strings that exceed the configured threshold **and** warn about near-duplicate
+utility sets. The scripts read thresholds from
+`tools/semantic-lint.config.json`, normalize whitespace, and report literals
+that violate the agreed limits.
 
 > Adjust `maxClasslistLength` **and** the `nearDuplicateClasses` block and re-run `bun run semantic` to enforce different ceilings.
 
 ### E) Near duplicate detection
 
-The near-duplicate checker tokenises each literal, deduplicates utilities, and compares token sets using Jaccard similarity. Any pair (or group) whose similarity exceeds the configured threshold produces a single diagnostic summarising the overlap and paths. Suggested defaults are bundled in `tools/semantic-lint.config.json`:
+The near-duplicate checker tokenizes each literal, deduplicates utilities, and
+compares token sets using Jaccard similarity. Any pair (or group) whose
+similarity exceeds the configured threshold produces a single diagnostic
+summarizing the overlap and paths. Suggested defaults are bundled in
+`tools/semantic-lint.config.json`:
 
 ```jsonc
 "nearDuplicateClasses": {
@@ -267,7 +278,9 @@ Adjust these knobs to tune the signal. When the checker fires, extract a semanti
 
 ## Proposed meaning-first semantic checks (roadmap)
 
-These heuristics focus on **structural intent** rather than raw class similarity. Each item describes what to detect, why it matters, and the preferred fix we will recommend in future lint passes.
+These heuristics focus on **structural intent** rather than raw class
+similarity. Each item describes what to detect, why it matters, and the
+preferred fix to recommend in future lint passes.
 
 ### 1) “Div/span soup” (utility-only wrapper chains)
 - **Signal**: Two or more nested `<div>`/`<span>` nodes whose only attribute is a utility-heavy `className` (no `role`, `aria-*`, `id`, `data-*`, event handlers).
@@ -303,7 +316,8 @@ These heuristics focus on **structural intent** rather than raw class similarity
 - **Signal**: Elements using only layout utilities (flex/grid/gap/justify/space) without semantics.
 - **Meaning**: These are layout patterns (stack/cluster/switcher) that deserve named abstractions.
 - **Action**: Suggest layout semantics (e.g. `.stack`, `.cluster`, `.sidebar`).
-- **Implementation notes**: Token classifier that recognises layout-only sets; fire in GritQL or the script.
+- **Implementation notes**: Token classifier that recognizes layout-only
+  sets; fire in GritQL or the script.
 
 ### 7) Heading/title repetition
 - **Signal**: The same utility bundle repeated across multiple headings (`<h1>`-`<h4>`) or section titles.
@@ -314,14 +328,22 @@ These heuristics focus on **structural intent** rather than raw class similarity
 ### 8) Utility load vs. semantic signal score
 - **Signal**: Elements with heavy utility usage but little semantic metadata (no role/id/aria/data).
 - **Meaning**: Frequent offender list for “this should have a name”.
-- **Action**: Soft warning nudging authors to introduce a semantic class summarising intent.
+- **Action**: Soft warning nudging authors to introduce a semantic class
+  summarizing intent.
 - **Implementation notes**: Extend the companion script to compute a heuristic score `(tokenCount - semanticSignals)` and warn above a configurable threshold.
 
-Each proposal will ship with a concrete class name suggestion and will reference `src/styles/semantic.css` (or `@utility` helpers) so fixes are straightforward.
+Each proposal will ship with a concrete class name suggestion and will
+reference `src/styles/semantic.css` (or `@utility` helpers) so fixes are
+straightforward.
 
 ### E) Class allowlist (Tailwind, DaisyUI, project semantics)
 
-The current Biome plugin does not yet expose helpers such as `split_classes`. Until it does, the repository enforces the allowlist via **Semgrep** (`tools/semgrep-semantic.yml`, rule `class-token-uppercase`) which catches camelCase tokens and other non‑Tailwind/DaisyUI class names. When the Grit integration grows richer predicates we can migrate this rule back into Grit.
+The current Biome plugin does not yet expose helpers such as
+`split_classes`. Until that changes, the repository enforces the allowlist via
+**Semgrep** (`tools/semgrep-semantic.yml`, rule `class-token-uppercase`),
+which catches camelCase tokens and other non‑Tailwind/DaisyUI class names.
+Migration back into Grit can be performed when the integration grows richer
+predicates.
 
 ---
 
@@ -357,7 +379,8 @@ module.exports = {
 };
 ```
 
-> We’re **not** using Stylelint for general formatting; only token enforcement and a few hygiene rules.
+> Stylelint is **not** used for general formatting; it only enforces tokens and
+> a few hygiene rules.
 
 ---
 
@@ -416,7 +439,8 @@ rules:
 - **CI:** `bun semantic` is the single gate invoked by `semantic-lint.yml`
   (see `.github/workflows/semantic-lint.yml` in the repo).
 
-> `uvx semgrep` expects `uv` to be installed (https://github.com/astral-sh/uv).
+> `uvx semgrep` expects `uv` to be installed
+> (<https://github.com/astral-sh/uv>).
 > The repo keeps the command consistent across local + CI environments.
 
 ---
@@ -470,7 +494,8 @@ semantic fixes over ad hoc opt-outs.
 ## 10) How to refactor into `@apply` (+ cascades)
 
 1. **Spot repetition:** linter warns that a class chunk is repeated (e.g., `inline-flex items-center gap-2 text-sm font-medium text-base-content`).
-2. **Name the concept:** choose a **semantic** name that reflects purpose, not appearance: e.g., `.nav__link`.
+2. **Name the concept:** choose a **semantic** name that reflects purpose, not
+   appearance: e.g., `.nav__link`.
 3. **Define once:** in `src/styles/semantic.css`:
    ```css
    .nav__link { @apply inline-flex items-center gap-2 text-sm font-medium text-base-content hover:text-primary; }
@@ -514,7 +539,8 @@ semantic fixes over ad hoc opt-outs.
 ## 12) IDE tips
 
 - Enable Tailwind IntelliSense for class hints and token names.
-- Configure Biome to format on save; run `pnpm lint:semantic` before commits.
+- Configure Biome to format on save; run `bun run semantic:lint` before
+  commits.
 - Consider an editor task to open `semantic.css` quickly when a repetition warning appears.
 
 ---
@@ -530,7 +556,9 @@ semantic fixes over ad hoc opt-outs.
 ## 14) FAQ
 
 **Q: Will `@apply` bloat CSS?**  
-A: We extract only repeated patterns. Tailwind still tree‑shakes class‑based styles; the few semantic classes you add are minimal and intentionally reused.
+A: Only repeated patterns are extracted. Tailwind still tree‑shakes
+class‑based styles; the few semantic classes added remain minimal and
+intentionally reused.
 
 **Q: When is it *okay* to keep utilities inline?**  
 A: One‑offs, quick prototypes, and tiny adjustments local to a component. Once the same chunk appears twice, prefer extracting it.
@@ -542,8 +570,8 @@ A: Configurable. Start with `repeatMinClasses=4`, `repeatMinOccurrences=2`. Tigh
 
 ## 15) Ready-to-run checklist
 
-1) Add files: `tools/grit/*.grit`, `tools/semantic-lint.config.json`, `tools/stylelint.config.cjs`, `tools/semgrep-semantic.yml`.  
-2) Wire **Biome** plugin or wrapper to execute Grit rules (paths above).  
-3) Add **`semantic.css`** and begin extracting repeated patterns with `@apply`.  
-4) Add **`lint:semantic`** script and the CI workflow.  
+1) Add files: `tools/grit/*.grit`, `tools/semantic-lint.config.json`, `tools/stylelint.config.cjs`, `tools/semgrep-semantic.yml`.
+2) Wire **Biome** plugin or wrapper to execute Grit rules (paths above).
+3) Add **`semantic.css`** and begin extracting repeated patterns with `@apply`.
+4) Add **`semantic:lint`** as the primary script and the CI workflow.
 5) Iterate on thresholds, allowlist prefixes, and rule messages as the team gains patterns.

@@ -106,7 +106,7 @@ Use them in markup where repetition would otherwise get silly:
 
 ## 4) Using daisyUI component classes with utilities
 
-daisyUI gives you quick structure; Tailwind refines it per-instance.
+daisyUI provides quick structure; Tailwind refines it per-instance.
 
 ```html
 <button class="btn btn-primary md:btn-lg shadow-sm @container">
@@ -199,7 +199,10 @@ Example for a menu item:
 ## 6) `@apply` vs `@utility` (v4 reality)
 
 - Use **`@apply`** to inline Tailwind **utilities** into CSS when you must style third‑party DOM, author CSS Modules / Vue `<style>` blocks, or reduce repetition inside a semantic wrapper. Pair it with `@reference` when applying inside component‑scoped styles.
-- Use **`@utility`** to register a **custom utility** (or a small family of them) that participates in Tailwind’s variant system (`hover:`, `md:`, `data-[state=…]:`, etc.). Prefer this for *project‑specific shorthands* that you want to behave like first‑class utilities.
+- Use **`@utility`** to register a **custom utility** (or a small family of
+  them) that participates in Tailwind’s variant system (`hover:`, `md:`,
+  `data-[state=…]:`, etc.). Prefer this for *project-specific shorthands* that
+  should behave like first-class utilities.
 
 Examples:
 
@@ -424,7 +427,8 @@ Now both **daisyUI component classes** and **role utilities** are token‑driven
 
 ### 11.4 Using tokens directly in utilities
 
-Tailwind v4 lets you reference custom properties in arbitrary values without writing `var()` yourself:
+Tailwind v4 allows custom properties to be referenced in arbitrary values
+without writing `var()` directly:
 
 ```html
 <!-- Shorthand for bg-[var(--color-primary)] -->
@@ -498,7 +502,7 @@ Use daisyUI’s component radius/size tokens to keep edges consistent:
 <span class="badge rounded-selector">New</span>
 ```
 
-If you want matching Tailwind utilities, back them with `@theme`:
+To create matching Tailwind utilities, back them with `@theme`:
 
 ```css
 @theme { --radius-field: .75rem; } /* now rounded-field works everywhere */
@@ -516,6 +520,7 @@ If you want matching Tailwind utilities, back them with `@theme`:
 ### 11.10 Quick recipes
 
 **a) Elevation system**
+
 ```css
 @theme {
   --shadow-surface-1: 0 1px 2px rgb(0 0 0 / .06);
@@ -525,20 +530,26 @@ If you want matching Tailwind utilities, back them with `@theme`:
 .card-2 {@apply shadow-surface-2 rounded-box;}
 ```
 
+
 **b) Tokenised prose**
+
 ```css
 @utility prose-muted { color: color-mix(in oklab, var(--color-base-content) 65%, transparent); }
 ```
 
+
 **c) Container‑aware sizes**
+
 ```css
 @theme { --container-compact: 400px; }
 /* Use with @sm: variant on container‑named elements */
 ```
 
+
 ### 11.11 Troubleshooting tokens
 
-- If a `bg-foo-500`‑style class doesn’t exist, confirm you declared the token in the right **namespace** under `@theme` (e.g., `--color-foo-500`).
+- If a `bg-foo-500`‑style class doesn’t exist, ensure the token is declared in
+  the right **namespace** under `@theme` (e.g., `--color-foo-500`).
 - In component‑scoped styles, add `@reference "../app.css";` before using `@apply` so Tailwind can resolve your tokens.
 - Don’t `@apply` plugin component classes (`btn`, `card`); compose them in markup or rebuild with tokens.
 

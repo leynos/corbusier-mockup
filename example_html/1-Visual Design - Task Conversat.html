@@ -87,13 +87,8 @@
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-10px); }
         }
-        .tool-result-expandable {
-            max-height: 200px;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        .tool-result-expandable.expanded {
-            max-height: 1000px;
+        .tool-result-expandable[hidden] {
+            display: none;
         }
     </style>
 </head>
@@ -137,7 +132,7 @@
                         <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
                     </button>
                     <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
-                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
                         <div class="hidden md:block">
                             <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
                             <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
@@ -282,12 +277,12 @@
                                             <span class="text-xs text-corbusier-gray">23 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">find src/ -name "*connection*" -o -name "*pool*"</p>
-                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-1">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-1" aria-controls="tool-result-1" aria-expanded="false" data-collapsed-label="View Results" data-expanded-label="Hide Results">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View Results</span>
                                         </button>
                                     </div>
-                                    <div id="tool-result-1" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                    <div id="tool-result-1" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4" hidden>
                                         <pre>src/database/connectionPool.js
 src/database/poolManager.js
 src/config/databaseConfig.js
@@ -335,7 +330,7 @@ Execution time: 0.34s</pre>
 
                         <div class="flex gap-4 message-bubble">
                             <div class="flex-shrink-0">
-                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                             </div>
                             <div class="flex-1">
                                 <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
@@ -381,12 +376,12 @@ Execution time: 0.34s</pre>
                                             <span class="text-xs text-corbusier-gray">18 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">config/pgbouncer.ini</p>
-                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-2">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-2" aria-controls="tool-result-2" aria-expanded="false" data-collapsed-label="View File Content" data-expanded-label="Hide File Content">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View File Content</span>
                                         </button>
                                     </div>
-                                    <div id="tool-result-2" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                    <div id="tool-result-2" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4" hidden>
                                         <pre>[databases]
 platform_api = host=postgres-primary.internal port=5432 dbname=platform_api
 
@@ -427,12 +422,12 @@ stats_period = 60</pre>
                                             <span class="text-xs text-corbusier-gray">2 hours ago</span>
                                         </div>
                                         <p class="text-sm text-corbusier-charcoal font-mono mb-3">npm run test:integration -- --grep "connection pool"</p>
-                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-3">
+                                        <button type="button" class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold flex items-center gap-1 expand-tool-result" data-target="tool-result-3" aria-controls="tool-result-3" aria-expanded="false" data-collapsed-label="View Test Results" data-expanded-label="Hide Test Results">
                                             <i class="fa-solid fa-chevron-down"></i>
                                             <span>View Test Results</span>
                                         </button>
                                     </div>
-                                    <div id="tool-result-3" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4">
+                                    <div id="tool-result-3" class="tool-result-expandable bg-corbusier-charcoal text-green-400 font-mono text-xs p-4" hidden>
                                         <pre>Running integration tests for connection pool...
 
   Connection Pool Tests
@@ -490,10 +485,10 @@ Exit code: 0</pre>
 
                     <div class="border-t border-corbusier-border p-4 bg-corbusier-cream">
                         <div class="flex items-start gap-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-card flex-shrink-0" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-card flex-shrink-0" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="Current user avatar" />
                             <div class="flex-1">
                                 <div class="relative">
-                                    <textarea id="message-input" placeholder="Type a message or use /command..." rows="2" class="w-full px-4 py-3 pr-12 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
+                                    <textarea id="message-input" aria-label="Conversation message" placeholder="Type a message or use /command..." rows="2" class="w-full px-4 py-3 pr-12 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
                                     <button type="button" aria-label="Send message" class="absolute right-3 bottom-3 p-2 bg-corbusier-blue text-white rounded-md hover:bg-ibm-blue transition-colors">
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
@@ -716,37 +711,55 @@ Exit code: 0</pre>
                     const targetId = this.getAttribute('data-target');
                     const targetElement = document.getElementById(targetId);
                     if (targetElement) {
-                        targetElement.classList.toggle('expanded');
+                        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                        targetElement.hidden = isExpanded;
+                        this.setAttribute('aria-expanded', String(!isExpanded));
                         const icon = this.querySelector('i');
                         const text = this.querySelector('span');
-                        if (targetElement.classList.contains('expanded')) {
-                            icon.classList.remove('fa-chevron-down');
-                            icon.classList.add('fa-chevron-up');
-                            text.textContent = 'Hide Results';
-                        } else {
+                        if (isExpanded) {
                             icon.classList.remove('fa-chevron-up');
                             icon.classList.add('fa-chevron-down');
-                            text.textContent = 'View Results';
+                            text.textContent = this.dataset.collapsedLabel || 'View Results';
+                        } else {
+                            icon.classList.remove('fa-chevron-down');
+                            icon.classList.add('fa-chevron-up');
+                            text.textContent = this.dataset.expandedLabel || 'Hide Results';
                         }
                     }
                 });
             });
 
             const messageInput = document.getElementById('message-input');
+            const sendButton = document.querySelector('button[aria-label="Send message"]');
+            const sendMessage = () => {
+                if (!messageInput) {
+                    return;
+                }
+
+                const message = messageInput.value.trim();
+                if (!message) {
+                    return;
+                }
+
+                console.log('Sending message:', message);
+                if (message.startsWith('/')) {
+                    console.log('Slash command detected:', message);
+                }
+
+                messageInput.value = '';
+            };
+
             if (messageInput) {
                 messageInput.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        const message = this.value.trim();
-                        if (message) {
-                            console.log('Sending message:', message);
-                            if (message.startsWith('/')) {
-                                console.log('Slash command detected:', message);
-                            }
-                            this.value = '';
-                        }
+                        sendMessage();
                     }
                 });
+            }
+
+            if (sendButton) {
+                sendButton.addEventListener('click', sendMessage);
             }
 
             console.log('Task Conversation Console initialized - Real-time updates active');

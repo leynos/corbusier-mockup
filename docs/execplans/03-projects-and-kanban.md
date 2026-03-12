@@ -35,10 +35,11 @@ headers.
 - Kanban cards follow the data-model-driven card architecture
   (`docs/data-model-driven-card-architecture.md`). Use DaisyUI `card`
   and `badge` components for visual presentation.
-- Kanban columns must map to `TaskState` values: To-Do → `draft`,
-  Planned → (a scheduled sub-state, rendered as draft with a
-  "planned" label), In Progress → `in_progress`, In Review →
-  `in_review`, Done → `done`.
+- Kanban columns must map to `TaskState` values: To-Do → `draft`
+  with `isPlanned: false`, Planned → `draft` with `isPlanned: true`,
+  In Progress → `in_progress`, In Review → `in_review`, Done → `done`.
+  `paused` and `abandoned` tasks are excluded from board columns but remain in
+  derived counts and summary data.
 - Task cards must carry the punch-card chamfer (top-right bevel).
   Blocked tasks must show the reversed chamfer (top-left bevel).
 - Drag-and-drop is a placeholder in this mockup — visual only, no
@@ -176,8 +177,8 @@ Router handles the nesting; the tabs reflect the current path.
 
 The Kanban board view renders five columns:
 
-- **To-Do** — Tasks in `draft` state.
-- **Planned** — Tasks in `draft` state with a `planned` label.
+- **To-Do** — Tasks in `draft` state with `isPlanned: false`.
+- **Planned** — Tasks in `draft` state with `isPlanned: true`.
 - **In Progress** — Tasks in `in_progress` state.
 - **In Review** — Tasks in `in_review` state.
 - **Done** — Tasks in `done` state.

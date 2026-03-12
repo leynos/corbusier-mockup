@@ -352,7 +352,7 @@ paused → in_progress
 │ ● Branch associated…        14 Mar 09:15        │
 │ ● Subtask completed…        14 Mar 11:42        │
 ├─────────────────────────────────────────────────┤
-│ Agent Utilisation                                │
+│ Agent Utilization                                │
 │ claude_code_sdk  ✓ Active   142 turns           │
 │ codex_cli        ✓ Active    87 turns           │
 │ custom_backend   ✕ Inactive   0 turns           │
@@ -391,11 +391,17 @@ export interface Task {
   readonly project: string;
   readonly assignee: Assignee;
   readonly dueDate: string;
+  readonly estimate: string | undefined;
+  readonly labels: readonly string[];
   readonly subtasks: readonly Subtask[];
   readonly dependencies: Dependencies;
   readonly branchRef: string | undefined;
   readonly pullRequestRef: string | undefined;
   readonly activityLog: readonly ActivityEvent[];
+  readonly parentGoal: string | undefined;
+  readonly parentIdea: string | undefined;
+  readonly parentStep: string | undefined;
+  readonly relatedTasks: readonly string[];
 }
 
 export function canTransitionTo(

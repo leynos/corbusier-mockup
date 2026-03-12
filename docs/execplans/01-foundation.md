@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: COMPLETE
+Status: PARTIAL
 
 ## Purpose / big picture
 
@@ -224,8 +224,9 @@ All 7 milestones delivered. The app shell renders with:
   and layout behaviour.
 
 Gate results: `bun lint`, `bun check:types`, `bun test`, `bun run test:a11y`,
-and `bun run semantic` all pass. Only E2E tests fail due to missing Playwright
-Chromium in WSL2 (known environment limitation).
+and `bun run semantic` all pass. The required E2E gate still fails due to
+missing Playwright Chromium in WSL2 (known environment limitation), so this
+plan remains partial.
 
 ## Context and orientation
 
@@ -627,8 +628,9 @@ All commands run from the repository root.
   errors.
 - Visual: the dev server renders the app shell with Polychromie
   colours, correct fonts, and working theme toggle.
-- Accessibility: Playwright axe sweep reports zero WCAG 2.2 AA
-  violations on the dashboard route.
+- Accessibility: Playwright axe sweep should report zero WCAG 2.2 AA
+  violations on the dashboard route once the Playwright environment is
+  available.
 
 **Quality method:**
 
@@ -638,7 +640,8 @@ bun run ff
 
 This single command runs the Tailwind compilation check, all unit
 tests, accessibility tests, lint, type-check, Fluent variable
-validation, semantic lint, and Playwright E2E tests.
+validation, semantic lint, and Playwright E2E tests. Completion stays
+partial until the Playwright portion succeeds.
 
 ## Idempotence and recovery
 

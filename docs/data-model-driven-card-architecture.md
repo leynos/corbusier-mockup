@@ -11,8 +11,9 @@ Locale bundles should keep only UI chrome and formatting scaffolding. This
 document audits current card usages and defines the schemas, localization
 rules, and migration steps to align the codebase.
 
-For a backend-compatible perspective (hexagonal domain boundaries, ports, and
-offline-first persistence), see `docs/wildside-mockup-data-model.md`.
+For a backend-compatible perspective on hexagonal domain boundaries and ports,
+see `docs/concept.md`. For offline-first persistence patterns, see
+`docs/local-first-react.md`.
 
 ## Principles to enforce
 

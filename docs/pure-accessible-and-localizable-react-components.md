@@ -29,14 +29,14 @@ distinct and complementary purpose in a layered system.
   utility-first, themeable styling system that provides high-level component
   classes while retaining the granular control of Tailwind. This layer is
   responsible for implementing a responsive, mobile-first design and a
-  consistent visual language across the application.[^3]
+  consistent visual language across the application.[^2]
 - **The State and Logic Layer: Tanstack & TypeScript.** All component logic and
   state management are encapsulated within a dedicated layer powered by
   TypeScript and the Tanstack ecosystem. TypeScript ensures type safety
   throughout the component lifecycle. Tanstack Query is employed for the
   declarative management of asynchronous server state, while a reducer or state
   machine pattern handles complex local component state. This strict separation
-  ensures that the view remains a pure function of its state.[^6]
+  ensures that the view remains a pure function of its state.[^3]
 
 The ultimate objective of this guide is to provide a definitive blueprint for
 architecting React components that are completely decoupled from business
@@ -59,20 +59,20 @@ ensures an application's stability as its complexity grows.
 ### 1.1 The Pure Function Paradigm in React
 
 At its core, the React rendering model is built on the assumption that every
-component behaves as a pure function.[^9] In computer science, a pure function
+component behaves as a pure function.[^4] In computer science, a pure function
 is defined by two strict characteristics: first, its return value is determined
 exclusively by its input values, and second, it produces no observable side
-effects.[^9] For a React component, the "inputs" are its props, state, and
+effects.[^4] For a React component, the "inputs" are its props, state, and
 context. The "return value" is the JSX that describes the UI. This means that
 given the same set of props, state, and context, a pure component must always
-render the identical JSX output.[^9]
+render the identical JSX output.[^4]
 
 This principle of "same inputs, same output" has profound implications for the
 entire rendering process. It allows React to make powerful optimizations. If
 the inputs to a component have not changed, React can safely skip re-rendering
 that component and its entire subtree, knowing that the output would be
 identical. This is a primary mechanism for performance enhancement in React
-applications.[^9] The ability to safely cache or memoize the output of a
+applications.[^4] The ability to safely cache or memoize the output of a
 component is entirely dependent on its purity.
 
 This paradigm also underpins React's advanced concurrent features. The renderer
@@ -84,7 +84,7 @@ that was later discarded, the application's state would become corrupted and
 unpredictable. Purity guarantees that rendering is a safe, idempotent operation
 that can be performed at any time without creating unintended consequences,
 thus future-proofing the application to leverage the full power of React's
-scheduler.[^9]
+scheduler.[^4]
 
 #### The Critical Role of Immutability
 
@@ -92,30 +92,30 @@ Immutability is the cornerstone of purity within the JavaScript ecosystem.
 React's change detection mechanism, particularly in functional components
 optimized with `React.memo`, relies on a shallow comparison of props and state.
 It uses reference equality (‘===‘) to determine if an object or array has
-changed.[^10] If data structures are mutated directly, their memory reference
+changed.[^5] If data structures are mutated directly, their memory reference
 remains the same. Consequently, React's shallow comparison will fail to detect
 the change, leading to a missed re-render and a UI that is out of sync with the
 application's state. This is one of the most common sources of bugs in React
-applications.[^13]
+applications.[^6]
 
 React enforces a single strict rule: all components must act like pure
 functions with respect to their props, which are to be treated as
-read-only.[^11] To update the UI, one must not mutate pre-existing state
+read-only.[^7] To update the UI, one must not mutate pre-existing state
 objects. Instead, the state update function (e.g., the setter from
 
 `useState`) must be called with a _new_ object or array. This creates a new
 reference, allowing React's reconciliation process to efficiently and correctly
-identify that a change has occurred and a re-render is necessary.[^13] This
+identify that a change has occurred and a re-render is necessary.[^6] This
 practice of treating state as an immutable snapshot increases predictability,
 simplifies debugging by making state changes explicit, and is essential for the
-performance optimizations that rely on shallow comparison.[^13]
+performance optimizations that rely on shallow comparison.[^6]
 
 #### Managing Side Effects
 
 The goal of a pure component architecture is not to eliminate side effects but
 to manage them rigorously. Side effects are any interactions with the world
 outside of the component's scope, such as data fetching, subscriptions, or
-direct DOM manipulation.[^9] These operations are essential for any dynamic
+direct DOM manipulation.[^4] These operations are essential for any dynamic
 application but are inherently impure.
 
 To maintain the purity of the rendering process, side effects must be isolated
@@ -125,17 +125,17 @@ and executed outside of the component's main body. React provides two primary
 1. **Event Handlers:** These functions execute in response to user
    interactions, such as a button click. They are the ideal place for side
    effects that are a direct result of a user action, like submitting a
-   form.[^9]
+   form.[^4]
 2. **The **`useEffect`** Hook:** This hook is used for side effects that need
    to synchronize with the component's lifecycle, such as fetching data when
    the component mounts or subscribing to an external data source. The function
    passed to `useEffect` runs _after_ the component has rendered and the DOM
-   has been updated, thereby keeping the render itself pure.[^16] The
+   has been updated, thereby keeping the render itself pure.[^8] The
    dependency array of
 
 `useEffect` provides fine-grained control over when the effect re-runs, and the
 returned cleanup function prevents memory leaks by unsubscribing or canceling
-operations when the component unmounts or the effect re-runs.[^16]
+operations when the component unmounts or the effect re-runs.[^8]
 
 By strictly confining side effects to event handlers and `useEffect`, the
 component's rendering logic remains a pure, predictable calculation, preserving
@@ -154,15 +154,15 @@ caching the results of expensive operations, including component rendering.
 In the era of class-based components, React provided `React.PureComponent` as a
 base class for optimization. It implemented the `shouldComponentUpdate`
 lifecycle method with a shallow comparison of props and state, preventing
-re-renders if they hadn't changed.[^10]
+re-renders if they hadn't changed.[^5]
 
 With the advent of functional components and hooks, this optimization is now
 provided by `React.memo`, a Higher-Order Component (HOC). `React.memo` is the
-recommended modern approach for optimizing functional components.[^10] It wraps
+recommended modern approach for optimizing functional components.[^5] It wraps
 a component and memoizes its rendered output. Before re-rendering the
 component, React will compare the new props with the previous props. If they
 are the same according to a shallow comparison, React will reuse the memoized
-result from the last render, skipping the re-render entirely.[^10]
+result from the last render, skipping the re-render entirely.[^5]
 
 #### Memoization Strategies
 
@@ -206,7 +206,7 @@ in the console, confirming that the re-render was successfully skipped.
 
 `React.memo` accepts an optional second argument: a custom comparison function
 that receives the old and new props and returns `true` if they are equal
-(preventing a re-render).[^10] While this offers granular control, its use
+(preventing a re-render).[^5] While this offers granular control, its use
 should be considered an anti-pattern within the proposed architecture.
 
 The need for a custom, deep comparison function often indicates an
@@ -232,7 +232,7 @@ eliminating the need for custom comparison logic.
 The primary architectural goal of this guide is to create components that are
 completely "free from business logic." This separation of concerns is a
 long-standing principle in software engineering that enhances maintainability,
-reusability, and testability.[^18] In modern React, the custom hook has emerged
+reusability, and testability.[^9] In modern React, the custom hook has emerged
 as the definitive pattern for achieving this decoupling, serving as a dedicated
 layer for all logic and state management.
 
@@ -242,10 +242,10 @@ The pattern of separating logic from presentation is not new. The classic
 "Container and Presentational Components" pattern, popularized by Dan Abramov,
 advocated for a similar separation where container components managed data and
 logic while presentational components were only concerned with rendering the
-UI.[^18] The introduction of React Hooks provided a more elegant and powerful
+UI.[^9] The introduction of React Hooks provided a more elegant and powerful
 way to implement this separation. The custom hook pattern can be seen as the
 modern evolution of this concept, offering a cleaner and more composable
-approach.[^18]
+approach.[^9]
 
 In this architecture, every non-trivial component is composed of two parts:
 
@@ -275,13 +275,13 @@ behavior. Its responsibilities are clearly defined:
 
 This strict encapsulation ensures that the presentational component remains
 completely unaware of the implementation details of state management or data
-fetching, making it highly reusable and easy to reason about.[^19]
+fetching, making it highly reusable and easy to reason about.[^10]
 
 #### Structuring and Naming Conventions
 
 A consistent file structure and naming convention are crucial for maintaining
 clarity in a large codebase. For any given feature component, such as a
-`UserProfileCard`, the following structure is recommended[^18]:
+`UserProfileCard`, the following structure is recommended[^9]:
 
 - `UserProfileCard/`
 
@@ -304,7 +304,7 @@ While `useState` is sufficient for simple, independent state variables, its
 limitations become apparent as component logic grows in complexity. When the
 next state depends on the previous state, or when multiple state variables are
 updated in a correlated manner, using multiple `useState` calls can lead to
-scattered logic and potential bugs.[^21] In these scenarios,
+scattered logic and potential bugs.[^11] In these scenarios,
 
 `useReducer` provides a more robust and centralized solution.
 
@@ -316,15 +316,15 @@ based on the nature of the state being managed.
 - **Prefer **`useState`** when:**
 
 - The state consists of simple JavaScript primitives (string, number,
-  boolean).[^22]
+  boolean).[^12]
 - The state updates are simple and do not depend on the previous state.
 - The component manages multiple, uncorrelated pieces of state.
 - **Prefer **`useReducer`** when:**
 
-- The state is a complex object or array with multiple sub-values.[^22]
+- The state is a complex object or array with multiple sub-values.[^12]
 - The next state is derived from the previous state.
 - Multiple state updates are often triggered by a single event, and the logic
-  can be centralized in a reducer function.[^21]
+  can be centralized in a reducer function.[^11]
 - The state transitions are complex and can benefit from the explicit structure
   of a state machine.
 
@@ -333,7 +333,7 @@ nested component trees. The `dispatch` function returned by `useReducer` has a
 stable identity and will not change between re-renders. This allows it to be
 passed down through props or context without triggering unnecessary re-renders
 in child components that are memoized, unlike callback functions defined inline
-that would be recreated on every render.[^21]
+that would be recreated on every render.[^11]
 
 #### Implementing Finite State Machines (FSMs)
 
@@ -391,23 +391,23 @@ const reducer = (state: State, action: Action): State => {
 This structure makes the component's behavior explicit and predictable. The
 reducer function becomes a single, centralized location for all state
 transition logic, making it easier to reason about, debug, and test in
-isolation.[^24]
+isolation.[^13]
 
 The selection of a state management tool should be guided not by the initial
 implementation's simplicity but by the anticipated evolution of the component's
-complexity. A simple modal might begin with a single `useState` boolean.[^24]
+complexity. A simple modal might begin with a single `useState` boolean.[^13]
 However, if a requirement for an exit animation is introduced, the state is no
 longer binary. It becomes a multi-step process:
 
 `'closed'` -> `'opening'` -> `'open'` -> `'closing'`. A `useState`
 implementation would require scattering logic across the state declaration, a
 `useEffect` for the animation timer, and complex conditionals in event handlers
-to prevent invalid state transitions.[^24] A
+to prevent invalid state transitions.[^13] A
 
 `useReducer` centralizes this transition logic, which is an improvement. A full
 state machine library like XState goes further by allowing declarative side
 effects, such as an `after` delay for the animation, directly within the state
-definition.[^24] Therefore, for components with non-trivial lifecycles,
+definition.[^13] Therefore, for components with non-trivial lifecycles,
 adopting a reducer-based state machine from the outset is a strategic
 investment in future maintainability, even if it appears more verbose initially.
 
@@ -435,10 +435,10 @@ a highly modular and flexible system.
 
 The foundation of any interactive component is its behavior and accessibility.
 Building accessible components from scratch is an incredibly difficult and
-error-prone task.[^2] Radix UI primitives solve this by providing a "headless"
+error-prone task.[^14] Radix UI primitives solve this by providing a "headless"
 component library. Headless components encapsulate all the complex logic for
 behavior and accessibility while leaving the visual styling completely to the
-developer.[^2] This philosophy makes Radix the ideal base layer for a custom
+developer.[^14] This philosophy makes Radix the ideal base layer for a custom
 design system.
 
 #### WAI-ARIA Compliance by Default
@@ -494,7 +494,7 @@ In this example, Radix's `Form.Field` automatically associates the `Form.Label`
 and `Form.Message` components with the `Form.Control` via the `name` prop. This
 ensures that screen readers can correctly announce the label for the input and
 any associated validation messages, a critical aspect of form accessibility
-that is handled automatically.[^29]
+that is handled automatically.[^15]
 
 ### 3.2 Layer 2: Server State Management with Tanstack Query
 
@@ -502,7 +502,7 @@ With the behavioral foundation in place, the next layer is state management,
 handled within the custom logic hook. This layer is responsible for all data
 fetching and mutation operations, acting as the bridge between the UI and the
 backend API. Tanstack Query is the ideal tool for this, as it declaratively
-manages caching, background refetching, and server state synchronization.[^6]
+manages caching, background refetching, and server state synchronization.[^3]
 
 #### The Custom Hook as the API Layer
 
@@ -542,22 +542,22 @@ export const useUserData = (userId: string) => {
 #### Type-Safe Data Fetching and Mutations
 
 End-to-end type safety is a primary goal. This is achieved by combining
-TypeScript with Tanstack Query's excellent type inference.[^8] The
+TypeScript with Tanstack Query's excellent type inference.[^16] The
 
 `fetchUser` and `updateUser` API functions should be strongly typed to return
 `Promise<User>`. This allows `useQuery` and `useMutation` to infer the type of
 `data` correctly, providing autocompletion and compile-time safety in the
-component.[^8] The
+component.[^16] The
 
 `queryOptions` helper is a best practice for creating reusable, co-located, and
 type-safe query definitions that can be shared across different hooks or for
-prefetching.[^32]
+prefetching.[^17]
 
 A critical pattern for maintaining UI consistency is cache invalidation. After
 a successful mutation, the `onSuccess` callback is used to call
 `queryClient.invalidateQueries`. This marks the relevant cached data as stale,
 and Tanstack Query will automatically refetch it in the background to ensure
-the UI reflects the latest server state.[^6]
+the UI reflects the latest server state.[^3]
 
 #### Defining the API Contract
 
@@ -567,17 +567,17 @@ robust approach is to establish a shared source of truth for data structures. A
 "TypeScript-first" workflow is highly effective:
 
 1. **Define Types:** Create TypeScript interfaces for all API requests and
-   responses in a shared package or directory (e.g., `types/api.ts`).[^36]
+   responses in a shared package or directory (e.g., `types/api.ts`).[^18]
 2. **Share Contract:** This types package becomes the formal contract. The Rust
    backend can then implement its `serde` structs to match these definitions
    precisely. Tools can also be used to generate TypeScript types from an
    OpenAPI/Swagger specification, which can be produced by the Actix backend.
 3. **Implement Typed Functions:** The front-end API client (e.g.,
    `api/user.ts`) imports these types and uses them to create strongly-typed
-   fetch functions.[^36]
+   fetch functions.[^18]
 
 This process eliminates an entire class of integration bugs caused by
-mismatched data shapes between the client and server.[^36]
+mismatched data shapes between the client and server.[^18]
 
 ### 3.3 Layer 3: Responsive Styling with DaisyUI 5 and Tailwind CSS
 
@@ -624,28 +624,28 @@ const StyledForm = () => (
 
 Here, classes like `form-control`, `input`, `input-bordered`, and `btn` from
 DaisyUI are applied directly to the Radix components, instantly giving them the
-desired look and feel.[^4]
+desired look and feel.[^19]
 
 #### Mobile-First and Responsive Design
 
 Tailwind CSS operates on a mobile-first principle. Unprefixed utility classes
 (e.g., `flex-col`) apply to all screen sizes, while prefixed classes (e.g.,
-`md:flex-row`) apply only from that specific breakpoint and larger.[^38] This
+`md:flex-row`) apply only from that specific breakpoint and larger.[^20] This
 makes it intuitive to build UIs that are responsive by default. DaisyUI 5
 enhances this by making all of its modifier classes fully responsive, allowing
 for powerful combinations like
 
-`md:btn-lg` to change component variants at different screen sizes.[^3]
+`md:btn-lg` to change component variants at different screen sizes.[^2]
 
 #### Theming and Customization
 
 DaisyUI's theming system is built on CSS variables, which makes it highly
 customizable and efficient. Themes, including dark mode, can be applied by
 adding a single `data-theme` attribute to a parent element, typically the root
-HTML tag.[^4] The components, using semantic color names like
+HTML tag.[^19] The components, using semantic color names like
 
 `primary` and `secondary`, will automatically adapt to the active theme's color
-palette.[^4] This decouples the component's structure from its specific color
+palette.[^19] This decouples the component's structure from its specific color
 implementation, allowing for global visual changes without altering any
 component code.
 
@@ -675,16 +675,16 @@ To build a truly global application, components must be localizable.
 `react-i18next`, built on top of the powerful `i18next` library, remains the
 de-facto standard for React internationalization because it preserves language
 detection, middleware, and formatting primitives within a single provider
-layer.[^41][^51] Pairing it with `i18next-fluent` keeps that ecosystem intact
+layer.[^21][^22] Pairing it with `i18next-fluent` keeps that ecosystem intact
 whilst letting translators work in Mozilla's Fluent syntax for richer
-grammatical control and safer defaults.[^52]
+grammatical control and safer defaults.[^23]
 
 An important caveat is that enabling the Fluent plug-in disables i18next's own
 string interpolation and pluralization. Every variable must therefore be
 declared using Fluent placeholders such as `{$name}`, and plural logic must be
-expressed with Fluent selectors.[^52] The official `react-i18next` repository
+expressed with Fluent selectors.[^23] The official `react-i18next` repository
 includes a Fluent-based sample application, which is a helpful reference when
-debugging Suspense loading states or validating translations in tests.[^54]
+debugging Suspense loading states or validating translations in tests.[^24]
 
 #### Setup and Configuration
 
@@ -700,7 +700,7 @@ pnpm add react-i18next i18next i18next-browser-languagedetector \
 Next, create `src/i18n.ts` to initialize the shared instance. The Fluent
 backend streams `.ftl` resources, the language detector keeps user preferences
 in sync, and the Fluent plug-in rewrites formatting so `t` resolves Fluent
-messages.[^52][^53]
+messages.[^23][^25]
 
 ```typescript
 // src/i18n.ts
@@ -746,14 +746,14 @@ export default i18n;
 
 Import this module inside `main.tsx` and keep the root wrapped in `Suspense` so
 React can pause rendering until the `.ftl` file for the active locale has been
-streamed.[^46]
+streamed.[^26]
 
 #### Structuring Translations
 
 Store Fluent resources under `public/locales/<language>/<namespace>.ftl`.
 Namespaces still let you split domains (for example, `common.ftl` and
 `userProfile.ftl`), but every file now contains Fluent messages instead of
-JSON.[^53]
+JSON.[^25]
 
 ```ftl
 # public/locales/en/userProfile.ftl
@@ -773,8 +773,8 @@ user-settings-unsaved-count =
 
 This format keeps translators in a single `.ftl` document where they can mix
 plain messages, attributes, and selectors without touching JSX. When new keys
-are added, remember that Fluent variables (for example, `{$count}`) must match
-the argument names you pass to `t`.
+are added, ensure that Fluent variables (for example, `{$count}`) match
+the argument names passed to `t`.
 
 #### Synchronizing Language Metadata and Layout Direction
 
@@ -799,7 +799,7 @@ render with proper glyph shaping.
 #### The ,`useTranslation`, Hook and ,`<Trans>`, Component
 
 The `useTranslation` hook still returns the familiar `t` helper; the difference
-is that it now resolves Fluent messages while honouring namespaces.[^41][^50]
+is that it now resolves Fluent messages while honouring namespaces.[^21][^27]
 
 ```typescript
 const { t } = useTranslation('userProfile');
@@ -816,7 +816,7 @@ and plural selectors just need a `count` (or similar) argument:
 not use braces for JSX, developers should continue to reach for `<Trans>` when a
 sentence needs a React component (for example, a link) embedded inside it; the
 component injects the React nodes while the Fluent string keeps the prose,
-yielding truly localizable markup without unsafe HTML.[^45]
+yielding truly localizable markup without unsafe HTML.[^28]
 
 The following table compares leading React i18n libraries, justifying the
 selection of `react-i18next` for its comprehensive feature set and robust
@@ -1025,71 +1025,97 @@ but also adaptable and maintainable for the future.
 
 [^1]: Accessibility – Radix Primitives, accessed on 17 August 2025,
    [https://www.radix-ui.com/primitives/docs/overview/accessibility](https://www.radix-ui.com/primitives/docs/overview/accessibility)
-[^2]: Introduction – Radix Primitives, accessed on 17 August 2025,
-   [https://www.radix-ui.com/primitives/docs/overview/introduction](https://www.radix-ui.com/primitives/docs/overview/introduction)
-[^3]: daisyUI v5 - What's New? - ThemeSelection, accessed on 17 August 2025,
+
+[^2]: daisyUI v5 - What's New? - ThemeSelection, accessed on 17 August 2025,
    [https://themeselection.com/daisyui-v5-whats-new/](https://themeselection.com/daisyui-v5-whats-new/)
-[^4]: daisyUI — Tailwind CSS Components ( version 5 update is here ), accessed on
-   17 August 2025, [https://daisyui.com/](https://daisyui.com/)
-[^6]: TanStack React Query: Crash Course - DEV Community, accessed on 17 August
+
+[^3]: TanStack React Query: Crash Course - DEV Community, accessed on 17 August
    2025,
    [https://dev.to/pedrotech/tanstack-react-query-crash-course-4ggp](https://dev.to/pedrotech/tanstack-react-query-crash-course-4ggp)
-[^8]: TypeScript | TanStack Query React Docs, accessed on 17 August 2025,
-   [https://tanstack.com/query/v5/docs/react/typescript](https://tanstack.com/query/v5/docs/react/typescript)
-[^9]: Keeping Components Pure – React, accessed on 17 August 2025,
+
+[^4]: Keeping Components Pure – React, accessed on 17 August 2025,
    [https://react.dev/learn/keeping-components-pure](https://react.dev/learn/keeping-components-pure)
-[^10]: Pure components in React: Using PureComponent and React.memo - LogRocket
+
+[^5]: Pure components in React: Using PureComponent and React.memo - LogRocket
     Blog, accessed on 17 August 2025,
     [https://blog.logrocket.com/pure-component-in-react/](https://blog.logrocket.com/pure-component-in-react/)
-[^11]: Components and Props - React, accessed on 17 August 2025,
-    [https://legacy.reactjs.org/docs/components-and-props.html](https://legacy.reactjs.org/docs/components-and-props.html)
-[^13]: Understanding Mutable vs. Immutable Data in React and Their Impact on
+
+[^6]: Understanding Mutable vs. Immutable Data in React and Their Impact on
     Rendering, accessed on 17 August 2025,
     [https://dev.to/muthuraja_r/understanding-mutable-vs-immutable-data-in-react-and-their-impact-on-rendering-ldc](https://dev.to/muthuraja_r/understanding-mutable-vs-immutable-data-in-react-and-their-impact-on-rendering-ldc)
-[^16]: Using the Effect Hook - React, accessed on 17 August 2025,
+
+[^7]: Components and Props - React, accessed on 17 August 2025,
+    [https://legacy.reactjs.org/docs/components-and-props.html](https://legacy.reactjs.org/docs/components-and-props.html)
+
+[^8]: Using the Effect Hook - React, accessed on 17 August 2025,
     [https://legacy.reactjs.org/docs/hooks-effect.html](https://legacy.reactjs.org/docs/hooks-effect.html)
-[^18]: Separation of concerns with React hooks | Felix Gerschau, accessed on 17
+
+[^9]: Separation of concerns with React hooks | Felix Gerschau, accessed on 17
     August 2025,
     [https://felixgerschau.com/react-hooks-separation-of-concerns/](https://felixgerschau.com/react-hooks-separation-of-concerns/)
-[^19]: React.js Best Practices & Patterns -Part 2 | by Bouazza Ayyoub - Medium,
+
+[^10]: React.js Best Practices & Patterns -Part 2 | by Bouazza Ayyoub - Medium,
     accessed on 17 August 2025,
     [https://bouazzaayyoub.medium.com/react-js-best-practices-patterns-part-2-334e4e488c49](https://bouazzaayyoub.medium.com/react-js-best-practices-patterns-part-2-334e4e488c49)
-[^21]: useState vs useReducer - reactjs - Stack Overflow, accessed on 17 August
+
+[^11]: useState vs useReducer - reactjs - Stack Overflow, accessed on 17 August
     2025,
     [https://stackoverflow.com/questions/54646553/usestate-vs-usereducer](https://stackoverflow.com/questions/54646553/usestate-vs-usereducer)
-[^22]: Choosing between useReducer and useState in React - Saeloun Blog, accessed
+
+[^12]: Choosing between useReducer and useState in React - Saeloun Blog, accessed
     on 17 August 2025,
     [https://blog.saeloun.com/2023/03/30/when-to-use-usestate-vs-usereducer/](https://blog.saeloun.com/2023/03/30/when-to-use-usestate-vs-usereducer/)
-[^24]: useState vs useReducer vs XState - Part 1: Modals | Stately, accessed on
+
+[^13]: useState vs useReducer vs XState - Part 1: Modals | Stately, accessed on
     17 August 2025,
     [https://stately.ai/blog/2021-07-28-usestate-vs-usereducer-vs-xstate-part-1-modals](https://stately.ai/blog/2021-07-28-usestate-vs-usereducer-vs-xstate-part-1-modals)
-[^29]: Form – Radix Primitives, accessed on 17 August 2025,
+
+[^14]: Introduction – Radix Primitives, accessed on 17 August 2025,
+   [https://www.radix-ui.com/primitives/docs/overview/introduction](https://www.radix-ui.com/primitives/docs/overview/introduction)
+
+[^15]: Form – Radix Primitives, accessed on 17 August 2025,
     [https://www.radix-ui.com/primitives/docs/components/form](https://www.radix-ui.com/primitives/docs/components/form)
-[^32]: Query Options | TanStack Query React Docs, accessed on 17 August 2025,
+
+[^16]: TypeScript | TanStack Query React Docs, accessed on 17 August 2025,
+   [https://tanstack.com/query/v5/docs/react/typescript](https://tanstack.com/query/v5/docs/react/typescript)
+
+[^17]: Query Options | TanStack Query React Docs, accessed on 17 August 2025,
     [https://tanstack.com/query/v5/docs/react/guides/query-options](https://tanstack.com/query/v5/docs/react/guides/query-options)
-[^36]: How I Use TypeScript to Design Reliable APIs (before writing a …),
+
+[^18]: How I Use TypeScript to Design Reliable APIs (before writing a …),
     accessed on 17 August 2025,
     [https://javascript.plainenglish.io/how-i-use-typescript-to-design-reliable-apis-before-writing-a-single-line-of-backend-code-1f3e5f3d2e30](https://javascript.plainenglish.io/how-i-use-typescript-to-design-reliable-apis-before-writing-a-single-line-of-backend-code-1f3e5f3d2e30)
-[^38]: Responsive design - Core concepts - Tailwind CSS, accessed on 17 August
+
+[^19]: daisyUI — Tailwind CSS Components ( version 5 update is here ), accessed on
+   17 August 2025, [https://daisyui.com/](https://daisyui.com/)
+
+[^20]: Responsive design - Core concepts - Tailwind CSS, accessed on 17 August
     2025,
     [https://tailwindcss.com/docs/responsive-design](https://tailwindcss.com/docs/responsive-design)
-[^41]: A Guide to React Localization with i18next - Phrase, accessed on 17 August
+
+[^21]: A Guide to React Localization with i18next - Phrase, accessed on 17 August
     2025,
     [https://phrase.com/blog/posts/localizing-react-apps-with-i18next/](https://phrase.com/blog/posts/localizing-react-apps-with-i18next/)
-[^45]: React i18n: A Step-by-Step Guide to React-Internationalization - Creole
-    Studios, accessed on 17 August 2025,
-    [https://www.creolestudios.com/react-i18next-simplifying-internationalization-in-react/](https://www.creolestudios.com/react-i18next-simplifying-internationalization-in-react/)
-[^46]: Quick start - react-i18next documentation, accessed on 17 August 2025,
-    [https://react.i18next.com/guides/quick-start](https://react.i18next.com/guides/quick-start)
-[^50]: useTranslation (hook) — react-i18next documentation, accessed on 17 August
-    2025,
-    [https://react.i18next.com/latest/usetranslation-hook](https://react.i18next.com/latest/usetranslation-hook)
-[^51]: react-i18next — repository and documentation, accessed on 17 August 2025,
+
+[^22]: react-i18next — repository and documentation, accessed on 17 August 2025,
     [https://github.com/i18next/react-i18next](https://github.com/i18next/react-i18next)
-[^52]: Complete Guide — React Internationalization (i18n) with i18next — YouTube,
+
+[^23]: Complete Guide — React Internationalization (i18n) with i18next — YouTube,
     accessed on 17 August 2025,
     [https://www.youtube.com/watch?v=LFaFPORPmeo](https://www.youtube.com/watch?v=LFaFPORPmeo)
-[^53]: i18next-fluent — README, accessed on 12 November 2025,
-    [https://github.com/i18next/i18next-fluent](https://github.com/i18next/i18next-fluent)
-[^54]: i18next-fluent-backend — README, accessed on 12 November 2025,
+
+[^24]: i18next-fluent-backend — README, accessed on 12 November 2025,
     [https://github.com/i18next/i18next-fluent-backend](https://github.com/i18next/i18next-fluent-backend)
+[^25]: i18next-fluent — README, accessed on 12 November 2025,
+    [https://github.com/i18next/i18next-fluent](https://github.com/i18next/i18next-fluent)
+
+[^26]: Quick start - react-i18next documentation, accessed on 17 August 2025,
+    [https://react.i18next.com/guides/quick-start](https://react.i18next.com/guides/quick-start)
+
+[^27]: useTranslation (hook) — react-i18next documentation, accessed on 17 August
+    2025,
+    [https://react.i18next.com/latest/usetranslation-hook](https://react.i18next.com/latest/usetranslation-hook)
+
+[^28]: React i18n: A Step-by-Step Guide to React-Internationalization - Creole
+    Studios, accessed on 17 August 2025,
+    [https://www.creolestudios.com/react-i18next-simplifying-internationalization-in-react/](https://www.creolestudios.com/react-i18next-simplifying-internationalization-in-react/)

@@ -63,6 +63,17 @@
         .status-transition:hover {
             transform: translateY(-2px);
         }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body class="bg-corbusier-cream font-sans antialiased">
@@ -105,7 +116,7 @@
                         <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
                     </button>
                     <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
-                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
                         <div class="hidden md:block">
                             <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
                             <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
@@ -155,7 +166,7 @@
                                 <div class="flex flex-wrap items-center gap-4 text-sm">
                                     <div class="flex items-center gap-2">
                                         <i class="fa-solid fa-user text-corbusier-blue"></i>
-                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                        <img class="w-6 h-6 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                                         <span class="text-corbusier-charcoal font-semibold">Mike Wilson</span>
                                     </div>
                                     <div class="flex items-center gap-2">
@@ -494,7 +505,7 @@
 
                         <div class="flex gap-4">
                             <div class="flex-shrink-0">
-                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                             </div>
                             <div class="flex-1">
                                 <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
@@ -543,7 +554,7 @@
 
                         <div class="flex gap-4">
                             <div class="flex-shrink-0">
-                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                <img class="w-10 h-10 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                             </div>
                             <div class="flex-1">
                                 <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
@@ -559,9 +570,10 @@
 
                     <div class="mt-6 pt-6 border-t border-corbusier-border">
                         <div class="flex items-start gap-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-card flex-shrink-0" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-card flex-shrink-0" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
                             <div class="flex-1">
-                                <textarea placeholder="Add a comment..." rows="3" class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
+                                <label for="task-comment" class="sr-only">Comment</label>
+                                <textarea id="task-comment" placeholder="Add a comment..." rows="3" class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all resize-none"></textarea>
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="flex items-center gap-2">
                                         <button type="button" aria-label="Attach file" class="text-sm text-corbusier-gray hover:text-corbusier-charcoal">
@@ -599,7 +611,7 @@
                             <p class="text-sm font-semibold text-corbusier-charcoal mb-2">Add Prometheus metrics endpoints</p>
                             <p class="text-xs text-corbusier-gray mb-3">Similar performance optimization work</p>
                             <div class="flex items-center gap-2">
-                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
                                 <span class="text-xs text-corbusier-gray">John Doe</span>
                             </div>
                         </div>
@@ -612,7 +624,7 @@
                             <p class="text-sm font-semibold text-corbusier-charcoal mb-2">Optimize API response caching mechanism</p>
                             <p class="text-xs text-corbusier-gray mb-3">Related performance improvements</p>
                             <div class="flex items-center gap-2">
-                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
                                 <span class="text-xs text-corbusier-gray">John Doe</span>
                             </div>
                         </div>
@@ -625,7 +637,7 @@
                             <p class="text-sm font-semibold text-corbusier-charcoal mb-2">Upgrade Node.js to v20 LTS</p>
                             <p class="text-xs text-corbusier-gray mb-3">Infrastructure upgrade in same project</p>
                             <div class="flex items-center gap-2">
-                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                                 <span class="text-xs text-corbusier-gray">Mike Wilson</span>
                             </div>
                         </div>
@@ -638,7 +650,7 @@
                             <p class="text-sm font-semibold text-corbusier-charcoal mb-2">Implement GraphQL subscriptions</p>
                             <p class="text-xs text-corbusier-gray mb-3">Real-time features using new pooling</p>
                             <div class="flex items-center gap-2">
-                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
+                                <img class="w-5 h-5 rounded-full border border-white" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="" />
                                 <span class="text-xs text-corbusier-gray">Alex Kim</span>
                             </div>
                         </div>
@@ -691,8 +703,8 @@
 
                     <div class="space-y-4">
                         <div>
-                            <p class="text-xs text-corbusier-gray uppercase font-semibold mb-2">Priority</p>
-                            <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
+                            <label for="task-priority" class="text-xs text-corbusier-gray uppercase font-semibold mb-2 block">Priority</label>
+                            <select id="task-priority" class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue">
                                 <option>Low</option>
                                 <option>Medium</option>
                                 <option selected>High</option>
@@ -703,7 +715,7 @@
                         <div>
                             <p class="text-xs text-corbusier-gray uppercase font-semibold mb-2">Assignee</p>
                             <div class="flex items-center gap-3 p-3 bg-corbusier-cream rounded-lg border border-corbusier-border">
-                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="avatar" />
+                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="" />
                                 <div>
                                     <p class="text-sm font-semibold text-corbusier-charcoal">Mike Wilson</p>
                                     <p class="text-xs text-corbusier-gray">Senior Backend Engineer</p>
@@ -744,9 +756,9 @@
                         <div>
                             <p class="text-xs text-corbusier-gray uppercase font-semibold mb-2">Watchers</p>
                             <div class="flex items-center -space-x-2">
-                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
-                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="avatar" />
-                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="avatar" />
+                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="" />
+                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="" />
+                                <img class="w-8 h-8 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="" />
                                 <button type="button" class="w-8 h-8 rounded-full border-2 border-white shadow-card bg-corbusier-blue text-white text-xs font-bold flex items-center justify-center hover:bg-ibm-blue transition-colors">
                                     +2
                                 </button>

@@ -9,12 +9,14 @@ Tailwind CSS v4 is a complete rewrite with a new high-performance Oxide engine, 
 ## Installation & Setup
 
 ### Basic Setup
+
 ```css
 /* styles.css */
 @import "tailwindcss";
 ```
 
 ### With Vite
+
 ```js
 // vite.config.js
 import { defineConfig } from 'vite'
@@ -26,6 +28,7 @@ export default defineConfig({
 ```
 
 ### Package Installation
+
 ```bash
 npm install tailwindcss @tailwindcss/vite
 ```
@@ -70,6 +73,7 @@ npm install tailwindcss @tailwindcss/vite
 ```
 
 ### Legacy Config Support (if needed)
+
 ```css
 @import "tailwindcss";
 @config "./tailwind.config.js";
@@ -154,10 +158,11 @@ Use the `@utility` directive instead of `@layer utilities`:
 ## New Features in v4
 
 ### Container Queries (Built-in)
+
 ```html
 <div class="@container">
   <div class="grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3">
-    <div class="@min-w-64:text-lg @max-w-96:bg-blue-100">
+    <div class="@min-[512px]:text-lg @max-[384px]:bg-blue-100">
       Responsive to container size
     </div>
   </div>
@@ -165,6 +170,7 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 ### 3D Transforms
+
 ```html
 <div class="perspective-1000">
   <div class="rotate-x-45 rotate-y-12 scale-z-110 translate-z-24 transform-3d">
@@ -174,6 +180,7 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 ### Enhanced Gradients
+
 ```html
 <!-- Linear gradients with angles -->
 <div class="bg-linear-45 from-blue-500 to-purple-500"></div>
@@ -186,6 +193,7 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 ### Text Shadows
+
 ```html
 <h1 class="text-shadow-lg text-shadow-blue-500/50">
   Text with colored shadow
@@ -193,6 +201,7 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 ### Mask Utilities
+
 ```html
 <div class="mask-radial mask-cover">
   <img src="image.jpg" alt="Masked image" />
@@ -201,14 +210,16 @@ Use the `@utility` directive instead of `@layer utilities`:
 
 ### New Variants
 
-#### @starting-style (for animations)
+#### `starting` variant (for animations)
+
 ```html
-<div class="opacity-100 @starting-style:opacity-0 transition-opacity">
+<div class="opacity-100 starting:opacity-0 transition-opacity">
   Animates in on mount
 </div>
 ```
 
 #### not-* variant
+
 ```html
 <div class="bg-blue-500 not-hover:bg-gray-500">
   Blue except when hovering
@@ -216,6 +227,7 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 #### nth-* variants
+
 ```html
 <div class="nth-2:bg-red-500 nth-odd:bg-blue-500">
   Nth child styling
@@ -223,17 +235,11 @@ Use the `@utility` directive instead of `@layer utilities`:
 ```
 
 #### inert variant
+
 ```html
 <div class="inert:opacity-50 inert:pointer-events-none">
   Styled when inert
 </div>
-```
-
-#### in-* variant (like group-* but without group class)
-```html
-<article>
-  <h2 class="in-article:text-lg">Styled when inside article</h2>
-</article>
 ```
 
 ### Modern Color System
@@ -349,9 +355,9 @@ src/
 </h1>
 ```
 
-### Animation with @starting-style
+### Animation with `starting`
 ```html
-<div class="translate-y-0 @starting-style:translate-y-full transition-transform duration-500">
+<div class="translate-y-0 starting:translate-y-full transition-transform duration-500">
   Slides up on mount
 </div>
 ```
@@ -1164,10 +1170,8 @@ forced-color-adjust-auto, forced-color-adjust-none
 #### Container Query Variants
 ```text
 @xs:, @sm:, @md:, @lg:, @xl:, @2xl:, @3xl:, @4xl:, @5xl:, @6xl:, @7xl:
-@min-w-0:, @min-w-xs:, @min-w-sm:, @min-w-md:, @min-w-lg:, @min-w-xl:, @min-w-2xl:, @min-w-3xl:, @min-w-4xl:, @min-w-5xl:, @min-w-6xl:, @min-w-7xl:
-@max-w-xs:, @max-w-sm:, @max-w-md:, @max-w-lg:, @max-w-xl:, @max-w-2xl:, @max-w-3xl:, @max-w-4xl:, @max-w-5xl:, @max-w-6xl:, @max-w-7xl:
-@min-h-0:, @min-h-xs:, @min-h-sm:, @min-h-md:, @min-h-lg:, @min-h-xl:, @min-h-2xl:, @min-h-3xl:, @min-h-4xl:, @min-h-5xl:, @min-h-6xl:, @min-h-7xl:
-@max-h-xs:, @max-h-sm:, @max-h-md:, @max-h-lg:, @max-h-xl:, @max-h-2xl:, @max-h-3xl:, @max-h-4xl:, @max-h-5xl:, @max-h-6xl:, @max-h-7xl:
+@min-[320px]:, @min-[512px]:, @min-[768px]:
+@max-[384px]:, @max-[640px]:, @max-[960px]:
 ```
 
 ### Responsive Design
@@ -1197,7 +1201,7 @@ peer-hover:, peer-focus:, peer-focus-within:, peer-focus-visible:, peer-active:,
 
 #### NEW Variants in v4
 ```text
-@starting-style:, not-*, nth-*, in-*, inert:, open: (for popovers)
+starting:, not-*, nth-*, in-*, inert:, open: (for popovers)
 ```
 
 ### Media Queries

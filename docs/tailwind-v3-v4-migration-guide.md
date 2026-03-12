@@ -6,6 +6,7 @@
     *   V4 ships with a completely rewritten engine. Expect drastically reduced build times – typically sub-10ms for most projects, even large ones often under 100ms. This is achieved by more efficiently parsing sources and generating CSS on-demand.
 2.  **CSS-First Configuration via `@theme`:**
     *   The primary configuration mechanism shifts from `tailwind.config.js` (for theme values) to the main CSS file using the `@theme` directive.
+
         ```css
         /* app.css */
         @import "tailwindcss";
@@ -17,6 +18,7 @@
           --spacing: 0.25rem; /* Base for numeric spacing utilities */
         }
         ```
+
     *   Theme values are defined as CSS custom properties (variables). Tailwind uses these to generate corresponding utility classes (e.g., `font-sans`, `bg-brand-500`, `lg:p-(--spacing-4)`) and also makes these variables globally available for use in custom CSS or arbitrary values (e.g., `var(--color-brand-500)`).
     *   The default theme is still provided but can be extended, overridden, or entirely replaced using this CSS-native approach. For instance, `--color-*: initial;` within `@theme` will remove all default color utilities, allowing a fully custom palette.
 3.  **Modern CSS Baseline:**
@@ -52,12 +54,14 @@
     *   Variant stacking order is now left-to-right (e.g., `dark:md:hover:bg-red-500`) for CSS-like consistency.
 5.  **Custom Utility Definition:**
     *   `@utility` directive replaces `@layer components` or `@layer utilities` for defining custom, variant-aware utility classes. This ensures proper integration with Tailwind's engine and cascade layers.
+
         ```css
         @utility btn-primary {
           background-color: var(--color-brand-500);
           /* ... */
         }
         ```
+
     *   Functional utilities (e.g., `tab-*` matching `tab-2`, `tab-github`) are defined using `@utility` with a `--value()` function to parse arguments and match theme keys or arbitrary values.
 6.  **`@apply` in Scoped Styles (Vue SFCs, Svelte, CSS Modules):**
     *   Due to isolated processing of these style blocks by build tools, theme variables, custom utilities, and variants defined in global CSS are not automatically available.

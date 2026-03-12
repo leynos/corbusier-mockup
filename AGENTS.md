@@ -2,21 +2,22 @@
 
 ## Code Style and Structure
 
-- **Code is for humans.** Write your code with clarity and empathy—assume a
-  tired teammate will need to debug it at 3 a.m.
-- **Comment *why*, not *what*.** Explain assumptions, edge cases, trade-offs, or
-  complexity. Don't echo the obvious.
-- **Clarity over cleverness.** Be concise, but favour explicit over terse or
-  obscure idioms. Prefer code that's easy to follow.
-- **Use functions and composition.** Avoid repetition by extracting reusable
-  logic. Prefer generators or comprehensions, and declarative code to
-  imperative repetition when readable.
+- **Code is for humans.** Code should be written with clarity and empathy, with
+  the expectation that a tired teammate may need to debug it at 3 a.m.
+- **Comment *why*, not *what*.** Comments should explain assumptions,
+  edge cases, trade-offs, or complexity. Avoid echoing the obvious.
+- **Clarity over cleverness.** Favour explicit constructs over terse or
+  obscure idioms. Prefer code that is easy to follow.
+- **Use functions and composition.** Repetition should be reduced by
+  extracting reusable logic. Generators or comprehensions are preferred, along
+  with declarative code when readability remains strong.
 - **Small, meaningful functions.** Functions must be small, clear in purpose,
   single responsibility, and obey command/query segregation.
-- **Clear commit messages.** Commit messages should be descriptive, explaining
-  what was changed and why.
-- **Name things precisely.** Use clear, descriptive variable and function names.
-  For booleans, prefer names with `is`, `has`, or `should`.
+- **Clear commit messages.** Commit messages should be descriptive,
+  explaining what changed and why.
+- **Name things precisely.** Clear, descriptive variable and function
+  names are preferred. Boolean names should prefer `is`, `has`, or
+  `should`.
 - **Structure logically.** Each file should encapsulate a coherent module. Group
   related code (e.g., models + utilities + fixtures) close together.
 - **Group by feature, not layer.** Colocate views, logic, fixtures, and helpers
@@ -161,12 +162,12 @@ browser‑only runtime.
 - `test`: `bun test --preload ./tests/setup-happy-dom.ts`
 - `test:e2e`: `playwright test`
 
-  Prefer Bun's direct shortcuts: `bun fmt`, `bun lint`, `bun check:types`,
-  `bun test`, and `bun test:e2e`. Bun accepts `bun run <name>` too, but the
-  terse form is faster to type. `lint` covers Biome checks, whilst
-  `check:types` keeps TypeScript errors visible. The `test` script uses Bun's
-  built-in runner, preloading the Happy DOM shim so component tests can render
-  without a browser.
+  Preferred Bun shortcuts are `bun fmt`, `bun lint`, `bun check:types`,
+  `bun test`, and `bun test:e2e`. `bun run <name>` remains available when the
+  explicit form is clearer. `lint` covers Biome checks, whilst `check:types`
+  keeps TypeScript errors visible. The `test` script uses Bun's built-in
+  runner, preloading the Happy DOM shim so component tests can render without
+  a browser.
 
   Call Biome or other CLIs through `bunx` when ad hoc execution makes sense:
 
@@ -248,7 +249,7 @@ Keep docs close to code.
   deterministic and parallel‑safe.
 - **Fixtures**: Use factories/builders for component props and server
   responses. Avoid ad hoc object literals in tests.
-- **Parameterised tests**: Drive variations with helper builders or tight loops
+- **Parameterized tests**: Drive variations with helper builders or tight loops
   rather than copy‑pasting cases.
 - **Mocking**: Prefer dependency injection. When stubbing modules, lean on
   the `mock` helpers provided by `bun:test`.
@@ -301,7 +302,7 @@ Keep docs close to code.
 
 - **CSP**: Ship a Content Security Policy where deployment allows it. For SPA
   hosting, prefer hashed scripts and forbid `eval`/`new Function`.
-- **Trusted Types**: If embedding third‑party HTML, gate through a sanitiser
+- **Trusted Types**: If embedding third‑party HTML, gate through a sanitizer
   and (where supported) Trusted Types policies.
 - **Secrets**: Never hard‑code secrets in client bundles. Use public,
   least‑privilege tokens only; treat everything as public.
@@ -338,9 +339,9 @@ Keep docs close to code.
   `select` to project server data for components. Wire `AbortSignal` to
   fetches. Use `retry` policies appropriate to the endpoint.
 - **Router** (if used): Code‑split per route; prefetch data on navigation where
-  it improves perceived performance. Handle not‑found/unauthorised with typed
+  it improves perceived performance. Handle not‑found/unauthorized with typed
   loaders.
-- **Table** (if used): Keep row models pure; virtualise for large sets; memoise
+- **Table** (if used): Keep row models pure; virtualize for large sets; memoise
   column defs.
 - **State**: Encapsulate server state with TanStack Query and model complex
   local state with reducers or state machines inside custom hooks.
@@ -455,9 +456,10 @@ The following tooling is available in this environment:
   1. Call `playwright.navigate` with the target URL to load the changed page.
   2. Call `playwright.screenshot` (set `fullPage: true` when useful) to
      capture current visuals. Screenshots are written under
-     `/tmp/playwright-mcp-output/`; inspect them before you commit.
-  3. Repeat after making refinements so you can spot regressions early.
-- `a11y MCP` – Run fast accessibility sweeps on the same pages you test with
+     `/tmp/playwright-mcp-output/`; screenshots should be reviewed before
+     shipping changes.
+  3. Repeat after refinements so regressions are caught early.
+- `a11y MCP` – Run fast accessibility sweeps on the same pages covered with
   Playwright. After navigating, invoke `a11y.scan_page` to collect
   automated issues. Review the findings, fix blockers, and rerun the
   scan until it is clean. Pair this with manual keyboard checks before

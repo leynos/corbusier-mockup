@@ -459,7 +459,7 @@ body {
 
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<div class="ds-page" id="main">
+<main id="main" class="ds-page" tabindex="-1">
 
   <!-- HEADER -->
   <header class="ds-header">
@@ -469,10 +469,10 @@ body {
       <p class="ds-version">v0.4.2 — Polychromie Architecturale · Dynamic 45° chamfer with SVG fill</p>
     </div>
     <div class="ds-theme-toggle" role="radiogroup" aria-label="Theme">
-      <button type="button" class="active" role="radio" aria-checked="true" aria-label="Light theme" data-theme="light" onclick="setTheme('light')">
+      <button type="button" class="active" role="radio" aria-checked="true" tabindex="0" aria-label="Light theme" data-theme="light" onclick="setTheme('light')">
         <i data-lucide="sun" style="width:16px;height:16px"></i>
       </button>
-      <button type="button" role="radio" aria-checked="false" aria-label="Dark theme" data-theme="dark" onclick="setTheme('dark')">
+      <button type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="Dark theme" data-theme="dark" onclick="setTheme('dark')">
         <i data-lucide="moon" style="width:16px;height:16px"></i>
       </button>
     </div>
@@ -765,7 +765,7 @@ body {
       </div>
       <div>
         <h3 class="ds-subsection-title">Backend registry card</h3>
-        <div class="ds-card ds-card-interactive" tabindex="0">
+        <div class="ds-card ds-card-interactive">
           <div class="ds-card-header">
             <span class="ds-card-title">Claude Code SDK</span>
             <span class="badge badge-done" style="font-size:11px;padding:2px 8px"><span class="badge-icon">✓</span> Active</span>
@@ -1052,18 +1052,66 @@ body {
     </div>
   </section>
 
-</div>
+</main>
 
 <script>
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  document.querySelectorAll('.ds-theme-toggle button').forEach(btn => {
+  const buttons = document.querySelectorAll('.ds-theme-toggle button');
+  buttons.forEach(btn => {
     const isActive = btn.dataset.theme === theme;
     btn.classList.toggle('active', isActive);
     btn.setAttribute('aria-checked', String(isActive));
+    btn.tabIndex = isActive ? 0 : -1;
   });
 }
-document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  const themeToggle = document.querySelector('.ds-theme-toggle');
+  if (!themeToggle) return;
+
+  const getButtons = () => Array.from(themeToggle.querySelectorAll('button'));
+  const focusButton = (button) => {
+    if (!button) return;
+    setTheme(button.dataset.theme);
+    button.focus();
+  };
+
+  themeToggle.addEventListener('keydown', (event) => {
+    const buttons = getButtons();
+    const currentIndex = buttons.findIndex((button) => button === document.activeElement);
+    if (currentIndex === -1) return;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowUp': {
+        event.preventDefault();
+        const nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+        focusButton(buttons[nextIndex]);
+        break;
+      }
+      case 'ArrowRight':
+      case 'ArrowDown': {
+        event.preventDefault();
+        const nextIndex = (currentIndex + 1) % buttons.length;
+        focusButton(buttons[nextIndex]);
+        break;
+      }
+      case 'Home':
+        event.preventDefault();
+        focusButton(buttons[0]);
+        break;
+      case 'End':
+        event.preventDefault();
+        focusButton(buttons[buttons.length - 1]);
+        break;
+      default:
+        break;
+    }
+  });
+});
 </script>
 </body>
 </html>

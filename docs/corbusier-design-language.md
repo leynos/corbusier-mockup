@@ -24,7 +24,7 @@ SaaS blue.
 
 The application spans four archetype families:
 
-- **Dashboard / data pages** — system health, KPIs, agent utilisation,
+- **Dashboard / data pages** — system health, KPIs, agent utilization,
   activity feeds.
 - **Archive / index pages** — task lists, project lists, conversation lists,
   tool registries, user directories.
@@ -87,7 +87,7 @@ the same instinct: colours derived from stone, verdigris, terracotta, olive
 wood, and slate rather than from UI convention. The system has four chromatic
 families, each with a communicative role:
 
-- **Teal family** (verdigris / oxidised copper) — primary accent, focus,
+- **Teal family** (verdigris / oxidized copper) — primary accent, focus,
   active navigation, links. The colour of the operations room's structural
   elements. Institutional confidence without corporate sterility.
 - **Terracotta family** (fired clay / rust) — action, urgency, calls to
@@ -112,7 +112,7 @@ Slate blue · Charcoal.
 Extended palette (Le Corbusier Polychromie range): Olive-to-forest green
 spectrum, seafoam-to-deep-teal spectrum, peach-to-umber spectrum,
 dusty-rose-to-plum spectrum. Each usable at multiple saturation levels for
-data visualisation and chart palettes.
+data visualization and chart palettes.
 
 ---
 
@@ -121,8 +121,8 @@ data visualisation and chart palettes.
 ### Dashboard (`/`)
 
 **This page helps** an engineering lead **understand** the current health and
-activity of their orchestration environment **so that** they can identify
-problems, gauge utilisation, and prioritise their attention.
+activity of their orchestration environment **so that** attention can be
+directed to problems, gauge utilization, and prioritize what needs action.
 
 **Five-second promise:** "Your system is healthy / degraded / broken, and
 here is what happened recently."
@@ -133,7 +133,7 @@ here is what happened recently."
 
 **Trust cues:** Live health indicators with timestamps, real numbers (not
 abstract gauges), recency markers on the activity feed. This is the
-wall-mounted status board: you walk in and you know.
+wall-mounted status board: upon entry, the state of the room is obvious.
 
 ### Task Detail (`/tasks/:id`)
 
@@ -141,8 +141,8 @@ wall-mounted status board: you walk in and you know.
 context, dependencies, and state **so that** they can advance the task, unblock
 downstream work, or hand it off with full context.
 
-**Five-second promise:** "This task is in *state X*, blocked by *Y*, and here
-is everything you need to act on it."
+**Five-second promise:** "This task is in *state X*, blocked by *Y*, and all
+necessary information to act on it is present."
 
 **Primary action:** Transition the task to its next valid state.
 
@@ -151,7 +151,7 @@ is everything you need to act on it."
 **Trust cues:** Audit timeline with immutable ordering, dependency graph
 showing real upstream/downstream tasks, state machine controls that disable
 invalid transitions. This is the index card on the task board: all the
-information is right there, and you can move it to the next column.
+information is present, and the item can move to the next column.
 
 ### Conversation Detail (`/projects/:slug/conversations/:id`)
 
@@ -186,7 +186,7 @@ language, architectural wayfinding — while staying warm through materials
 
 **Design-school lens:** Neo-modern dominant. Brutalist seasoning in the
 exposed structural elements (condensed uppercase section labels, monospace
-IDs, visible borders as load-bearing walls). Data-visualisation discipline
+IDs, visible borders as load-bearing walls). Data-visualization discipline
 in all chart and metric treatment. The mid-century operations room as
 guiding metaphor.
 
@@ -228,7 +228,7 @@ guiding metaphor.
 watercolour-ink illustrations for empty states, onboarding, and error
 pages — drawn in the style of the operations room vibe images: warm,
 human, slightly loose, with visible linework. Functional iconography
-(Lucide or Phosphor) for navigation and status. System-state visualisation
+(Lucide or Phosphor) for navigation and status. System-state visualization
 (sparklines, progress bars, health gauges) does the visual work.
 
 **Motion hypothesis:**
@@ -267,9 +267,9 @@ signal by appearing only where attention is genuinely required.
 | Rank | Element | Visual volume | Notes |
 |------|---------|---------------|-------|
 | 1 | System health status (healthy/degraded/critical) | Loudest | The answer to "is anything on fire?" |
-| 2 | KPI cards (SLA, active tasks, agent utilisation, tool success rate) | High | Context for the health status |
+| 2 | KPI cards (SLA, active tasks, agent utilization, tool success rate) | High | Context for the health status |
 | 3 | Recent activity feed | Medium-high | Temporal narrative |
-| 4 | Agent utilisation summary | Medium | Secondary data |
+| 4 | Agent utilization summary | Medium | Secondary data |
 | 5 | Navigation (sidebar) | Medium-low | Always visible, never dominant |
 | 6 | Header (search, notifications, user menu) | Low | Utility |
 
@@ -295,7 +295,7 @@ signal by appearing only where attention is genuinely required.
   can build a mental model of the page.
 - **First-scroll narrative (Dashboard):** First screen shows health
   status + KPI cards + the first three activity items. Scroll reveals the
-  full activity feed and agent utilisation. The first screen answers the
+  full activity feed and agent utilization. The first screen answers the
   critical question; the scroll provides depth.
 
 ---
@@ -368,7 +368,7 @@ signal by appearing only where attention is genuinely required.
 Dark theme uses teal-charcoal, not cool blue-black. Accent colours lighten
 to maintain contrast.
 
-#### Data-visualisation palette
+#### Data-visualization palette
 
 For charts, graphs, and categorical distinction, the extended Polychromie
 range provides a pre-tested sequence of hues with sufficient mutual contrast:

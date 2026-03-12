@@ -131,7 +131,7 @@
                             </div>
                         </div>
 
-                        <form id="signin-form" class="space-y-5">
+                        <form id="signin-form" class="space-y-5" method="post" action="#">
                             <div>
                                 <label for="email" class="block text-sm font-semibold text-corbusier-charcoal mb-2">Email address</label>
                                 <div class="relative">
@@ -280,8 +280,20 @@
 
     <script>
         window.addEventListener('load', function() {
+            const signinForm = document.getElementById('signin-form');
+            const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             const passwordToggle = document.getElementById('password-visibility-toggle');
+
+            if (signinForm && emailInput && passwordInput) {
+                signinForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value;
+                    console.log('Mock sign-in submitted:', { email, hasPassword: password.length > 0 });
+                });
+            }
 
             if (!passwordInput || !passwordToggle) {
                 return;
