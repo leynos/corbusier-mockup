@@ -15,7 +15,7 @@ daisyUI 5 provides class names for common UI components
 
 1. daisyUI 5 requires Tailwind CSS 4
 2. `tailwind.config.js` file is deprecated in Tailwind CSS v4. do not use `tailwind.config.js`. Tailwind CSS v4 only needs `@import "tailwindcss";` in the CSS file if it's a node dependency.
-3. daisyUI 5 can be installed using `npm i -D daisyui@latest` and then adding `@plugin "daisyui";` to the CSS file
+3. daisyUI 5 can be installed using `npm i -D daisyui@5` and then adding `@plugin "daisyui";` to the CSS file
 4. daisyUI is suggested to be installed as a dependency, but to use it from CDN, include Tailwind CSS and daisyUI CDN files:
 
 ```html
@@ -828,7 +828,7 @@ A FAB that opens a 3 other buttons in the corner of page vertically
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <button class="btn btn-lg btn-circle">{Icon1}</button>
   <button class="btn btn-lg btn-circle">{Icon2}</button>
   <button class="btn btn-lg btn-circle">{Icon3}</button>
@@ -839,7 +839,7 @@ A FAB that opens a 3 other buttons in the corner of page vertically and they hav
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
   <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
@@ -850,7 +850,7 @@ FAB with rectangle buttons. These are not circular buttons so they can have more
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <button class="btn btn-lg">{Label1}</button>
   <button class="btn btn-lg">{Label2}</button>
   <button class="btn btn-lg">{Label3}</button>
@@ -861,7 +861,7 @@ FAB with close button. When FAB is open, the original button is replaced with a 
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <div class="fab-close">Close <span class="btn btn-circle btn-lg btn-error">✕</span></div>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
@@ -873,7 +873,7 @@ FAB with Main Action button. When FAB is open, the original button is replaced w
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <div class="fab-main-action">
     {LabelMainAction}<button class="btn btn-circle btn-secondary btn-lg">{IconMainAction}</button>
   </div>
@@ -887,7 +887,7 @@ FAB Flower. It opens the buttons in a flower shape (quarter circle) arrangement 
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
   <button class="btn btn-lg btn-circle">{Icon1}</button>
   <button class="btn btn-lg btn-circle">{Icon2}</button>
@@ -899,7 +899,7 @@ FAB Flower with tooltips. There's no space for a text label in a quarter circle,
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
   <div class="tooltip tooltip-left" data-tip="{Label1}">
     <button class="btn btn-lg btn-circle">{Icon1}</button>
@@ -1062,9 +1062,9 @@ Hero is a component for displaying a large box or image with a title and descrip
 
 ### hover-gallery
 
-Hover Gallery is a container of images. The first image is visible by default, and hovering horizontally reveals the other images. Hover Gallery is useful for product cards in ecommerce sites, portfolios, or image galleries. Hover Gallery can include up to 10 images.
+Hover Gallery is a container of images. The first image is visible by default, and hovering horizontally reveals the remaining images. Hover Gallery is useful for product cards in e-commerce sites, portfolios, or image galleries. Hover Gallery can include up to 10 images.
 
-[indicator docs](https://daisyui.com/components/hover-gallery/)
+[hover-gallery docs](https://daisyui.com/components/hover-gallery/)
 
 #### Class names
 
@@ -1085,7 +1085,7 @@ Hover Gallery is a container of images. The first image is visible by default, a
 
 - hover-gallery can be a `<div>` or a `<figure>`
 - hover-gallery can include up to 10 images
-- hover-gallery needs a max width otherwise if fills the container width
+- hover-gallery needs a max width; otherwise it fills the container width
 - Images must be the same dimensions for proper alignment
 
 ### indicator
@@ -1463,7 +1463,7 @@ Modal displays a dialog or box on button activation
 Using HTML dialog element
 
 ```html
-<button onclick="my_modal.showModal()">Open modal</button>
+<button type="button" onclick="document.getElementById('my_modal').showModal()">Open modal</button>
 <dialog id="my_modal" class="modal">
   <div class="modal-box">{CONTENT}</div>
   <form method="dialog" class="modal-backdrop"><button>close</button></form>
