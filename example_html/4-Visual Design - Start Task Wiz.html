@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Task - Step 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .policy-acknowledgement:checked + label {
+            border-color: #4A6FA5;
+            background-color: #F0F4FA;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="wizard-header" class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">Start New Task</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-sm text-corbusier-teal"></i>
+                        <span class="text-sm">Review configuration, acknowledge policy decisions, and start task execution</span>
+                    </p>
+                </div>
+                <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                </button>
+            </div>
+
+            <div id="progress-indicator" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-blue rounded-full flex items-center justify-center text-white font-bold">5</div>
+                        <div>
+                            <p class="font-bold text-corbusier-charcoal">Review & Start</p>
+                            <p class="text-xs text-corbusier-gray">Final confirmation and task initialization</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-green-500"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-corbusier-blue"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-corbusier-blue rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
+                    </div>
+                </div>
+                <div class="w-full bg-corbusier-border rounded-full h-2">
+                    <div class="bg-corbusier-blue h-2 rounded-full transition-all duration-300" style="width: 100%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-corbusier-gray font-mono">
+                    <span>Step 5 of 5</span>
+                    <span>100% Complete</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="configuration-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-corbusier-blue"></i>
+                        Complete Configuration Summary
+                    </h2>
+                    <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit Configuration
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-corbusier-blue rounded-lg flex items-center justify-center text-white">
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+                            <h3 class="font-bold text-corbusier-charcoal">Origin & Project</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Source</p>
+                                <p class="font-mono font-semibold text-corbusier-charcoal">ISSUE-1847</p>
+                                <p class="text-xs text-corbusier-gray mt-1">Optimize API response caching mechanism</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Project</p>
+                                <p class="font-semibold text-corbusier-charcoal">Platform API v3</p>
+                                <p class="text-xs text-corbusier-gray mt-1">Main production API service</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Milestone</p>
+                                <p class="font-semibold text-corbusier-charcoal">Q1 2024 Performance</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Priority</p>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">
+                                    <i class="fa-solid fa-flag"></i>High
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-corbusier-teal rounded-lg flex items-center justify-center text-white">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <h3 class="font-bold text-corbusier-charcoal">Agent Backend & Tools</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Agent Backend</p>
+                                <p class="font-semibold text-corbusier-charcoal">UX Pilot 3.5 Sonnet</p>
+                                <p class="text-xs text-corbusier-gray mt-1">Advanced reasoning, context: 200K tokens</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Tools Enabled</p>
+                                <p class="font-semibold text-corbusier-charcoal">8 Selected</p>
+                                <p class="text-xs text-corbusier-gray mt-1">Code editor, terminal, git, file system, search</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Policy Profile</p>
+                                <p class="font-semibold text-corbusier-charcoal">Standard Development</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Max Iterations</p>
+                                <p class="font-mono font-semibold text-corbusier-charcoal">50</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-corbusier-mustard rounded-lg flex items-center justify-center text-white">
+                                <i class="fa-brands fa-github"></i>
+                            </div>
+                            <h3 class="font-bold text-corbusier-charcoal">Workspace Configuration</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Repository</p>
+                                <p class="font-mono font-semibold text-corbusier-charcoal">acme-corp/platform-api-v3</p>
+                                <p class="text-xs text-corbusier-gray mt-1">Full read/write access</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Branch</p>
+                                <p class="font-mono font-semibold text-corbusier-charcoal">task/1847-optimize-api-response-caching</p>
+                                <p class="text-xs text-corbusier-gray mt-1">From: main</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Environment</p>
+                                <p class="font-semibold text-corbusier-charcoal">4 Variables Configured</p>
+                                <p class="text-xs text-corbusier-gray mt-1">All secrets encrypted</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Compute</p>
+                                <p class="font-mono font-semibold text-corbusier-charcoal">2 vCPU / 4 GB RAM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="policy-acknowledgement" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-corbusier-orange"></i>
+                        Policy Acknowledgement & Audit Trail
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Review and acknowledge policy decisions before task execution. All actions will be recorded in the immutable audit trail.</p>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-info-circle text-corbusier-blue text-xl mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-corbusier-charcoal mb-2">Policy Evaluation Results</h4>
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex items-center justify-between p-3 bg-white rounded border border-blue-200">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                                            <span class="text-corbusier-charcoal">Code Modification Policy</span>
+                                        </div>
+                                        <span class="text-xs font-mono text-green-600 font-bold">APPROVED</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded border border-blue-200">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                                            <span class="text-corbusier-charcoal">Branch Creation Policy</span>
+                                        </div>
+                                        <span class="text-xs font-mono text-green-600 font-bold">APPROVED</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded border border-blue-200">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                                            <span class="text-corbusier-charcoal">Resource Allocation Policy</span>
+                                        </div>
+                                        <span class="text-xs font-mono text-green-600 font-bold">APPROVED</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded border border-blue-200">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                                            <span class="text-corbusier-charcoal">Secret Access Policy</span>
+                                        </div>
+                                        <span class="text-xs font-mono text-green-600 font-bold">APPROVED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-acknowledgement-wrapper space-y-3">
+                        <div>
+                            <input type="checkbox" id="policy-1" class="policy-acknowledgement hidden">
+                            <label for="policy-1" class="flex items-start gap-3 p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                                <div class="w-5 h-5 border-2 border-corbusier-border rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-check text-white text-xs hidden"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-corbusier-charcoal text-sm mb-1">I acknowledge that this task will create a new branch and modify code in the repository</p>
+                                    <p class="text-xs text-corbusier-gray">All changes will be tracked via git and subject to code review before merge</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox" id="policy-2" class="policy-acknowledgement hidden">
+                            <label for="policy-2" class="flex items-start gap-3 p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                                <div class="w-5 h-5 border-2 border-corbusier-border rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-check text-white text-xs hidden"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-corbusier-charcoal text-sm mb-1">I understand that compute resources will be allocated and billed to my team's account</p>
+                                    <p class="text-xs text-corbusier-gray">Estimated cost: $0.24/hour for 2 vCPU, 4 GB RAM configuration</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox" id="policy-3" class="policy-acknowledgement hidden">
+                            <label for="policy-3" class="flex items-start gap-3 p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                                <div class="w-5 h-5 border-2 border-corbusier-border rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-check text-white text-xs hidden"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-corbusier-charcoal text-sm mb-1">I acknowledge that all task actions will be recorded in an immutable audit trail</p>
+                                    <p class="text-xs text-corbusier-gray">Audit records include timestamps, user identity, tool executions, and policy decisions</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox" id="policy-4" class="policy-acknowledgement hidden">
+                            <label for="policy-4" class="flex items-start gap-3 p-4 border-2 border-corbusier-border rounded-lg cursor-pointer hover:border-corbusier-blue transition-all">
+                                <div class="w-5 h-5 border-2 border-corbusier-border rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-check text-white text-xs hidden"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-corbusier-charcoal text-sm mb-1">I confirm that I have reviewed the agent backend, tools, and workspace configuration</p>
+                                    <p class="text-xs text-corbusier-gray">Configuration can be modified later but may require task restart</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-exclamation-triangle text-corbusier-mustard text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Governance Notice</h4>
+                            <p class="text-xs text-corbusier-gray">By starting this task, you agree to comply with all organizational policies and governance requirements. Violations may result in automatic task termination and audit review.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="audit-trail-preview" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-corbusier-teal"></i>
+                        Audit Trail Preview
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Initial audit records that will be created upon task start</p>
+                </div>
+
+                <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                    <div class="space-y-4 text-xs font-mono">
+                        <div class="flex items-start gap-3 pb-4 border-b border-corbusier-border">
+                            <div class="w-2 h-2 bg-corbusier-blue rounded-full mt-1.5 flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-corbusier-charcoal">TASK_CREATED</span>
+                                    <span class="text-corbusier-gray">[Timestamp: On Start]</span>
+                                </div>
+                                <div class="space-y-1 text-corbusier-gray">
+                                    <p>User: john.doe@acme.com</p>
+                                    <p>Task ID: [Generated UUID]</p>
+                                    <p>Origin: ISSUE-1847</p>
+                                    <p>Project: Platform API v3</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 pb-4 border-b border-corbusier-border">
+                            <div class="w-2 h-2 bg-corbusier-blue rounded-full mt-1.5 flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-corbusier-charcoal">POLICY_EVALUATED</span>
+                                    <span class="text-corbusier-gray">[Timestamp: On Start]</span>
+                                </div>
+                                <div class="space-y-1 text-corbusier-gray">
+                                    <p>Policy: Code Modification Policy</p>
+                                    <p>Result: APPROVED</p>
+                                    <p>Reason: User has write permissions</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 pb-4 border-b border-corbusier-border">
+                            <div class="w-2 h-2 bg-corbusier-blue rounded-full mt-1.5 flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-corbusier-charcoal">BRANCH_CREATED</span>
+                                    <span class="text-corbusier-gray">[Timestamp: On Start]</span>
+                                </div>
+                                <div class="space-y-1 text-corbusier-gray">
+                                    <p>Repository: acme-corp/platform-api-v3</p>
+                                    <p>Branch: task/1847-optimize-api-response-caching</p>
+                                    <p>Base: main</p>
+                                    <p>Commit SHA: [Latest main commit]</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 pb-4 border-b border-corbusier-border">
+                            <div class="w-2 h-2 bg-corbusier-blue rounded-full mt-1.5 flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-corbusier-charcoal">WORKSPACE_INITIALIZED</span>
+                                    <span class="text-corbusier-gray">[Timestamp: On Start]</span>
+                                </div>
+                                <div class="space-y-1 text-corbusier-gray">
+                                    <p>CPU: 2 vCPU</p>
+                                    <p>Memory: 4 GB</p>
+                                    <p>Storage: 20 GB</p>
+                                    <p>Environment Variables: 4 configured</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-2 h-2 bg-corbusier-blue rounded-full mt-1.5 flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold text-corbusier-charcoal">AGENT_SESSION_STARTED</span>
+                                    <span class="text-corbusier-gray">[Timestamp: On Start]</span>
+                                </div>
+                                <div class="space-y-1 text-corbusier-gray">
+                                    <p>Backend: UX Pilot 3.5 Sonnet</p>
+                                    <p>Tools: 8 enabled</p>
+                                    <p>Max Iterations: 50</p>
+                                    <p>Session ID: [Generated UUID]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2 text-xs text-corbusier-gray">
+                    <i class="fa-solid fa-lock text-corbusier-teal"></i>
+                    <span>All audit records are cryptographically signed and immutable</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="idempotency-notice" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-corbusier-teal rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                        <i class="fa-solid fa-rotate text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-corbusier-charcoal mb-3 flex items-center gap-2">
+                            Idempotency Protection
+                            <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded">ENABLED</span>
+                        </h3>
+                        <p class="text-sm text-corbusier-gray mb-4">This task wizard is protected against duplicate submissions. An idempotency key will be generated to ensure that clicking "Start Task" multiple times will not create duplicate tasks or charge resources multiple times.</p>
+                        <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-corbusier-gray uppercase font-semibold">Idempotency Key</span>
+                                <button class="text-xs text-corbusier-blue hover:text-ibm-blue font-semibold">
+                                    <i class="fa-solid fa-copy mr-1"></i>Copy
+                                </button>
+                            </div>
+                            <p class="text-xs font-mono text-corbusier-charcoal break-all">task-start-1847-john-doe-20240315-143022-a7f3c9d2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rollback-behavior" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-rotate-left text-corbusier-orange"></i>
+                        Rollback & Exit Behavior
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Understand what happens if you cancel or if the task fails to start</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                            <h3 class="font-bold text-corbusier-charcoal">If You Cancel</h3>
+                        </div>
+                        <ul class="space-y-2 text-sm text-corbusier-gray">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-corbusier-orange mt-1.5"></i>
+                                <span>No resources will be allocated or charged</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-corbusier-orange mt-1.5"></i>
+                                <span>No branch will be created in the repository</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-corbusier-orange mt-1.5"></i>
+                                <span>Configuration draft will be saved for 7 days</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-corbusier-orange mt-1.5"></i>
+                                <span>No audit records will be created</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-5 border border-corbusier-border">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <h3 class="font-bold text-corbusier-charcoal">If Start Fails</h3>
+                        </div>
+                        <ul class="space-y-2 text-sm text-corbusier-gray">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-red-600 mt-1.5"></i>
+                                <span>Automatic rollback of all partial changes</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-red-600 mt-1.5"></i>
+                                <span>Any created branches will be deleted</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-red-600 mt-1.5"></i>
+                                <span>Resources will be immediately deallocated</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle text-[6px] text-red-600 mt-1.5"></i>
+                                <span>Error details logged for troubleshooting</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="final-checklist" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-tasks text-corbusier-blue"></i>
+                        Pre-Start Validation Checklist
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">All systems and requirements verified</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Configuration Valid</p>
+                                <p class="text-xs text-corbusier-gray">All steps completed and validated</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">PASSED</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">VCS Connection</p>
+                                <p class="text-xs text-corbusier-gray">GitHub API accessible and authenticated</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">PASSED</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Agent Backend Available</p>
+                                <p class="text-xs text-corbusier-gray">UX Pilot 3.5 Sonnet ready and responsive</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">PASSED</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Compute Resources Available</p>
+                                <p class="text-xs text-corbusier-gray">2 vCPU / 4 GB RAM allocation confirmed</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">PASSED</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Budget Available</p>
+                                <p class="text-xs text-corbusier-gray">$847.50 remaining in team budget</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-green-600 font-bold">PASSED</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            <div>
+                                <p class="font-semibold text-corbusier-charcoal text-sm">Policy Acknowledgements</p>
+                                <p class="text-xs text-corbusier-gray">All required acknowledgements pending</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono text-yellow-600 font-bold">PENDING</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-circle-check text-green-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">System Ready to Start Task</h4>
+                            <p class="text-xs text-green-800">All prerequisites met. Complete policy acknowledgements and click "Start Task" to begin execution. Task will initialize within 30 seconds of confirmation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizard-actions" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                        </button>
+                        <button id="start-task-btn" class="w-full sm:w-auto px-8 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fa-solid fa-rocket mr-2"></i>Start Task
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-xs text-corbusier-gray">Complete all policy acknowledgements to enable task start</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const policyCheckboxes = document.querySelectorAll('.policy-acknowledgement');
+            const startTaskBtn = document.getElementById('start-task-btn');
+
+            function updateCheckboxVisual(checkbox) {
+                const label = checkbox.nextElementSibling;
+                const checkIcon = label.querySelector('i');
+                const checkboxDiv = label.querySelector('div');
+                
+                if (checkbox.checked) {
+                    checkboxDiv.classList.add('bg-corbusier-blue', 'border-corbusier-blue');
+                    checkboxDiv.classList.remove('border-corbusier-border');
+                    checkIcon.classList.remove('hidden');
+                } else {
+                    checkboxDiv.classList.remove('bg-corbusier-blue', 'border-corbusier-blue');
+                    checkboxDiv.classList.add('border-corbusier-border');
+                    checkIcon.classList.add('hidden');
+                }
+            }
+
+            function checkAllAcknowledgements() {
+                const allChecked = Array.from(policyCheckboxes).every(cb => cb.checked);
+                startTaskBtn.disabled = !allChecked;
+            }
+
+            policyCheckboxes.forEach(checkbox => {
+                updateCheckboxVisual(checkbox);
+                
+                checkbox.addEventListener('change', function() {
+                    updateCheckboxVisual(this);
+                    checkAllAcknowledgements();
+                });
+            });
+
+            startTaskBtn.addEventListener('click', function() {
+                if (!this.disabled) {
+                    console.log('Starting task with idempotency protection...');
+                    this.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Starting Task...';
+                    this.disabled = true;
+                }
+            });
+
+            console.log('Start Task Wizard - Step 5 loaded - Review & confirmation active');
+        });
+    </script>
+
+</body>
+</html>

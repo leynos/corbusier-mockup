@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Suggestions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .dismissed-suggestion {
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: all 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="suggestions-header" class="mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">AI Suggestions</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-sparkles text-sm text-corbusier-mustard"></i>
+                        <span class="text-sm">AI-driven recommendations based on project patterns and team velocity</span>
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-rotate mr-2"></i>Refresh
+                    </button>
+                    <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                        <i class="fa-solid fa-sliders mr-2"></i>Preferences
+                    </button>
+                </div>
+            </div>
+
+            <div id="suggestion-stats" class="bg-white rounded-xl border border-corbusier-border shadow-card p-4 mb-6">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-lightbulb text-purple-600 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray">Total</p>
+                            <p class="text-lg font-bold text-corbusier-charcoal font-mono">18</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-arrow-up text-green-600 text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray">High Confidence</p>
+                            <p class="text-lg font-bold text-corbusier-charcoal font-mono">7</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-fire text-corbusier-orange text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray">High Impact</p>
+                            <p class="text-lg font-bold text-corbusier-charcoal font-mono">5</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-check-circle text-corbusier-blue text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray">Converted</p>
+                            <p class="text-lg font-bold text-corbusier-charcoal font-mono">12</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-xmark text-corbusier-gray text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-corbusier-gray">Dismissed</p>
+                            <p class="text-lg font-bold text-corbusier-charcoal font-mono">8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="filters-and-controls" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Filter by Project</label>
+                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option>All Projects</option>
+                            <option>Platform API v3</option>
+                            <option>Mobile App v2</option>
+                            <option>Data Pipeline Upgrade</option>
+                            <option>Security Audit 2024</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Suggestion Type</label>
+                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option>All Types</option>
+                            <option>Optimization</option>
+                            <option>Bug Prevention</option>
+                            <option>Refactoring</option>
+                            <option>Security</option>
+                            <option>Performance</option>
+                            <option>Testing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-corbusier-gray mb-2 uppercase">Sort By</label>
+                        <select class="w-full px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option>Confidence (High to Low)</option>
+                            <option>Confidence (Low to High)</option>
+                            <option>Impact (High to Low)</option>
+                            <option>Impact (Low to High)</option>
+                            <option>Created (Newest)</option>
+                            <option>Created (Oldest)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <button class="flex-1 px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                            <i class="fa-solid fa-filter mr-2"></i>Apply
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="suggestions-list" class="space-y-4">
+
+            <div id="suggestion-1" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all">
+                <div class="p-6">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-brain text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-corbusier-charcoal mb-1">Optimize database connection pooling</h3>
+                                    <p class="text-xs text-corbusier-gray font-mono">SUGGESTION-AI-1847 • Platform API v3</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-arrow-up"></i>
+                                        95% Confidence
+                                    </span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-fire"></i>
+                                        High Impact
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-corbusier-gray mb-4">Analysis shows connection pool exhaustion during peak hours. Recommend increasing pool size from 50 to 150 and implementing connection timeout handling. Expected performance improvement: 40% reduction in response time.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Optimization</span>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">Performance</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Database</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-corbusier-cream rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-corbusier-mustard text-lg mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2">AI Explainability</h4>
+                                <div class="space-y-2 text-xs text-corbusier-gray">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Pattern detected: Connection pool saturation in 87% of error logs from last 7 days</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Similar optimization in Mobile App v2 reduced latency by 42%</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Correlation with increased traffic during 9AM-11AM and 2PM-4PM windows</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-chart-line text-corbusier-blue mt-0.5"></i>
+                                        <span>Estimated ROI: 120 hours saved per month in incident response</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-paper rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <h4 class="font-semibold text-corbusier-charcoal text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-blue"></i>
+                            Source Context
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Origin:</span>
+                                <span class="font-mono text-corbusier-charcoal">Incident #INC-2847 + Performance Monitoring</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Related Issue:</span>
+                                <a href="#" class="font-mono text-corbusier-blue hover:underline">ISSUE-1847</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Detected:</span>
+                                <span class="font-mono text-corbusier-charcoal">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center gap-3 text-xs text-corbusier-gray">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i>
+                                Estimated: 4-6 hours
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-user"></i>
+                                Recommended: Backend Team
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-plus mr-2"></i>Convert to Task
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>View Source
+                            </button>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-gray hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" onclick="dismissSuggestion('suggestion-1')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="suggestion-2" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all">
+                <div class="p-6">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-shield-halved text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-corbusier-charcoal mb-1">Add input validation for user uploads</h3>
+                                    <p class="text-xs text-corbusier-gray font-mono">SUGGESTION-AI-1848 • Mobile App v2</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-arrow-up"></i>
+                                        92% Confidence
+                                    </span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-fire"></i>
+                                        High Impact
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-corbusier-gray mb-4">Security scan identified missing file type and size validation on user upload endpoints. Potential vulnerability to malicious file uploads and DoS attacks. Recommend implementing strict validation and virus scanning.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Security</span>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">Critical</span>
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Bug Prevention</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-corbusier-cream rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-corbusier-mustard text-lg mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2">AI Explainability</h4>
+                                <div class="space-y-2 text-xs text-corbusier-gray">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Static analysis detected 3 endpoints without file validation checks</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Industry best practices require multi-layer validation for user-generated content</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Similar vulnerability fixed in Platform API v3 (TASK-1142)</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-exclamation-triangle text-red-600 mt-0.5"></i>
+                                        <span>Risk level: High - could lead to data breach or service disruption</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-paper rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <h4 class="font-semibold text-corbusier-charcoal text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-blue"></i>
+                            Source Context
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Origin:</span>
+                                <span class="font-mono text-corbusier-charcoal">Security Audit 2024 + Code Analysis</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Related Files:</span>
+                                <a href="#" class="font-mono text-corbusier-blue hover:underline">upload_handler.py, media_controller.js</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Detected:</span>
+                                <span class="font-mono text-corbusier-charcoal">5 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center gap-3 text-xs text-corbusier-gray">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i>
+                                Estimated: 6-8 hours
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-user"></i>
+                                Recommended: Security Team
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-plus mr-2"></i>Convert to Task
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>View Source
+                            </button>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-gray hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" onclick="dismissSuggestion('suggestion-2')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="suggestion-3" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all">
+                <div class="p-6">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-code text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-corbusier-charcoal mb-1">Refactor authentication middleware</h3>
+                                    <p class="text-xs text-corbusier-gray font-mono">SUGGESTION-AI-1849 • Platform API v3</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-minus"></i>
+                                        78% Confidence
+                                    </span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                        Medium Impact
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-corbusier-gray mb-4">Authentication middleware contains duplicated logic across 8 files. Recommend consolidating into a shared module to improve maintainability and reduce code complexity by approximately 35%.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded">Refactoring</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Code Quality</span>
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Maintainability</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-corbusier-cream rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-corbusier-mustard text-lg mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2">AI Explainability</h4>
+                                <div class="space-y-2 text-xs text-corbusier-gray">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Code analysis identified 247 lines of duplicated authentication logic</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Cyclomatic complexity score: 18 (above recommended threshold of 10)</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Historical data shows refactoring reduces bug rate by 28% on average</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-paper rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <h4 class="font-semibold text-corbusier-charcoal text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-blue"></i>
+                            Source Context
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Origin:</span>
+                                <span class="font-mono text-corbusier-charcoal">Code Quality Analysis</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Affected Files:</span>
+                                <a href="#" class="font-mono text-corbusier-blue hover:underline">8 middleware files</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Detected:</span>
+                                <span class="font-mono text-corbusier-charcoal">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center gap-3 text-xs text-corbusier-gray">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i>
+                                Estimated: 8-12 hours
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-user"></i>
+                                Recommended: Backend Team
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-plus mr-2"></i>Convert to Task
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>View Source
+                            </button>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-gray hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" onclick="dismissSuggestion('suggestion-3')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="suggestion-4" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all">
+                <div class="p-6">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-flask text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-corbusier-charcoal mb-1">Add integration tests for payment flow</h3>
+                                    <p class="text-xs text-corbusier-gray font-mono">SUGGESTION-AI-1850 • Mobile App v2</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-arrow-up"></i>
+                                        88% Confidence
+                                    </span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                        Medium Impact
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-corbusier-gray mb-4">Payment flow has 0% integration test coverage. Recent production incidents suggest need for comprehensive end-to-end testing including edge cases and failure scenarios.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">Testing</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Quality</span>
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Bug Prevention</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-corbusier-cream rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-corbusier-mustard text-lg mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2">AI Explainability</h4>
+                                <div class="space-y-2 text-xs text-corbusier-gray">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Coverage analysis shows payment module at 0% integration test coverage</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>3 production incidents in last 30 days related to payment processing</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Industry standard recommends minimum 80% coverage for critical flows</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-paper rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <h4 class="font-semibold text-corbusier-charcoal text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-blue"></i>
+                            Source Context
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Origin:</span>
+                                <span class="font-mono text-corbusier-charcoal">Test Coverage Report + Incident Analysis</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Related Incidents:</span>
+                                <a href="#" class="font-mono text-corbusier-blue hover:underline">INC-2901, INC-2914, INC-2928</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Detected:</span>
+                                <span class="font-mono text-corbusier-charcoal">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center gap-3 text-xs text-corbusier-gray">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i>
+                                Estimated: 10-14 hours
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-user"></i>
+                                Recommended: QA Team
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-plus mr-2"></i>Convert to Task
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>View Source
+                            </button>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-gray hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" onclick="dismissSuggestion('suggestion-4')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="suggestion-5" class="bg-white rounded-xl border border-corbusier-border shadow-card hover:shadow-floating transition-all">
+                <div class="p-6">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-gauge-high text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-corbusier-charcoal mb-1">Implement caching for frequently accessed data</h3>
+                                    <p class="text-xs text-corbusier-gray font-mono">SUGGESTION-AI-1851 • Data Pipeline Upgrade</p>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-minus"></i>
+                                        82% Confidence
+                                    </span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-fire"></i>
+                                        High Impact
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-corbusier-gray mb-4">Analytics show 60% of API calls request the same 200 records. Implementing Redis caching could reduce database load by 55% and improve response times by 70%.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded">Optimization</span>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">Performance</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">Caching</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-corbusier-cream rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-corbusier-mustard text-lg mt-1"></i>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-corbusier-charcoal text-sm mb-2">AI Explainability</h4>
+                                <div class="space-y-2 text-xs text-corbusier-gray">
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Query log analysis shows high frequency of identical requests (60% repeat rate)</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-green-600 mt-0.5"></i>
+                                        <span>Database metrics indicate unnecessary load on primary database</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <i class="fa-solid fa-chart-line text-corbusier-blue mt-0.5"></i>
+                                        <span>Projected savings: $2,400/month in database costs</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-paper rounded-lg p-4 mb-4 border border-corbusier-border">
+                        <h4 class="font-semibold text-corbusier-charcoal text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-link text-corbusier-blue"></i>
+                            Source Context
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Origin:</span>
+                                <span class="font-mono text-corbusier-charcoal">Performance Monitoring + Query Analytics</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Endpoints:</span>
+                                <a href="#" class="font-mono text-corbusier-blue hover:underline">/api/v3/users, /api/v3/projects</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-corbusier-gray">Detected:</span>
+                                <span class="font-mono text-corbusier-charcoal">6 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-corbusier-border">
+                        <div class="flex items-center gap-3 text-xs text-corbusier-gray">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i>
+                                Estimated: 5-7 hours
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-user"></i>
+                                Recommended: Backend Team
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="px-4 py-2 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors">
+                                <i class="fa-solid fa-plus mr-2"></i>Convert to Task
+                            </button>
+                            <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>View Source
+                            </button>
+                            <button class="px-3 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-gray hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" onclick="dismissSuggestion('suggestion-5')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="pagination" class="mt-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-4">
+                <div class="flex items-center justify-between">
+                    <p class="text-sm text-corbusier-gray">Showing 5 of 18 suggestions</p>
+                    <div class="flex items-center gap-2">
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button class="px-3 py-1.5 bg-corbusier-blue text-white rounded-md text-sm font-bold">1</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">2</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">3</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">4</button>
+                        <button class="px-3 py-1.5 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function dismissSuggestion(suggestionId) {
+            const element = document.getElementById(suggestionId);
+            if (element) {
+                element.classList.add('dismissed-suggestion');
+                setTimeout(() => {
+                    element.style.display = 'none';
+                    const totalCount = document.querySelector('#pagination p');
+                    if (totalCount) {
+                        const currentCount = parseInt(totalCount.textContent.match(/\d+/)[0]);
+                        totalCount.textContent = `Showing ${currentCount - 1} of 18 suggestions`;
+                    }
+                    const dismissedStat = document.querySelector('#suggestion-stats .grid > div:last-child p:last-child');
+                    if (dismissedStat) {
+                        const count = parseInt(dismissedStat.textContent);
+                        dismissedStat.textContent = count + 1;
+                    }
+                }, 300);
+            }
+        }
+
+        window.addEventListener('load', function() {
+            console.log('AI Suggestions page loaded - RBAC tenant scoping active');
+        });
+    </script>
+
+</body>
+</html>

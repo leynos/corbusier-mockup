@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Task - Step 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'corbusier-cream': '#F4F1EA',
+                        'corbusier-paper': '#FDFBF7',
+                        'corbusier-charcoal': '#2C2C2C',
+                        'corbusier-blue': '#4A6FA5',
+                        'corbusier-orange': '#D95D39',
+                        'corbusier-teal': '#4B8F8C',
+                        'corbusier-mustard': '#E09F3E',
+                        'corbusier-gray': '#9E9E9E',
+                        'corbusier-border': '#D1CDC4',
+                        'ibm-blue': '#0033A0',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        'mono': ['Courier Prime', 'Courier New', 'monospace'],
+                    },
+                    boxShadow: {
+                        'card': '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06)',
+                        'floating': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'retro': '4px 4px 0px 0px rgba(44, 44, 44, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F1EA; }
+        ::-webkit-scrollbar-thumb { background: #D1CDC4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9E9E9E; }
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .backend-card input[type="radio"]:checked + label {
+            border-color: #4A6FA5;
+            background-color: #F0F4FA;
+        }
+        .capability-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+<body class="bg-corbusier-cream font-sans antialiased">
+
+    <header id="header" class="bg-white border-b border-corbusier-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-orange rounded-lg flex items-center justify-center text-white font-mono font-bold text-xl shadow-retro">C</div>
+                        <div class="hidden md:block">
+                            <h1 class="font-mono font-bold text-lg tracking-tight text-corbusier-charcoal">CORBUSIER</h1>
+                            <p class="text-xs text-corbusier-gray font-mono">acme.corbusier.io</p>
+                        </div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1 ml-8">
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Dashboard</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-corbusier-blue rounded-md">My Tasks</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">AI Suggestions</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Projects</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Personnel</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Reports</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Settings</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Feedback</a>
+                        <div class="w-px h-6 bg-corbusier-border mx-2"></div>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Integrations</a>
+                        <a href="#" class="px-4 py-2 text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">Governance</a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="lg:hidden p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative hidden md:block">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-corbusier-gray text-sm"></i>
+                        <input type="text" placeholder="Search..." class="w-48 lg:w-64 pl-9 pr-3 py-2 bg-corbusier-cream border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                    </div>
+                    <button class="relative p-2 text-corbusier-charcoal hover:bg-corbusier-cream rounded-md transition-colors">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-corbusier-orange rounded-full pulse-dot"></span>
+                    </button>
+                    <div class="flex items-center gap-2 pl-3 border-l border-corbusier-border">
+                        <img class="w-9 h-9 rounded-full border-2 border-white shadow-card" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="avatar" />
+                        <div class="hidden md:block">
+                            <p class="text-sm font-semibold text-corbusier-charcoal">John Doe</p>
+                            <p class="text-xs text-corbusier-gray font-mono">Team Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <section id="wizard-header" class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-corbusier-charcoal mb-2">Start New Task</h1>
+                    <p class="text-corbusier-gray flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-sm text-corbusier-mustard"></i>
+                        <span class="text-sm">Select agent backend/runtime with capability badges and policy constraints</span>
+                    </p>
+                </div>
+                <button class="px-4 py-2 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                    <i class="fa-solid fa-xmark mr-2"></i>Cancel
+                </button>
+            </div>
+
+            <div id="progress-indicator" class="bg-white rounded-xl border border-corbusier-border shadow-card p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-corbusier-blue rounded-full flex items-center justify-center text-white font-bold">2</div>
+                        <div>
+                            <p class="font-bold text-corbusier-charcoal">Agent Backend Selection</p>
+                            <p class="text-xs text-corbusier-gray">Choose runtime and execution environment</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="w-16 h-1 bg-corbusier-blue"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-blue rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">3</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">4</div>
+                            <div class="w-16 h-1 bg-corbusier-border"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-corbusier-border rounded-full flex items-center justify-center text-corbusier-gray text-sm font-bold">5</div>
+                    </div>
+                </div>
+                <div class="w-full bg-corbusier-border rounded-full h-2">
+                    <div class="bg-corbusier-blue h-2 rounded-full transition-all duration-300" style="width: 40%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-corbusier-gray font-mono">
+                    <span>Step 2 of 5</span>
+                    <span>40% Complete</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="context-summary" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-corbusier-charcoal flex items-center gap-2">
+                        <i class="fa-solid fa-info-circle text-corbusier-blue"></i>
+                        Task Context from Step 1
+                    </h3>
+                    <button class="text-sm text-corbusier-blue hover:text-ibm-blue font-semibold">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Origin</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold font-mono">ISSUE-1847</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Project</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">Platform API v3</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Workspace</p>
+                        <p class="text-sm text-corbusier-charcoal font-semibold">main</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-corbusier-gray uppercase font-semibold mb-1">Status</p>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">
+                            <i class="fa-solid fa-check-circle"></i>Validated
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agent-backend-selection" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-server text-corbusier-blue"></i>
+                        Agent Backend Options
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Select the runtime environment for task execution. Each backend has specific capabilities and constraints.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="backend-card">
+                        <input type="radio" id="backend-UX Pilot" name="agent-backend" value="UX Pilot" class="hidden" checked>
+                        <label for="backend-UX Pilot" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center text-white shadow-card">
+                                        <i class="fa-solid fa-brain text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-corbusier-charcoal text-lg mb-1">UX Pilot 3.5 Sonnet Backend</h3>
+                                        <p class="text-sm text-corbusier-gray">UX Pilot AI's advanced reasoning model with extended context</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></span>
+                                    <span class="text-xs font-semibold text-green-600">Available</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold text-corbusier-gray uppercase mb-2">Capabilities</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="capability-badge px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-code"></i>Code Generation
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-book"></i>200K Context
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-teal-100 text-teal-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-comments"></i>Multi-turn Dialog
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-tools"></i>Function Calling
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-file-code"></i>Structured Output
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Max Tokens</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">200,000</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Avg Latency</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">2.3s</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Cost Tier</p>
+                                    <p class="font-mono font-bold text-corbusier-orange">Premium</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Reliability</p>
+                                    <p class="font-mono font-bold text-green-600">99.9%</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-corbusier-border">
+                                <div class="flex items-start gap-2 text-xs text-corbusier-gray">
+                                    <i class="fa-solid fa-shield-halved text-corbusier-blue mt-0.5"></i>
+                                    <p><span class="font-semibold">Policy Constraints:</span> Approved for production workloads. Rate limit: 100 req/min. Requires data residency compliance for sensitive projects.</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="backend-card">
+                        <input type="radio" id="backend-mcp" name="agent-backend" value="mcp" class="hidden">
+                        <label for="backend-mcp" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-corbusier-teal to-teal-700 rounded-lg flex items-center justify-center text-white shadow-card">
+                                        <i class="fa-solid fa-network-wired text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-corbusier-charcoal text-lg mb-1">MCP Server Orchestrator</h3>
+                                        <p class="text-sm text-corbusier-gray">Model Context Protocol with multi-server coordination</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></span>
+                                    <span class="text-xs font-semibold text-green-600">Available</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold text-corbusier-gray uppercase mb-2">Capabilities</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="capability-badge px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-plug"></i>Tool Orchestration
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-layer-group"></i>Multi-Server
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-teal-100 text-teal-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-database"></i>Context Sharing
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-bolt"></i>Event Streaming
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-sync"></i>Stateful Sessions
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Max Servers</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">8</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Avg Latency</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">1.8s</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Cost Tier</p>
+                                    <p class="font-mono font-bold text-corbusier-blue">Standard</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Reliability</p>
+                                    <p class="font-mono font-bold text-green-600">99.5%</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-corbusier-border">
+                                <div class="flex items-start gap-2 text-xs text-corbusier-gray">
+                                    <i class="fa-solid fa-shield-halved text-corbusier-blue mt-0.5"></i>
+                                    <p><span class="font-semibold">Policy Constraints:</span> Approved for development and staging. Requires explicit tool authorization. Session timeout: 2 hours.</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="backend-card">
+                        <input type="radio" id="backend-gpt4" name="agent-backend" value="gpt4" class="hidden">
+                        <label for="backend-gpt4" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center text-white shadow-card">
+                                        <i class="fa-solid fa-robot text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-corbusier-charcoal text-lg mb-1">GPT-4 Turbo Backend</h3>
+                                        <p class="text-sm text-corbusier-gray">UX Pilot AI's latest model with vision and tool use</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 bg-green-500 rounded-full pulse-dot"></span>
+                                    <span class="text-xs font-semibold text-green-600">Available</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold text-corbusier-gray uppercase mb-2">Capabilities</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="capability-badge px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-code"></i>Code Generation
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-eye"></i>Vision API
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-teal-100 text-teal-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-book"></i>128K Context
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-tools"></i>Function Calling
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-language"></i>JSON Mode
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Max Tokens</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">128,000</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Avg Latency</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">1.9s</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Cost Tier</p>
+                                    <p class="font-mono font-bold text-corbusier-orange">Premium</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Reliability</p>
+                                    <p class="font-mono font-bold text-green-600">99.7%</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-corbusier-border">
+                                <div class="flex items-start gap-2 text-xs text-corbusier-gray">
+                                    <i class="fa-solid fa-shield-halved text-corbusier-blue mt-0.5"></i>
+                                    <p><span class="font-semibold">Policy Constraints:</span> Approved for all environments. Rate limit: 150 req/min. Vision API requires additional approval for sensitive data.</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="backend-card">
+                        <input type="radio" id="backend-local" name="agent-backend" value="local" class="hidden">
+                        <label for="backend-local" class="block p-6 border-2 border-corbusier-border rounded-xl cursor-pointer hover:border-corbusier-blue transition-all opacity-60">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-gray-400 to-gray-600 rounded-lg flex items-center justify-center text-white shadow-card">
+                                        <i class="fa-solid fa-laptop-code text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-corbusier-charcoal text-lg mb-1">Local LLM Runner</h3>
+                                        <p class="text-sm text-corbusier-gray">Self-hosted model with full data control</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                                    <span class="text-xs font-semibold text-yellow-600">Limited Capacity</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold text-corbusier-gray uppercase mb-2">Capabilities</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="capability-badge px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-shield-alt"></i>Data Privacy
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-lock"></i>Air-Gapped
+                                    </span>
+                                    <span class="capability-badge px-2 py-1 bg-teal-100 text-teal-700 text-xs font-semibold rounded">
+                                        <i class="fa-solid fa-cog"></i>Customizable
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Max Tokens</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">32,000</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Avg Latency</p>
+                                    <p class="font-mono font-bold text-corbusier-charcoal">4.2s</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Cost Tier</p>
+                                    <p class="font-mono font-bold text-green-600">Free</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-corbusier-gray mb-1">Reliability</p>
+                                    <p class="font-mono font-bold text-yellow-600">95.0%</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-corbusier-border">
+                                <div class="flex items-start gap-2 text-xs text-corbusier-gray">
+                                    <i class="fa-solid fa-exclamation-triangle text-yellow-600 mt-0.5"></i>
+                                    <p><span class="font-semibold">Policy Constraints:</span> Currently at capacity. Available for high-security projects only. Requires infrastructure team approval.</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="runtime-configuration" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-corbusier-teal"></i>
+                        Runtime Configuration
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Fine-tune execution parameters for the selected backend</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Timeout (seconds)
+                        </label>
+                        <input type="number" value="300" min="60" max="3600" class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <p class="text-xs text-corbusier-gray mt-1">Maximum execution time for agent operations</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Max Retries
+                        </label>
+                        <input type="number" value="3" min="0" max="10" class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                        <p class="text-xs text-corbusier-gray mt-1">Number of retry attempts on failure</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Temperature
+                        </label>
+                        <input type="range" min="0" max="2" step="0.1" value="0.7" class="w-full h-2 bg-corbusier-border rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-corbusier-gray mt-1">
+                            <span>Precise (0.0)</span>
+                            <span>Balanced (0.7)</span>
+                            <span>Creative (2.0)</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-corbusier-charcoal mb-2">
+                            Concurrency Limit
+                        </label>
+                        <select class="w-full px-4 py-3 bg-white border border-corbusier-border rounded-md text-sm focus:outline-none focus:border-corbusier-blue focus:ring-1 focus:ring-corbusier-blue transition-all">
+                            <option value="1">Sequential (1)</option>
+                            <option value="2" selected>Low (2)</option>
+                            <option value="5">Medium (5)</option>
+                            <option value="10">High (10)</option>
+                        </select>
+                        <p class="text-xs text-corbusier-gray mt-1">Parallel tool execution limit</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-lightbulb text-corbusier-blue text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm mb-1">Recommended Settings</h4>
+                            <p class="text-xs text-corbusier-gray">Based on your task type (database optimization), we recommend: Timeout 600s, Temperature 0.5, Concurrency 2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="availability-status" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-corbusier-mustard"></i>
+                        Backend Availability & Performance
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Real-time status and performance metrics</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm">UX Pilot 3.5 Sonnet</h4>
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Current Load</span>
+                                <span class="font-mono font-bold text-green-600">24%</span>
+                            </div>
+                            <div class="w-full bg-corbusier-border rounded-full h-1.5">
+                                <div class="bg-green-500 h-1.5 rounded-full" style="width: 24%"></div>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Queue Time</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">&lt;1s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm">MCP Server</h4>
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Current Load</span>
+                                <span class="font-mono font-bold text-green-600">18%</span>
+                            </div>
+                            <div class="w-full bg-corbusier-border rounded-full h-1.5">
+                                <div class="bg-green-500 h-1.5 rounded-full" style="width: 18%"></div>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Queue Time</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">&lt;1s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-corbusier-cream rounded-lg p-4 border border-corbusier-border">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-semibold text-corbusier-charcoal text-sm">GPT-4 Turbo</h4>
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Current Load</span>
+                                <span class="font-mono font-bold text-yellow-600">62%</span>
+                            </div>
+                            <div class="w-full bg-corbusier-border rounded-full h-1.5">
+                                <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 62%"></div>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-corbusier-gray">Queue Time</span>
+                                <span class="font-mono font-bold text-corbusier-charcoal">~2s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="policy-compliance" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-corbusier-charcoal mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-gavel text-corbusier-orange"></i>
+                        Policy Compliance Check
+                    </h2>
+                    <p class="text-sm text-corbusier-gray">Validation against governance policies for selected backend</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Data Residency Compliance</h4>
+                            <p class="text-xs text-green-800">Selected backend meets EU data residency requirements for Platform API v3 project</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Rate Limit Compliance</h4>
+                            <p class="text-xs text-green-800">Current workspace usage: 45/100 requests per minute. Sufficient capacity available.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Cost Budget Approval</h4>
+                            <p class="text-xs text-green-800">Estimated task cost ($0.45) within approved monthly budget ($500 remaining)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <i class="fa-solid fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-green-900 text-sm mb-1">Security Clearance</h4>
+                            <p class="text-xs text-green-800">User role (Team Lead) authorized for premium backend usage in production workspace</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizard-actions" class="mb-6">
+            <div class="bg-white rounded-xl border border-corbusier-border shadow-card p-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <button class="w-full sm:w-auto px-6 py-3 bg-white border border-corbusier-border rounded-md text-sm font-semibold text-corbusier-charcoal hover:bg-corbusier-cream transition-colors">
+                            <i class="fa-solid fa-floppy-disk mr-2"></i>Save Draft
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-3 bg-corbusier-blue text-white rounded-md text-sm font-bold hover:bg-ibm-blue transition-colors shadow-card">
+                            Next: Tools & Policy <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="bg-corbusier-charcoal text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <p class="text-sm text-gray-400 font-mono">© 2024 CORBUSIER</p>
+                    <div class="w-px h-4 bg-gray-600"></div>
+                    <p class="text-xs text-gray-500 font-mono tracking-wider">v2.0.1</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', function() {
+            const backendCards = document.querySelectorAll('.backend-card input[type="radio"]');
+            backendCards.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Backend selected:', this.value);
+                });
+            });
+
+            const temperatureSlider = document.querySelector('input[type="range"]');
+            if (temperatureSlider) {
+                temperatureSlider.addEventListener('input', function() {
+                    console.log('Temperature adjusted:', this.value);
+                });
+            }
+
+            console.log('Start Task Wizard - Step 2 loaded - Agent backend selection and configuration active');
+        });
+    </script>
+
+</body>
+</html>

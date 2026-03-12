@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+tokens/node_modules/
+
+# Build output
+dist/
+tokens/dist/
+
+# Vite
+.vite/
+
+# Bun
+.bun/
+.bun-install/
+.bun-cache/
+.npm-cache/
+
+# Temp
+tmp/
+.tmp/
+
+# Playwright
+playwright-report/
+test-results/
+.playwright-mcp/
+
+# Editor / OS
+*.swp
+*.swo
+*~
+.DS_Store

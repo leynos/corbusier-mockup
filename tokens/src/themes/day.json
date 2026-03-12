@@ -1,0 +1,46 @@
+{
+  "name": "corbusier-mockup-day",
+  "displayName": "Corbusier Mockup Day",
+  "prefersLight": true,
+  "colorScheme": "light",
+  "semantic": {
+    "bg": {
+      "default": { "value": "{color.cream.50}" },
+      "subtle": { "value": "{color.cream.100}" },
+      "muted": { "value": "{color.cream.300}" },
+      "overlay": { "value": "{color.cream.400}" }
+    },
+    "fg": {
+      "default": { "value": "{color.charcoal.600}" },
+      "muted": { "value": "{color.text.muted-dark}" }
+    },
+    "brand": {
+      "default": { "value": "{color.teal.500}" },
+      "hover": { "value": "{color.teal.700}" },
+      "contrast": { "value": "{color.cream.50}" }
+    },
+    "accent": {
+      "default": { "value": "{color.terracotta.500}" },
+      "hover": { "value": "{color.terracotta.700}" },
+      "contrast": { "value": "{color.cream.50}" }
+    },
+    "status": {
+      "info": {
+        "default": { "value": "{color.slate.500}" },
+        "contrast": { "value": "{color.charcoal.600}" }
+      },
+      "success": {
+        "default": { "value": "{color.olive.500}" },
+        "contrast": { "value": "{color.cream.50}" }
+      },
+      "warning": {
+        "default": { "value": "{color.copper.500}" },
+        "contrast": { "value": "{color.charcoal.600}" }
+      },
+      "error": {
+        "default": { "value": "{color.rust.500}" },
+        "contrast": { "value": "{color.cream.50}" }
+      }
+    }
+  }
+}
