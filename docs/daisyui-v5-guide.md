@@ -33,30 +33,30 @@ daisyUI 5 provides class names for common UI components
 
 ## daisyUI 5 usage rules
 
-1. Styles are applied to an HTML element by adding daisyUI class names to it. This includes a component class name, part class names (if available for that component), and modifier class names (if available for that component)
-2. Components can be customized using Tailwind CSS utility classes if the customization is not possible using the existing daisyUI classes. For example `btn px-10` sets a custom horizontal padding to a `btn`
-3. If customization of daisyUI styles using Tailwind CSS utility classes does not work because of CSS specificity issues, use the `!` at the end of the Tailwind CSS utility class to override the existing styles. For example `btn bg-red-500!` sets a custom background color to a `btn` forcefully. This is a last resort solution and should be used sparingly
-4. If a specific component or something similar to it does not exist in daisyUI, create a custom component using Tailwind CSS utility
-5. when using Tailwind CSS `flex` and `grid` for layout, it should be responsive using Tailwind CSS responsive utility prefixes.
+1. Styles are applied to an HTML element by adding daisyUI class names to it. This includes a component class name, part class names (if available for that component), and modifier class names (if available for that component).
+2. Components can be customized using Tailwind CSS utility classes if the customization is not possible using the existing daisyUI classes. For example `btn px-10` sets custom horizontal padding on a `btn`.
+3. If customization of daisyUI styles using Tailwind CSS utility classes does not work because of CSS specificity issues, use the `!` at the end of the Tailwind CSS utility class to override the existing styles. For example `btn bg-red-500!` sets a custom background colour on a `btn` forcefully. This is a last resort solution and should be used sparingly.
+4. If a specific component or something similar to it does not exist in daisyUI, create a custom component using Tailwind CSS utility classes.
+5. When using Tailwind CSS `flex` and `grid` for layout, it should be responsive using Tailwind CSS responsive utility prefixes.
 6. Only allowed class names are existing daisyUI class names or Tailwind CSS utility classes.
 7. Ideally, custom CSS is rarely necessary. Using daisyUI class names or Tailwind CSS utility classes is preferred.
-8. For placeholder images, use <https://picsum.photos/200/300> with the required size
-9. When designing, avoid adding a custom font unless necessary
-10. Avoid adding `bg-base-100 text-base-content` to the body unless necessary
-11. For design decisions, use Refactoring UI book best practices
+8. For placeholder images, use <https://picsum.photos/200/300> with the required size.
+9. When designing, avoid adding a custom font unless necessary.
+10. Avoid adding `bg-base-100 text-base-content` to the body unless necessary.
+11. For design decisions, use Refactoring UI book best practices.
 
-daisyUI 5 class names are one of the following categories. These type names are only for reference and are not used in the actual code
+daisyUI 5 class names are one of the following categories. These type names are only for reference and are not used in the actual code.
 
 - `component`: the required component class
 - `part`: a child part of a component
 - `style`: sets a specific style to component or part
-- `behavior`: changes the behavior of component or part
-- `color`: sets a specific color to component or part
+- `behaviour`: changes the behaviour of component or part
+- `colour`: sets a specific colour to component or part
 - `size`: sets a specific size to component or part
 - `placement`: sets a specific placement to component or part
 - `direction`: sets a specific direction to component or part
 - `modifier`: modifies the component or part in a specific way
-- `variant`: prefixes for utility classes that conditionally apply styles. syntax is `variant:utility-class`
+- `variant`: prefixes for utility classes that conditionally apply styles. Syntax is `variant:utility-class`.
 
 ## Config
 
@@ -430,7 +430,7 @@ Cards are used to group and display content
 
 #### Rules
 
-- {MODIFIER} is optional and can have one of the modifier class names and one of the size class names
+- {MODIFIER} is optional and can have style classes (`card-border`, `card-dash`), modifier classes (`card-side`, `image-full`), and one of the size class names
 - `<figure>` and `<div class="card-body">` are optional
 - can use `sm:card-side` for responsive layouts
 - If image is placed after `card-body`, the image will be placed at the bottom
@@ -821,7 +821,7 @@ A single FAB in the corder of screen
 
 ```html
 <div class="fab">
-  <button class="btn btn-lg btn-circle">{IconOriginal}</button>
+  <button type="button" class="btn btn-lg btn-circle">{IconOriginal}</button>
 </div>
 ```
 
@@ -830,9 +830,9 @@ A FAB that opens a 3 other buttons in the corner of page vertically
 ```html
 <div class="fab">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <button class="btn btn-lg btn-circle">{Icon1}</button>
-  <button class="btn btn-lg btn-circle">{Icon2}</button>
-  <button class="btn btn-lg btn-circle">{Icon3}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon1}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon2}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon3}</button>
 </div>
 ```
 
@@ -841,9 +841,9 @@ A FAB that opens a 3 other buttons in the corner of page vertically and they hav
 ```html
 <div class="fab">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
+  <div>{Label1}<button type="button" class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button type="button" class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button type="button" class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -852,9 +852,9 @@ FAB with rectangle buttons. These are not circular buttons so they can have more
 ```html
 <div class="fab">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <button class="btn btn-lg">{Label1}</button>
-  <button class="btn btn-lg">{Label2}</button>
-  <button class="btn btn-lg">{Label3}</button>
+  <button type="button" class="btn btn-lg">{Label1}</button>
+  <button type="button" class="btn btn-lg">{Label2}</button>
+  <button type="button" class="btn btn-lg">{Label3}</button>
 </div>
 ```
 
@@ -867,9 +867,9 @@ FAB with close button. When FAB is open, the original button is replaced with a 
     Close
     <button type="button" class="btn btn-circle btn-lg btn-error">✕</button>
   </div>
-  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
+  <div>{Label1}<button type="button" class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button type="button" class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button type="button" class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -879,11 +879,11 @@ FAB with Main Action button. When FAB is open, the original button is replaced w
 <div class="fab">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
   <div class="fab-main-action">
-    {LabelMainAction}<button class="btn btn-circle btn-secondary btn-lg">{IconMainAction}</button>
+    {LabelMainAction}<button type="button" class="btn btn-circle btn-secondary btn-lg">{IconMainAction}</button>
   </div>
-  <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
-  <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
-  <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
+  <div>{Label1}<button type="button" class="btn btn-lg btn-circle">{Icon1}</button></div>
+  <div>{Label2}<button type="button" class="btn btn-lg btn-circle">{Icon2}</button></div>
+  <div>{Label3}<button type="button" class="btn btn-lg btn-circle">{Icon3}</button></div>
 </div>
 ```
 
@@ -892,10 +892,10 @@ FAB Flower. It opens the buttons in a flower shape (quarter circle) arrangement 
 ```html
 <div class="fab fab-flower">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
-  <button class="btn btn-lg btn-circle">{Icon1}</button>
-  <button class="btn btn-lg btn-circle">{Icon2}</button>
-  <button class="btn btn-lg btn-circle">{Icon3}</button>
+  <button type="button" class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon1}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon2}</button>
+  <button type="button" class="btn btn-lg btn-circle">{Icon3}</button>
 </div>
 ```
 
@@ -904,15 +904,15 @@ FAB Flower with tooltips. There's no space for a text label in a quarter circle,
 ```html
 <div class="fab fab-flower">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
+  <button type="button" class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
   <div class="tooltip tooltip-left" data-tip="{Label1}">
-    <button class="btn btn-lg btn-circle">{Icon1}</button>
+    <button type="button" class="btn btn-lg btn-circle">{Icon1}</button>
   </div>
   <div class="tooltip tooltip-left" data-tip="{Label2}">
-    <button class="btn btn-lg btn-circle">{Icon2}</button>
+    <button type="button" class="btn btn-lg btn-circle">{Icon2}</button>
   </div>
   <div class="tooltip tooltip-left" data-tip="{Label3}">
-    <button class="btn btn-lg btn-circle">{Icon3}</button>
+    <button type="button" class="btn btn-lg btn-circle">{Icon3}</button>
   </div>
 </div>
 ```
@@ -1779,7 +1779,7 @@ Status is a really small icon to visually show the current status of an element,
 #### Rules
 
 - {MODIFIER} is optional and can have one of the color/size class names
-- This component does not render anything visible
+- This component renders a visible small status dot, and `status-neutral`, `status-primary`, `status-secondary`, `status-accent`, `status-info`, `status-success`, `status-warning`, `status-error`, plus the `status-xs` through `status-xl` size classes adjust its appearance
 
 ### steps
 
