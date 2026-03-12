@@ -355,7 +355,7 @@ Buttons allow the user to take actions
 #### Syntax
 
 ```html
-<button class="btn {MODIFIER}">Button</button>
+<button type="button" class="btn {MODIFIER}">Button</button>
 ```
 
 #### Rules
@@ -1079,10 +1079,10 @@ Hover Gallery is a container of images. The first image is visible by default, a
 
 ```html
 <figure class="hover-gallery max-w-60">
-  <img src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" />
-  <img src="https://img.daisyui.com/images/stock/daisyui-hat-2.webp" />
-  <img src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp" />
-  <img src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" />
+  <img src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" alt="{alt-text-1}" />
+  <img src="https://img.daisyui.com/images/stock/daisyui-hat-2.webp" alt="{alt-text-2}" />
+  <img src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp" alt="{alt-text-3}" />
+  <img src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" alt="{alt-text-4}" />
 </figure>
 ```
 
@@ -1092,6 +1092,7 @@ Hover Gallery is a container of images. The first image is visible by default, a
 - hover-gallery can include up to 10 images
 - hover-gallery needs a max width; otherwise it fills the container width
 - Images must be the same dimensions for proper alignment
+- Use `alt=""` only when an image is purely decorative
 
 ### indicator
 
@@ -1308,7 +1309,7 @@ Mask crops the content of the element to common shapes
 #### Syntax
 
 ```html
-<img class="mask {MODIFIER}" src="{image-url}" />
+<img class="mask {MODIFIER}" src="{image-url}" alt="{alt-text}" />
 ```
 
 #### Rules
@@ -1316,6 +1317,7 @@ Mask crops the content of the element to common shapes
 - {MODIFIER} is required and can have one of the style/modifier class names
 - The shape of any element can be changed using `mask` class names
 - Set custom sizes using `w-*` and `h-*`
+- Use `alt=""` only when the image is purely decorative
 
 ### menu
 
@@ -1869,8 +1871,8 @@ Tabs can be used to show a list of links in a tabbed format
 Using buttons:
 
 ```html
-<div role="tablist" class="tabs {MODIFIER}">
-  <button role="tab" class="tab">Tab</button>
+<div class="tabs {MODIFIER}">
+  <button type="button" class="tab">Tab</button>
 </div>
 ```
 
