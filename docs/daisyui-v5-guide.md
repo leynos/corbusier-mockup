@@ -862,7 +862,10 @@ FAB with close button. When FAB is open, the original button is replaced with a 
 ```html
 <div class="fab">
   <button type="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</button>
-  <div class="fab-close">Close <span class="btn btn-circle btn-lg btn-error">✕</span></div>
+  <div class="fab-close">
+    Close
+    <button type="button" class="btn btn-circle btn-lg btn-error">✕</button>
+  </div>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
   <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
