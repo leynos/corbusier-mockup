@@ -15,6 +15,7 @@ import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { ProgressBar } from "../../components/progress-bar";
 import { StatusBadge } from "../../components/status-badge";
+import { pickLocalization } from "../../domain/entities/localization";
 import { DependencyHierarchy } from "../tasks/components/dependency-hierarchy";
 import { DependencyPanel } from "../tasks/components/dependency-panel";
 import { RelatedTasks } from "../tasks/components/related-tasks";
@@ -59,8 +60,8 @@ interface TaskFocusPanelProps {
 }
 
 function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
-  const { t } = useTranslation();
-  const taskId = task.id.toLowerCase();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const done = task.subtasks.filter((s) => s.done).length;
   const total = task.subtasks.length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -70,11 +71,11 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
       <div className="mb-3 flex items-center gap-3">
         <StatusBadge state={task.state} />
         <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content">
-          {t(`${taskId}-title`, { defaultValue: task.title })}
+          {pickLocalization(task.localizations, locale).name}
         </h2>
       </div>
       <p className="mb-3 text-[length:var(--font-size-sm)] text-base-content/80">
-        {t(`${taskId}-description`, { defaultValue: task.description })}
+        {pickLocalization(task.localizations, locale).description ?? ""}
       </p>
       {total > 0 ? (
         <div>
@@ -90,9 +91,7 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
       {task.estimate !== undefined ? (
         <p className="mt-2 text-[length:var(--font-size-xs)] text-base-content/60">
           {t("task-deps-estimate-label", { defaultValue: "Estimate:" })}{" "}
-          <span className="font-semibold text-base-content">
-            {t(`${taskId}-estimate`, { defaultValue: task.estimate })}
-          </span>
+          <span className="font-semibold text-base-content">{task.estimate}</span>
         </p>
       ) : null}
     </div>
@@ -102,7 +101,8 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDepsScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -155,7 +155,7 @@ export function TaskDepsScreen(): JSX.Element {
                 kind: e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                description: t(`${e.id}-description`, { defaultValue: e.description }),
+                localizations: e.localizations,
               }))}
             />
           </Section>
@@ -175,7 +175,7 @@ export function TaskDepsScreen(): JSX.Element {
                     key={sub.id}
                     className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
                   >
-                    {t(`${sub.id}-title`, { defaultValue: sub.title })}
+                    {pickLocalization(sub.localizations, locale).name}
                   </li>
                 ))}
               </ul>

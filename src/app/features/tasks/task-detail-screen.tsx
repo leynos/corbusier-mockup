@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
+import { pickLocalization } from "../../domain/entities/localization";
 import { BranchPrPanel } from "./components/branch-pr-panel";
 import { DependencyHierarchy } from "./components/dependency-hierarchy";
 import { DependencyPanel } from "./components/dependency-panel";
@@ -60,7 +61,8 @@ function Section({ icon: Icon, title, children }: SectionProps): JSX.Element {
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDetailScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -76,8 +78,6 @@ export function TaskDetailScreen(): JSX.Element {
       </div>
     );
   }
-
-  const taskId = task.id.toLowerCase();
 
   return (
     <div className="space-y-6">
@@ -129,7 +129,7 @@ export function TaskDetailScreen(): JSX.Element {
                 kind: e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                description: t(`${e.id}-description`, { defaultValue: e.description }),
+                localizations: e.localizations,
               }))}
             />
           </Section>
@@ -148,7 +148,7 @@ export function TaskDetailScreen(): JSX.Element {
             title={t("task-section-description", { defaultValue: "Description" })}
           >
             <p className="text-[length:var(--font-size-sm)] text-base-content/80">
-              {t(`${taskId}-description`, { defaultValue: task.description })}
+              {pickLocalization(task.localizations, locale).description ?? ""}
             </p>
           </Section>
 

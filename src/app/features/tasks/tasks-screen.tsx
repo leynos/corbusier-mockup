@@ -5,11 +5,16 @@ import { Link } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-
+import {
+  priorityDescriptors,
+  projectDescriptors,
+  taskStateDescriptors,
+} from "../../../data/registries";
 import { Priority, TASKS, type Task, TaskState } from "../../../data/tasks";
 import { AvatarStack } from "../../components/avatar-stack";
 import { PriorityTag } from "../../components/priority-tag";
 import { StatusBadge } from "../../components/status-badge";
+import { pickLocalization } from "../../domain/entities/localization";
 
 /* ── Filter types ─────────────────────────────────────────────────── */
 
@@ -17,13 +22,9 @@ type StateFilter = TaskState | "all";
 type PriorityFilter = Priority | "all";
 type ProjectFilter = string | "all";
 
-/* ── Unique project names ─────────────────────────────────────────── */
+/* ── Unique project slugs ────────────────────────────────────────── */
 
-const PROJECTS: readonly string[] = [...new Set(TASKS.map((t) => t.project))];
-
-/* ── Unique project slugs (for key derivation) ────────────────────── */
-
-const PROJECT_SLUGS = new Map(TASKS.map((t) => [t.project, t.projectSlug]));
+const PROJECT_SLUGS: readonly string[] = [...new Set(TASKS.map((t) => t.projectSlug))];
 
 /* ── Filter chip ──────────────────────────────────────────────────── */
 
@@ -55,24 +56,6 @@ function FilterChip<T extends string>({
   );
 }
 
-/* ── State / priority default labels ─────────────────────────────── */
-
-const STATE_DEFAULTS: Record<TaskState, string> = {
-  [TaskState.Draft]: "Draft",
-  [TaskState.InProgress]: "In Progress",
-  [TaskState.InReview]: "In Review",
-  [TaskState.Paused]: "Paused",
-  [TaskState.Done]: "Done",
-  [TaskState.Abandoned]: "Abandoned",
-};
-
-const PRIORITY_DEFAULTS: Record<Priority, string> = {
-  [Priority.Critical]: "Critical",
-  [Priority.High]: "High",
-  [Priority.Medium]: "Medium",
-  [Priority.Low]: "Low",
-};
-
 /* ── Task row ─────────────────────────────────────────────────────── */
 
 function formatDueDate(iso: string): string {
@@ -84,8 +67,8 @@ function formatDueDate(iso: string): string {
 }
 
 function TaskRow({ task }: { readonly task: Task }): JSX.Element {
-  const { t } = useTranslation();
-  const taskId = task.id.toLowerCase();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <Link
@@ -101,10 +84,10 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
       {/* Title + project + ID */}
       <div className="min-w-0 flex-1">
         <p className="truncate font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold text-base-content">
-          {t(`${taskId}-title`, { defaultValue: task.title })}
+          {pickLocalization(task.localizations, locale).name}
         </p>
         <p className="mt-0.5 text-[length:var(--font-size-xs)] text-base-content/60">
-          {t(`project-${task.projectSlug}`, { defaultValue: task.project })}{" "}
+          {pickLocalization(projectDescriptors[task.projectSlug]?.localizations, locale).name}{" "}
           <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>
@@ -131,7 +114,8 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
 /* ── Tasks screen ─────────────────────────────────────────────────── */
 
 export function TasksScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
 
   const [stateFilter, setStateFilter] = useState<StateFilter>("all");
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all");
@@ -142,7 +126,7 @@ export function TasksScreen(): JSX.Element {
   const filtered = TASKS.filter((task) => {
     if (stateFilter !== "all" && task.state !== stateFilter) return false;
     if (priorityFilter !== "all" && task.priority !== priorityFilter) return false;
-    if (projectFilter !== "all" && task.project !== projectFilter) return false;
+    if (projectFilter !== "all" && task.projectSlug !== projectFilter) return false;
     return true;
   });
 
@@ -179,9 +163,7 @@ export function TasksScreen(): JSX.Element {
             {Object.values(TaskState).map((s) => (
               <FilterChip
                 key={s}
-                label={t(`task-state-${s.replace(/_/g, "-")}`, {
-                  defaultValue: STATE_DEFAULTS[s],
-                })}
+                label={pickLocalization(taskStateDescriptors[s]?.localizations, locale).name}
                 value={s}
                 selected={stateFilter === s}
                 onSelect={setStateFilter}
@@ -203,7 +185,7 @@ export function TasksScreen(): JSX.Element {
             {Object.values(Priority).map((p) => (
               <FilterChip
                 key={p}
-                label={t(`task-priority-${p}`, { defaultValue: PRIORITY_DEFAULTS[p] })}
+                label={pickLocalization(priorityDescriptors[p]?.localizations, locale).name}
                 value={p}
                 selected={priorityFilter === p}
                 onSelect={setPriorityFilter}
@@ -222,12 +204,12 @@ export function TasksScreen(): JSX.Element {
               selected={projectFilter === "all"}
               onSelect={setProjectFilter}
             />
-            {PROJECTS.map((p) => (
+            {PROJECT_SLUGS.map((slug) => (
               <FilterChip
-                key={p}
-                label={t(`project-${PROJECT_SLUGS.get(p) ?? p}`, { defaultValue: p })}
-                value={p}
-                selected={projectFilter === p}
+                key={slug}
+                label={pickLocalization(projectDescriptors[slug]?.localizations, locale).name}
+                value={slug}
+                selected={projectFilter === slug}
                 onSelect={setProjectFilter}
               />
             ))}

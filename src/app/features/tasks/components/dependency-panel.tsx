@@ -5,13 +5,15 @@ import { useTranslation } from "react-i18next";
 
 import { findTask, type Task } from "../../../../data/tasks";
 import { StatusBadge } from "../../../components/status-badge";
+import { pickLocalization } from "../../../domain/entities/localization";
 
 interface DependencyPanelProps {
   readonly task: Task;
 }
 
 function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
   const dep = findTask(taskId);
   if (dep === undefined) {
     return (
@@ -23,7 +25,6 @@ function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
     );
   }
 
-  const depId = dep.id.toLowerCase();
   return (
     <div className="rounded border border-base-300 px-3 py-2">
       <div className="flex items-center gap-2">
@@ -33,7 +34,7 @@ function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
         </span>
       </div>
       <p className="mt-1 text-[length:var(--font-size-sm)] font-semibold text-base-content">
-        {t(`${depId}-title`, { defaultValue: dep.title })}
+        {pickLocalization(dep.localizations, locale).name}
       </p>
       <p className="mt-0.5 text-[length:var(--font-size-xs)] text-base-content/60">
         {dep.assignee.name}

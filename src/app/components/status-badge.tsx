@@ -10,8 +10,9 @@ import {
 } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-
+import { taskStateDescriptors } from "../../data/registries";
 import { TaskState } from "../../data/tasks";
+import { pickLocalization } from "../domain/entities/localization";
 
 /* ── Visual mapping ────────────────────────────────────────────────── */
 
@@ -54,15 +55,6 @@ const STYLE_MAP: Record<TaskState, BadgeStyle> = {
   },
 };
 
-const LABEL_DEFAULTS: Record<TaskState, string> = {
-  [TaskState.Draft]: "Draft",
-  [TaskState.InProgress]: "In Progress",
-  [TaskState.InReview]: "In Review",
-  [TaskState.Paused]: "Paused",
-  [TaskState.Done]: "Done",
-  [TaskState.Abandoned]: "Abandoned",
-};
-
 /* ── Component ─────────────────────────────────────────────────────── */
 
 interface StatusBadgeProps {
@@ -71,11 +63,10 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ state, className = "" }: StatusBadgeProps): JSX.Element {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const style = STYLE_MAP[state];
   const Icon = style.icon;
-  const key = `task-state-${state.replace(/_/g, "-")}`;
-  const label = t(key, { defaultValue: LABEL_DEFAULTS[state] });
+  const label = pickLocalization(taskStateDescriptors[state]?.localizations, i18n.language).name;
 
   return (
     <span

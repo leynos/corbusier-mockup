@@ -6,8 +6,9 @@
 
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-
+import { labelDescriptors } from "../../data/registries";
 import type { Task } from "../../data/tasks";
+import { pickLocalization } from "../domain/entities/localization";
 import { AvatarStack } from "./avatar-stack";
 import { CategoryTag } from "./category-tag";
 import { ChamferCard } from "./chamfer-card";
@@ -27,14 +28,14 @@ function subtaskProgress(task: Task): number {
 }
 
 export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const isBlocked = task.dependencies.blockedBy.length > 0;
   const reversed = isBlocked;
   const strokeClass = isBlocked ? "stroke-error" : "stroke-base-300";
   const progress = subtaskProgress(task);
   const done = task.subtasks.filter((s) => s.done).length;
   const total = task.subtasks.length;
-  const taskId = task.id.toLowerCase();
 
   return (
     <ChamferCard
@@ -53,19 +54,22 @@ export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
 
       {/* Title */}
       <h3 className="mb-1 text-[length:var(--font-size-sm)] font-semibold text-base-content">
-        {t(`${taskId}-title`, { defaultValue: task.title })}
+        {pickLocalization(task.localizations, locale).name}
       </h3>
 
       {/* Description (truncated) */}
       <p className="mb-3 line-clamp-2 text-[length:var(--font-size-xs)] text-base-content/60">
-        {t(`${taskId}-description`, { defaultValue: task.description })}
+        {pickLocalization(task.localizations, locale).description}
       </p>
 
       {/* Labels */}
-      {task.labels.length > 0 ? (
+      {task.labelIds.length > 0 ? (
         <div className="mb-3 flex flex-wrap gap-1">
-          {task.labels.map((l) => (
-            <CategoryTag key={l} label={t(`label-${l}`, { defaultValue: l })} />
+          {task.labelIds.map((l) => (
+            <CategoryTag
+              key={l}
+              label={pickLocalization(labelDescriptors[l]?.localizations, locale).name}
+            />
           ))}
         </div>
       ) : null}

@@ -6,13 +6,15 @@ import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../../data/tasks";
 import { StatusBadge } from "../../../components/status-badge";
+import { pickLocalization } from "../../../domain/entities/localization";
 
 interface RelatedTasksProps {
   readonly taskIds: readonly string[];
 }
 
 export function RelatedTasks({ taskIds }: RelatedTasksProps): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
 
   if (taskIds.length === 0) {
     return (
@@ -27,7 +29,6 @@ export function RelatedTasks({ taskIds }: RelatedTasksProps): JSX.Element {
       {taskIds.map((id) => {
         const related = findTask(id);
         if (related === undefined) return null;
-        const relatedId = related.id.toLowerCase();
 
         return (
           <Link
@@ -43,7 +44,7 @@ export function RelatedTasks({ taskIds }: RelatedTasksProps): JSX.Element {
               </span>
             </div>
             <p className="mt-1 text-[length:var(--font-size-sm)] font-semibold text-base-content">
-              {t(`${relatedId}-title`, { defaultValue: related.title })}
+              {pickLocalization(related.localizations, locale).name}
             </p>
           </Link>
         );

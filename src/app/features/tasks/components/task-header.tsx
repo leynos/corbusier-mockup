@@ -3,11 +3,12 @@
 import { IconCalendar } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-
+import { projectDescriptors } from "../../../../data/registries";
 import type { Task } from "../../../../data/tasks";
 import { AvatarStack } from "../../../components/avatar-stack";
 import { PriorityTag } from "../../../components/priority-tag";
 import { StatusBadge } from "../../../components/status-badge";
+import { pickLocalization } from "../../../domain/entities/localization";
 
 interface TaskHeaderProps {
   readonly task: Task;
@@ -22,8 +23,8 @@ function formatDueDate(iso: string): string {
 }
 
 export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
-  const { t } = useTranslation();
-  const taskId = task.id.toLowerCase();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -33,10 +34,10 @@ export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
           <PriorityTag priority={task.priority} />
         </div>
         <h1 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
-          {t(`${taskId}-title`, { defaultValue: task.title })}
+          {pickLocalization(task.localizations, locale).name}
         </h1>
         <p className="mt-1 text-[length:var(--font-size-sm)] text-base-content/60">
-          {t(`project-${task.projectSlug}`, { defaultValue: task.project })}{" "}
+          {pickLocalization(projectDescriptors[task.projectSlug]?.localizations, locale).name}{" "}
           <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>

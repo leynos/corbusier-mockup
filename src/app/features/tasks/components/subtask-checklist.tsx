@@ -6,13 +6,15 @@ import { useTranslation } from "react-i18next";
 
 import type { Subtask } from "../../../../data/tasks";
 import { ProgressBar } from "../../../components/progress-bar";
+import { pickLocalization } from "../../../domain/entities/localization";
 
 interface SubtaskChecklistProps {
   readonly subtasks: readonly Subtask[];
 }
 
 export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Element | null {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
 
   if (subtasks.length === 0) return null;
 
@@ -51,7 +53,7 @@ export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Eleme
             <span
               className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
             >
-              {t(`${sub.id}-title`, { defaultValue: sub.title })}
+              {pickLocalization(sub.localizations, locale).name}
             </span>
           </li>
         ))}

@@ -2,15 +2,16 @@
 
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-
 import type { ActivityEventKind } from "../../data/tasks";
+import type { EntityLocalizations } from "../domain/entities/localization";
+import { pickLocalization } from "../domain/entities/localization";
 
 export interface TimelineEntry {
   readonly id: string;
   readonly kind: ActivityEventKind;
   readonly timestamp: string;
   readonly actor: string;
-  readonly description: string;
+  readonly localizations: EntityLocalizations;
 }
 
 /* Dot colour follows design language:
@@ -42,7 +43,8 @@ function formatTimestamp(iso: string): string {
 }
 
 export function ActivityTimeline({ entries, className = "" }: ActivityTimelineProps): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   return (
     <ol
       className={`relative space-y-4 ${className}`}
@@ -63,7 +65,8 @@ export function ActivityTimeline({ entries, className = "" }: ActivityTimelinePr
           {/* Content */}
           <div className="pb-4">
             <p className="text-[length:var(--font-size-sm)] text-base-content">
-              <span className="font-semibold">{entry.actor}</span> {entry.description}
+              <span className="font-semibold">{entry.actor}</span>{" "}
+              {pickLocalization(entry.localizations, locale).name}
             </p>
             <time
               dateTime={entry.timestamp}

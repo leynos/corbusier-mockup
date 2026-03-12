@@ -5,6 +5,7 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Task } from "../../../../data/tasks";
+import { pickLocalization } from "../../../domain/entities/localization";
 
 interface DependencyHierarchyProps {
   readonly task: Task;
@@ -16,31 +17,31 @@ interface BreadcrumbItem {
 }
 
 export function DependencyHierarchy({ task }: DependencyHierarchyProps): JSX.Element | null {
-  const { t } = useTranslation();
-  const taskId = task.id.toLowerCase();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const items: BreadcrumbItem[] = [];
 
-  if (task.parentGoal !== undefined) {
+  if (task.hierarchy.goal !== undefined) {
     items.push({
       label: t("task-hierarchy-goal", { defaultValue: "Goal" }),
-      value: t(`${taskId}-goal`, { defaultValue: task.parentGoal }),
+      value: pickLocalization(task.hierarchy.goal, locale).name,
     });
   }
-  if (task.parentIdea !== undefined) {
+  if (task.hierarchy.idea !== undefined) {
     items.push({
       label: t("task-hierarchy-idea", { defaultValue: "Idea" }),
-      value: t(`${taskId}-idea`, { defaultValue: task.parentIdea }),
+      value: pickLocalization(task.hierarchy.idea, locale).name,
     });
   }
-  if (task.parentStep !== undefined) {
+  if (task.hierarchy.step !== undefined) {
     items.push({
       label: t("task-hierarchy-step", { defaultValue: "Step" }),
-      value: t(`${taskId}-step`, { defaultValue: task.parentStep }),
+      value: pickLocalization(task.hierarchy.step, locale).name,
     });
   }
   items.push({
     label: t("task-hierarchy-task", { defaultValue: "Task" }),
-    value: t(`${taskId}-title`, { defaultValue: task.title }),
+    value: pickLocalization(task.localizations, locale).name,
   });
 
   if (items.length <= 1) return null;

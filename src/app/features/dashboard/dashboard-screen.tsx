@@ -187,7 +187,9 @@ export function DashboardScreen(): JSX.Element {
                 kind: e.kind === "tool_call" || e.kind === "agent_turn" ? "agent_action" : e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                description: t(`${e.id}-description`, { defaultValue: e.description }),
+                localizations: {
+                  "en-GB": { name: t(`${e.id}-description`, { defaultValue: e.description }) },
+                },
               }))}
             />
           </div>
