@@ -63,7 +63,7 @@ deliver.[^1]
    data without interruption. When a network connection becomes available, the
    application opportunistically synchronizes any local changes with the server
    and pulls down updates from other clients.[^1]
-4. **Seamless collaboration among colleagues.** Local-first architecture
+4. **Seamless collaboration with colleagues.** Local-first architecture
    does not sacrifice the collaborative capabilities that have made cloud
    applications indispensable. The goal is to support real-time, multi-user
    collaboration that is on par with, or even superior to, existing cloud-based
@@ -84,7 +84,7 @@ deliver.[^1]
    via a server, it can be end-to-end encrypted. This ensures that the server
    operator cannot access the content of the user's data, only store the
    encrypted blobs.[^1]
-7. **Users retain ultimate ownership and control.** Perhaps the most profound
+7. **Ultimate ownership and control is retained.** Perhaps the most profound
    philosophical shift is the restoration of data ownership to the user.
    Because the data resides in files on their local device, users have ultimate
    agency. They can back it up, move it, manipulate it with other tools, or
@@ -139,7 +139,7 @@ disciplined separation of these two state types.
   cache of this remote data. It is inherently asynchronous, as it must be
   fetched over a network. It is also shared, meaning other users or processes
   can change it without the client's direct knowledge, causing the local cache
-  to become "stale".[^3] In the context of our local-first architecture, this
+  to become "stale".[^3] In the context of the local-first architecture, this
   "server state" is mirrored and persisted on the client's device, becoming the
   primary data source that the application interacts with, but its lifecycle
   and synchronization challenges remain.
@@ -192,7 +192,7 @@ libraries that are purpose-built for their respective domains.
   global client state an application needs, often reducing it to just a few UI
   flags.[^6]
 
-This deliberate separation forms the cornerstone of our local-first
+This deliberate separation forms the cornerstone of the local-first
 architecture. It allows each library to perform the task for which it was
 designed, resulting in a system that is more performant, less complex, and
 easier to maintain at scale.
@@ -362,7 +362,7 @@ export default useSettingsStore;
 ```
 
 This simple example provides a gentle introduction to the concept of state
-persistence, which will be explored in much greater depth when we discuss
+persistence, which will be explored in much greater depth as discussed
 persisting the server state cache in Section 6.
 
 ## Server State Synchronization with Tanstack Query
@@ -418,7 +418,7 @@ cached query and are often a point of confusion.
 (300,000 ms). This means that if a user navigates away from a page, the data
 for that page will be kept in the cache for 5 minutes. If they navigate back
 within that window, the data will be instantly available. After 5 minutes of
-inactivity, the data is deleted from the cache. As we will see in Section 6,
+inactivity, the data is deleted from the cache. As shown in Section 6,
 this setting has critical implications for building a local-first application,
 as the default value is insufficient for offline persistence.
 
@@ -693,7 +693,7 @@ imperative approach that manually synchronizes two separate state containers.
 
 A core ideal of local-first software is that the network is optional. To
 achieve this, the application's state must be persisted locally on the user's
-device. For our architecture, this means persisting the in-memory cache managed
+device. For the architecture, this means persisting the in-memory cache managed
 by Tanstack Query to a durable storage layer. This transforms the cache from a
 transient, session-based optimization into a robust, local database that
 enables full offline functionality.
@@ -1051,7 +1051,7 @@ complex behavior.[^47]
 
 The core concepts include[^47]:
 
-- **States:** A finite set of explicit conditions your application or component
+- **States:** A finite set of explicit conditions the application or component
   can be in (e.g., `idle`, `loading`, `success`, `error`). A machine can only
   be in one state at a time, which eliminates impossible states and reduces
   bugs.[^48]
@@ -1097,7 +1097,7 @@ complex components or features that benefit from the rigor of a state machine.
 
 ### Best Practices for Seamless Integration with Tanstack Query
 
-Integrating XState into our architecture with Tanstack Query follows the same
+Integrating XState into the architecture with Tanstack Query follows the same
 core principle: **Tanstack Query owns the server state**.[^54] The state
 machine should not duplicate this state but rather react to it.
 
@@ -1109,7 +1109,7 @@ source of events.
    single source of truth for the data itself, as well as its asynchronous
    lifecycle (`isPending`, `isSuccess`, `isError`).
 2. **Feed Query State into the Machine:** Use a `useEffect` hook to observe the
-   state of `useQuery` and send corresponding events to your XState machine.
+   state of `useQuery` and send corresponding events to the XState machine.
 3. **Machine Manages UI State:** The machine transitions based on these events,
    controlling what the user sees (e.g., a loading spinner, the data, or an
    error message with a retry button).
@@ -1262,7 +1262,7 @@ evolution, providing a higher-level abstraction specifically designed for
 local-first and real-time applications.[^17]
 
 Tanstack DB builds directly on top of Tanstack Query, extending it with a set
-of primitives that formalize the patterns we have manually constructed in this
+of primitives that formalize the patterns manually constructed in this
 guide[^43]:
 
 - **Collections:** A formal local store primitive that acts as the client-side
