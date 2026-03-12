@@ -1,6 +1,7 @@
 /** @file Task metadata panel — assignee, due date, priority, estimate, labels. */
 
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { Task } from "../../../../data/tasks";
 import { CategoryTag } from "../../../components/category-tag";
@@ -35,26 +36,35 @@ function MetaRow({ label, children }: MetaRowProps): JSX.Element {
 }
 
 export function TaskMetadataPanel({ task }: TaskMetadataPanelProps): JSX.Element {
+  const { t } = useTranslation();
+  const taskId = task.id.toLowerCase();
+
   return (
     <dl className="divide-y divide-base-300/50">
-      <MetaRow label="Assignee">
+      <MetaRow label={t("task-meta-assignee", { defaultValue: "Assignee" })}>
         <span className="font-semibold">{task.assignee.name}</span>
         <span className="ml-1 text-[length:var(--font-size-xs)] text-base-content/60">
-          {task.assignee.role}
+          {t(`role-${task.assignee.role.toLowerCase().replace(/\s+/g, "-")}`, {
+            defaultValue: task.assignee.role,
+          })}
         </span>
       </MetaRow>
-      <MetaRow label="Due">
+      <MetaRow label={t("task-meta-due", { defaultValue: "Due" })}>
         <time dateTime={task.dueDate}>{formatDueDate(task.dueDate)}</time>
       </MetaRow>
-      <MetaRow label="Priority">
+      <MetaRow label={t("task-meta-priority", { defaultValue: "Priority" })}>
         <PriorityTag priority={task.priority} />
       </MetaRow>
-      {task.estimate !== undefined ? <MetaRow label="Estimate">{task.estimate}</MetaRow> : null}
+      {task.estimate !== undefined ? (
+        <MetaRow label={t("task-meta-estimate", { defaultValue: "Estimate" })}>
+          {t(`${taskId}-estimate`, { defaultValue: task.estimate })}
+        </MetaRow>
+      ) : null}
       {task.labels.length > 0 ? (
-        <MetaRow label="Labels">
+        <MetaRow label={t("task-meta-labels", { defaultValue: "Labels" })}>
           <div className="flex flex-wrap justify-end gap-1">
             {task.labels.map((l) => (
-              <CategoryTag key={l} label={l} />
+              <CategoryTag key={l} label={t(`label-${l}`, { defaultValue: l })} />
             ))}
           </div>
         </MetaRow>

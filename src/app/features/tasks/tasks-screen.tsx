@@ -21,6 +21,10 @@ type ProjectFilter = string | "all";
 
 const PROJECTS: readonly string[] = [...new Set(TASKS.map((t) => t.project))];
 
+/* ── Unique project slugs (for key derivation) ────────────────────── */
+
+const PROJECT_SLUGS = new Map(TASKS.map((t) => [t.project, t.projectSlug]));
+
 /* ── Filter chip ──────────────────────────────────────────────────── */
 
 interface FilterChipProps<T extends string> {
@@ -51,9 +55,9 @@ function FilterChip<T extends string>({
   );
 }
 
-/* ── State labels ─────────────────────────────────────────────────── */
+/* ── State / priority default labels ─────────────────────────────── */
 
-const STATE_LABELS: Record<TaskState, string> = {
+const STATE_DEFAULTS: Record<TaskState, string> = {
   [TaskState.Draft]: "Draft",
   [TaskState.InProgress]: "In Progress",
   [TaskState.InReview]: "In Review",
@@ -62,7 +66,7 @@ const STATE_LABELS: Record<TaskState, string> = {
   [TaskState.Abandoned]: "Abandoned",
 };
 
-const PRIORITY_LABELS: Record<Priority, string> = {
+const PRIORITY_DEFAULTS: Record<Priority, string> = {
   [Priority.Critical]: "Critical",
   [Priority.High]: "High",
   [Priority.Medium]: "Medium",
@@ -80,6 +84,9 @@ function formatDueDate(iso: string): string {
 }
 
 function TaskRow({ task }: { readonly task: Task }): JSX.Element {
+  const { t } = useTranslation();
+  const taskId = task.id.toLowerCase();
+
   return (
     <Link
       to="/tasks/$id"
@@ -94,10 +101,11 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
       {/* Title + project + ID */}
       <div className="min-w-0 flex-1">
         <p className="truncate font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold text-base-content">
-          {task.title}
+          {t(`${taskId}-title`, { defaultValue: task.title })}
         </p>
         <p className="mt-0.5 text-[length:var(--font-size-xs)] text-base-content/60">
-          {task.project} <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
+          {t(`project-${task.projectSlug}`, { defaultValue: task.project })}{" "}
+          <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>
 
@@ -152,7 +160,7 @@ export function TasksScreen(): JSX.Element {
 
       {/* Filter bar */}
       <section
-        aria-label="Task filters"
+        aria-label={t("task-filter-region", { defaultValue: "Task filters" })}
         className="card mb-6 border border-base-300 bg-base-100 shadow-sm"
       >
         <div className="card-body gap-3 p-4">
@@ -160,10 +168,10 @@ export function TasksScreen(): JSX.Element {
           <div className="flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-1 text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
               <IconFilter size={14} stroke={1.5} aria-hidden="true" />
-              State
+              {t("task-filter-state", { defaultValue: "State" })}
             </span>
             <FilterChip
-              label="All"
+              label={t("task-filter-all", { defaultValue: "All" })}
               value="all"
               selected={stateFilter === "all"}
               onSelect={setStateFilter}
@@ -171,7 +179,9 @@ export function TasksScreen(): JSX.Element {
             {Object.values(TaskState).map((s) => (
               <FilterChip
                 key={s}
-                label={STATE_LABELS[s]}
+                label={t(`task-state-${s.replace(/_/g, "-")}`, {
+                  defaultValue: STATE_DEFAULTS[s],
+                })}
                 value={s}
                 selected={stateFilter === s}
                 onSelect={setStateFilter}
@@ -182,10 +192,10 @@ export function TasksScreen(): JSX.Element {
           {/* Priority filters */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              Priority
+              {t("task-filter-priority", { defaultValue: "Priority" })}
             </span>
             <FilterChip
-              label="All"
+              label={t("task-filter-all", { defaultValue: "All" })}
               value="all"
               selected={priorityFilter === "all"}
               onSelect={setPriorityFilter}
@@ -193,7 +203,7 @@ export function TasksScreen(): JSX.Element {
             {Object.values(Priority).map((p) => (
               <FilterChip
                 key={p}
-                label={PRIORITY_LABELS[p]}
+                label={t(`task-priority-${p}`, { defaultValue: PRIORITY_DEFAULTS[p] })}
                 value={p}
                 selected={priorityFilter === p}
                 onSelect={setPriorityFilter}
@@ -204,10 +214,10 @@ export function TasksScreen(): JSX.Element {
           {/* Project filters */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              Project
+              {t("task-filter-project", { defaultValue: "Project" })}
             </span>
             <FilterChip
-              label="All"
+              label={t("task-filter-all", { defaultValue: "All" })}
               value="all"
               selected={projectFilter === "all"}
               onSelect={setProjectFilter}
@@ -215,7 +225,7 @@ export function TasksScreen(): JSX.Element {
             {PROJECTS.map((p) => (
               <FilterChip
                 key={p}
-                label={p}
+                label={t(`project-${PROJECT_SLUGS.get(p) ?? p}`, { defaultValue: p })}
                 value={p}
                 selected={projectFilter === p}
                 onSelect={setProjectFilter}
@@ -232,7 +242,7 @@ export function TasksScreen(): JSX.Element {
                 className="inline-flex items-center gap-1 text-[length:var(--font-size-xs)] font-semibold text-primary hover:text-primary/80"
               >
                 <IconFilterOff size={14} stroke={1.5} aria-hidden="true" />
-                Reset filters
+                {t("task-filter-reset", { defaultValue: "Reset filters" })}
               </button>
             </div>
           ) : null}
@@ -240,14 +250,19 @@ export function TasksScreen(): JSX.Element {
       </section>
 
       {/* Task list */}
-      <section aria-label="Task list" className="card border border-base-300 bg-base-100 shadow-sm">
+      <section
+        aria-label={t("task-list-region", { defaultValue: "Task list" })}
+        className="card border border-base-300 bg-base-100 shadow-sm"
+      >
         <div className="card-body p-0">
           {/* Summary header */}
           <div className="border-b border-base-300 px-4 py-3">
             <p className="text-[length:var(--font-size-sm)] text-base-content/60">
-              Showing{" "}
-              <span className="font-semibold text-base-content">{String(filtered.length)}</span> of{" "}
-              <span className="font-semibold text-base-content">{String(TASKS.length)}</span> tasks
+              {t("task-list-summary", {
+                shown: String(filtered.length),
+                total: String(TASKS.length),
+                defaultValue: `Showing ${String(filtered.length)} of ${String(TASKS.length)} tasks`,
+              })}
             </p>
           </div>
 
@@ -263,7 +278,7 @@ export function TasksScreen(): JSX.Element {
           ) : (
             <div className="px-4 py-12 text-center">
               <p className="text-[length:var(--font-size-sm)] text-base-content/60">
-                No tasks match the current filters.
+                {t("task-list-empty", { defaultValue: "No tasks match the current filters." })}
               </p>
             </div>
           )}

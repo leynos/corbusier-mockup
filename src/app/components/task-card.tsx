@@ -5,6 +5,7 @@
  */
 
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { Task } from "../../data/tasks";
 import { AvatarStack } from "./avatar-stack";
@@ -26,10 +27,14 @@ function subtaskProgress(task: Task): number {
 }
 
 export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
+  const { t } = useTranslation();
   const isBlocked = task.dependencies.blockedBy.length > 0;
   const reversed = isBlocked;
   const strokeClass = isBlocked ? "stroke-error" : "stroke-base-300";
   const progress = subtaskProgress(task);
+  const done = task.subtasks.filter((s) => s.done).length;
+  const total = task.subtasks.length;
+  const taskId = task.id.toLowerCase();
 
   return (
     <ChamferCard
@@ -48,33 +53,40 @@ export function TaskCard({ task, className = "" }: TaskCardProps): JSX.Element {
 
       {/* Title */}
       <h3 className="mb-1 text-[length:var(--font-size-sm)] font-semibold text-base-content">
-        {task.title}
+        {t(`${taskId}-title`, { defaultValue: task.title })}
       </h3>
 
       {/* Description (truncated) */}
       <p className="mb-3 line-clamp-2 text-[length:var(--font-size-xs)] text-base-content/60">
-        {task.description}
+        {t(`${taskId}-description`, { defaultValue: task.description })}
       </p>
 
       {/* Labels */}
       {task.labels.length > 0 ? (
         <div className="mb-3 flex flex-wrap gap-1">
           {task.labels.map((l) => (
-            <CategoryTag key={l} label={l} />
+            <CategoryTag key={l} label={t(`label-${l}`, { defaultValue: l })} />
           ))}
         </div>
       ) : null}
 
       {/* Progress bar (if subtasks exist) */}
-      {task.subtasks.length > 0 ? (
+      {total > 0 ? (
         <div className="mb-3">
           <ProgressBar
             value={progress}
             fillClassName={isBlocked ? "bg-error" : "bg-primary"}
-            label={`${String(progress)}% subtasks complete`}
+            label={t("task-card-progress", {
+              progress: String(progress),
+              defaultValue: `${String(progress)}% subtasks complete`,
+            })}
           />
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/50">
-            {task.subtasks.filter((s) => s.done).length}/{task.subtasks.length} subtasks
+            {t("task-card-subtasks", {
+              done: String(done),
+              total: String(total),
+              defaultValue: `${String(done)}/${String(total)} subtasks`,
+            })}
           </p>
         </div>
       ) : null}

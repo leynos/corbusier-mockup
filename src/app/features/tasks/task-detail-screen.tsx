@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { type JSX, useId } from "react";
+import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
@@ -59,6 +60,7 @@ function Section({ icon: Icon, title, children }: SectionProps): JSX.Element {
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDetailScreen(): JSX.Element {
+  const { t } = useTranslation();
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -66,7 +68,7 @@ export function TaskDetailScreen(): JSX.Element {
     return (
       <div className="py-12 text-center">
         <p className="text-[length:var(--font-size-lg)] font-semibold text-base-content">
-          Task not found
+          {t("task-not-found", { defaultValue: "Task not found" })}
         </p>
         <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/60">
           {id}
@@ -74,6 +76,8 @@ export function TaskDetailScreen(): JSX.Element {
       </div>
     );
   }
+
+  const taskId = task.id.toLowerCase();
 
   return (
     <div className="space-y-6">
@@ -91,29 +95,41 @@ export function TaskDetailScreen(): JSX.Element {
         {/* Main content — 2/3 */}
         <div className="space-y-6 lg:col-span-2">
           {/* 3. Dependencies */}
-          <Section icon={IconNetwork} title="Dependencies">
+          <Section
+            icon={IconNetwork}
+            title={t("task-section-dependencies", { defaultValue: "Dependencies" })}
+          >
             <DependencyPanel task={task} />
           </Section>
 
           {/* 4. Subtasks */}
-          <Section icon={IconListCheck} title="Progress">
+          <Section
+            icon={IconListCheck}
+            title={t("task-section-progress", { defaultValue: "Progress" })}
+          >
             <SubtaskChecklist subtasks={task.subtasks} />
           </Section>
 
           {/* 5. Branch & PR */}
-          <Section icon={IconGitBranch} title="Source Control">
+          <Section
+            icon={IconGitBranch}
+            title={t("task-section-source-control", { defaultValue: "Source Control" })}
+          >
             <BranchPrPanel branchRef={task.branchRef} pullRequestRef={task.pullRequestRef} />
           </Section>
 
           {/* 6. Activity timeline */}
-          <Section icon={IconActivity} title="Activity">
+          <Section
+            icon={IconActivity}
+            title={t("task-section-activity", { defaultValue: "Activity" })}
+          >
             <ActivityTimeline
               entries={task.activityLog.map((e) => ({
                 id: e.id,
                 kind: e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                description: e.description,
+                description: t(`${e.id}-description`, { defaultValue: e.description }),
               }))}
             />
           </Section>
@@ -122,19 +138,25 @@ export function TaskDetailScreen(): JSX.Element {
         {/* Sidebar — 1/3 */}
         <div className="space-y-6">
           {/* 7. Metadata */}
-          <Section icon={IconTag} title="Details">
+          <Section icon={IconTag} title={t("task-section-details", { defaultValue: "Details" })}>
             <TaskMetadataPanel task={task} />
           </Section>
 
           {/* Description */}
-          <Section icon={IconHierarchy2} title="Description">
+          <Section
+            icon={IconHierarchy2}
+            title={t("task-section-description", { defaultValue: "Description" })}
+          >
             <p className="text-[length:var(--font-size-sm)] text-base-content/80">
-              {task.description}
+              {t(`${taskId}-description`, { defaultValue: task.description })}
             </p>
           </Section>
 
           {/* Related tasks */}
-          <Section icon={IconUsers} title="Related Tasks">
+          <Section
+            icon={IconUsers}
+            title={t("task-section-related", { defaultValue: "Related Tasks" })}
+          >
             <RelatedTasks taskIds={task.relatedTasks} />
           </Section>
         </div>

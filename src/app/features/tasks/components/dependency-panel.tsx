@@ -1,6 +1,7 @@
 /** @file Dependency panel — "Blocked By" and "Blocks" sections. */
 
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import { findTask, type Task } from "../../../../data/tasks";
 import { StatusBadge } from "../../../components/status-badge";
@@ -10,6 +11,7 @@ interface DependencyPanelProps {
 }
 
 function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
+  const { t } = useTranslation();
   const dep = findTask(taskId);
   if (dep === undefined) {
     return (
@@ -21,6 +23,7 @@ function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
     );
   }
 
+  const depId = dep.id.toLowerCase();
   return (
     <div className="rounded border border-base-300 px-3 py-2">
       <div className="flex items-center gap-2">
@@ -30,7 +33,7 @@ function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
         </span>
       </div>
       <p className="mt-1 text-[length:var(--font-size-sm)] font-semibold text-base-content">
-        {dep.title}
+        {t(`${depId}-title`, { defaultValue: dep.title })}
       </p>
       <p className="mt-0.5 text-[length:var(--font-size-xs)] text-base-content/60">
         {dep.assignee.name}
@@ -40,12 +43,15 @@ function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
 }
 
 export function DependencyPanel({ task }: DependencyPanelProps): JSX.Element {
+  const { t } = useTranslation();
   const { blockedBy, blocks } = task.dependencies;
   const hasAny = blockedBy.length > 0 || blocks.length > 0;
 
   if (!hasAny) {
     return (
-      <p className="text-[length:var(--font-size-sm)] text-base-content/60">No dependencies.</p>
+      <p className="text-[length:var(--font-size-sm)] text-base-content/60">
+        {t("task-deps-none", { defaultValue: "No dependencies." })}
+      </p>
     );
   }
 
@@ -54,7 +60,7 @@ export function DependencyPanel({ task }: DependencyPanelProps): JSX.Element {
       {blockedBy.length > 0 ? (
         <div>
           <h3 className="mb-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            Blocked By
+            {t("task-deps-blocked-by", { defaultValue: "Blocked By" })}
           </h3>
           <div className="space-y-2">
             {blockedBy.map((id) => (
@@ -66,7 +72,7 @@ export function DependencyPanel({ task }: DependencyPanelProps): JSX.Element {
       {blocks.length > 0 ? (
         <div>
           <h3 className="mb-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            Blocks
+            {t("task-deps-blocks", { defaultValue: "Blocks" })}
           </h3>
           <div className="space-y-2">
             {blocks.map((id) => (

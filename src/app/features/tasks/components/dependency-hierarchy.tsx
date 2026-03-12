@@ -2,6 +2,7 @@
 
 import { IconChevronRight } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { Task } from "../../../../data/tasks";
 
@@ -15,23 +16,40 @@ interface BreadcrumbItem {
 }
 
 export function DependencyHierarchy({ task }: DependencyHierarchyProps): JSX.Element | null {
+  const { t } = useTranslation();
+  const taskId = task.id.toLowerCase();
   const items: BreadcrumbItem[] = [];
 
   if (task.parentGoal !== undefined) {
-    items.push({ label: "Goal", value: task.parentGoal });
+    items.push({
+      label: t("task-hierarchy-goal", { defaultValue: "Goal" }),
+      value: t(`${taskId}-goal`, { defaultValue: task.parentGoal }),
+    });
   }
   if (task.parentIdea !== undefined) {
-    items.push({ label: "Idea", value: task.parentIdea });
+    items.push({
+      label: t("task-hierarchy-idea", { defaultValue: "Idea" }),
+      value: t(`${taskId}-idea`, { defaultValue: task.parentIdea }),
+    });
   }
   if (task.parentStep !== undefined) {
-    items.push({ label: "Step", value: task.parentStep });
+    items.push({
+      label: t("task-hierarchy-step", { defaultValue: "Step" }),
+      value: t(`${taskId}-step`, { defaultValue: task.parentStep }),
+    });
   }
-  items.push({ label: "Task", value: task.title });
+  items.push({
+    label: t("task-hierarchy-task", { defaultValue: "Task" }),
+    value: t(`${taskId}-title`, { defaultValue: task.title }),
+  });
 
   if (items.length <= 1) return null;
 
   return (
-    <nav aria-label="Task hierarchy" className="flex flex-wrap items-center gap-1">
+    <nav
+      aria-label={t("task-hierarchy-label", { defaultValue: "Task hierarchy" })}
+      className="flex flex-wrap items-center gap-1"
+    >
       {items.map((item, i) => (
         <span key={item.label} className="flex items-center gap-1">
           {i > 0 ? (

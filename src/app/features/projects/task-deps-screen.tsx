@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { type JSX, useId } from "react";
+import { useTranslation } from "react-i18next";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
@@ -58,6 +59,8 @@ interface TaskFocusPanelProps {
 }
 
 function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
+  const { t } = useTranslation();
+  const taskId = task.id.toLowerCase();
   const done = task.subtasks.filter((s) => s.done).length;
   const total = task.subtasks.length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -67,16 +70,16 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
       <div className="mb-3 flex items-center gap-3">
         <StatusBadge state={task.state} />
         <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content">
-          {task.title}
+          {t(`${taskId}-title`, { defaultValue: task.title })}
         </h2>
       </div>
       <p className="mb-3 text-[length:var(--font-size-sm)] text-base-content/80">
-        {task.description}
+        {t(`${taskId}-description`, { defaultValue: task.description })}
       </p>
       {total > 0 ? (
         <div>
           <div className="mb-1 flex items-center justify-between text-[length:var(--font-size-xs)] text-base-content/60">
-            <span>Subtask progress</span>
+            <span>{t("task-deps-subtask-progress", { defaultValue: "Subtask progress" })}</span>
             <span className="font-[family-name:var(--font-mono)]">
               {String(done)}/{String(total)}
             </span>
@@ -86,7 +89,10 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
       ) : null}
       {task.estimate !== undefined ? (
         <p className="mt-2 text-[length:var(--font-size-xs)] text-base-content/60">
-          Estimate: <span className="font-semibold text-base-content">{task.estimate}</span>
+          {t("task-deps-estimate-label", { defaultValue: "Estimate:" })}{" "}
+          <span className="font-semibold text-base-content">
+            {t(`${taskId}-estimate`, { defaultValue: task.estimate })}
+          </span>
         </p>
       ) : null}
     </div>
@@ -96,6 +102,7 @@ function TaskFocusPanel({ task }: TaskFocusPanelProps): JSX.Element {
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 export function TaskDepsScreen(): JSX.Element {
+  const { t } = useTranslation();
   const { id } = routeApi.useParams();
   const task = findTask(id);
 
@@ -103,7 +110,7 @@ export function TaskDepsScreen(): JSX.Element {
     return (
       <div className="py-12 text-center">
         <p className="text-[length:var(--font-size-lg)] font-semibold text-base-content">
-          Task not found
+          {t("task-not-found", { defaultValue: "Task not found" })}
         </p>
         <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/60">
           {id}
@@ -118,7 +125,10 @@ export function TaskDepsScreen(): JSX.Element {
       <DependencyHierarchy task={task} />
 
       {/* Current task focus */}
-      <Section icon={IconHierarchy2} title="Current Task">
+      <Section
+        icon={IconHierarchy2}
+        title={t("task-section-current", { defaultValue: "Current Task" })}
+      >
         <TaskFocusPanel task={task} />
       </Section>
 
@@ -127,19 +137,25 @@ export function TaskDepsScreen(): JSX.Element {
         {/* Main — 2/3 */}
         <div className="space-y-6 lg:col-span-2">
           {/* Dependency graph */}
-          <Section icon={IconNetwork} title="Dependencies">
+          <Section
+            icon={IconNetwork}
+            title={t("task-section-dependencies", { defaultValue: "Dependencies" })}
+          >
             <DependencyPanel task={task} />
           </Section>
 
           {/* Activity timeline */}
-          <Section icon={IconActivity} title="Activity">
+          <Section
+            icon={IconActivity}
+            title={t("task-section-activity", { defaultValue: "Activity" })}
+          >
             <ActivityTimeline
               entries={task.activityLog.map((e) => ({
                 id: e.id,
                 kind: e.kind,
                 timestamp: e.timestamp,
                 actor: e.actor,
-                description: e.description,
+                description: t(`${e.id}-description`, { defaultValue: e.description }),
               }))}
             />
           </Section>
@@ -149,14 +165,17 @@ export function TaskDepsScreen(): JSX.Element {
         <div className="space-y-6">
           {/* Subtask summary */}
           {task.subtasks.length > 0 ? (
-            <Section icon={IconListCheck} title="Subtasks">
+            <Section
+              icon={IconListCheck}
+              title={t("task-section-subtasks", { defaultValue: "Subtasks" })}
+            >
               <ul className="space-y-1">
                 {task.subtasks.map((sub) => (
                   <li
                     key={sub.id}
                     className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
                   >
-                    {sub.title}
+                    {t(`${sub.id}-title`, { defaultValue: sub.title })}
                   </li>
                 ))}
               </ul>
@@ -164,7 +183,10 @@ export function TaskDepsScreen(): JSX.Element {
           ) : null}
 
           {/* Related tasks */}
-          <Section icon={IconUsers} title="Related Tasks">
+          <Section
+            icon={IconUsers}
+            title={t("task-section-related", { defaultValue: "Related Tasks" })}
+          >
             <RelatedTasks taskIds={task.relatedTasks} />
           </Section>
         </div>

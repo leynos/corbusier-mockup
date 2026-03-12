@@ -2,6 +2,7 @@
 
 import { IconGitBranch, IconGitPullRequest } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 interface BranchPrPanelProps {
   readonly branchRef: string | undefined;
@@ -9,10 +10,12 @@ interface BranchPrPanelProps {
 }
 
 export function BranchPrPanel({ branchRef, pullRequestRef }: BranchPrPanelProps): JSX.Element {
+  const { t } = useTranslation();
+
   if (branchRef === undefined && pullRequestRef === undefined) {
     return (
       <p className="text-[length:var(--font-size-sm)] text-base-content/60">
-        No branch or PR associated.
+        {t("task-branch-none", { defaultValue: "No branch or PR associated." })}
       </p>
     );
   }

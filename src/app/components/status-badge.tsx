@@ -9,6 +9,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import { TaskState } from "../../data/tasks";
 
@@ -53,7 +54,7 @@ const STYLE_MAP: Record<TaskState, BadgeStyle> = {
   },
 };
 
-const LABEL_MAP: Record<TaskState, string> = {
+const LABEL_DEFAULTS: Record<TaskState, string> = {
   [TaskState.Draft]: "Draft",
   [TaskState.InProgress]: "In Progress",
   [TaskState.InReview]: "In Review",
@@ -70,9 +71,11 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ state, className = "" }: StatusBadgeProps): JSX.Element {
+  const { t } = useTranslation();
   const style = STYLE_MAP[state];
   const Icon = style.icon;
-  const label = LABEL_MAP[state];
+  const key = `task-state-${state.replace(/_/g, "-")}`;
+  const label = t(key, { defaultValue: LABEL_DEFAULTS[state] });
 
   return (
     <span

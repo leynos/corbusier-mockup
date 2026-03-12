@@ -2,6 +2,7 @@
 
 import { IconCircle, IconCircleCheck } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { Subtask } from "../../../../data/tasks";
 import { ProgressBar } from "../../../components/progress-bar";
@@ -11,6 +12,8 @@ interface SubtaskChecklistProps {
 }
 
 export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Element | null {
+  const { t } = useTranslation();
+
   if (subtasks.length === 0) return null;
 
   const done = subtasks.filter((s) => s.done).length;
@@ -20,7 +23,7 @@ export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Eleme
     <div>
       <div className="mb-3 flex items-center justify-between">
         <h3 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold text-base-content">
-          Subtasks
+          {t("task-subtask-heading", { defaultValue: "Subtasks" })}
         </h3>
         <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
           {String(done)}/{String(subtasks.length)}
@@ -48,7 +51,7 @@ export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Eleme
             <span
               className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
             >
-              {sub.title}
+              {t(`${sub.id}-title`, { defaultValue: sub.title })}
             </span>
           </li>
         ))}

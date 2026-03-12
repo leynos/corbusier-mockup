@@ -1,6 +1,7 @@
 /** @file Vertical activity timeline with coloured dots. */
 
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { ActivityEventKind } from "../../data/tasks";
 
@@ -41,8 +42,12 @@ function formatTimestamp(iso: string): string {
 }
 
 export function ActivityTimeline({ entries, className = "" }: ActivityTimelineProps): JSX.Element {
+  const { t } = useTranslation();
   return (
-    <ol className={`relative space-y-4 ${className}`} aria-label="Activity timeline">
+    <ol
+      className={`relative space-y-4 ${className}`}
+      aria-label={t("activity-timeline-label", { defaultValue: "Activity timeline" })}
+    >
       {entries.map((entry, i) => (
         <li key={entry.id} className="flex gap-3">
           {/* Dot + vertical line */}

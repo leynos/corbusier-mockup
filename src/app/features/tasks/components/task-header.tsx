@@ -2,6 +2,7 @@
 
 import { IconCalendar } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { Task } from "../../../../data/tasks";
 import { AvatarStack } from "../../../components/avatar-stack";
@@ -21,6 +22,9 @@ function formatDueDate(iso: string): string {
 }
 
 export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
+  const { t } = useTranslation();
+  const taskId = task.id.toLowerCase();
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0 flex-1">
@@ -29,10 +33,11 @@ export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
           <PriorityTag priority={task.priority} />
         </div>
         <h1 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
-          {task.title}
+          {t(`${taskId}-title`, { defaultValue: task.title })}
         </h1>
         <p className="mt-1 text-[length:var(--font-size-sm)] text-base-content/60">
-          {task.project} <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
+          {t(`project-${task.projectSlug}`, { defaultValue: task.project })}{" "}
+          <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-4">
