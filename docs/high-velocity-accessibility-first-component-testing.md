@@ -633,7 +633,7 @@ In a complex UI, it is possible to inadvertently change or break semantic
 structure while refactoring, even if everything “looks” fine visually. To
 guard against this, the framework uses **accessibility tree snapshots** in
 Playwright. The accessibility tree is what assistive technologies actually
-interact with: a computed structure derived from the DOM, listing elements
+interact with a computed structure derived from the DOM, listing elements
 with roles, names, and properties as a screen reader would perceive them.
 
 Playwright provides an API `page.accessibility.snapshot()` that returns this

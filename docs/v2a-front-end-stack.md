@@ -303,7 +303,7 @@ front-end stack is:
   and
 - Happy DOM, Testing Library, Vitest, Playwright, and axe-core for testing.
 
-For map/location-based applications specifically, add a domain layer on top of
+For map/location-based applications specifically, add a domain layer atop
 that stack:
 
 - MapLibre GL JS for interactive maps,
