@@ -19,6 +19,7 @@ controls-drawer-close-button = 閉じる
 controls-reset-to-device-default-label = デバイス既定に戻す
 controls-trigger-label = コントロール
 
+app-skip-to-content = ページコンテンツへスキップ
 nav-sidebar-label = メインナビゲーション
 nav-zone-mainframe = メインフレーム
 nav-zone-projects = プロジェクト

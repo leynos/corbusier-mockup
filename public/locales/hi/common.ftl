@@ -19,6 +19,7 @@ controls-drawer-close-button = बंद करें
 controls-reset-to-device-default-label = डिवाइस डिफ़ॉल्ट पर रीसेट करें
 controls-trigger-label = नियंत्रण
 
+app-skip-to-content = पृष्ठ सामग्री पर जाएँ
 nav-sidebar-label = मुख्य नेविगेशन
 nav-zone-mainframe = मुख्य फ़्रेम
 nav-zone-projects = परियोजनाएँ

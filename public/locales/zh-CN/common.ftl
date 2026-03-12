@@ -19,6 +19,7 @@ controls-drawer-close-button = 关闭
 controls-reset-to-device-default-label = 重置为设备默认值
 controls-trigger-label = 控件
 
+app-skip-to-content = 跳至页面内容
 nav-sidebar-label = 主导航
 nav-zone-mainframe = 主框架
 nav-zone-projects = 项目

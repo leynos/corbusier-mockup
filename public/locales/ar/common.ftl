@@ -19,6 +19,7 @@ controls-drawer-close-button = إغلاق
 controls-reset-to-device-default-label = إعادة الضبط إلى الإعداد الافتراضي للجهاز
 controls-trigger-label = عناصر التحكم
 
+app-skip-to-content = انتقل إلى محتوى الصفحة
 nav-sidebar-label = التنقل الرئيسي
 nav-zone-mainframe = الإطار الرئيسي
 nav-zone-projects = المشاريع
