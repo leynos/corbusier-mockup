@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import {
@@ -36,10 +36,12 @@ describe("supported locale metadata", () => {
 
   it("matches locales in a case-insensitive manner", () => {
     expect(getLocaleMetadata("EN-gb").code).toBe("en-GB");
+    expect(getLocaleMetadata("ZH-cn").code).toBe("zh-CN");
   });
 
   it("falls back to language-only matches when the region is unsupported", () => {
     expect(getLocaleMetadata("en-AU").code).toBe("en-GB");
+    expect(getLocaleMetadata("ar-SA").code).toBe("ar");
   });
 
   it("returns the default locale when no match can be made", () => {
@@ -50,12 +52,36 @@ describe("supported locale metadata", () => {
     const codes = SUPPORTED_LOCALES.map((locale) => locale.code);
     expect(new Set(codes).size).toBe(codes.length);
   });
+
+  it("ships the same translation keys in every common Fluent bundle", async () => {
+    const localesDir = resolve(process.cwd(), "public/locales");
+    const readKeys = async (code: string): Promise<string[]> => {
+      const contents = await readFile(resolve(localesDir, code, "common.ftl"), "utf8");
+      return contents
+        .split("\n")
+        .map((line) => line.match(/^([a-z0-9-]+)\s*=/u)?.[1] ?? null)
+        .filter((key): key is string => key !== null)
+        .sort();
+    };
+
+    const expectedKeys = await readKeys(DEFAULT_LOCALE);
+
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(await readKeys(locale.code)).toEqual(expectedKeys);
+    }
+  });
 });
 
 describe("locale direction helpers", () => {
   it("keeps the shipped locale in left-to-right mode", () => {
     expect(getLocaleDirection("en-GB")).toBe("ltr");
     expect(isRtlLocale("en-GB")).toBe(false);
+  });
+
+  it("marks Arabic locales as right-to-left", () => {
+    expect(getLocaleDirection("ar")).toBe("rtl");
+    expect(getLocaleDirection("ar-SA")).toBe("rtl");
+    expect(isRtlLocale("ar")).toBe(true);
   });
 
   it("defaults to ltr when a locale is undefined or unsupported", () => {

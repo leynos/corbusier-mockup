@@ -35,6 +35,12 @@ const dedupeSupportedLocales = (
 
 const RAW_SUPPORTED_LOCALES = [
   { code: "en-GB", label: "English (UK)", nativeLabel: "English (UK)" },
+  { code: "ar", label: "Arabic", nativeLabel: "العربية", direction: "rtl" },
+  { code: "de", label: "German", nativeLabel: "Deutsch" },
+  { code: "es", label: "Spanish", nativeLabel: "Español" },
+  { code: "hi", label: "Hindi", nativeLabel: "हिन्दी" },
+  { code: "ja", label: "Japanese", nativeLabel: "日本語" },
+  { code: "zh-CN", label: "Chinese (Simplified)", nativeLabel: "简体中文" },
 ] as const satisfies readonly SupportedLocale[];
 
 export const SUPPORTED_LOCALES = dedupeSupportedLocales(RAW_SUPPORTED_LOCALES);

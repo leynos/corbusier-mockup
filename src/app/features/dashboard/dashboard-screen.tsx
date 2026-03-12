@@ -7,10 +7,15 @@ import { ChamferCard } from "../../components/chamfer-card";
 import { PlaceholderScreen } from "../placeholder-screen";
 
 function ChamferDemo(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
-    <section aria-label="Chamfer demo" className="mt-8 space-y-6">
+    <section
+      aria-label={t("dashboard-demo-region-label", { defaultValue: "Chamfer demo" })}
+      className="mt-8 space-y-6"
+    >
       <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-        Punch-card chamfer demo
+        {t("dashboard-demo-heading", { defaultValue: "Punch-card chamfer demo" })}
       </h2>
 
       <div className="flex flex-wrap gap-4">
@@ -21,10 +26,12 @@ function ChamferDemo(): JSX.Element {
           strokeClassName="stroke-base-300"
         >
           <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
-            Task card
+            {t("dashboard-demo-card-title", { defaultValue: "Task card" })}
           </p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            Standard chamfer-md (top-right bevel)
+            {t("dashboard-demo-card-subtitle", {
+              defaultValue: "Standard chamfer-md (top-right bevel)",
+            })}
           </p>
         </ChamferCard>
 
@@ -35,9 +42,13 @@ function ChamferDemo(): JSX.Element {
           fillClassName="fill-base-100"
           strokeClassName="stroke-error"
         >
-          <p className="text-[length:var(--font-size-sm)] font-semibold text-error">Blocked card</p>
+          <p className="text-[length:var(--font-size-sm)] font-semibold text-error">
+            {t("dashboard-demo-blocked-title", { defaultValue: "Blocked card" })}
+          </p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            Reversed chamfer-md (top-left bevel)
+            {t("dashboard-demo-blocked-subtitle", {
+              defaultValue: "Reversed chamfer-md (top-left bevel)",
+            })}
           </p>
         </ChamferCard>
       </div>

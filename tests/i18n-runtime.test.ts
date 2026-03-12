@@ -33,6 +33,14 @@ describe("i18n runtime configuration", () => {
     expect(readBodyDirection()).toBe("ltr");
   });
 
+  it("applies right-to-left metadata for Arabic", () => {
+    applyDocumentLocale("ar");
+
+    expect(document.documentElement.lang).toBe("ar");
+    expect(document.documentElement.dir).toBe("rtl");
+    expect(readBodyDirection()).toBe("rtl");
+  });
+
   it("falls back to the default locale metadata when a locale is missing", () => {
     document.documentElement.lang = "zz";
     document.documentElement.dir = "rtl";

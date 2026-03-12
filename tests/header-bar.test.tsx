@@ -7,6 +7,16 @@ import userEvent from "@testing-library/user-event";
 import { HeaderBar } from "../src/app/layout/header-bar";
 import { renderWithProviders } from "./utils/render-with-providers";
 
+const EXPECTED_LANGUAGE_OPTIONS = [
+  "English (UK)",
+  "العربية",
+  "Deutsch",
+  "Español",
+  "हिन्दी",
+  "日本語",
+  "简体中文",
+];
+
 describe("HeaderBar", () => {
   beforeEach(() => {
     cleanup();
@@ -28,7 +38,12 @@ describe("HeaderBar", () => {
     expect(screen.getByRole("group", { name: /theme/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Day" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Night" })).toBeTruthy();
-    expect(screen.getByRole("combobox", { name: /language/i })).toBeTruthy();
+    const select = screen.getByRole("combobox", { name: /language/i });
+    expect(select).toBeTruthy();
+    const optionLabels = Array.from((select as HTMLSelectElement).options).map(
+      (option) => option.textContent ?? "",
+    );
+    expect(optionLabels).toEqual(EXPECTED_LANGUAGE_OPTIONS);
   });
 
   it("switches themes from the toolbar buttons", async () => {
