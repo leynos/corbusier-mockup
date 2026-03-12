@@ -397,7 +397,7 @@ fetch and maintain it.
 
 Understanding the distinction between `staleTime` and `gcTime` (garbage
 collection time) is the absolute key to mastering Tanstack Query's caching
-behavior. These two configuration options govern the entire lifecycle of a
+behaviour. These two configuration options govern the entire lifecycle of a
 cached query and are often a point of confusion.
 
 - **`staleTime`:** This option determines the duration, in milliseconds, for
