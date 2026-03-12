@@ -400,7 +400,7 @@ collection time) is the absolute key to mastering Tanstack Query's caching
 behavior. These two configuration options govern the entire lifecycle of a
 cached query and are often a point of confusion.
 
-- `staleTime`**:** This option determines the duration, in milliseconds, for
+- **`staleTime`:** This option determines the duration, in milliseconds, for
   which fetched data is considered "fresh." By default, `staleTime` is `0`,
   meaning data is considered stale immediately after it is fetched.[^10] When a
   query's data is fresh, Tanstack Query will serve it directly from the cache
@@ -409,7 +409,7 @@ cached query and are often a point of confusion.
   cache _and_ trigger a background refetch to get the latest version. Setting a
   longer `staleTime` (e.g., `5` minutes) is useful for data that does not
   change frequently, as it will prevent unnecessary background refetches.
-- `gcTime`**:** This option, formerly known as `cacheTime`, determines the
+- **`gcTime`:** This option, formerly known as `cacheTime`, determines the
   duration, in milliseconds, that data for an **inactive** query is kept in the
   cache before being garbage collected.[^10] A query becomes inactive when
   there are no longer any mounted components subscribing to it (i.e., no active
@@ -448,7 +448,7 @@ mutation.[^11]
 The primary interface for interacting with Tanstack Query is through its hooks,
 `useQuery` and `useMutation`.
 
-- `useQuery`**:** This hook is used for fetching and subscribing to data. It
+- **`useQuery`:** This hook is used for fetching and subscribing to data. It
   takes an object with a `queryKey` and a `queryFn` (an async function that
   returns the data) as its primary arguments. It returns an object containing
   the query's state, including derived flags like `isPending`, `isError`, and
@@ -471,7 +471,7 @@ export function useTodos(filters) {
 
 ```
 
-- `useMutation`**:** This hook is used for creating, updating, or deleting
+- **`useMutation`:** This hook is used for creating, updating, or deleting
   data. It takes a `mutationFn` as its argument. The returned `mutate` function
   is called to trigger the mutation. A common and powerful pattern is to use
   the `onSuccess` callback to invalidate related queries, which prompts
@@ -650,6 +650,8 @@ typically done using a `useEffect` hook that watches the `data` returned from
 
 ```javascript
 // ANTI-PATTERN: DO NOT DO THIS
+import { useEffect } from 'react';
+
 const useProductStore = create((set) => ({
   products: [],
   setProducts: (data) => set({ products: data }),
@@ -660,7 +662,7 @@ function ProductComponent() {
   const { data } = useQuery({ queryKey: ['products'], queryFn: fetchProducts });
 
   // This creates a second source of truth and breaks Tanstack Query's features.
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setProducts(data);
     }
@@ -760,7 +762,7 @@ Simply adding a persister is not enough. To ensure a robust offline
 implementation, two critical configuration changes are required. Neglecting
 these will lead to a broken or unreliable offline experience.
 
-1. **Setting **`gcTime`** to Prevent Premature Data Loss:** As discussed in
+1. **Setting `gcTime` to Prevent Premature Data Loss:** As discussed in
    Section 4, `gcTime` controls when inactive data is removed from the cache.
    The default is 5 minutes. In an offline context, a query can easily become
    "inactive" for longer than this period. If `gcTime` is not increased,
@@ -771,7 +773,7 @@ these will lead to a broken or unreliable offline experience.
 `gcTime` must be set to a much higher value, such as 24 hours or even
 `Infinity`, to ensure that offline data is preserved indefinitely.[^13]
 
-1. **Using **`PersistQueryClientProvider`** to Prevent Race Conditions:**
+1. **Using `PersistQueryClientProvider` to Prevent Race Conditions:**
    Restoring the cache from an asynchronous storage like IndexedDB takes a
    small amount of time. During this hydration process, components may mount
    and trigger `useQuery` hooks, initiating new network requests before the
@@ -881,7 +883,7 @@ for implementing this pattern within the `useMutation` hook.
 The process involves using the `onMutate` lifecycle callback, which runs before
 the `mutationFn` is executed:
 
-1. `onMutate`**:** Inside this `async` function, the first step is to cancel
+1. **`onMutate`:** Inside this `async` function, the first step is to cancel
    any ongoing refetches for the data being mutated using
    `queryClient.cancelQueries`. This prevents a background refetch from
    overwriting the optimistic update.
@@ -892,11 +894,11 @@ the `mutationFn` is executed:
    the new, optimistic data using `queryClient.setQueryData`.
 4. **Return Context:** The `onMutate` function returns a context object
    containing the snapshotted previous state.
-5. `onError`**:** If the `mutationFn` throws an error, the `onError` callback
+5. **`onError`:** If the `mutationFn` throws an error, the `onError` callback
    is triggered. It receives the context object from `onMutate` and uses it to
    restore the cache to its original state with `queryClient.setQueryData`,
    thus rolling back the optimistic update.
-6. `onSettled`**:** This callback runs after the mutation is complete,
+6. **`onSettled`:** This callback runs after the mutation is complete,
    regardless of whether it succeeded or failed. It is used to invalidate the
    relevant query (`queryClient.invalidateQueries`), ensuring that the client's
    cache is eventually synchronized with the true, authoritative state from the
@@ -1120,6 +1122,7 @@ source of events.
 
 ```javascript
 // Example of a component using XState with Tanstack Query
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useMachine } from '@xstate/react';
 import { createMachine, assign } from 'xstate';
@@ -1168,7 +1171,7 @@ function MyComponent() {
   });
 
   // 3. Feed query state changes into the machine as events
-  React.useEffect(() => {
+  useEffect(() => {
     if (isPending) return; // The machine is already in 'loading'
 
     if (isError) {
@@ -1413,7 +1416,7 @@ on August 20, 2025, [https://tanstack.com/](https://tanstack.com/)
 
 [^13]: persistQueryClient | TanStack Query React Docs, accessed on August 20,
 2025,
-[https://tanstack.com/query/v4/docs/react/plugins/persistQueryClient](https://tanstack.com/query/v4/docs/react/plugins/persistQueryClient)
+[https://tanstack.com/query/v5/docs/react/plugins/persistQueryClient](https://tanstack.com/query/v5/docs/react/plugins/persistQueryClient)
 
 [^17]: Building Offline-First React Native Apps with React Query and …, accessed
 on August 20, 2025,
