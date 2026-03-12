@@ -275,7 +275,7 @@ Avatars are used to show a thumbnail
 ```html
 <div class="avatar {MODIFIER}">
   <div>
-    <img src="{image-url}" />
+    <img src="{image-url}" alt="{alt-text}" />
   </div>
 </div>
 ```
@@ -284,6 +284,7 @@ Avatars are used to show a thumbnail
 
 - {MODIFIER} is optional and can have one of the modifier class names
 - Use `avatar-group` for containing multiple avatars
+- Use `alt=""` only when an avatar image is purely decorative
 - Set custom sizes using `w-*` and `h-*`
 - Use mask classes such as `mask-squircle`, `mask-hexagon`, `mask-triangle`
 
@@ -394,7 +395,7 @@ For Pikaday:
 For React Day Picker:
 
 ```html
-<DayPicker className="react-day-picker">
+<DayPicker className="react-day-picker" />
 ```
 
 #### Rules
@@ -1876,7 +1877,7 @@ Using buttons:
 Using radio inputs:
 
 ```html
-<div role="tablist" class="tabs tabs-box">
+<div class="tabs tabs-box">
   <input type="radio" name="my_tabs" class="tab" aria-label="Tab" />
 </div>
 ```
