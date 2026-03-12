@@ -151,7 +151,7 @@ Design tokens are a first-class part of the stack.
   - `tokens/dist/tokens.css` for runtime CSS variables and theme output,
   - `tokens/dist/tailwind.theme.cjs` for Tailwind theme extension data, and
   - legacy helper artefacts under `tokens/dist/` for incidental tooling.
-- `vite.config.ts` watches the generated token outputs and triggers a full page
+- `vite.config.ts` watches the generated token outputs and triggers a full-page
   reload when they change.
 
 This means the front-end theme layer is not hand-maintained in one place.
