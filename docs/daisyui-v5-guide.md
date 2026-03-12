@@ -361,7 +361,7 @@ Buttons allow the user to take actions
 - {MODIFIER} is optional and can have one of each color/style/behavior/size/modifier class names
 - btn can be used on any html tags such as `<button>`, `<a>`, `<input>`
 - btn can have an icon before or after the text
-- Set `tabindex="-1" role="button" aria-disabled="true"` to disable the button using a class name
+- Native `<button>` and `<input>` elements should use the native `disabled` attribute. Anchors and other elements should use the `btn-disabled` class together with `aria-disabled="true"` and `tabindex="-1"`, and JS should block click and keyboard activation explicitly
 
 ### calendar
 
@@ -790,7 +790,7 @@ Using CSS focus
 
 ```html
 <div class="dropdown">
-  <div tabindex="0" role="button">Button</div>
+  <button type="button">Button</button>
   <ul tabindex="-1" class="dropdown-content">{CONTENT}</ul>
 </div>
 ```
@@ -799,7 +799,7 @@ Using CSS focus
 
 - {MODIFIER} is optional and can have one of the modifier/placement class names
 - replace `{id}` and `{anchor}` with a unique name
-- For CSS focus dropdowns, use `tabindex="0"` and `role="button"` on the button
+- For CSS focus dropdowns, use a native `<button type="button">` element as the trigger
 - The content can be any HTML element (not just `<ul>`)
 
 ### fab
@@ -1286,7 +1286,7 @@ Loading shows an animation to indicate that something is loading
 
 #### Rules
 
-- {MODIFIER} is optional and can have one of the style/size class names
+- {MODIFIER} is optional and can have one of the style, modifier, or placement class names
 
 ### mask
 
@@ -1879,7 +1879,7 @@ Using radio inputs:
 
 #### Rules
 
-- {MODIFIER} is optional and can have one of the style/size class names
+- {MODIFIER} is optional and can have one of the style, modifier, or placement class names
 - Radio inputs are needed for tab content to work with tab click
 - If tabs gets a background then every tab inside it becomes rounded from both top corners
 
