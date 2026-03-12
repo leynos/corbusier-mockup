@@ -45,9 +45,11 @@ header-user-menu-label = Menú de usuario
 dashboard-demo-region-label = Demostración de chaflán
 dashboard-demo-heading = Demostración de chaflán tipo tarjeta perforada
 dashboard-demo-card-title = Tarjeta de tarea
-dashboard-demo-card-subtitle = chamfer-md estándar (bisel superior derecho)
+dashboard-demo-card-subtitle-ltr = chamfer-md estándar (bisel superior derecho)
+dashboard-demo-card-subtitle-rtl = chamfer-md estándar (bisel superior izquierdo)
 dashboard-demo-blocked-title = Tarjeta bloqueada
-dashboard-demo-blocked-subtitle = chamfer-md invertido (bisel superior izquierdo)
+dashboard-demo-blocked-subtitle-ltr = chamfer-md invertido (bisel superior izquierdo)
+dashboard-demo-blocked-subtitle-rtl = chamfer-md invertido (bisel superior derecho)
 
 page-dashboard = Panel
 page-dashboard-sub = Resumen del espacio de trabajo.

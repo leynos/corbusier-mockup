@@ -45,9 +45,11 @@ header-user-menu-label = ユーザーメニュー
 dashboard-demo-region-label = 面取りデモ
 dashboard-demo-heading = パンチカード面取りデモ
 dashboard-demo-card-title = タスクカード
-dashboard-demo-card-subtitle = 標準 chamfer-md（右上ベベル）
+dashboard-demo-card-subtitle-ltr = 標準 chamfer-md（右上ベベル）
+dashboard-demo-card-subtitle-rtl = 標準 chamfer-md（左上ベベル）
 dashboard-demo-blocked-title = ブロック済みカード
-dashboard-demo-blocked-subtitle = 反転 chamfer-md（左上ベベル）
+dashboard-demo-blocked-subtitle-ltr = 反転 chamfer-md（左上ベベル）
+dashboard-demo-blocked-subtitle-rtl = 反転 chamfer-md（右上ベベル）
 
 page-dashboard = ダッシュボード
 page-dashboard-sub = ワークスペースの概要です。

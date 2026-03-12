@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 
 import {
   DEFAULT_LOCALE,
+  DETECTION_ORDER,
   getLocaleDirection,
   getLocaleMetadata,
   isRtlLocale,
@@ -51,6 +52,10 @@ describe("supported locale metadata", () => {
   it("does not expose duplicate locale codes", () => {
     const codes = SUPPORTED_LOCALES.map((locale) => locale.code);
     expect(new Set(codes).size).toBe(codes.length);
+  });
+
+  it("prefers explicit locale picks before falling back to the browser locale", () => {
+    expect([...DETECTION_ORDER]).toEqual(["querystring", "localStorage", "navigator"]);
   });
 
   it("ships the same translation keys in every common Fluent bundle", async () => {

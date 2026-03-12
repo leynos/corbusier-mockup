@@ -45,9 +45,11 @@ header-user-menu-label = User menu
 dashboard-demo-region-label = Chamfer demo
 dashboard-demo-heading = Punch-card chamfer demo
 dashboard-demo-card-title = Task card
-dashboard-demo-card-subtitle = Standard chamfer-md (top-right bevel)
+dashboard-demo-card-subtitle-ltr = Standard chamfer-md (top-right bevel)
+dashboard-demo-card-subtitle-rtl = Standard chamfer-md (top-left bevel)
 dashboard-demo-blocked-title = Blocked card
-dashboard-demo-blocked-subtitle = Reversed chamfer-md (top-left bevel)
+dashboard-demo-blocked-subtitle-ltr = Reversed chamfer-md (top-left bevel)
+dashboard-demo-blocked-subtitle-rtl = Reversed chamfer-md (top-right bevel)
 
 page-dashboard = Dashboard
 page-dashboard-sub = Overview of your workspace.

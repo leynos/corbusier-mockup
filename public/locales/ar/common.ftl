@@ -45,9 +45,11 @@ header-user-menu-label = قائمة المستخدم
 dashboard-demo-region-label = عرض الشطفة
 dashboard-demo-heading = عرض شطفة البطاقة المثقبة
 dashboard-demo-card-title = بطاقة مهمة
-dashboard-demo-card-subtitle = chamfer-md قياسي (حافة مشطوفة أعلى اليمين)
+dashboard-demo-card-subtitle-ltr = chamfer-md قياسي (حافة مشطوفة أعلى اليمين)
+dashboard-demo-card-subtitle-rtl = chamfer-md قياسي (حافة مشطوفة أعلى اليسار)
 dashboard-demo-blocked-title = بطاقة محظورة
-dashboard-demo-blocked-subtitle = chamfer-md معكوس (حافة مشطوفة أعلى اليسار)
+dashboard-demo-blocked-subtitle-ltr = chamfer-md معكوس (حافة مشطوفة أعلى اليسار)
+dashboard-demo-blocked-subtitle-rtl = chamfer-md معكوس (حافة مشطوفة أعلى اليمين)
 
 page-dashboard = لوحة المعلومات
 page-dashboard-sub = نظرة عامة على مساحة العمل.

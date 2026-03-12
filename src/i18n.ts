@@ -136,8 +136,8 @@ export const i18nReady = i18n
       escapeValue: false,
     },
     detection: {
-      // Navigator is intentionally excluded to keep server renders and first visits
-      // deterministic; we favour explicit query/localStorage picks plus the default locale.
+      // Explicit query or persisted user choices still win, but fresh sessions
+      // should respect the browser locale that Playwright and real users send.
       order: [...DETECTION_ORDER],
       lookupQuerystring: "lng",
       caches: ["localStorage"],

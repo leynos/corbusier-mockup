@@ -4,10 +4,54 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ChamferCard } from "../../components/chamfer-card";
+import { isRtlLocale } from "../../i18n/supported-locales";
 import { PlaceholderScreen } from "../placeholder-screen";
 
+type ChamferDemoCardConfig = {
+  readonly reversed: boolean;
+  readonly subtitleKey: string;
+  readonly defaultSubtitle: string;
+};
+
+type ChamferDemoLayout = {
+  readonly standard: ChamferDemoCardConfig;
+  readonly blocked: ChamferDemoCardConfig;
+};
+
+export function getChamferDemoLayout(isRtl: boolean): ChamferDemoLayout {
+  if (isRtl) {
+    return {
+      standard: {
+        reversed: true,
+        subtitleKey: "dashboard-demo-card-subtitle-rtl",
+        defaultSubtitle: "Standard chamfer-md (top-left bevel)",
+      },
+      blocked: {
+        reversed: false,
+        subtitleKey: "dashboard-demo-blocked-subtitle-rtl",
+        defaultSubtitle: "Reversed chamfer-md (top-right bevel)",
+      },
+    };
+  }
+
+  return {
+    standard: {
+      reversed: false,
+      subtitleKey: "dashboard-demo-card-subtitle-ltr",
+      defaultSubtitle: "Standard chamfer-md (top-right bevel)",
+    },
+    blocked: {
+      reversed: true,
+      subtitleKey: "dashboard-demo-blocked-subtitle-ltr",
+      defaultSubtitle: "Reversed chamfer-md (top-left bevel)",
+    },
+  };
+}
+
 function ChamferDemo(): JSX.Element {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const isRtl = isRtlLocale(i18n.resolvedLanguage ?? i18n.language);
+  const layout = getChamferDemoLayout(isRtl);
 
   return (
     <section
@@ -22,6 +66,7 @@ function ChamferDemo(): JSX.Element {
         {/* Standard task card */}
         <ChamferCard
           className="w-64 p-4"
+          reversed={layout.standard.reversed}
           fillClassName="fill-base-100"
           strokeClassName="stroke-base-300"
         >
@@ -29,8 +74,8 @@ function ChamferDemo(): JSX.Element {
             {t("dashboard-demo-card-title", { defaultValue: "Task card" })}
           </p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            {t("dashboard-demo-card-subtitle", {
-              defaultValue: "Standard chamfer-md (top-right bevel)",
+            {t(layout.standard.subtitleKey, {
+              defaultValue: layout.standard.defaultSubtitle,
             })}
           </p>
         </ChamferCard>
@@ -38,7 +83,7 @@ function ChamferDemo(): JSX.Element {
         {/* Blocked task card */}
         <ChamferCard
           className="w-64 p-4"
-          reversed
+          reversed={layout.blocked.reversed}
           fillClassName="fill-base-100"
           strokeClassName="stroke-error"
         >
@@ -46,8 +91,8 @@ function ChamferDemo(): JSX.Element {
             {t("dashboard-demo-blocked-title", { defaultValue: "Blocked card" })}
           </p>
           <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            {t("dashboard-demo-blocked-subtitle", {
-              defaultValue: "Reversed chamfer-md (top-left bevel)",
+            {t(layout.blocked.subtitleKey, {
+              defaultValue: layout.blocked.defaultSubtitle,
             })}
           </p>
         </ChamferCard>

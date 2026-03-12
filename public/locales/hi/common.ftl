@@ -45,9 +45,11 @@ header-user-menu-label = उपयोगकर्ता मेनू
 dashboard-demo-region-label = चैम्फर डेमो
 dashboard-demo-heading = पंच-कार्ड चैम्फर डेमो
 dashboard-demo-card-title = कार्य कार्ड
-dashboard-demo-card-subtitle = मानक chamfer-md (ऊपर-दायाँ बेवल)
+dashboard-demo-card-subtitle-ltr = मानक chamfer-md (ऊपर-दायाँ बेवल)
+dashboard-demo-card-subtitle-rtl = मानक chamfer-md (ऊपर-बायाँ बेवल)
 dashboard-demo-blocked-title = अवरोधित कार्ड
-dashboard-demo-blocked-subtitle = उल्टा chamfer-md (ऊपर-बायाँ बेवल)
+dashboard-demo-blocked-subtitle-ltr = उल्टा chamfer-md (ऊपर-बायाँ बेवल)
+dashboard-demo-blocked-subtitle-rtl = उल्टा chamfer-md (ऊपर-दायाँ बेवल)
 
 page-dashboard = डैशबोर्ड
 page-dashboard-sub = कार्यक्षेत्र का अवलोकन।

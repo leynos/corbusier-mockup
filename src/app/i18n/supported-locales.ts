@@ -46,7 +46,7 @@ const RAW_SUPPORTED_LOCALES = [
 export const SUPPORTED_LOCALES = dedupeSupportedLocales(RAW_SUPPORTED_LOCALES);
 
 export const DEFAULT_LOCALE = SUPPORTED_LOCALES[0].code;
-export const DETECTION_ORDER = ["querystring", "localStorage"] as const;
+export const DETECTION_ORDER = ["querystring", "localStorage", "navigator"] as const;
 
 const LOCALE_MAP: Record<string, SupportedLocale> = SUPPORTED_LOCALES.reduce(
   (map, locale) => {

@@ -45,9 +45,11 @@ header-user-menu-label = 用户菜单
 dashboard-demo-region-label = 切角演示
 dashboard-demo-heading = 打孔卡切角演示
 dashboard-demo-card-title = 任务卡片
-dashboard-demo-card-subtitle = 标准 chamfer-md（右上倒角）
+dashboard-demo-card-subtitle-ltr = 标准 chamfer-md（右上倒角）
+dashboard-demo-card-subtitle-rtl = 标准 chamfer-md（左上倒角）
 dashboard-demo-blocked-title = 已阻塞卡片
-dashboard-demo-blocked-subtitle = 反向 chamfer-md（左上倒角）
+dashboard-demo-blocked-subtitle-ltr = 反向 chamfer-md（左上倒角）
+dashboard-demo-blocked-subtitle-rtl = 反向 chamfer-md（右上倒角）
 
 page-dashboard = 仪表板
 page-dashboard-sub = 工作区概览。

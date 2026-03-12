@@ -45,9 +45,11 @@ header-user-menu-label = Benutzermenü
 dashboard-demo-region-label = Fasen-Demo
 dashboard-demo-heading = Lochkarten-Fasen-Demo
 dashboard-demo-card-title = Aufgabenkarte
-dashboard-demo-card-subtitle = Standard-chamfer-md (Abschrägung oben rechts)
+dashboard-demo-card-subtitle-ltr = Standard-chamfer-md (Abschrägung oben rechts)
+dashboard-demo-card-subtitle-rtl = Standard-chamfer-md (Abschrägung oben links)
 dashboard-demo-blocked-title = Blockierte Karte
-dashboard-demo-blocked-subtitle = Umgekehrtes chamfer-md (Abschrägung oben links)
+dashboard-demo-blocked-subtitle-ltr = Umgekehrtes chamfer-md (Abschrägung oben links)
+dashboard-demo-blocked-subtitle-rtl = Umgekehrtes chamfer-md (Abschrägung oben rechts)
 
 page-dashboard = Dashboard
 page-dashboard-sub = Überblick über den Arbeitsbereich.
