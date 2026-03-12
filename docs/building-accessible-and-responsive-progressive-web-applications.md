@@ -471,7 +471,7 @@ Creating a functional offline PWA goes beyond simply caching assets with a servi
 
 #### UX Patterns for Offline States
 
--   **Status Indication:** The application should provide clear, non-intrusive feedback when the network connection is lost and when it is restored. This can be achieved through subtle UI changes, such as displaying a "toast" notification, an icon, or graying out features that are only available online. This helps manage user expectations and prevents confusion.
+-   **Status Indication:** The application should provide clear, non-intrusive feedback when the network connection is lost and when it is restored. This can be achieved through subtle UI changes, such as displaying a "toast" notification, an icon, or greying out features that are only available online. This helps manage user expectations and prevents confusion.
 
 -   **Meaningful Fallback Content:** Instead of displaying a generic browser error page, the PWA should serve meaningful content from the cache. This could be a dedicated offline page explaining the situation, a read-only version of previously viewed content (like cached news articles), or simply the application's main shell, allowing the user to navigate to other cached sections.
 
@@ -596,7 +596,7 @@ This checklist provides a structured framework for conducting a comprehensive qu
 | **PWA Reliability** | `start_url` responds with a 200 status code when offline. | Automated | Lighthouse PWA Audit |
 | **PWA Reliability** | Page provides a custom offline fallback experience. | Manual | DevTools Offline Mode |
 | **Perceivable** | All non-decorative images have descriptive `alt` text. | Manual | Code Review, Screen Reader |
-| **Perceivable** | Color contrast for text and UI components meets WCAG AA levels. | Automated | Lighthouse, DevTools Inspector |
+| **Perceivable** | Colour contrast for text and UI components meets WCAG AA levels. | Automated | Lighthouse, DevTools Inspector |
 | **Perceivable** | Content reflows to a single column at 320px width without horizontal scroll. | Manual | Browser Resizing |
 | **Operable** | All interactive functionality is operable with a keyboard. | Manual | Keyboard-Only Testing |
 | **Operable** | A visible focus indicator is always present for the active element. | Manual | Keyboard-Only Testing |
