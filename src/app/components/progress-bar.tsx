@@ -17,7 +17,7 @@ export function ProgressBar({
   value,
   fillClassName = "bg-primary",
   className = "",
-  label,
+  label = "Progress",
 }: ProgressBarProps): JSX.Element {
   const clamped = Math.max(0, Math.min(100, value));
   return (

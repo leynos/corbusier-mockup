@@ -10,7 +10,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
-import type { JSX } from "react";
+import { type JSX, useId } from "react";
 
 import { findTask } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
@@ -36,10 +36,17 @@ interface SectionProps {
 }
 
 function Section({ icon: Icon, title, children }: SectionProps): JSX.Element {
+  const headingId = useId();
   return (
-    <section className="card border border-base-300 bg-base-100 shadow-sm">
+    <section
+      className="card border border-base-300 bg-base-100 shadow-sm"
+      aria-labelledby={headingId}
+    >
       <div className="card-body p-5">
-        <h2 className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
+        <h2
+          id={headingId}
+          className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60"
+        >
           <Icon size={16} stroke={1.5} aria-hidden="true" />
           {title}
         </h2>
