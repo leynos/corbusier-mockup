@@ -209,7 +209,15 @@ dashboard-agent-turn-count =
 
 project-list-region = Lista de proyectos
 project-card-lead = Responsable:
-project-card-task-summary = { $total } tareas · { $inProgress } en progreso · { $blocked } bloqueadas
+project-card-task-summary =
+    { $total ->
+        [one] { $total } tarea
+       *[other] { $total } tareas
+    } · { $inProgress } en progreso ·
+    { $blocked ->
+        [one] { $blocked } bloqueada
+       *[other] { $blocked } bloqueadas
+    }
 project-status-active = Activo
 project-status-inactive = Inactivo
 project-status-completed = Completado
@@ -243,6 +251,12 @@ backlog-col-due = Vencimiento
 ## Calendar view
 
 calendar-grid-label = Calendario
+calendar-day-no-tasks = { $date } — no hay tareas vencidas
+calendar-day-with-tasks =
+    { $date } — { $count ->
+        [one] { $count } tarea vence
+       *[other] { $count } tareas vencen
+    }
 
 ## List view
 

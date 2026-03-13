@@ -11,37 +11,39 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findProject } from "../../../data/projects";
+import { type ProjectSlug, parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { AvatarStack } from "../../components/avatar-stack";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
 import { ProjectStatusBadge } from "./components/project-status-badge";
-import { ViewSwitcher } from "./components/view-switcher";
+import { useProjectViewTabs, ViewSwitcher } from "./components/view-switcher";
 
 export function ProjectLandingScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
+  const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
-  if (!slug) {
-    return <Navigate to="/projects" />;
+  if (!projectSlug) {
+    return <Navigate to="/projects" replace />;
   }
 
-  const project = findProject(slug);
+  const project = findProject(projectSlug);
 
   if (!project) {
-    return <Navigate to="/projects" />;
+    return <Navigate to="/projects" replace />;
   }
 
   /* Redirect bare /projects/:slug to canonical kanban view. */
-  return <Navigate to="/projects/$slug/kanban" params={{ slug }} />;
+  return <Navigate to="/projects/$slug/kanban" params={{ slug: projectSlug }} replace />;
 }
 
 /**
  * Shared project header rendered by each sub-view screen.
  * Sub-views import and render this at the top of their layout.
  */
-export function ProjectHeader({ slug }: { readonly slug: string }): JSX.Element | null {
+export function ProjectHeader({ slug }: { readonly slug: ProjectSlug }): JSX.Element | null {
   const { i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-
+  const viewTabs = useProjectViewTabs(slug);
   const project = findProject(slug);
   if (!project) return null;
 
@@ -76,7 +78,7 @@ export function ProjectHeader({ slug }: { readonly slug: string }): JSX.Element 
       </div>
 
       {/* View switcher tabs */}
-      <ViewSwitcher slug={slug} />
+      <ViewSwitcher slug={project.slug} tabsLabel={viewTabs.tabsLabel} tabs={viewTabs.tabs} />
     </div>
   );
 }

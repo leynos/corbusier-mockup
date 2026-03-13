@@ -29,6 +29,7 @@ describe("KanbanColumn", () => {
         tasks={[...inProgressTasks]}
         accentClassName="bg-warning"
         slug={slug}
+        addNewLabel="Add New"
       />,
     );
 
@@ -42,6 +43,7 @@ describe("KanbanColumn", () => {
         tasks={[...inProgressTasks]}
         accentClassName="bg-warning"
         slug={slug}
+        addNewLabel="Add New"
       />,
     );
 
@@ -55,6 +57,7 @@ describe("KanbanColumn", () => {
         tasks={[...inProgressTasks]}
         accentClassName="bg-warning"
         slug={slug}
+        addNewLabel="Add New"
       />,
     );
 
@@ -69,9 +72,28 @@ describe("KanbanColumn", () => {
         tasks={[...inProgressTasks]}
         accentClassName="bg-warning"
         slug={slug}
+        addNewLabel="Add New"
       />,
     );
 
-    expect(await screen.findByText("Add New")).toBeTruthy();
+    const addNewButton = await screen.findByRole("button", { name: "Add New — In Progress" });
+    expect(addNewButton.getAttribute("type")).toBe("button");
+    expect(addNewButton.hasAttribute("disabled")).toBe(true);
+  });
+
+  it("renders correctly when there are no tasks", async () => {
+    renderWithRouter(
+      <KanbanColumn
+        label="Done"
+        tasks={[]}
+        accentClassName="bg-success"
+        slug={slug}
+        addNewLabel="Add New"
+      />,
+    );
+
+    expect(await screen.findByText("0")).toBeTruthy();
+    expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+    expect(await screen.findByRole("button", { name: "Add New — Done" })).toBeTruthy();
   });
 });

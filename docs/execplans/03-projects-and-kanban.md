@@ -44,8 +44,8 @@ headers.
 - Drag-and-drop is a placeholder in this mockup — visual only, no
   actual reordering. A keyboard-accessible alternative must be
   documented (select card, Enter, arrow to target column, Enter).
-- The view switcher must be implemented with `@radix-ui/react-tabs`
-  for keyboard accessibility.
+- The view switcher must expose keyboard-accessible tab semantics via
+  plain `role="tablist"` / `role="tab"` navigation links.
 - Project status indicators in the sidebar (filled dot = active,
   hollow = inactive) must be consistent with the project fixture data.
 
@@ -89,8 +89,10 @@ headers.
 - [x] Milestone 4: Kanban board — `5b80b4a`
 - [x] Milestone 5: Backlog, Calendar, List, and Timeline placeholders — `8594b0a`
 - [x] Milestone 6: Tests and validation — `5235789`
-- [x] Post-completion review remediation: sidebar project links now target the
-  canonical Kanban route and are covered by a regression test.
+- [x] Post-completion review remediation: canonical project navigation,
+  shared draft bucketing, localized calendar semantics, placeholder
+  control hardening, and regression coverage were tightened after PR
+  review.
 
 ## Surprises & discoveries
 
@@ -99,7 +101,8 @@ headers.
   non-i18n strings. The TypeScript parser exposes HTML entity names
   (e.g., "ndash") as `JsxText`, which matches the pattern. Fixed by
   using `{"\u2013"}` JSX expressions instead.
-- **Radix Tabs `aria-controls` a11y violation**: Radix `Tabs.Trigger`
+- **Radix Tabs `aria-controls` accessibility (a11y) violation**:
+  Radix `Tabs.Trigger`
   emits `aria-controls` referencing panel IDs, but the ViewSwitcher
   uses tabs as navigation links — no panels exist. This caused an axe
   `aria-valid-attr-value` violation. Resolved by replacing Radix Tabs
@@ -108,7 +111,8 @@ headers.
   `return <Navigate>` violates the Rules of Hooks. Fixed by extracting
   the derived data into a pure `deriveColumns()` function and calling
   hooks unconditionally before any returns.
-- **Calendar ARIA grid roles**: Initially used `role="grid"` /
+- **Calendar Accessible Rich Internet Applications (ARIA) grid
+  roles**: Initially used `role="grid"` /
   `role="gridcell"` / `role="columnheader"` for the calendar month
   layout, but this implied interactive grid navigation that doesn't
   exist. Switched to `<section aria-label>` with decorative day cells.
@@ -122,9 +126,7 @@ headers.
   together as they form a natural unit (project list + landing layout).
 - **Radix Tabs → plain ARIA**: Replaced `@radix-ui/react-tabs` with
   hand-rolled `role="tablist"` / `role="tab"` to avoid the
-  `aria-controls` pointing to non-existent panels. This deviates from
-  the plan's constraint ("must be implemented with
-  `@radix-ui/react-tabs`") but is the correct accessibility choice.
+  `aria-controls` pointing to non-existent panels.
 - **Calendar and Timeline as styled placeholders**: As anticipated in
   the risks section, these views are structural mockups (month grid
   with dots, horizontal bar chart) rather than fully interactive
@@ -133,7 +135,8 @@ headers.
 ## Outcomes & retrospective
 
 All 6 milestones delivered across 5 commits. The `bun run ff` gate
-passes fully (95 unit tests, 14 E2E tests, axe a11y audits).
+passes fully (95 unit tests, 14 end-to-end (E2E) tests, axe a11y
+audits).
 
 **Delivered:**
 
@@ -335,8 +338,8 @@ failure.
 
 ## Interfaces and dependencies
 
-No new npm dependencies. Uses `@radix-ui/react-tabs` for the view
-switcher.
+No new npm dependencies. The view switcher uses plain ARIA tab
+semantics instead of a tab library.
 
 ### Key interfaces
 

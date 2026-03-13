@@ -6,7 +6,6 @@ import { expect, test } from "@playwright/test";
 test.describe("Projects", () => {
   test("project list shows project cards and navigates to kanban", async ({ page }) => {
     await page.goto("/projects");
-    await page.waitForLoadState("networkidle");
 
     const main = page.getByRole("main");
     await expect(main.getByRole("heading", { name: "Projects" })).toBeVisible();
@@ -17,13 +16,12 @@ test.describe("Projects", () => {
     const cards = projectList.getByRole("listitem");
     await expect(cards).toHaveCount(3);
 
-    await projectList.getByRole("link").first().click();
+    await projectList.getByRole("link", { name: /apollo-guidance/i }).click();
     await expect(page).toHaveURL(/\/projects\/apollo-guidance\/kanban$/);
   });
 
   test("kanban board renders five columns with headings", async ({ page }) => {
     await page.goto("/projects/apollo-guidance/kanban");
-    await page.waitForLoadState("networkidle");
 
     const board = page.getByRole("region", { name: /kanban board/i });
     await expect(board).toBeVisible();
@@ -37,7 +35,6 @@ test.describe("Projects", () => {
 
   test("view switcher tabs navigate between sub-views", async ({ page }) => {
     await page.goto("/projects/apollo-guidance/kanban");
-    await page.waitForLoadState("networkidle");
 
     const tabs = page.getByRole("tablist", { name: /project views/i });
     await expect(tabs).toBeVisible();
@@ -51,7 +48,7 @@ test.describe("Projects", () => {
 
   test("project list has no accessibility violations", async ({ page }) => {
     await page.goto("/projects");
-    await page.waitForLoadState("networkidle");
+    await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
 
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
@@ -59,7 +56,7 @@ test.describe("Projects", () => {
 
   test("kanban board has no accessibility violations", async ({ page }) => {
     await page.goto("/projects/apollo-guidance/kanban");
-    await page.waitForLoadState("networkidle");
+    await expect(page.getByRole("region", { name: /kanban board/i })).toBeVisible();
 
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);

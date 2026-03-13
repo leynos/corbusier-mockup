@@ -259,6 +259,8 @@ backlog-col-due = الاستحقاق
 ## Calendar view
 
 calendar-grid-label = التقويم
+calendar-day-no-tasks = { $date } — لا توجد مهام مستحقة
+calendar-day-with-tasks = { $date } — { $count } مهام مستحقة
 
 ## List view
 

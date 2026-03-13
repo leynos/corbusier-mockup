@@ -8,8 +8,8 @@
 import { IconPlus } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import type { JSX } from "react";
-import { useTranslation } from "react-i18next";
 
+import type { ProjectSlug } from "../../../../data/registries/project-descriptors";
 import type { Task } from "../../../../data/tasks";
 import { TaskCard } from "../../../components/task-card";
 
@@ -17,7 +17,8 @@ interface KanbanColumnProps {
   readonly label: string;
   readonly tasks: readonly Task[];
   readonly accentClassName: string;
-  readonly slug: string;
+  readonly slug: ProjectSlug;
+  readonly addNewLabel: string;
 }
 
 export function KanbanColumn({
@@ -25,9 +26,8 @@ export function KanbanColumn({
   tasks,
   accentClassName,
   slug,
+  addNewLabel,
 }: KanbanColumnProps): JSX.Element {
-  const { t } = useTranslation();
-
   return (
     <section className="flex min-w-[16rem] flex-1 flex-col" aria-label={label}>
       {/* Column header */}
@@ -55,11 +55,12 @@ export function KanbanColumn({
       {/* Add New placeholder */}
       <button
         type="button"
-        className="mt-3 flex w-full items-center justify-center gap-1 rounded border-2 border-dashed border-base-300 px-3 py-2 text-[length:var(--font-size-sm)] text-base-content/40 hover:border-primary/40 hover:text-primary/60"
-        aria-label={`${t("kanban-add-new", { defaultValue: "Add New" })} — ${label}`}
+        disabled
+        className="mt-3 flex w-full cursor-not-allowed items-center justify-center gap-1 rounded border-2 border-dashed border-base-300 px-3 py-2 text-[length:var(--font-size-sm)] text-base-content/40 opacity-70"
+        aria-label={`${addNewLabel} — ${label}`}
       >
         <IconPlus size={14} stroke={1.5} aria-hidden="true" />
-        {t("kanban-add-new", { defaultValue: "Add New" })}
+        {addNewLabel}
       </button>
     </section>
   );

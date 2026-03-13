@@ -71,9 +71,9 @@ export function ProjectCard({ project, taskSummary }: ProjectCardProps): JSX.Ele
         {/* Task summary */}
         <p className="mb-3 text-[length:var(--font-size-xs)] text-base-content/60">
           {t("project-card-task-summary", {
-            total: String(taskSummary.totalTasks),
-            inProgress: String(taskSummary.inProgressCount),
-            blocked: String(taskSummary.blockedCount),
+            total: taskSummary.totalTasks,
+            inProgress: taskSummary.inProgressCount,
+            blocked: taskSummary.blockedCount,
             defaultValue: `${String(taskSummary.totalTasks)} tasks · ${String(taskSummary.inProgressCount)} in progress · ${String(taskSummary.blockedCount)} blocked`,
           })}
         </p>

@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findProject, getTasksForProject } from "../../../data/projects";
+import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { pickLocalization } from "../../domain/entities/localization";
 import { ProjectHeader } from "./project-landing-screen";
@@ -25,14 +26,15 @@ export function TimelineScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
   const { i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
-  const project = slug ? findProject(slug) : undefined;
+  const project = projectSlug ? findProject(projectSlug) : undefined;
 
   const { tasks, rangeStart, rangeSpan } = useMemo(() => {
-    if (!slug || !project) {
+    if (!projectSlug || !project) {
       return { tasks: [], rangeStart: 0, rangeSpan: 1 };
     }
-    const projectTasks = getTasksForProject(slug, TASKS);
+    const projectTasks = getTasksForProject(projectSlug, TASKS);
     const start = new Date(project.dateRange.start).getTime();
     const end = new Date(project.dateRange.end).getTime();
     return {
@@ -40,21 +42,20 @@ export function TimelineScreen(): JSX.Element {
       rangeStart: start,
       rangeSpan: end - start || 1,
     };
-  }, [slug, project]);
+  }, [project, projectSlug]);
 
-  if (!slug || !project) {
-    return <Navigate to="/projects" />;
+  if (!projectSlug || !project) {
+    return <Navigate to="/projects" replace />;
   }
 
   return (
     <div>
-      <ProjectHeader slug={slug} />
+      <ProjectHeader slug={projectSlug} />
 
       <div className="space-y-2">
         {tasks.map((task) => {
           const loc = pickLocalization(task.localizations, locale);
           const left = dateToPercent(task.dueDate, rangeStart, rangeSpan);
-          const barWidth = Math.max(8, 100 - left);
 
           return (
             <div key={task.id} className="flex items-center gap-3">
@@ -63,8 +64,8 @@ export function TimelineScreen(): JSX.Element {
               </span>
               <div className="relative h-6 flex-1 rounded bg-base-300/20">
                 <div
-                  className="absolute inset-y-0 rounded bg-primary/30"
-                  style={{ left: `${String(left)}%`, width: `${String(barWidth)}%` }}
+                  className="absolute inset-y-1 w-3 -translate-x-1/2 rounded-full bg-primary/40"
+                  style={{ left: `${String(left)}%` }}
                 />
               </div>
             </div>

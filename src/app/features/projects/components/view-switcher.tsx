@@ -9,58 +9,84 @@
 
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { JSX } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-interface ViewTab {
-  readonly id: string;
+import type { ProjectSlug } from "../../../../data/registries/project-descriptors";
+
+type ProjectViewRoute =
+  | "/projects/$slug/backlog"
+  | "/projects/$slug/kanban"
+  | "/projects/$slug/calendar"
+  | "/projects/$slug/list"
+  | "/projects/$slug/timeline";
+
+export interface ViewTab {
+  readonly id: "backlog" | "kanban" | "calendar" | "list" | "timeline";
   readonly label: string;
-  readonly path: string;
+  readonly to: ProjectViewRoute;
+  readonly href: string;
 }
 
 interface ViewSwitcherProps {
-  readonly slug: string;
+  readonly slug: ProjectSlug;
+  readonly tabsLabel: string;
+  readonly tabs: readonly ViewTab[];
 }
 
-export function ViewSwitcher({ slug }: ViewSwitcherProps): JSX.Element {
+export function useProjectViewTabs(slug: ProjectSlug): {
+  readonly tabsLabel: string;
+  readonly tabs: readonly ViewTab[];
+} {
   const { t } = useTranslation();
-  const location = useRouterState({ select: (s) => s.location });
+  const tabs = useMemo<readonly ViewTab[]>(
+    () => [
+      {
+        id: "backlog",
+        label: t("project-view-backlog", { defaultValue: "Backlog" }),
+        to: "/projects/$slug/backlog",
+        href: `/projects/${slug}/backlog`,
+      },
+      {
+        id: "kanban",
+        label: t("project-view-kanban", { defaultValue: "Kanban" }),
+        to: "/projects/$slug/kanban",
+        href: `/projects/${slug}/kanban`,
+      },
+      {
+        id: "calendar",
+        label: t("project-view-calendar", { defaultValue: "Calendar" }),
+        to: "/projects/$slug/calendar",
+        href: `/projects/${slug}/calendar`,
+      },
+      {
+        id: "list",
+        label: t("project-view-list", { defaultValue: "List" }),
+        to: "/projects/$slug/list",
+        href: `/projects/${slug}/list`,
+      },
+      {
+        id: "timeline",
+        label: t("project-view-timeline", { defaultValue: "Timeline" }),
+        to: "/projects/$slug/timeline",
+        href: `/projects/${slug}/timeline`,
+      },
+    ],
+    [slug, t],
+  );
 
-  const tabs: readonly ViewTab[] = [
-    {
-      id: "backlog",
-      label: t("project-view-backlog", { defaultValue: "Backlog" }),
-      path: `/projects/${slug}/backlog`,
-    },
-    {
-      id: "kanban",
-      label: t("project-view-kanban", { defaultValue: "Kanban" }),
-      path: `/projects/${slug}/kanban`,
-    },
-    {
-      id: "calendar",
-      label: t("project-view-calendar", { defaultValue: "Calendar" }),
-      path: `/projects/${slug}/calendar`,
-    },
-    {
-      id: "list",
-      label: t("project-view-list", { defaultValue: "List" }),
-      path: `/projects/${slug}/list`,
-    },
-    {
-      id: "timeline",
-      label: t("project-view-timeline", { defaultValue: "Timeline" }),
-      path: `/projects/${slug}/timeline`,
-    },
-  ];
+  return {
+    tabsLabel: t("project-view-tabs-label", { defaultValue: "Project views" }),
+    tabs,
+  };
+}
 
-  const activeId = tabs.find((tab) => location.pathname === tab.path)?.id ?? "kanban";
+export function ViewSwitcher({ slug, tabsLabel, tabs }: ViewSwitcherProps): JSX.Element {
+  const location = useRouterState({ select: (state) => state.location });
+  const activeId = tabs.find((tab) => location.pathname === tab.href)?.id;
 
   return (
-    <div
-      className="flex gap-1 border-b border-base-300"
-      role="tablist"
-      aria-label={t("project-view-tabs-label", { defaultValue: "Project views" })}
-    >
+    <div className="flex gap-1 border-b border-base-300" role="tablist" aria-label={tabsLabel}>
       {tabs.map((tab) => {
         const isActive = tab.id === activeId;
         return (
@@ -68,7 +94,8 @@ export function ViewSwitcher({ slug }: ViewSwitcherProps): JSX.Element {
             key={tab.id}
             role="tab"
             aria-selected={isActive}
-            to={tab.path}
+            to={tab.to}
+            params={{ slug }}
             className={`border-b-2 px-4 py-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold transition-colors ${
               isActive
                 ? "border-primary text-primary"

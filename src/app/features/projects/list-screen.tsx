@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findProject, getTasksForProject } from "../../../data/projects";
+import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { PriorityTag } from "../../components/priority-tag";
 import { StatusBadge } from "../../components/status-badge";
@@ -22,21 +23,22 @@ export function ListScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
-  const project = slug ? findProject(slug) : undefined;
+  const project = projectSlug ? findProject(projectSlug) : undefined;
 
   const tasks = useMemo(() => {
-    if (!slug) return [];
-    return getTasksForProject(slug, TASKS);
-  }, [slug]);
+    if (!projectSlug) return [];
+    return getTasksForProject(projectSlug, TASKS);
+  }, [projectSlug]);
 
-  if (!slug || !project) {
-    return <Navigate to="/projects" />;
+  if (!projectSlug || !project) {
+    return <Navigate to="/projects" replace />;
   }
 
   return (
     <div>
-      <ProjectHeader slug={slug} />
+      <ProjectHeader slug={projectSlug} />
 
       <div className="overflow-x-auto">
         <table className="w-full text-[length:var(--font-size-sm)]">

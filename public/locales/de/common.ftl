@@ -239,6 +239,8 @@ backlog-col-due = Fällig
 ## Calendar view
 
 calendar-grid-label = Kalender
+calendar-day-no-tasks = { $date } — keine Aufgaben fällig
+calendar-day-with-tasks = { $date } — { $count } Aufgaben fällig
 
 ## List view
 

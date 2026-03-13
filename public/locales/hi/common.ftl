@@ -244,6 +244,8 @@ backlog-col-due = नियत तिथि
 ## Calendar view
 
 calendar-grid-label = कैलेंडर
+calendar-day-no-tasks = { $date } — कोई कार्य देय नहीं
+calendar-day-with-tasks = { $date } — { $count } कार्य देय
 
 ## List view
 

@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { findProject, getTasksForProject } from "../../../data/projects";
+import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS, TaskState } from "../../../data/tasks";
 import { PriorityTag } from "../../components/priority-tag";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -21,21 +22,22 @@ export function BacklogScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
-  const project = slug ? findProject(slug) : undefined;
+  const project = projectSlug ? findProject(projectSlug) : undefined;
 
   const draftTasks = useMemo(() => {
-    if (!slug) return [];
-    return getTasksForProject(slug, TASKS).filter((task) => task.state === TaskState.Draft);
-  }, [slug]);
+    if (!projectSlug) return [];
+    return getTasksForProject(projectSlug, TASKS).filter((task) => task.state === TaskState.Draft);
+  }, [projectSlug]);
 
-  if (!slug || !project) {
-    return <Navigate to="/projects" />;
+  if (!projectSlug || !project) {
+    return <Navigate to="/projects" replace />;
   }
 
   return (
     <div>
-      <ProjectHeader slug={slug} />
+      <ProjectHeader slug={projectSlug} />
 
       <div className="overflow-x-auto">
         <table className="w-full text-[length:var(--font-size-sm)]">

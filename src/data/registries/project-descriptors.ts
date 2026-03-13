@@ -15,6 +15,10 @@ export const PROJECT_SLUGS = [
 
 export type ProjectSlug = (typeof PROJECT_SLUGS)[number];
 
+export function parseProjectSlug(value: string): ProjectSlug | undefined {
+  return PROJECT_SLUGS.find((slug) => slug === value);
+}
+
 export const projectDescriptors = {
   "apollo-guidance": {
     id: "apollo-guidance",

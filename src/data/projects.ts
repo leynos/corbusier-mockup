@@ -11,7 +11,7 @@
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
 import type { ProjectSlug } from "./registries/project-descriptors";
-import { type Assignee, type Task, TaskState } from "./tasks";
+import { type Assignee, type Task, type TaskId, TaskState } from "./tasks";
 
 /* ── Kanban column identifiers ────────────────────────────────────── */
 
@@ -70,20 +70,23 @@ export const PROJECT_FIXTURES: readonly Project[] = [
     ),
     lead: TOMAS,
     dateRange: { start: "2026-03-01", end: "2026-08-01" },
-    status: "inactive",
+    status: "active",
     team: [TOMAS, ELENA],
   },
 ];
 
 /* ── Helpers ──────────────────────────────────────────────────────── */
 
-/** Find a project by slug. Returns undefined when the slug is unknown. */
-export function findProject(slug: string): Project | undefined {
+/** Find a project by slug. */
+export function findProject(slug: ProjectSlug): Project | undefined {
   return PROJECT_FIXTURES.find((p) => p.slug === slug);
 }
 
 /** Filter tasks belonging to a given project. */
-export function getTasksForProject(projectSlug: string, tasks: readonly Task[]): readonly Task[] {
+export function getTasksForProject(
+  projectSlug: ProjectSlug,
+  tasks: readonly Task[],
+): readonly Task[] {
   return tasks.filter((t) => t.projectSlug === projectSlug);
 }
 
@@ -107,22 +110,57 @@ export interface KanbanColumnCounts {
   readonly done: number;
 }
 
+export interface DraftTaskBuckets {
+  readonly todo: readonly Task[];
+  readonly planned: readonly Task[];
+}
+
+function createTaskLookup(tasks: readonly Task[]): ReadonlyMap<TaskId, Task> {
+  return new Map(tasks.map((task) => [task.id, task]));
+}
+
+function isTaskBlocked(task: Task, taskLookup: ReadonlyMap<TaskId, Task>): boolean {
+  return task.dependencies.blockedBy.some((dependencyId) => {
+    const dependency = taskLookup.get(dependencyId);
+    return dependency !== undefined && dependency.state !== TaskState.Done;
+  });
+}
+
 /**
- * Whether a draft task has been planned (has a due date in the future
- * and at least one subtask — a simple heuristic for the mockup).
+ * Whether a draft task has been planned.
  *
- * Tasks with non-empty `blockedBy` where none of the blockers are
- * `done` remain in the "To-Do" column regardless.
+ * Drafts with subtasks count as planned unless an unfinished dependency
+ * still blocks them, in which case they remain in the "To-Do" column.
  */
-function isDraftPlanned(task: Task): boolean {
-  return task.subtasks.length > 0;
+export function isDraftPlanned(task: Task, taskLookup: ReadonlyMap<TaskId, Task>): boolean {
+  return task.subtasks.length > 0 && !isTaskBlocked(task, taskLookup);
+}
+
+export function splitDraftTasks(
+  drafts: readonly Task[],
+  taskLookup: ReadonlyMap<TaskId, Task>,
+): DraftTaskBuckets {
+  const todo: Task[] = [];
+  const planned: Task[] = [];
+
+  for (const task of drafts) {
+    if (isDraftPlanned(task, taskLookup)) {
+      planned.push(task);
+      continue;
+    }
+    todo.push(task);
+  }
+
+  return { todo, planned };
 }
 
 /** Derive column counts from grouped task buckets. */
-function countByColumn(grouped: Record<TaskState, readonly Task[]>): KanbanColumnCounts {
-  const drafts = grouped[TaskState.Draft];
-  const planned = drafts.filter((t) => isDraftPlanned(t)).length;
-  const todo = drafts.length - planned;
+function countByColumn(
+  grouped: Record<TaskState, readonly Task[]>,
+  draftBuckets: DraftTaskBuckets,
+): KanbanColumnCounts {
+  const planned = draftBuckets.planned.length;
+  const todo = draftBuckets.todo.length;
 
   return {
     todo,
@@ -135,6 +173,7 @@ function countByColumn(grouped: Record<TaskState, readonly Task[]>): KanbanColum
 
 export interface GroupedTasks {
   readonly grouped: Record<TaskState, readonly Task[]>;
+  readonly draftBuckets: DraftTaskBuckets;
   readonly taskCounts: KanbanColumnCounts;
   readonly totalTasks: number;
   readonly blockedCount: number;
@@ -147,21 +186,23 @@ export interface GroupedTasks {
  * `paused` and `abandoned` tasks are included in the grouped buckets
  * and total count but excluded from the Kanban column counts.
  */
-export function groupTasksByState(projectSlug: string, tasks: readonly Task[]): GroupedTasks {
+export function groupTasksByState(projectSlug: ProjectSlug, tasks: readonly Task[]): GroupedTasks {
   const projectTasks = getTasksForProject(projectSlug, tasks);
   const buckets = createEmptyBuckets();
+  const taskLookup = createTaskLookup(projectTasks);
 
   for (const task of projectTasks) {
     buckets[task.state].push(task);
   }
 
-  const blockedCount = projectTasks.filter((t) => t.dependencies.blockedBy.length > 0).length;
-
+  const draftBuckets = splitDraftTasks(buckets[TaskState.Draft], taskLookup);
+  const blockedCount = projectTasks.filter((task) => isTaskBlocked(task, taskLookup)).length;
   const inProgressCount = buckets[TaskState.InProgress].length;
 
   return {
     grouped: buckets,
-    taskCounts: countByColumn(buckets),
+    draftBuckets,
+    taskCounts: countByColumn(buckets, draftBuckets),
     totalTasks: projectTasks.length,
     blockedCount,
     inProgressCount,
