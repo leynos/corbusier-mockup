@@ -1,4 +1,26 @@
-/** @file State machine transition buttons — only valid next states shown. */
+/**
+ * @file Render task-state transition controls for the task detail surface.
+ *
+ * Purpose:
+ * Render the valid task-state actions for the current task state.
+ *
+ * Responsibilities:
+ * Derive the valid next-state actions from `validTransitions`, localize
+ * the rendered labels and ARIA text, and pass plain strings and target
+ * states into the presentational button view.
+ *
+ * Usage:
+ * Render `StateMachineControls` with a current `TaskState` and an
+ * `onTransition` handler that applies the chosen target state.
+ *
+ * Invariants:
+ * Show only target states returned by `validTransitions` for the current
+ * state.
+ *
+ * Related:
+ * Task state definitions and transition rules live in
+ * `src/data/tasks.ts`.
+ */
 
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +30,7 @@ import { TaskState, validTransitions } from "../../../../data/tasks";
 /** Props accepted by {`@link` StateMachineControls}. */
 export interface StateMachineControlsProps {
   readonly currentState: TaskState;
-  readonly onTransition?: (target: TaskState) => void;
+  readonly onTransition: (target: TaskState) => void;
 }
 
 /** Describes a single rendered transition button. */
@@ -23,7 +45,7 @@ interface TransitionAction {
 interface StateMachineControlsViewProps {
   readonly actions: readonly TransitionAction[];
   readonly emptyMessage: string;
-  readonly onTransition?: (target: TaskState) => void;
+  readonly onTransition: (target: TaskState) => void;
 }
 
 /** Translation keys for reachable task-state actions. */
@@ -107,7 +129,7 @@ function StateMachineControlsView({
           type="button"
           className={action.className}
           aria-label={action.ariaLabel}
-          onClick={() => onTransition?.(action.target)}
+          onClick={() => onTransition(action.target)}
         >
           {action.label}
         </button>
@@ -129,7 +151,7 @@ export function StateMachineControls({
     <StateMachineControlsView
       actions={actions}
       emptyMessage={emptyMessage}
-      {...(onTransition ? { onTransition } : {})}
+      onTransition={onTransition}
     />
   );
 }
