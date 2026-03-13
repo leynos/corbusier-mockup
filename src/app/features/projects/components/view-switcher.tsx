@@ -1,11 +1,12 @@
 /** @file Tabbed view selector for project sub-routes.
  *
- * Uses @radix-ui/react-tabs for keyboard accessibility, with tabs
- * linking to TanStack Router sub-routes (/backlog, /kanban, /calendar,
- * /list, /timeline). The active tab reflects the current URL.
+ * Renders a navigation tab bar linking to TanStack Router sub-routes
+ * (/backlog, /kanban, /calendar, /list, /timeline). The active tab
+ * reflects the current URL. Uses role="tablist" / role="tab" for
+ * keyboard accessibility without Radix Tabs (which generates
+ * aria-controls referencing panel IDs that don't exist here).
  */
 
-import * as Tabs from "@radix-ui/react-tabs";
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
@@ -52,32 +53,32 @@ export function ViewSwitcher({ slug }: ViewSwitcherProps): JSX.Element {
     },
   ];
 
-  const activeTab = tabs.find((tab) => location.pathname === tab.path)?.id ?? "kanban";
+  const activeId = tabs.find((tab) => location.pathname === tab.path)?.id ?? "kanban";
 
   return (
-    <Tabs.Root value={activeTab}>
-      <Tabs.List
-        className="flex gap-1 border-b border-base-300"
-        aria-label={t("project-view-tabs-label", { defaultValue: "Project views" })}
-      >
-        {tabs.map((tab) => {
-          const isActive = tab.id === activeTab;
-          return (
-            <Tabs.Trigger key={tab.id} value={tab.id} asChild>
-              <Link
-                to={tab.path}
-                className={`border-b-2 px-4 py-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold transition-colors ${
-                  isActive
-                    ? "border-primary text-primary"
-                    : "border-transparent text-base-content/60 hover:border-base-content/30 hover:text-base-content"
-                }`}
-              >
-                {tab.label}
-              </Link>
-            </Tabs.Trigger>
-          );
-        })}
-      </Tabs.List>
-    </Tabs.Root>
+    <div
+      className="flex gap-1 border-b border-base-300"
+      role="tablist"
+      aria-label={t("project-view-tabs-label", { defaultValue: "Project views" })}
+    >
+      {tabs.map((tab) => {
+        const isActive = tab.id === activeId;
+        return (
+          <Link
+            key={tab.id}
+            role="tab"
+            aria-selected={isActive}
+            to={tab.path}
+            className={`border-b-2 px-4 py-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold transition-colors ${
+              isActive
+                ? "border-primary text-primary"
+                : "border-transparent text-base-content/60 hover:border-base-content/30 hover:text-base-content"
+            }`}
+          >
+            {tab.label}
+          </Link>
+        );
+      })}
+    </div>
   );
 }
