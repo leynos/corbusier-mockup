@@ -157,7 +157,7 @@ export function TaskDetailScreen(): JSX.Element {
       {/* Two-column layout: main content + sidebar metadata */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <TaskDetailMainSections
-          task={task}
+          task={activeTask}
           dependenciesTitle={t("task-section-dependencies", { defaultValue: "Dependencies" })}
           progressTitle={t("task-section-progress", { defaultValue: "Progress" })}
           sourceControlTitle={t("task-section-source-control", {
@@ -166,7 +166,7 @@ export function TaskDetailScreen(): JSX.Element {
           activityTitle={t("task-section-activity", { defaultValue: "Activity" })}
         />
         <TaskDetailSidebarSections
-          task={task}
+          task={activeTask}
           description={description}
           detailsTitle={t("task-section-details", { defaultValue: "Details" })}
           descriptionTitle={t("task-section-description", { defaultValue: "Description" })}

@@ -19,7 +19,7 @@ import type { TrendDirection } from "../../data/dashboard";
 interface KpiCardProps {
   readonly label: string;
   readonly value: string;
-  readonly context?: string;
+  readonly context?: string | undefined;
   readonly trend: TrendDirection;
   readonly trendLabel: string;
 }

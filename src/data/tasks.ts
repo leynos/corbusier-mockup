@@ -98,14 +98,14 @@ export interface Task {
 
 /* ── State machine ─────────────────────────────────────────────────── */
 
-const VALID_TRANSITIONS: ReadonlyMap<TaskState, readonly TaskState[]> = new Map([
-  [TaskState.Draft, [TaskState.InProgress, TaskState.Abandoned]],
-  [TaskState.InProgress, [TaskState.InReview, TaskState.Paused, TaskState.Abandoned]],
-  [TaskState.InReview, [TaskState.Done, TaskState.InProgress, TaskState.Abandoned]],
-  [TaskState.Paused, [TaskState.InProgress, TaskState.Abandoned]],
-  [TaskState.Done, [TaskState.Abandoned]],
-  [TaskState.Abandoned, []],
-]);
+const VALID_TRANSITIONS: Record<TaskState, readonly TaskState[]> = {
+  [TaskState.Draft]: [TaskState.InProgress, TaskState.Abandoned],
+  [TaskState.InProgress]: [TaskState.InReview, TaskState.Paused, TaskState.Abandoned],
+  [TaskState.InReview]: [TaskState.Done, TaskState.InProgress, TaskState.Abandoned],
+  [TaskState.Paused]: [TaskState.InProgress, TaskState.Abandoned],
+  [TaskState.Done]: [TaskState.Abandoned],
+  [TaskState.Abandoned]: [],
+};
 
 /**
  * Check whether a state transition is valid.
@@ -117,14 +117,14 @@ const VALID_TRANSITIONS: ReadonlyMap<TaskState, readonly TaskState[]> = new Map(
  * ```
  */
 export function canTransitionTo(from: TaskState, to: TaskState): boolean {
-  return VALID_TRANSITIONS.get(from)?.includes(to) ?? false;
+  return VALID_TRANSITIONS[from]?.includes(to) ?? false;
 }
 
 /**
  * Return the list of states reachable from the given state.
  */
 export function validTransitions(from: TaskState): readonly TaskState[] {
-  return VALID_TRANSITIONS.get(from) ?? [];
+  return VALID_TRANSITIONS[from] ?? [];
 }
 
 /**

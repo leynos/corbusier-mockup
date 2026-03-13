@@ -137,10 +137,11 @@ entities to the `EntityLocalizations` pattern.
   `LocalizedAltText`, `ImageAsset`, and the `pickLocalization`
   helper with deterministic fallback (current locale → `en-GB` →
   any available).
-- Create `src/data/registries/` with descriptor registries for
-  `labelDescriptors`, `priorityDescriptors`, `taskStateDescriptors`,
-  `healthStatusDescriptors`, `agentStatusDescriptors`, and
-  `eventKindDescriptors`. Each registry entry owns its
+- Create `src/data/registries/` with the following descriptor
+  registries: `labelDescriptors`, `priorityDescriptors`,
+  `taskStateDescriptors`, `healthStatusDescriptors`,
+  `agentStatusDescriptors`, and `eventKindDescriptors`. Each registry
+  entry owns its
   `localizations: EntityLocalizations`. The authoritative list of
   descriptor IDs for each registry is in the "Descriptor registries"
   section of `docs/data-model-driven-card-architecture.md`.

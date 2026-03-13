@@ -40,8 +40,9 @@ export function SystemHealthPanel(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const Icon = HEALTH_ICON[SYSTEM_HEALTH.overall];
   const colour = HEALTH_COLOUR[SYSTEM_HEALTH.overall];
+  const statusDescriptor = healthStatusDescriptors[SYSTEM_HEALTH.overall];
   const label = pickLocalization(
-    healthStatusDescriptors[SYSTEM_HEALTH.overall].localizations,
+    statusDescriptor?.localizations ?? { "en-GB": { name: SYSTEM_HEALTH.overall } },
     locale,
   ).name;
 

@@ -177,13 +177,29 @@ task-filter-project = المشروع
 task-filter-all = الكل
 task-filter-reset = إعادة تعيين المرشحات
 task-list-region = قائمة المهام
-task-list-summary = عرض { $shown } من { $total } مهمة
+task-list-summary =
+    { $total ->
+        [zero] عرض { $shown } من { $total } مهام
+        [one] عرض { $shown } من { $total } مهمة
+        [two] عرض { $shown } من { $total } مهمتين
+        [few] عرض { $shown } من { $total } مهام
+        [many] عرض { $shown } من { $total } مهمة
+       *[other] عرض { $shown } من { $total } مهمة
+    }
 task-list-empty = لا توجد مهام تطابق المرشحات الحالية.
 
 ## Task card
 
 task-card-progress = { $progress }% من المهام الفرعية مكتملة
-task-card-subtasks = { $done }/{ $total } مهمة فرعية
+task-card-subtasks =
+    { $total ->
+        [zero] { $done }/{ $total } مهام فرعية
+        [one] { $done }/{ $total } مهمة فرعية
+        [two] { $done }/{ $total } مهمتان فرعيتان
+        [few] { $done }/{ $total } مهام فرعية
+        [many] { $done }/{ $total } مهمة فرعية
+       *[other] { $done }/{ $total } مهمة فرعية
+    }
 
 ## Dashboard
 

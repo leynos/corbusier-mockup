@@ -84,8 +84,7 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 This plan depends on plans 01 (foundation), 02 (reusable components:
 status badges, category tags, avatar stacks), and milestone 0 of
 plan 03 (shared localization-aware data model helpers). It is
-relatively
-self-contained because it touches a single route.
+relatively self-contained because it touches a single route.
 
 The shared data model types (`EntityLocalizations`,
 `pickLocalization`, descriptor registries) introduced in plan 03

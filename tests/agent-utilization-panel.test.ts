@@ -6,6 +6,7 @@ import i18n from "../src/i18n";
 
 describe("getAgentStatusLabel", () => {
   it("keeps error backends distinct from inactive ones", () => {
+    expect(getAgentStatusLabel("active", "en-GB")).toBe("Active");
     expect(getAgentStatusLabel("error", "en-GB")).toBe("Error");
     expect(getAgentStatusLabel("inactive", "en-GB")).toBe("Inactive");
   });

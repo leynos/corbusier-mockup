@@ -177,13 +177,17 @@ task-filter-project = Proyecto
 task-filter-all = Todas
 task-filter-reset = Restablecer filtros
 task-list-region = Lista de tareas
-task-list-summary = Mostrando { $shown } de { $total } tareas
+task-list-summary = Mostrando { $shown } de { $total }
 task-list-empty = Ninguna tarea coincide con los filtros actuales.
 
 ## Task card
 
 task-card-progress = { $progress }% de subtareas completadas
-task-card-subtasks = { $done }/{ $total } subtareas
+task-card-subtasks =
+    { $total ->
+        [one] { $done }/{ $total } subtarea
+       *[other] { $done }/{ $total } subtareas
+    }
 
 ## Dashboard
 

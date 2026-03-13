@@ -199,11 +199,7 @@ dashboard-activity-region = हालिया गतिविधि
 dashboard-activity-heading = हालिया गतिविधि
 dashboard-agent-region = एजेंट उपयोग
 dashboard-agent-heading = एजेंट उपयोग
-dashboard-agent-turn-count =
-    { $count ->
-        [one] टर्न
-       *[other] टर्न
-    }
+dashboard-agent-turn-count = टर्न
 
 ## Shared components
 

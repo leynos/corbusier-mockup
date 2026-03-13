@@ -19,6 +19,10 @@ import { getRecentActivityEntries } from "./activity-adapter";
 import { AgentUtilizationPanel } from "./components/agent-utilization-panel";
 import { SystemHealthPanel } from "./components/system-health-panel";
 
+function assertUnreachable(value: never): never {
+  throw new Error(`Unhandled KPI value format: ${String(value)}`);
+}
+
 function formatKpiValue(value: number, valueFormat: KpiValueFormat, locale: string): string {
   switch (valueFormat) {
     case "integer":
@@ -35,6 +39,8 @@ function formatKpiValue(value: number, valueFormat: KpiValueFormat, locale: stri
         unitDisplay: "narrow",
         maximumFractionDigits: 0,
       }).format(value);
+    default:
+      return assertUnreachable(valueFormat);
   }
 }
 
@@ -63,19 +69,22 @@ export function DashboardScreen(): JSX.Element {
         data-testid="dashboard-kpi-region"
         className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {KPI_METRICS.map((m) => (
-          <KpiCard
-            key={m.id}
-            label={pickLocalization(m.localizations, locale).name}
-            value={formatKpiValue(m.value, m.valueFormat, locale)}
-            trend={m.trend}
-            trendLabel={pickLocalization(m.trendLocalizations, locale).name}
-            {...(() => {
-              const context = pickLocalization(m.localizations, locale).description;
-              return context ? { context } : {};
-            })()}
-          />
-        ))}
+        {KPI_METRICS.map((metric) => {
+          const loc = pickLocalization(metric.localizations, locale);
+          const trendLoc = pickLocalization(metric.trendLocalizations, locale);
+          const context = loc.description;
+
+          return (
+            <KpiCard
+              key={metric.id}
+              label={loc.name}
+              value={formatKpiValue(metric.value, metric.valueFormat, locale)}
+              context={context}
+              trend={metric.trend}
+              trendLabel={trendLoc.name}
+            />
+          );
+        })}
       </section>
 
       {/* 3 + 4. Activity feed + Agent utilization */}
