@@ -8,7 +8,7 @@
  */
 
 import { IconActivity } from "@tabler/icons-react";
-import type { JSX } from "react";
+import { type JSX, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { KPI_METRICS, type KpiValueFormat } from "../../../data/dashboard";
@@ -53,6 +53,7 @@ function formatKpiValue(value: number, valueFormat: KpiValueFormat, locale: stri
 export function DashboardScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const recentActivity = useMemo(() => getRecentActivityEntries(), []);
 
   return (
     <div>
@@ -100,7 +101,7 @@ export function DashboardScreen(): JSX.Element {
               <IconActivity size={16} stroke={1.5} aria-hidden="true" />
               {t("dashboard-activity-heading", { defaultValue: "Recent Activity" })}
             </h2>
-            <ActivityTimeline entries={getRecentActivityEntries()} />
+            <ActivityTimeline entries={recentActivity} />
           </div>
         </section>
 

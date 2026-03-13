@@ -179,6 +179,7 @@ task-filter-reset = फ़िल्टर रीसेट करें
 task-list-region = कार्य सूची
 task-list-summary =
     { $shown ->
+        [0] { $total } में से { $shown } कार्य दिखाए जा रहे हैं
         [one] { $total } में से { $shown } कार्य दिखाया जा रहा है
        *[other] { $total } में से { $shown } कार्य दिखाए जा रहे हैं
     }

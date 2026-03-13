@@ -125,14 +125,14 @@ const VALID_TRANSITIONS: Record<TaskState, readonly TaskState[]> = {
  * ```
  */
 export function canTransitionTo(from: TaskState, to: TaskState): boolean {
-  return VALID_TRANSITIONS[from]?.includes(to) ?? false;
+  return VALID_TRANSITIONS[from].includes(to);
 }
 
 /**
  * Return the list of states reachable from the given state.
  */
 export function validTransitions(from: TaskState): readonly TaskState[] {
-  return VALID_TRANSITIONS[from] ?? [];
+  return VALID_TRANSITIONS[from];
 }
 
 /**

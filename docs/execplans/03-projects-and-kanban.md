@@ -104,7 +104,7 @@ headers.
 
 This plan depends on `01-foundation.md` (app shell, routes, tokens),
 `02-dashboard-and-tasks.md` (reusable components: status badges, task
-cards, priority tags, avatar stacks), and its own milestone 0 (shared
+cards, priority tags, avatar stacks), and milestone 0 (shared
 localization-aware fixture registries and entity helpers). The task
 card component from plan 02 is reused here in the Kanban columns.
 
