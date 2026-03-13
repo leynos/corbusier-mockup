@@ -1,6 +1,6 @@
 /** @file Tests for the ProjectCard component. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, screen } from "@testing-library/react";
 
 import { ProjectCard } from "../src/app/features/projects/components/project-card";
@@ -20,10 +20,6 @@ const project = getFixtureProject();
 const taskSummary = groupTasksByState(project.slug, TASKS);
 
 describe("ProjectCard", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });
@@ -56,15 +52,13 @@ describe("ProjectCard", () => {
   it("renders task summary counts", async () => {
     renderWithRouter(<ProjectCard project={project} taskSummary={taskSummary} />);
 
-    const text = await screen.findByText(
-      new RegExp(
-        `${String(taskSummary.totalTasks)}.*tasks.*${String(taskSummary.inProgressCount)}.*in progress.*${String(taskSummary.blockedCount)}.*blocked`,
-        "i",
+    expect(
+      await screen.findByText(
+        new RegExp(
+          `${String(taskSummary.totalTasks)}.*tasks.*${String(taskSummary.inProgressCount)}.*in progress.*${String(taskSummary.blockedCount)}.*blocked`,
+          "i",
+        ),
       ),
-    );
-
-    expect(text.textContent).toContain(String(taskSummary.totalTasks));
-    expect(text.textContent).toContain(String(taskSummary.inProgressCount));
-    expect(text.textContent).toContain(String(taskSummary.blockedCount));
+    ).toBeTruthy();
   });
 });

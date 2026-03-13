@@ -101,12 +101,13 @@ headers.
   non-i18n strings. The TypeScript parser exposes HTML entity names
   (e.g., "ndash") as `JsxText`, which matches the pattern. Fixed by
   using `{"\u2013"}` JSX expressions instead.
-- **Radix Tabs `aria-controls` accessibility (a11y) violation**:
+- **Tabbed view-switcher `aria-controls` accessibility (a11y) violation**:
   Radix `Tabs.Trigger`
   emits `aria-controls` referencing panel IDs, but the ViewSwitcher
   uses tabs as navigation links — no panels exist. This caused an axe
-  `aria-valid-attr-value` violation. Resolved by replacing Radix Tabs
-  with plain `<div role="tablist">` + `<Link role="tab">` elements.
+  `aria-valid-attr-value` violation. Resolved by replacing the
+  previous tab implementation with plain `<div role="tablist">` +
+  `<Link role="tab">` elements.
 - **Hooks after early return**: Putting `useMemo` after conditional
   `return <Navigate>` violates the Rules of Hooks. Fixed by extracting
   the derived data into a pure `deriveColumns()` function and calling
@@ -124,9 +125,10 @@ headers.
   `pickLocalization` helper were in place before this plan started.
 - **M2+M3 combined commit**: Milestones 2 and 3 were committed
   together as they form a natural unit (project list + landing layout).
-- **Radix Tabs → plain ARIA**: Replaced `@radix-ui/react-tabs` with
-  hand-rolled `role="tablist"` / `role="tab"` to avoid the
-  `aria-controls` pointing to non-existent panels.
+- **Tab implementation → plain ARIA**: Replaced
+  `@radix-ui/react-tabs` with hand-rolled `role="tablist"` /
+  `role="tab"` to avoid the `aria-controls` pointing to non-existent
+  panels.
 - **Calendar and Timeline as styled placeholders**: As anticipated in
   the risks section, these views are structural mockups (month grid
   with dots, horizontal bar chart) rather than fully interactive
@@ -145,7 +147,7 @@ audits).
 - Project landing with shared header and view switcher (5 tabs)
 - Kanban board with 5 task columns, count badges, and "Add New" buttons
 - 4 styled placeholder views (Backlog table, Calendar month grid,
-  List dense table, Timeline Gantt bars)
+  List dense table, Timeline milestone markers)
 - 12 new unit tests, 5 new E2E tests
 
 **Files created:** 14 new files across `src/data/`, `src/app/features/projects/`,
@@ -177,8 +179,8 @@ card component from plan 02 is reused here in the Kanban columns.
   Kanban column.
 - `src/app/features/projects/components/project-card.tsx` — A card
   for the project list grid.
-- `src/app/features/projects/components/view-switcher.tsx` — Tabbed
-  view selector using Radix Tabs.
+- `src/app/features/projects/components/view-switcher.tsx` — Plain
+  ARIA tab-semantics view selector.
 - Placeholder screens for Backlog, Calendar, List, Timeline.
 
 ## Plan of work
@@ -254,8 +256,9 @@ The canonical project landing page (`/projects/:slug/kanban`) renders:
 
 - A project header with name, lead, status badge, date range, and
   team avatars.
-- A view switcher (Radix Tabs) with five tabs: Backlog, Kanban,
-  Calendar, List, Timeline. The default tab is Kanban.
+- A view switcher with plain ARIA tab semantics and five tabs:
+  Backlog, Kanban, Calendar, List, Timeline. The default tab is
+  Kanban.
 - The active tab panel renders the corresponding route.
 
 The view switcher tabs link to sub-routes:

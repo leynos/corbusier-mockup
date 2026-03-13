@@ -205,7 +205,17 @@ dashboard-agent-turn-count =
 
 project-list-region = Projektliste
 project-card-lead = Leitung:
-project-card-task-summary = { $total } Aufgaben · { $inProgress } in Bearbeitung · { $blocked } blockiert
+project-card-task-summary =
+    { $total ->
+        [one] { $total } Aufgabe
+       *[other] { $total } Aufgaben
+    } · { $inProgress ->
+        [one] { $inProgress } in Bearbeitung
+       *[other] { $inProgress } in Bearbeitung
+    } · { $blocked ->
+        [one] { $blocked } blockiert
+       *[other] { $blocked } blockiert
+    }
 project-status-active = Aktiv
 project-status-inactive = Inaktiv
 project-status-completed = Abgeschlossen
@@ -240,7 +250,11 @@ backlog-col-due = Fällig
 
 calendar-grid-label = Kalender
 calendar-day-no-tasks = { $date } — keine Aufgaben fällig
-calendar-day-with-tasks = { $date } — { $count } Aufgaben fällig
+calendar-day-with-tasks =
+    { $date } — { $count ->
+        [one] { $count } Aufgabe fällig
+       *[other] { $count } Aufgaben fällig
+    }
 
 ## List view
 

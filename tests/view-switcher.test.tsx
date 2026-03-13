@@ -1,6 +1,6 @@
 /** @file Tests for the ViewSwitcher component. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, screen, within } from "@testing-library/react";
 
 import type { ViewTab } from "../src/app/features/projects/components/view-switcher";
@@ -46,10 +46,6 @@ function createTabs(): readonly ViewTab[] {
 }
 
 describe("ViewSwitcher", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });

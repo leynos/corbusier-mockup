@@ -1,8 +1,16 @@
-/** @file Single Kanban column rendering a header and task card list.
+/** @file KanbanColumn renders one task-state lane for the project board.
  *
- * Each column has a coloured header with task count badge, a scrollable
- * list of TaskCard components, and an "Add New" placeholder button at
- * the bottom.
+ * Invariants:
+ * - The Add New placeholder is rendered for every KanbanColumn, but it remains
+ *   disabled when task creation is not allowed.
+ * - TaskCard links must keep the `/projects/:projectId/tasks/:taskId` route
+ *   contract so task details stay addressable from the board.
+ * - The header task count reflects only the visible tasks passed to
+ *   KanbanColumn.
+ *
+ * @see src/app/features/projects/kanban-screen.tsx for column layout and copy.
+ * @see src/data/projects.ts for project and task grouping data consumed by
+ *   TaskCard and KanbanColumn.
  */
 
 import { IconPlus } from "@tabler/icons-react";

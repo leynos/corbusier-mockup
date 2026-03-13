@@ -1,6 +1,6 @@
 /** @file Tests for the KanbanColumn component. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, screen } from "@testing-library/react";
 
 import { KanbanColumn } from "../src/app/features/projects/components/kanban-column";
@@ -14,10 +14,6 @@ const inProgressTasks = getTasksForProject(slug, TASKS).filter(
 );
 
 describe("KanbanColumn", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });

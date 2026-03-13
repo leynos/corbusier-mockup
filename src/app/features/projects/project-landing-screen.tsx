@@ -74,7 +74,7 @@ export function ProjectHeader({ slug }: { readonly slug: ProjectSlug }): JSX.Ele
             {formatShortDate(project.dateRange.end, locale)}
           </time>
         </span>
-        <AvatarStack assignees={[...project.team]} max={5} />
+        <AvatarStack assignees={project.team} max={5} />
       </div>
 
       {/* View switcher tabs */}

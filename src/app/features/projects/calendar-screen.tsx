@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { findProject, getTasksForProject } from "../../../data/projects";
 import { type ProjectSlug, parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
+import { useNow } from "../../hooks/use-now";
 import { ProjectHeader } from "./project-landing-screen";
 
 function buildDueDateCounts(slug: ProjectSlug): ReadonlyMap<string, number> {
@@ -92,7 +93,7 @@ export function CalendarScreen(): JSX.Element {
   const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
-  const now = new Date();
+  const now = useNow();
   const year = now.getFullYear();
   const month = now.getMonth();
   const firstDayOfWeek = useMemo(() => getFirstDayOfWeek(locale), [locale]);
@@ -109,20 +110,27 @@ export function CalendarScreen(): JSX.Element {
     () => chunkCalendarDays(buildCalendarDays(year, month, firstDayOfWeek)),
     [firstDayOfWeek, month, year],
   );
+  const monthLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
+        new Date(year, month),
+      ),
+    [locale, month, year],
+  );
+  const fullDateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+    [locale],
+  );
 
   if (!projectSlug || !project) {
     return <Navigate to="/projects" replace />;
   }
-
-  const monthLabel = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
-    new Date(year, month),
-  );
-  const fullDateFormatter = new Intl.DateTimeFormat(locale, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
 
   return (
     <div>

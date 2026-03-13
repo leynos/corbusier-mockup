@@ -18,10 +18,27 @@ import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
 import { ProjectHeader } from "./project-landing-screen";
 
+export function useBacklogScreenCopy(): {
+  readonly locale: string;
+  readonly priorityLabel: string;
+  readonly taskLabel: string;
+  readonly assigneeLabel: string;
+  readonly dueLabel: string;
+} {
+  const { t, i18n } = useTranslation();
+
+  return {
+    locale: i18n.resolvedLanguage ?? i18n.language,
+    priorityLabel: t("backlog-col-priority", { defaultValue: "Priority" }),
+    taskLabel: t("backlog-col-task", { defaultValue: "Task" }),
+    assigneeLabel: t("backlog-col-assignee", { defaultValue: "Assignee" }),
+    dueLabel: t("backlog-col-due", { defaultValue: "Due" }),
+  };
+}
+
 export function BacklogScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
-  const { t, i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? i18n.language;
+  const copy = useBacklogScreenCopy();
   const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
@@ -44,16 +61,16 @@ export function BacklogScreen(): JSX.Element {
           <thead>
             <tr className="border-b border-base-300 text-left">
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("backlog-col-priority", { defaultValue: "Priority" })}
+                {copy.priorityLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("backlog-col-task", { defaultValue: "Task" })}
+                {copy.taskLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("backlog-col-assignee", { defaultValue: "Assignee" })}
+                {copy.assigneeLabel}
               </th>
               <th className="pb-2 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("backlog-col-due", { defaultValue: "Due" })}
+                {copy.dueLabel}
               </th>
             </tr>
           </thead>
@@ -64,11 +81,11 @@ export function BacklogScreen(): JSX.Element {
                   <PriorityTag priority={task.priority} />
                 </td>
                 <td className="py-2.5 pr-4 text-base-content">
-                  {pickLocalization(task.localizations, locale).name}
+                  {pickLocalization(task.localizations, copy.locale).name}
                 </td>
                 <td className="py-2.5 pr-4 text-base-content/60">{task.assignee.name}</td>
                 <td className="py-2.5 text-base-content/60">
-                  <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, locale)}</time>
+                  <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, copy.locale)}</time>
                 </td>
               </tr>
             ))}

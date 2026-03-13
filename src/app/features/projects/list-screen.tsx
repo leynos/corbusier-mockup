@@ -19,10 +19,31 @@ import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
 import { ProjectHeader } from "./project-landing-screen";
 
+export function useListScreenCopy(): {
+  readonly locale: string;
+  readonly idLabel: string;
+  readonly taskLabel: string;
+  readonly statusLabel: string;
+  readonly priorityLabel: string;
+  readonly assigneeLabel: string;
+  readonly dueLabel: string;
+} {
+  const { t, i18n } = useTranslation();
+
+  return {
+    locale: i18n.resolvedLanguage ?? i18n.language,
+    idLabel: t("list-col-id", { defaultValue: "ID" }),
+    taskLabel: t("list-col-task", { defaultValue: "Task" }),
+    statusLabel: t("list-col-status", { defaultValue: "Status" }),
+    priorityLabel: t("list-col-priority", { defaultValue: "Priority" }),
+    assigneeLabel: t("list-col-assignee", { defaultValue: "Assignee" }),
+    dueLabel: t("list-col-due", { defaultValue: "Due" }),
+  };
+}
+
 export function ListScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
-  const { t, i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? i18n.language;
+  const copy = useListScreenCopy();
   const projectSlug = slug ? parseProjectSlug(slug) : undefined;
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
@@ -45,22 +66,22 @@ export function ListScreen(): JSX.Element {
           <thead>
             <tr className="border-b border-base-300 text-left">
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-id", { defaultValue: "ID" })}
+                {copy.idLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-task", { defaultValue: "Task" })}
+                {copy.taskLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-status", { defaultValue: "Status" })}
+                {copy.statusLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-priority", { defaultValue: "Priority" })}
+                {copy.priorityLabel}
               </th>
               <th className="pb-2 pr-4 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-assignee", { defaultValue: "Assignee" })}
+                {copy.assigneeLabel}
               </th>
               <th className="pb-2 font-[family-name:var(--font-display)] font-semibold text-base-content/60">
-                {t("list-col-due", { defaultValue: "Due" })}
+                {copy.dueLabel}
               </th>
             </tr>
           </thead>
@@ -71,7 +92,7 @@ export function ListScreen(): JSX.Element {
                   {task.id}
                 </td>
                 <td className="py-2.5 pr-4 text-base-content">
-                  {pickLocalization(task.localizations, locale).name}
+                  {pickLocalization(task.localizations, copy.locale).name}
                 </td>
                 <td className="py-2.5 pr-4">
                   <StatusBadge state={task.state} />
@@ -81,7 +102,7 @@ export function ListScreen(): JSX.Element {
                 </td>
                 <td className="py-2.5 pr-4 text-base-content/60">{task.assignee.name}</td>
                 <td className="py-2.5 text-base-content/60">
-                  <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, locale)}</time>
+                  <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, copy.locale)}</time>
                 </td>
               </tr>
             ))}
