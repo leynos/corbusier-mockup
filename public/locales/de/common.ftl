@@ -229,6 +229,26 @@ kanban-column-in-review = In Prüfung
 kanban-column-done = Erledigt
 kanban-add-new = Neu hinzufügen
 
+## Backlog view
+
+backlog-col-priority = Priorität
+backlog-col-task = Aufgabe
+backlog-col-assignee = Zuständig
+backlog-col-due = Fällig
+
+## Calendar view
+
+calendar-grid-label = Kalender
+
+## List view
+
+list-col-id = ID
+list-col-task = Aufgabe
+list-col-status = Status
+list-col-priority = Priorität
+list-col-assignee = Zuständig
+list-col-due = Fällig
+
 ## Shared components
 
 activity-timeline-label = Aktivitätschronik

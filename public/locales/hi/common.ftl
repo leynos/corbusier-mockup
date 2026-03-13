@@ -234,6 +234,26 @@ kanban-column-in-review = समीक्षा में
 kanban-column-done = हो गया
 kanban-add-new = नया जोड़ें
 
+## Backlog view
+
+backlog-col-priority = प्राथमिकता
+backlog-col-task = कार्य
+backlog-col-assignee = समनुदेशिती
+backlog-col-due = नियत तिथि
+
+## Calendar view
+
+calendar-grid-label = कैलेंडर
+
+## List view
+
+list-col-id = आईडी
+list-col-task = कार्य
+list-col-status = स्थिति
+list-col-priority = प्राथमिकता
+list-col-assignee = समनुदेशिती
+list-col-due = नियत तिथि
+
 ## Shared components
 
 activity-timeline-label = गतिविधि टाइमलाइन

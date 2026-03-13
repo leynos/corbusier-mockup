@@ -229,6 +229,26 @@ kanban-column-in-review = レビュー中
 kanban-column-done = 完了
 kanban-add-new = 新規追加
 
+## Backlog view
+
+backlog-col-priority = 優先度
+backlog-col-task = タスク
+backlog-col-assignee = 担当者
+backlog-col-due = 期限
+
+## Calendar view
+
+calendar-grid-label = カレンダー
+
+## List view
+
+list-col-id = ID
+list-col-task = タスク
+list-col-status = ステータス
+list-col-priority = 優先度
+list-col-assignee = 担当者
+list-col-due = 期限
+
 ## Shared components
 
 activity-timeline-label = アクティビティタイムライン

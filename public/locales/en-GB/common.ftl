@@ -230,6 +230,26 @@ kanban-column-in-review = In Review
 kanban-column-done = Done
 kanban-add-new = Add New
 
+## Backlog view
+
+backlog-col-priority = Priority
+backlog-col-task = Task
+backlog-col-assignee = Assignee
+backlog-col-due = Due
+
+## Calendar view
+
+calendar-grid-label = Calendar
+
+## List view
+
+list-col-id = ID
+list-col-task = Task
+list-col-status = Status
+list-col-priority = Priority
+list-col-assignee = Assignee
+list-col-due = Due
+
 ## Shared components
 
 activity-timeline-label = Activity timeline

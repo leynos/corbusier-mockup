@@ -249,6 +249,26 @@ kanban-column-in-review = قيد المراجعة
 kanban-column-done = مكتمل
 kanban-add-new = إضافة جديد
 
+## Backlog view
+
+backlog-col-priority = الأولوية
+backlog-col-task = المهمة
+backlog-col-assignee = المسؤول
+backlog-col-due = الاستحقاق
+
+## Calendar view
+
+calendar-grid-label = التقويم
+
+## List view
+
+list-col-id = المعرّف
+list-col-task = المهمة
+list-col-status = الحالة
+list-col-priority = الأولوية
+list-col-assignee = المسؤول
+list-col-due = الاستحقاق
+
 ## Shared components
 
 activity-timeline-label = سجل النشاط الزمني
