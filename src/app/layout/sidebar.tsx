@@ -19,6 +19,8 @@ import type { RegisteredRouter, ValidateLinkOptions } from "@tanstack/react-rout
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { JSX, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { PROJECT_FIXTURES } from "../../data/projects";
+import { pickLocalization } from "../domain/entities/localization";
 
 type SidebarStaticRoute =
   | "/"
@@ -116,7 +118,7 @@ function ProjectLink({ project }: { readonly project: ProjectItem }): JSX.Elemen
 }
 
 export function Sidebar(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const mainframeItems: readonly NavItem[] = [
     {
@@ -137,11 +139,13 @@ export function Sidebar(): JSX.Element {
     },
   ];
 
-  const fixtureProjects: readonly ProjectItem[] = [
-    { label: "Apollo-Guidance", slug: "apollo-guidance", active: true },
-    { label: "Manhattan-Logistics", slug: "manhattan-logistics", active: true },
-    { label: "Skunkworks-Alpha", slug: "skunkworks-alpha", active: false },
-  ];
+  const locale = i18n.resolvedLanguage ?? i18n.language;
+
+  const fixtureProjects: readonly ProjectItem[] = PROJECT_FIXTURES.map((p) => ({
+    label: pickLocalization(p.localizations, locale).name,
+    slug: p.slug,
+    active: p.status === "active",
+  }));
 
   const systemItems: readonly NavItem[] = [
     {

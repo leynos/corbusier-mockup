@@ -23,7 +23,7 @@ describe("TaskDepsScreen project scoping", () => {
   });
 
   it("renders the dependency view when the project slug matches the task", async () => {
-    renderTaskDepsScreen("/projects/platform-api-v3/tasks/TASK-1001/dependencies");
+    renderTaskDepsScreen("/projects/apollo-guidance/tasks/TASK-1001/dependencies");
 
     const titles = await screen.findAllByText("Implement Claude Code SDK agent backend");
     expect(titles.length).toBeGreaterThanOrEqual(1);
@@ -31,7 +31,7 @@ describe("TaskDepsScreen project scoping", () => {
   });
 
   it("treats a mismatched project slug as not found", async () => {
-    renderTaskDepsScreen("/projects/mobile-app-v2/tasks/TASK-1001/dependencies");
+    renderTaskDepsScreen("/projects/manhattan-logistics/tasks/TASK-1001/dependencies");
 
     expect(await screen.findByText("Task not found")).toBeTruthy();
     expect(screen.getByText("TASK-1001")).toBeTruthy();
