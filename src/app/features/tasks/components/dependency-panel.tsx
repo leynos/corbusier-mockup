@@ -13,7 +13,7 @@ interface DependencyPanelProps {
 
 function DepCard({ taskId }: { readonly taskId: TaskId }): JSX.Element {
   const { i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   const dep = findTask(taskId);
   if (dep === undefined) {
     return (

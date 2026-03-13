@@ -9,7 +9,7 @@
 
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
-import type { TaskId } from "./tasks";
+import { type TaskId, taskId } from "./tasks";
 
 /* ── KPI data ──────────────────────────────────────────────────────── */
 
@@ -118,7 +118,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T09:14:00Z",
     actor: "Ava Chen",
     localizations: loc("Transitioned TASK-1001 to In Progress"),
-    taskRef: "TASK-1001",
+    taskRef: taskId("TASK-1001"),
   },
   {
     id: "da-2",
@@ -126,7 +126,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T09:15:00Z",
     actor: "Ava Chen",
     localizations: loc("Associated branch feature/claude-sdk-backend"),
-    taskRef: "TASK-1001",
+    taskRef: taskId("TASK-1001"),
   },
   {
     id: "da-3",
@@ -134,7 +134,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T11:42:00Z",
     actor: "Ava Chen",
     localizations: loc("Completed subtask: Define agent adapter interface"),
-    taskRef: "TASK-1001",
+    taskRef: taskId("TASK-1001"),
   },
   {
     id: "da-4",
@@ -142,7 +142,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T12:05:00Z",
     actor: "Claude Code SDK",
     localizations: loc("Invoked file_write on src/agent/adapter.ts"),
-    taskRef: "TASK-1001",
+    taskRef: taskId("TASK-1001"),
   },
   {
     id: "da-5",
@@ -150,7 +150,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T12:06:00Z",
     actor: "Claude Code SDK",
     localizations: loc("Completed turn 142 — 3 tool calls, 0 errors"),
-    taskRef: "TASK-1001",
+    taskRef: taskId("TASK-1001"),
   },
   {
     id: "da-7",
@@ -158,7 +158,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T14:30:00Z",
     actor: "Marcus Webb",
     localizations: loc("Transitioned TASK-1002 to In Review"),
-    taskRef: "TASK-1002",
+    taskRef: taskId("TASK-1002"),
   },
   {
     id: "da-6",
@@ -166,7 +166,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T14:32:00Z",
     actor: "Marcus Webb",
     localizations: loc("Opened PR #251 for tool registry schema"),
-    taskRef: "TASK-1002",
+    taskRef: taskId("TASK-1002"),
   },
   {
     id: "da-8",
@@ -174,7 +174,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T15:00:00Z",
     actor: "Priya Sharma",
     localizations: loc("Left comment on TASK-1006: Tool call panel needs expand/collapse"),
-    taskRef: "TASK-1006",
+    taskRef: taskId("TASK-1006"),
   },
   {
     id: "da-9",
@@ -182,7 +182,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T15:30:00Z",
     actor: "Codex CLI",
     localizations: loc("Completed turn 87 — schema validation pass"),
-    taskRef: "TASK-1016",
+    taskRef: taskId("TASK-1016"),
   },
   {
     id: "da-10",
@@ -190,7 +190,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T16:00:00Z",
     actor: "Elena Rossi",
     localizations: loc("Transitioned TASK-1007 to Done"),
-    taskRef: "TASK-1007",
+    taskRef: taskId("TASK-1007"),
   },
   {
     id: "da-11",
@@ -198,7 +198,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T16:15:00Z",
     actor: "Claude Code SDK",
     localizations: loc("Invoked bash: bun test — all passing"),
-    taskRef: "TASK-1011",
+    taskRef: taskId("TASK-1011"),
   },
   {
     id: "da-12",
@@ -206,7 +206,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     timestamp: "2026-03-12T16:45:00Z",
     actor: "Tomás Herrera",
     localizations: loc("Completed subtask: Implement scope middleware"),
-    taskRef: "TASK-1011",
+    taskRef: taskId("TASK-1011"),
   },
 ];
 

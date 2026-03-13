@@ -33,8 +33,16 @@ export enum Priority {
 
 /* ── Supporting types ──────────────────────────────────────────────── */
 
-export type TaskId = `TASK-${number}`;
-export type SubtaskId = `st-${number}`;
+export type TaskId = string & { readonly brand: "TaskId" };
+export type SubtaskId = string & { readonly brand: "SubtaskId" };
+
+export function taskId(id: `TASK-${number}`): TaskId {
+  return id as TaskId;
+}
+
+export function subtaskId(id: `st-${number}`): SubtaskId {
+  return id as SubtaskId;
+}
 
 export interface Assignee {
   readonly name: string;
@@ -147,7 +155,7 @@ const JAMES: Assignee = { name: "James Okafor", initials: "JO", role: "Platform 
 
 export const TASKS: readonly Task[] = [
   {
-    id: "TASK-1001",
+    id: taskId("TASK-1001"),
     localizations: loc(
       "Implement Claude Code SDK agent backend",
       "Integrate the Claude Code SDK as a first-class agent backend, including turn lifecycle management and tool dispatch.",
@@ -160,12 +168,12 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["backend", "agent"],
     subtasks: [
-      { id: "st-1", localizations: loc("Define agent adapter interface"), done: true },
-      { id: "st-2", localizations: loc("Implement SDK client wrapper"), done: true },
-      { id: "st-3", localizations: loc("Add turn lifecycle hooks"), done: false },
-      { id: "st-4", localizations: loc("Write integration tests"), done: false },
+      { id: subtaskId("st-1"), localizations: loc("Define agent adapter interface"), done: true },
+      { id: subtaskId("st-2"), localizations: loc("Implement SDK client wrapper"), done: true },
+      { id: subtaskId("st-3"), localizations: loc("Add turn lifecycle hooks"), done: false },
+      { id: subtaskId("st-4"), localizations: loc("Write integration tests"), done: false },
     ],
-    dependencies: { blockedBy: [], blocks: ["TASK-1003", "TASK-1005"] },
+    dependencies: { blockedBy: [], blocks: [taskId("TASK-1003"), taskId("TASK-1005")] },
     branchRef: "feature/claude-sdk-backend",
     pullRequestRef: "#247",
     activityLog: [
@@ -196,10 +204,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Pluggable agent backends"),
       step: loc("SDK integration"),
     },
-    relatedTasks: ["TASK-1002", "TASK-1003"],
+    relatedTasks: [taskId("TASK-1002"), taskId("TASK-1003")],
   },
   {
-    id: "TASK-1002",
+    id: taskId("TASK-1002"),
     localizations: loc(
       "Design MCP tool registry schema",
       "Define the JSON schema for registering tools in the MCP tool registry, including capability declarations and access policies.",
@@ -212,12 +220,12 @@ export const TASKS: readonly Task[] = [
     estimate: "3 pts",
     labelIds: ["backend", "schema"],
     subtasks: [
-      { id: "st-5", localizations: loc("Draft JSON schema document"), done: true },
-      { id: "st-6", localizations: loc("Add capability declarations"), done: true },
-      { id: "st-7", localizations: loc("Define access policy shape"), done: true },
-      { id: "st-8", localizations: loc("Review with team"), done: false },
+      { id: subtaskId("st-5"), localizations: loc("Draft JSON schema document"), done: true },
+      { id: subtaskId("st-6"), localizations: loc("Add capability declarations"), done: true },
+      { id: subtaskId("st-7"), localizations: loc("Define access policy shape"), done: true },
+      { id: subtaskId("st-8"), localizations: loc("Review with team"), done: false },
     ],
-    dependencies: { blockedBy: [], blocks: ["TASK-1004"] },
+    dependencies: { blockedBy: [], blocks: [taskId("TASK-1004")] },
     branchRef: "feature/tool-registry-schema",
     pullRequestRef: "#251",
     activityLog: [
@@ -241,10 +249,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Pluggable agent backends"),
       step: loc("Tool registry"),
     },
-    relatedTasks: ["TASK-1001", "TASK-1004"],
+    relatedTasks: [taskId("TASK-1001"), taskId("TASK-1004")],
   },
   {
-    id: "TASK-1003",
+    id: taskId("TASK-1003"),
     localizations: loc(
       "Build hook execution engine",
       "Implement the server-side hook execution engine that runs pre/post hooks around agent turns and tool calls.",
@@ -257,12 +265,12 @@ export const TASKS: readonly Task[] = [
     estimate: "8 pts",
     labelIds: ["backend", "hooks"],
     subtasks: [
-      { id: "st-9", localizations: loc("Define hook lifecycle events"), done: false },
-      { id: "st-10", localizations: loc("Implement pre-hook runner"), done: false },
-      { id: "st-11", localizations: loc("Implement post-hook runner"), done: false },
-      { id: "st-12", localizations: loc("Add timeout/retry logic"), done: false },
+      { id: subtaskId("st-9"), localizations: loc("Define hook lifecycle events"), done: false },
+      { id: subtaskId("st-10"), localizations: loc("Implement pre-hook runner"), done: false },
+      { id: subtaskId("st-11"), localizations: loc("Implement post-hook runner"), done: false },
+      { id: subtaskId("st-12"), localizations: loc("Add timeout/retry logic"), done: false },
     ],
-    dependencies: { blockedBy: ["TASK-1001"], blocks: [] },
+    dependencies: { blockedBy: [taskId("TASK-1001")], blocks: [] },
     branchRef: undefined,
     pullRequestRef: undefined,
     activityLog: [],
@@ -271,10 +279,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Governance layer"),
       step: loc("Hook system"),
     },
-    relatedTasks: ["TASK-1001"],
+    relatedTasks: [taskId("TASK-1001")],
   },
   {
-    id: "TASK-1004",
+    id: taskId("TASK-1004"),
     localizations: loc(
       "Implement tool access policy evaluator",
       "Build the policy evaluation engine that checks whether an agent is permitted to invoke a given tool based on the access policy configuration.",
@@ -287,7 +295,7 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["backend", "policy"],
     subtasks: [],
-    dependencies: { blockedBy: ["TASK-1002"], blocks: ["TASK-1008"] },
+    dependencies: { blockedBy: [taskId("TASK-1002")], blocks: [taskId("TASK-1008")] },
     branchRef: undefined,
     pullRequestRef: undefined,
     activityLog: [],
@@ -296,10 +304,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Governance layer"),
       step: loc("Policy engine"),
     },
-    relatedTasks: ["TASK-1002"],
+    relatedTasks: [taskId("TASK-1002")],
   },
   {
-    id: "TASK-1005",
+    id: taskId("TASK-1005"),
     localizations: loc(
       "Add SSE streaming for agent turns",
       "Implement server-sent events endpoint for streaming agent turn progress to the dashboard in real time.",
@@ -312,11 +320,11 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["backend", "streaming"],
     subtasks: [
-      { id: "st-13", localizations: loc("Set up SSE endpoint"), done: true },
-      { id: "st-14", localizations: loc("Implement event serialization"), done: true },
-      { id: "st-15", localizations: loc("Add client reconnection logic"), done: false },
+      { id: subtaskId("st-13"), localizations: loc("Set up SSE endpoint"), done: true },
+      { id: subtaskId("st-14"), localizations: loc("Implement event serialization"), done: true },
+      { id: subtaskId("st-15"), localizations: loc("Add client reconnection logic"), done: false },
     ],
-    dependencies: { blockedBy: ["TASK-1001"], blocks: ["TASK-1009"] },
+    dependencies: { blockedBy: [taskId("TASK-1001")], blocks: [taskId("TASK-1009")] },
     branchRef: "feature/sse-agent-turns",
     pullRequestRef: undefined,
     activityLog: [
@@ -333,10 +341,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Live dashboard"),
       step: loc("SSE infrastructure"),
     },
-    relatedTasks: ["TASK-1001", "TASK-1009"],
+    relatedTasks: [taskId("TASK-1001"), taskId("TASK-1009")],
   },
   {
-    id: "TASK-1006",
+    id: taskId("TASK-1006"),
     localizations: loc(
       "Design conversation thread UI",
       "Create the conversation detail view showing agent messages, tool call results, and handoff annotations.",
@@ -349,11 +357,11 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["frontend", "ui"],
     subtasks: [
-      { id: "st-16", localizations: loc("Message bubble component"), done: true },
-      { id: "st-17", localizations: loc("Tool call expansion panel"), done: false },
-      { id: "st-18", localizations: loc("Handoff annotation badge"), done: false },
+      { id: subtaskId("st-16"), localizations: loc("Message bubble component"), done: true },
+      { id: subtaskId("st-17"), localizations: loc("Tool call expansion panel"), done: false },
+      { id: subtaskId("st-18"), localizations: loc("Handoff annotation badge"), done: false },
     ],
-    dependencies: { blockedBy: [], blocks: ["TASK-1010"] },
+    dependencies: { blockedBy: [], blocks: [taskId("TASK-1010")] },
     branchRef: "feature/conversation-ui",
     pullRequestRef: undefined,
     activityLog: [
@@ -377,10 +385,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Agent transparency"),
       step: loc("Conversation UI"),
     },
-    relatedTasks: ["TASK-1010"],
+    relatedTasks: [taskId("TASK-1010")],
   },
   {
-    id: "TASK-1007",
+    id: taskId("TASK-1007"),
     localizations: loc(
       "Set up Playwright E2E test harness",
       "Configure Playwright for end-to-end testing with Podman container support on Fedora/WSL2.",
@@ -393,9 +401,9 @@ export const TASKS: readonly Task[] = [
     estimate: "3 pts",
     labelIds: ["testing", "devops"],
     subtasks: [
-      { id: "st-19", localizations: loc("Write Podman wrapper script"), done: true },
-      { id: "st-20", localizations: loc("Add axe-core integration"), done: true },
-      { id: "st-21", localizations: loc("Create smoke test suite"), done: true },
+      { id: subtaskId("st-19"), localizations: loc("Write Podman wrapper script"), done: true },
+      { id: subtaskId("st-20"), localizations: loc("Add axe-core integration"), done: true },
+      { id: subtaskId("st-21"), localizations: loc("Create smoke test suite"), done: true },
     ],
     dependencies: { blockedBy: [], blocks: [] },
     branchRef: "feature/e2e-harness",
@@ -417,7 +425,7 @@ export const TASKS: readonly Task[] = [
     relatedTasks: [],
   },
   {
-    id: "TASK-1008",
+    id: taskId("TASK-1008"),
     localizations: loc(
       "Implement governance audit logging",
       "Record all policy evaluations, hook executions, and tool access decisions to an immutable audit log.",
@@ -430,7 +438,7 @@ export const TASKS: readonly Task[] = [
     estimate: "8 pts",
     labelIds: ["backend", "governance"],
     subtasks: [],
-    dependencies: { blockedBy: ["TASK-1004"], blocks: [] },
+    dependencies: { blockedBy: [taskId("TASK-1004")], blocks: [] },
     branchRef: undefined,
     pullRequestRef: undefined,
     activityLog: [],
@@ -439,10 +447,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Governance layer"),
       step: loc("Audit logging"),
     },
-    relatedTasks: ["TASK-1004"],
+    relatedTasks: [taskId("TASK-1004")],
   },
   {
-    id: "TASK-1009",
+    id: taskId("TASK-1009"),
     localizations: loc(
       "Build real-time dashboard widgets",
       "Create dashboard components that consume SSE events and render live KPI updates, agent status, and activity feed.",
@@ -455,11 +463,11 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["frontend", "dashboard"],
     subtasks: [
-      { id: "st-22", localizations: loc("KPI card with live update"), done: true },
-      { id: "st-23", localizations: loc("Agent status indicator"), done: false },
-      { id: "st-24", localizations: loc("Activity feed auto-scroll"), done: false },
+      { id: subtaskId("st-22"), localizations: loc("KPI card with live update"), done: true },
+      { id: subtaskId("st-23"), localizations: loc("Agent status indicator"), done: false },
+      { id: subtaskId("st-24"), localizations: loc("Activity feed auto-scroll"), done: false },
     ],
-    dependencies: { blockedBy: ["TASK-1005"], blocks: [] },
+    dependencies: { blockedBy: [taskId("TASK-1005")], blocks: [] },
     branchRef: "feature/live-dashboard",
     pullRequestRef: undefined,
     activityLog: [
@@ -476,10 +484,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Live dashboard"),
       step: loc("Dashboard widgets"),
     },
-    relatedTasks: ["TASK-1005"],
+    relatedTasks: [taskId("TASK-1005")],
   },
   {
-    id: "TASK-1010",
+    id: taskId("TASK-1010"),
     localizations: loc(
       "Add slash command parser",
       "Implement a parser for slash commands in the conversation input (/run, /approve, /reject, /escalate) with auto-complete.",
@@ -492,7 +500,7 @@ export const TASKS: readonly Task[] = [
     estimate: "3 pts",
     labelIds: ["frontend", "parser"],
     subtasks: [],
-    dependencies: { blockedBy: ["TASK-1006"], blocks: [] },
+    dependencies: { blockedBy: [taskId("TASK-1006")], blocks: [] },
     branchRef: undefined,
     pullRequestRef: undefined,
     activityLog: [],
@@ -501,10 +509,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Agent transparency"),
       step: loc("Command interface"),
     },
-    relatedTasks: ["TASK-1006"],
+    relatedTasks: [taskId("TASK-1006")],
   },
   {
-    id: "TASK-1011",
+    id: taskId("TASK-1011"),
     localizations: loc(
       "Configure tenant isolation boundaries",
       "Set up namespace-level isolation ensuring agent backends, tools, and hooks are scoped to tenant boundaries.",
@@ -517,11 +525,11 @@ export const TASKS: readonly Task[] = [
     estimate: "8 pts",
     labelIds: ["devops", "security"],
     subtasks: [
-      { id: "st-25", localizations: loc("Define namespace schema"), done: true },
-      { id: "st-26", localizations: loc("Implement scope middleware"), done: true },
-      { id: "st-27", localizations: loc("Add cross-tenant guard tests"), done: false },
+      { id: subtaskId("st-25"), localizations: loc("Define namespace schema"), done: true },
+      { id: subtaskId("st-26"), localizations: loc("Implement scope middleware"), done: true },
+      { id: subtaskId("st-27"), localizations: loc("Add cross-tenant guard tests"), done: false },
     ],
-    dependencies: { blockedBy: [], blocks: ["TASK-1012"] },
+    dependencies: { blockedBy: [], blocks: [taskId("TASK-1012")] },
     branchRef: "feature/tenant-isolation",
     pullRequestRef: "#260",
     activityLog: [
@@ -538,10 +546,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Multi-tenancy"),
       step: loc("Isolation boundaries"),
     },
-    relatedTasks: ["TASK-1012"],
+    relatedTasks: [taskId("TASK-1012")],
   },
   {
-    id: "TASK-1012",
+    id: taskId("TASK-1012"),
     localizations: loc(
       "Write tenant onboarding automation",
       "Automate tenant provisioning: create namespace, seed default hooks/policies, register initial agent backend.",
@@ -554,7 +562,7 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["devops", "automation"],
     subtasks: [],
-    dependencies: { blockedBy: ["TASK-1011"], blocks: [] },
+    dependencies: { blockedBy: [taskId("TASK-1011")], blocks: [] },
     branchRef: undefined,
     pullRequestRef: undefined,
     activityLog: [],
@@ -563,10 +571,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("Multi-tenancy"),
       step: loc("Onboarding flow"),
     },
-    relatedTasks: ["TASK-1011"],
+    relatedTasks: [taskId("TASK-1011")],
   },
   {
-    id: "TASK-1013",
+    id: taskId("TASK-1013"),
     localizations: loc(
       "Implement Kanban board drag-and-drop",
       "Add accessible drag-and-drop to the Kanban board with keyboard support (select, Enter, arrow, Enter).",
@@ -579,9 +587,9 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["frontend", "a11y"],
     subtasks: [
-      { id: "st-28", localizations: loc("Drag handle component"), done: true },
-      { id: "st-29", localizations: loc("Drop zone highlighting"), done: false },
-      { id: "st-30", localizations: loc("Keyboard navigation path"), done: false },
+      { id: subtaskId("st-28"), localizations: loc("Drag handle component"), done: true },
+      { id: subtaskId("st-29"), localizations: loc("Drop zone highlighting"), done: false },
+      { id: subtaskId("st-30"), localizations: loc("Keyboard navigation path"), done: false },
     ],
     dependencies: { blockedBy: [], blocks: [] },
     branchRef: "feature/kanban-dnd",
@@ -603,7 +611,7 @@ export const TASKS: readonly Task[] = [
     relatedTasks: [],
   },
   {
-    id: "TASK-1014",
+    id: taskId("TASK-1014"),
     localizations: loc(
       "Add monitoring dashboard for agent health",
       "Build the system monitoring page showing agent backend health checks, response latency P95, and error rates.",
@@ -633,10 +641,10 @@ export const TASKS: readonly Task[] = [
       idea: loc("System monitoring"),
       step: loc("Health dashboard"),
     },
-    relatedTasks: ["TASK-1009"],
+    relatedTasks: [taskId("TASK-1009")],
   },
   {
-    id: "TASK-1015",
+    id: taskId("TASK-1015"),
     localizations: loc(
       "Design settings page layout",
       "Create the application settings page with sections for appearance, authentication, integrations, and workspace config.",
@@ -649,9 +657,9 @@ export const TASKS: readonly Task[] = [
     estimate: "2 pts",
     labelIds: ["frontend", "settings"],
     subtasks: [
-      { id: "st-31", localizations: loc("Appearance section"), done: true },
-      { id: "st-32", localizations: loc("Authentication section"), done: true },
-      { id: "st-33", localizations: loc("Integrations section"), done: true },
+      { id: subtaskId("st-31"), localizations: loc("Appearance section"), done: true },
+      { id: subtaskId("st-32"), localizations: loc("Authentication section"), done: true },
+      { id: subtaskId("st-33"), localizations: loc("Integrations section"), done: true },
     ],
     dependencies: { blockedBy: [], blocks: [] },
     branchRef: "feature/settings-layout",
@@ -673,7 +681,7 @@ export const TASKS: readonly Task[] = [
     relatedTasks: [],
   },
   {
-    id: "TASK-1016",
+    id: taskId("TASK-1016"),
     localizations: loc(
       "Integrate Codex CLI agent backend",
       "Add OpenAI Codex CLI as a second agent backend option alongside Claude Code SDK.",
@@ -686,9 +694,13 @@ export const TASKS: readonly Task[] = [
     estimate: "5 pts",
     labelIds: ["backend", "agent"],
     subtasks: [
-      { id: "st-34", localizations: loc("Implement Codex adapter"), done: true },
-      { id: "st-35", localizations: loc("Map tool schemas to Codex format"), done: true },
-      { id: "st-36", localizations: loc("Add health check endpoint"), done: true },
+      { id: subtaskId("st-34"), localizations: loc("Implement Codex adapter"), done: true },
+      {
+        id: subtaskId("st-35"),
+        localizations: loc("Map tool schemas to Codex format"),
+        done: true,
+      },
+      { id: subtaskId("st-36"), localizations: loc("Add health check endpoint"), done: true },
     ],
     dependencies: { blockedBy: [], blocks: [] },
     branchRef: "feature/codex-backend",
@@ -707,7 +719,7 @@ export const TASKS: readonly Task[] = [
       idea: loc("Pluggable agent backends"),
       step: loc("Codex integration"),
     },
-    relatedTasks: ["TASK-1001"],
+    relatedTasks: [taskId("TASK-1001")],
   },
 ];
 
