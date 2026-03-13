@@ -1,4 +1,25 @@
-/** @file Dependency panel — "Blocked By" and "Blocks" sections. */
+/**
+ * @file Render task dependency sections for the task detail screen.
+ *
+ * Purpose:
+ * Render the "Blocked By" and "Blocks" sections for a task's
+ * dependencies.
+ *
+ * Responsibilities:
+ * Receive a `Task` value, display the dependency lists for both
+ * directions, and handle the empty state when no dependencies exist.
+ *
+ * Usage:
+ * Import `DependencyPanel` and pass a `Task` object through the `task`
+ * prop.
+ *
+ * Invariants:
+ * Render each dependency section only when the corresponding dependency
+ * list is non-empty, and do not mutate the provided `Task`.
+ *
+ * Related:
+ * The task data model is defined by `Task` in `src/data/tasks.ts`.
+ */
 
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
