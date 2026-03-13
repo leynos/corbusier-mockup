@@ -201,6 +201,34 @@ dashboard-agent-turn-count =
        *[other] 轮次
     }
 
+## Project cards
+
+project-list-region = 项目列表
+project-card-lead = 负责人:
+project-card-task-summary = { $total } 个任务 · { $inProgress } 进行中 · { $blocked } 个阻塞
+project-status-active = 活跃
+project-status-inactive = 不活跃
+project-status-completed = 已完成
+
+## Project landing
+
+project-view-tabs-label = 项目视图
+project-view-backlog = 待办事项
+project-view-kanban = 看板
+project-view-calendar = 日历
+project-view-list = 列表
+project-view-timeline = 时间线
+
+## Kanban board
+
+kanban-board-label = 看板面板
+kanban-column-todo = 待办
+kanban-column-planned = 已计划
+kanban-column-in-progress = 进行中
+kanban-column-in-review = 审核中
+kanban-column-done = 已完成
+kanban-add-new = 新建
+
 ## Shared components
 
 activity-timeline-label = 动态时间线

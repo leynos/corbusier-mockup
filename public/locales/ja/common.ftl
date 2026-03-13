@@ -201,6 +201,34 @@ dashboard-agent-turn-count =
        *[other] ターン
     }
 
+## Project cards
+
+project-list-region = プロジェクト一覧
+project-card-lead = リーダー:
+project-card-task-summary = { $total } 件のタスク · { $inProgress } 件進行中 · { $blocked } 件ブロック中
+project-status-active = アクティブ
+project-status-inactive = 非アクティブ
+project-status-completed = 完了
+
+## Project landing
+
+project-view-tabs-label = プロジェクトビュー
+project-view-backlog = バックログ
+project-view-kanban = カンバン
+project-view-calendar = カレンダー
+project-view-list = リスト
+project-view-timeline = タイムライン
+
+## Kanban board
+
+kanban-board-label = カンバンボード
+kanban-column-todo = 未着手
+kanban-column-planned = 計画済み
+kanban-column-in-progress = 進行中
+kanban-column-in-review = レビュー中
+kanban-column-done = 完了
+kanban-add-new = 新規追加
+
 ## Shared components
 
 activity-timeline-label = アクティビティタイムライン

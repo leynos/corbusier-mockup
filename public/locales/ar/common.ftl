@@ -221,6 +221,34 @@ dashboard-agent-turn-count =
        *[other] دورات
     }
 
+## Project cards
+
+project-list-region = قائمة المشاريع
+project-card-lead = القائد:
+project-card-task-summary = { $total } مهام · { $inProgress } قيد التنفيذ · { $blocked } محظورة
+project-status-active = نشط
+project-status-inactive = غير نشط
+project-status-completed = مكتمل
+
+## Project landing
+
+project-view-tabs-label = عروض المشروع
+project-view-backlog = قائمة المهام
+project-view-kanban = كانبان
+project-view-calendar = التقويم
+project-view-list = القائمة
+project-view-timeline = الجدول الزمني
+
+## Kanban board
+
+kanban-board-label = لوحة كانبان
+kanban-column-todo = للتنفيذ
+kanban-column-planned = مخطط
+kanban-column-in-progress = قيد التنفيذ
+kanban-column-in-review = قيد المراجعة
+kanban-column-done = مكتمل
+kanban-add-new = إضافة جديد
+
 ## Shared components
 
 activity-timeline-label = سجل النشاط الزمني

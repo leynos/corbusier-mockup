@@ -201,6 +201,34 @@ dashboard-agent-turn-count =
        *[other] Züge
     }
 
+## Project cards
+
+project-list-region = Projektliste
+project-card-lead = Leitung:
+project-card-task-summary = { $total } Aufgaben · { $inProgress } in Bearbeitung · { $blocked } blockiert
+project-status-active = Aktiv
+project-status-inactive = Inaktiv
+project-status-completed = Abgeschlossen
+
+## Project landing
+
+project-view-tabs-label = Projektansichten
+project-view-backlog = Backlog
+project-view-kanban = Kanban
+project-view-calendar = Kalender
+project-view-list = Liste
+project-view-timeline = Zeitstrahl
+
+## Kanban board
+
+kanban-board-label = Kanban-Tafel
+kanban-column-todo = Zu erledigen
+kanban-column-planned = Geplant
+kanban-column-in-progress = In Bearbeitung
+kanban-column-in-review = In Prüfung
+kanban-column-done = Erledigt
+kanban-add-new = Neu hinzufügen
+
 ## Shared components
 
 activity-timeline-label = Aktivitätschronik

@@ -206,6 +206,34 @@ dashboard-agent-turn-count =
        *[other] टर्न
     }
 
+## Project cards
+
+project-list-region = परियोजना सूची
+project-card-lead = नेता:
+project-card-task-summary = { $total } कार्य · { $inProgress } प्रगति में · { $blocked } अवरुद्ध
+project-status-active = सक्रिय
+project-status-inactive = निष्क्रिय
+project-status-completed = पूर्ण
+
+## Project landing
+
+project-view-tabs-label = परियोजना दृश्य
+project-view-backlog = बैकलॉग
+project-view-kanban = कानबान
+project-view-calendar = कैलेंडर
+project-view-list = सूची
+project-view-timeline = समयरेखा
+
+## Kanban board
+
+kanban-board-label = कानबान बोर्ड
+kanban-column-todo = करना है
+kanban-column-planned = योजनाबद्ध
+kanban-column-in-progress = प्रगति में
+kanban-column-in-review = समीक्षा में
+kanban-column-done = हो गया
+kanban-add-new = नया जोड़ें
+
 ## Shared components
 
 activity-timeline-label = गतिविधि टाइमलाइन
