@@ -80,13 +80,17 @@ headers.
 
 ## Progress
 
-- [x] Milestone 0: Data model foundation and plan-02 migration (deferred — M0 was already handled by plan 02's entity localizations)
+- [x] Milestone 0: Data model foundation and plan-02 migration
+  (deferred — M0 was already handled by plan 02's entity
+  localizations)
 - [x] Milestone 1: Project fixture data — `ec1e25d`
 - [x] Milestone 2: Project list page — `3841057`
 - [x] Milestone 3: Project landing layout with view switcher — `3841057`
 - [x] Milestone 4: Kanban board — `5b80b4a`
 - [x] Milestone 5: Backlog, Calendar, List, and Timeline placeholders — `8594b0a`
 - [x] Milestone 6: Tests and validation — `5235789`
+- [x] Post-completion review remediation: sidebar project links now target the
+  canonical Kanban route and are covered by a regression test.
 
 ## Surprises & discoveries
 
@@ -132,6 +136,7 @@ All 6 milestones delivered across 5 commits. The `bun run ff` gate
 passes fully (95 unit tests, 14 E2E tests, axe a11y audits).
 
 **Delivered:**
+
 - 3 project fixtures with grouped task summaries
 - Project list page with ChamferCard grid
 - Project landing with shared header and view switcher (5 tabs)

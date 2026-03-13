@@ -98,7 +98,7 @@ function ProjectLink({ project }: { readonly project: ProjectItem }): JSX.Elemen
 
   return (
     <SidebarLink
-      to="/projects/$slug"
+      to="/projects/$slug/kanban"
       params={{ slug: project.slug }}
       className={`flex items-center gap-3 rounded-md px-3 py-1.5 text-[length:var(--font-size-sm)] transition-colors duration-[var(--transition-fast)] ${
         isActive

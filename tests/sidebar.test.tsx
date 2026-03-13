@@ -45,6 +45,16 @@ describe("Sidebar", () => {
     expect(within(nav).getByText("Skunkworks-Alpha")).toBeTruthy();
   });
 
+  it("links fixture projects to the canonical kanban route", async () => {
+    renderWithRouter(<Sidebar />);
+
+    const nav = await screen.findByRole("navigation", { name: /main navigation/i });
+    const apolloProjectLink = within(nav).getByText("Apollo-Guidance").closest("a");
+
+    expect(apolloProjectLink).toBeTruthy();
+    expect(apolloProjectLink?.getAttribute("href")).toBe("/projects/apollo-guidance/kanban");
+  });
+
   it("renders system navigation items", async () => {
     renderWithRouter(<Sidebar />);
 
