@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 
 import { TaskState, validTransitions } from "../../../../data/tasks";
 
+/** Props accepted by {`@link` StateMachineControls}. */
 export interface StateMachineControlsProps {
   readonly currentState: TaskState;
   readonly onTransition?: (target: TaskState) => void;
 }
 
+/** Describes a single rendered transition button. */
 interface TransitionAction {
   readonly target: TaskState;
   readonly label: string;
@@ -17,6 +19,7 @@ interface TransitionAction {
   readonly className: string;
 }
 
+/** Props for the pure-presentational transition-button view. */
 interface StateMachineControlsViewProps {
   readonly actions: readonly TransitionAction[];
   readonly emptyMessage: string;
