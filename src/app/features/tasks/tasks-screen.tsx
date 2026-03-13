@@ -92,6 +92,55 @@ function FilterGroup<T extends string>({
   );
 }
 
+interface TaskFilters {
+  readonly stateFilter: StateFilter;
+  readonly priorityFilter: PriorityFilter;
+  readonly projectFilter: ProjectFilter;
+}
+
+function taskMatchesFilters(task: Task, filters: TaskFilters): boolean {
+  if (filters.stateFilter !== "all" && task.state !== filters.stateFilter) return false;
+  if (filters.priorityFilter !== "all" && task.priority !== filters.priorityFilter) return false;
+  if (filters.projectFilter !== "all" && task.projectSlug !== filters.projectFilter) return false;
+  return true;
+}
+
+function buildStateOptions(locale: string, allLabel: string): readonly FilterOption<StateFilter>[] {
+  return [
+    { value: "all", label: allLabel },
+    ...Object.values(TaskState).map((state) => ({
+      value: state,
+      label: pickLocalization(taskStateDescriptors[state]?.localizations, locale).name,
+    })),
+  ];
+}
+
+function buildPriorityOptions(
+  locale: string,
+  allLabel: string,
+): readonly FilterOption<PriorityFilter>[] {
+  return [
+    { value: "all", label: allLabel },
+    ...Object.values(Priority).map((priority) => ({
+      value: priority,
+      label: pickLocalization(priorityDescriptors[priority]?.localizations, locale).name,
+    })),
+  ];
+}
+
+function buildProjectOptions(
+  locale: string,
+  allLabel: string,
+): readonly FilterOption<ProjectFilter>[] {
+  return [
+    { value: "all", label: allLabel },
+    ...PROJECT_SLUGS.map((slug) => ({
+      value: slug,
+      label: pickLocalization(projectDescriptors[slug]?.localizations, locale).name,
+    })),
+  ];
+}
+
 function TaskRow({ task }: { readonly task: Task }): JSX.Element {
   const { i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
@@ -146,15 +195,10 @@ export function TasksScreen(): JSX.Element {
   const [stateFilter, setStateFilter] = useState<StateFilter>("all");
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>("all");
   const [projectFilter, setProjectFilter] = useState<ProjectFilter>("all");
+  const filters: TaskFilters = { stateFilter, priorityFilter, projectFilter };
 
   const hasFilters = stateFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all";
-
-  const filtered = TASKS.filter((task) => {
-    if (stateFilter !== "all" && task.state !== stateFilter) return false;
-    if (priorityFilter !== "all" && task.priority !== priorityFilter) return false;
-    if (projectFilter !== "all" && task.projectSlug !== projectFilter) return false;
-    return true;
-  });
+  const filtered = TASKS.filter((task) => taskMatchesFilters(task, filters));
 
   const resetFilters = (): void => {
     setStateFilter("all");
@@ -163,27 +207,9 @@ export function TasksScreen(): JSX.Element {
   };
 
   const allLabel = t("task-filter-all", { defaultValue: "All" });
-  const stateOptions: readonly FilterOption<StateFilter>[] = [
-    { value: "all", label: allLabel },
-    ...Object.values(TaskState).map((state) => ({
-      value: state,
-      label: pickLocalization(taskStateDescriptors[state]?.localizations, locale).name,
-    })),
-  ];
-  const priorityOptions: readonly FilterOption<PriorityFilter>[] = [
-    { value: "all", label: allLabel },
-    ...Object.values(Priority).map((priority) => ({
-      value: priority,
-      label: pickLocalization(priorityDescriptors[priority]?.localizations, locale).name,
-    })),
-  ];
-  const projectOptions: readonly FilterOption<ProjectFilter>[] = [
-    { value: "all", label: allLabel },
-    ...PROJECT_SLUGS.map((slug) => ({
-      value: slug,
-      label: pickLocalization(projectDescriptors[slug]?.localizations, locale).name,
-    })),
-  ];
+  const stateOptions = buildStateOptions(locale, allLabel);
+  const priorityOptions = buildPriorityOptions(locale, allLabel);
+  const projectOptions = buildProjectOptions(locale, allLabel);
 
   return (
     <div>
