@@ -1,10 +1,12 @@
 /** @file Regression tests for locale-aware date formatting helpers. */
 
 import { describe, expect, it } from "bun:test";
+import { fileURLToPath } from "node:url";
 
 const textDecoder = new TextDecoder();
-const formatterModulePath = new URL("../src/app/utils/date-formatting.ts", import.meta.url)
-  .pathname;
+const formatterModulePath = fileURLToPath(
+  new URL("../src/app/utils/date-formatting.ts", import.meta.url),
+);
 
 function runFormatShortDateInTimezone(timeZone: string, iso: string): string {
   const result = Bun.spawnSync({

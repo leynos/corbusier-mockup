@@ -1,4 +1,9 @@
-/** @file Shared dashboard panel showing the aggregate system health signal. */
+/** @file Shared dashboard panel showing the aggregate system health signal.
+ *
+ * This is the loudest dashboard surface. It maps the `SYSTEM_HEALTH`
+ * fixture onto an icon, colour, translated status label, and localized
+ * last-checked time.
+ */
 
 import { IconAlertTriangle, IconCircleCheck, IconCircleX } from "@tabler/icons-react";
 import type { JSX } from "react";
@@ -9,12 +14,14 @@ import { healthStatusDescriptors } from "../../../../data/registries";
 import { pickLocalization } from "../../../domain/entities/localization";
 import { formatShortTime } from "../../../utils/date-formatting";
 
+/** Icon mapping that must stay exhaustive with `HealthStatus`. */
 const HEALTH_ICON: Record<HealthStatus, typeof IconCircleCheck> = {
   healthy: IconCircleCheck,
   degraded: IconAlertTriangle,
   critical: IconCircleX,
 };
 
+/** Text-colour mapping mirroring the severity scale used by the status icon. */
 const HEALTH_COLOUR: Record<HealthStatus, string> = {
   healthy: "text-success",
   degraded: "text-warning",
@@ -22,7 +29,11 @@ const HEALTH_COLOUR: Record<HealthStatus, string> = {
 };
 
 /**
- * Render the aggregate system-health panel and last-checked timestamp.
+ * Render the primary system-health summary card.
+ *
+ * The panel expects `SYSTEM_HEALTH.overall` and
+ * `healthStatusDescriptors` to stay aligned so every status renders
+ * with both a label and a visual treatment.
  */
 export function SystemHealthPanel(): JSX.Element {
   const { t, i18n } = useTranslation();

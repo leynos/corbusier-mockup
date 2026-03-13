@@ -396,8 +396,8 @@ paused → in_progress
 │ ● Subtask completed…        14 Mar 11:42        │
 ├─────────────────────────────────────────────────┤
 │ Agent Utilization                                │
-│ claude_code_sdk  ✓ Active   142 turns           │
-│ codex_cli        ✓ Active    87 turns           │
+│ Claude Code SDK  ✓ Active   142 turns           │
+│ Codex CLI        ✓ Active    87 turns           │
 │ custom_backend   ✕ Inactive   0 turns           │
 └─────────────────────────────────────────────────┘
 ```
@@ -426,25 +426,22 @@ export enum TaskState {
 }
 
 export interface Task {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
+  readonly id: TaskId;
+  readonly localizations: EntityLocalizations;
   readonly state: TaskState;
   readonly priority: Priority;
-  readonly project: string;
+  readonly projectSlug: ProjectSlug;
   readonly assignee: Assignee;
   readonly dueDate: string;
   readonly estimate: string | undefined;
-  readonly labels: readonly string[];
+  readonly labelIds: readonly string[];
   readonly subtasks: readonly Subtask[];
   readonly dependencies: Dependencies;
   readonly branchRef: string | undefined;
   readonly pullRequestRef: string | undefined;
   readonly activityLog: readonly ActivityEvent[];
-  readonly parentGoal: string | undefined;
-  readonly parentIdea: string | undefined;
-  readonly parentStep: string | undefined;
-  readonly relatedTasks: readonly string[];
+  readonly hierarchy: TaskHierarchy;
+  readonly relatedTasks: readonly TaskId[];
 }
 
 export function canTransitionTo(

@@ -11,7 +11,7 @@ import { IconActivity } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { KPI_METRICS } from "../../../data/dashboard";
+import { KPI_METRICS, type KpiValueFormat } from "../../../data/dashboard";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { KpiCard } from "../../components/kpi-card";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -19,11 +19,7 @@ import { getRecentActivityEntries } from "./activity-adapter";
 import { AgentUtilizationPanel } from "./components/agent-utilization-panel";
 import { SystemHealthPanel } from "./components/system-health-panel";
 
-function formatKpiValue(
-  value: number,
-  valueFormat: (typeof KPI_METRICS)[number]["valueFormat"],
-  locale: string,
-): string {
+function formatKpiValue(value: number, valueFormat: KpiValueFormat, locale: string): string {
   switch (valueFormat) {
     case "integer":
       return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
@@ -43,8 +39,10 @@ function formatKpiValue(
 }
 
 /**
- * Render the main dashboard overview and compose the major dashboard
- * panels in visual-priority order.
+ * Render the dashboard route in the intended visual hierarchy order.
+ *
+ * KPI value formatting and activity shaping are handled by upstream
+ * helpers so this component remains responsible for composition.
  */
 export function DashboardScreen(): JSX.Element {
   const { t, i18n } = useTranslation();

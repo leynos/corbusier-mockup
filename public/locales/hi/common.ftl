@@ -177,7 +177,11 @@ task-filter-project = परियोजना
 task-filter-all = सभी
 task-filter-reset = फ़िल्टर रीसेट करें
 task-list-region = कार्य सूची
-task-list-summary = { $total } में से { $shown } कार्य दिखाए जा रहे हैं
+task-list-summary =
+    { $shown ->
+        [one] { $total } में से { $shown } कार्य दिखाया जा रहा है
+       *[other] { $total } में से { $shown } कार्य दिखाए जा रहे हैं
+    }
 task-list-empty = वर्तमान फ़िल्टर से कोई कार्य मेल नहीं खाता।
 
 ## Task card

@@ -529,7 +529,7 @@ export const TASKS: readonly Task[] = [
         id: "ev-11",
         kind: "agent_action",
         timestamp: "2026-03-12T10:30:00Z",
-        actor: "claude_code_sdk",
+        actor: "Claude Code SDK",
         localizations: loc("Generated namespace isolation middleware"),
       },
     ],
@@ -717,6 +717,6 @@ export function findTask(id: TaskId): Task | undefined {
 }
 
 /** Look up a task by project slug and task ID. Returns undefined if not found. */
-export function findProjectTask(projectSlug: string, id: TaskId): Task | undefined {
+export function findProjectTask(projectSlug: ProjectSlug, id: TaskId): Task | undefined {
   return TASKS.find((task) => task.projectSlug === projectSlug && task.id === id);
 }

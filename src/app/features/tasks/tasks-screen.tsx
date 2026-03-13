@@ -3,7 +3,7 @@
 import { IconCalendar, IconFilter, IconFilterOff } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import type { JSX } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   PROJECT_SLUGS,
@@ -27,14 +27,19 @@ type ProjectFilter = ProjectSlug | "all";
 
 /* ── Filter chip ──────────────────────────────────────────────────── */
 
-interface FilterChipProps {
+interface FilterChipProps<T extends string> {
   readonly label: string;
-  readonly value: string;
+  readonly value: T;
   readonly selected: boolean;
-  readonly onSelect: (value: string) => void;
+  readonly onSelect: (value: T) => void;
 }
 
-function FilterChip({ label, value, selected, onSelect }: FilterChipProps): JSX.Element {
+function FilterChip<T extends string>({
+  label,
+  value,
+  selected,
+  onSelect,
+}: FilterChipProps<T>): JSX.Element {
   return (
     <button
       type="button"
@@ -83,7 +88,7 @@ function FilterGroup<T extends string>({
           label={option.label}
           value={option.value}
           selected={value === option.value}
-          onSelect={(selectedValue) => onChange(selectedValue as T)}
+          onSelect={onChange}
         />
       ))}
     </div>
@@ -205,9 +210,9 @@ export function TasksScreen(): JSX.Element {
   };
 
   const allLabel = t("task-filter-all", { defaultValue: "All" });
-  const stateOptions = buildStateOptions(locale, allLabel);
-  const priorityOptions = buildPriorityOptions(locale, allLabel);
-  const projectOptions = buildProjectOptions(locale, allLabel);
+  const stateOptions = useMemo(() => buildStateOptions(locale, allLabel), [allLabel, locale]);
+  const priorityOptions = useMemo(() => buildPriorityOptions(locale, allLabel), [allLabel, locale]);
+  const projectOptions = useMemo(() => buildProjectOptions(locale, allLabel), [allLabel, locale]);
 
   return (
     <div>
@@ -267,9 +272,9 @@ export function TasksScreen(): JSX.Element {
           <div className="border-b border-base-300 px-4 py-3">
             <p className="text-[length:var(--font-size-sm)] text-base-content/60">
               {t("task-list-summary", {
-                shown: String(filtered.length),
-                total: String(TASKS.length),
-                defaultValue: `Showing ${String(filtered.length)} of ${String(TASKS.length)} tasks`,
+                shown: filtered.length,
+                total: TASKS.length,
+                defaultValue: "Showing {{shown}} of {{total}} tasks",
               })}
             </p>
           </div>

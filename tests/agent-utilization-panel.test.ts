@@ -24,9 +24,13 @@ describe("dashboard-agent-turn-count", () => {
   });
 
   it("provides a localized RTL turn label", async () => {
+    const previousLanguage = i18n.resolvedLanguage ?? i18n.language;
     await i18n.changeLanguage("ar");
 
-    expect(i18n.t("dashboard-agent-turn-count", { count: 3 })).toBe("دورات");
-    await i18n.changeLanguage("en-GB");
+    try {
+      expect(i18n.t("dashboard-agent-turn-count", { count: 3 })).toBe("دورات");
+    } finally {
+      await i18n.changeLanguage(previousLanguage);
+    }
   });
 });

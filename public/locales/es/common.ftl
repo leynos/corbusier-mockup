@@ -126,7 +126,7 @@ task-action-pause = Pausar
 task-action-mark-done = Marcar como completada
 task-action-abandon = Abandonar
 task-action-none = No hay transiciones disponibles desde este estado.
-task-action-transition = Transicionar a { $target }
+task-action-transition = Pasar a { $target }
 
 ## Task hierarchy
 

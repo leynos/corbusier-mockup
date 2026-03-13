@@ -82,8 +82,9 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 ## Context and orientation
 
 This plan depends on plans 01 (foundation), 02 (reusable components:
-status badges, category tags, avatar stacks), and 03 milestone 0
-(shared localization-aware data model helpers). It is relatively
+status badges, category tags, avatar stacks), and milestone 0 of
+plan 03 (shared localization-aware data model helpers). It is
+relatively
 self-contained because it touches a single route.
 
 The shared data model types (`EntityLocalizations`,
@@ -198,7 +199,7 @@ In `src/data/suggestions.ts`:
 ```tsx
 export interface Suggestion {
   readonly id: string;
-  readonly projectSlug: string;
+  readonly projectSlug: ProjectSlug;
   readonly localizations: EntityLocalizations;
   readonly priority: "high" | "medium" | "low";
   readonly confidence: number;

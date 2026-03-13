@@ -197,7 +197,11 @@ dashboard-agent-region = استخدام الوكلاء
 dashboard-agent-heading = استخدام الوكلاء
 dashboard-agent-turn-count =
     { $count ->
+        [zero] دورات
         [one] دورة
+        [two] دورتان
+        [few] دورات
+        [many] دورة
        *[other] دورات
     }
 

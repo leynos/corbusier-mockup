@@ -1,10 +1,21 @@
-/** @file KPI card for dashboard metrics — standard rounded corners, no chamfer. */
+/** @file KPI card for dashboard metrics.
+ *
+ * The dashboard formats metric values and localized copy upstream in
+ * `src/app/features/dashboard/dashboard-screen.tsx`, then passes those
+ * display strings into this presentational card.
+ */
 
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 import type { JSX } from "react";
 
 import type { TrendDirection } from "../../data/dashboard";
 
+/**
+ * Props required to render a single KPI card.
+ *
+ * `label`, `value`, `context`, and `trendLabel` must already be
+ * localized and formatted for display before they reach this component.
+ */
 interface KpiCardProps {
   readonly label: string;
   readonly value: string;
@@ -13,7 +24,7 @@ interface KpiCardProps {
   readonly trendLabel: string;
 }
 
-/** Visual treatment for trend labels and icons. */
+/** Visual treatment for trend labels and icons, exhaustive over every trend direction. */
 const TREND_STYLES: Record<
   TrendDirection,
   { readonly text: string; readonly icon: typeof IconTrendingUp | null }
@@ -24,7 +35,10 @@ const TREND_STYLES: Record<
 };
 
 /**
- * Render a dashboard KPI card with a formatted value and trend callout.
+ * Render a dashboard KPI card with a preformatted value and trend callout.
+ *
+ * The card does not perform numeric formatting itself; callers keep that
+ * policy centralized so all KPI surfaces stay consistent.
  */
 export function KpiCard({ label, value, context, trend, trendLabel }: KpiCardProps): JSX.Element {
   const trendStyle = TREND_STYLES[trend];

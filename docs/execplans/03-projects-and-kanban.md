@@ -130,9 +130,9 @@ card component from plan 02 is reused here in the Kanban columns.
 ### Milestone 0: Data model foundation and plan-02 migration
 
 Introduce the shared data model types and migrate existing plan-02
-entities to the `EntityLocalizations` pattern:
+entities to the `EntityLocalizations` pattern.
 
-- Create `src/app/domain/entities/localization.ts` defining:
+- Create `src/app/domain/entities/localization.ts` to define
   `LocaleCode`, `LocalizedStringSet`, `EntityLocalizations`,
   `LocalizedAltText`, `ImageAsset`, and the `pickLocalization`
   helper with deterministic fallback (current locale → `en-GB` →
@@ -164,7 +164,7 @@ entities to the `EntityLocalizations` pattern:
 
 ### Milestone 1: Project fixture data
 
-Create `src/data/projects.ts` defining:
+Create `src/data/projects.ts` to define:
 
 - A `Project` interface with `slug`,
   `localizations: EntityLocalizations` (name, description), `lead`

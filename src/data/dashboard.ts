@@ -14,12 +14,13 @@ import type { TaskId } from "./tasks";
 /* ── KPI data ──────────────────────────────────────────────────────── */
 
 export type TrendDirection = "up" | "down" | "flat";
+export type KpiValueFormat = "integer" | "percentage" | "milliseconds";
 
 export interface KpiMetric {
   readonly id: string;
   readonly localizations: EntityLocalizations;
   readonly value: number;
-  readonly valueFormat: "integer" | "percentage" | "milliseconds";
+  readonly valueFormat: KpiValueFormat;
   readonly trend: TrendDirection;
   readonly trendLocalizations: EntityLocalizations;
 }
@@ -99,8 +100,10 @@ export type DashboardEventKind =
   | "pr_opened"
   | "comment";
 
+export type DashboardEventId = `da-${number}`;
+
 export interface DashboardEvent {
-  readonly id: string;
+  readonly id: DashboardEventId;
   readonly kind: DashboardEventKind;
   readonly timestamp: string;
   readonly actor: string;
@@ -137,7 +140,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     id: "da-4",
     kind: "tool_call",
     timestamp: "2026-03-12T12:05:00Z",
-    actor: "claude_code_sdk",
+    actor: "Claude Code SDK",
     localizations: loc("Invoked file_write on src/agent/adapter.ts"),
     taskRef: "TASK-1001",
   },
@@ -145,7 +148,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     id: "da-5",
     kind: "agent_turn",
     timestamp: "2026-03-12T12:06:00Z",
-    actor: "claude_code_sdk",
+    actor: "Claude Code SDK",
     localizations: loc("Completed turn 142 — 3 tool calls, 0 errors"),
     taskRef: "TASK-1001",
   },
@@ -177,7 +180,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     id: "da-9",
     kind: "agent_turn",
     timestamp: "2026-03-12T15:30:00Z",
-    actor: "codex_cli",
+    actor: "Codex CLI",
     localizations: loc("Completed turn 87 — schema validation pass"),
     taskRef: "TASK-1016",
   },
@@ -193,7 +196,7 @@ export const RECENT_ACTIVITY: readonly DashboardEvent[] = [
     id: "da-11",
     kind: "tool_call",
     timestamp: "2026-03-12T16:15:00Z",
-    actor: "claude_code_sdk",
+    actor: "Claude Code SDK",
     localizations: loc("Invoked bash: bun test — all passing"),
     taskRef: "TASK-1011",
   },
