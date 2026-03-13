@@ -171,7 +171,7 @@ Create fixture files for each entity:
   execution log entries.
 - **Monitoring**: Metric data for HTTP request rate, agent turn
   latency (P50/P95/P99), tool execution throughput, DB connection
-  pool utilisation. Active alerts. Health check statuses.
+  pool utilization. Active alerts. Health check statuses.
 - **Tenant**: A single tenant with ID, slug,
   `localizations: EntityLocalizations` (name = display name),
   status, and owning user.

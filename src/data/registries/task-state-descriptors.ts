@@ -1,16 +1,16 @@
 /** @file Task state descriptor registry — resolves state IDs to localised labels. */
 
 import type { EntityLocalizations } from "../../app/domain/entities/localization";
-import type { TaskState } from "../tasks";
+import { TaskState } from "../tasks";
 
 export interface TaskStateDescriptor {
   readonly id: TaskState;
   readonly localizations: EntityLocalizations;
 }
 
-export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
+export const taskStateDescriptors = {
   draft: {
-    id: "draft" as TaskState,
+    id: TaskState.Draft,
     localizations: {
       "en-GB": { name: "Draft" },
       ar: { name: "مسودة" },
@@ -22,7 +22,7 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
     },
   },
   in_progress: {
-    id: "in_progress" as TaskState,
+    id: TaskState.InProgress,
     localizations: {
       "en-GB": { name: "In Progress" },
       ar: { name: "قيد التنفيذ" },
@@ -34,7 +34,7 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
     },
   },
   in_review: {
-    id: "in_review" as TaskState,
+    id: TaskState.InReview,
     localizations: {
       "en-GB": { name: "In Review" },
       ar: { name: "قيد المراجعة" },
@@ -46,7 +46,7 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
     },
   },
   paused: {
-    id: "paused" as TaskState,
+    id: TaskState.Paused,
     localizations: {
       "en-GB": { name: "Paused" },
       ar: { name: "متوقفة مؤقتاً" },
@@ -58,7 +58,7 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
     },
   },
   done: {
-    id: "done" as TaskState,
+    id: TaskState.Done,
     localizations: {
       "en-GB": { name: "Done" },
       ar: { name: "منجزة" },
@@ -70,7 +70,7 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
     },
   },
   abandoned: {
-    id: "abandoned" as TaskState,
+    id: TaskState.Abandoned,
     localizations: {
       "en-GB": { name: "Abandoned" },
       ar: { name: "مهجورة" },
@@ -81,4 +81,4 @@ export const taskStateDescriptors: Record<string, TaskStateDescriptor> = {
       "zh-CN": { name: "已放弃" },
     },
   },
-};
+} satisfies Record<TaskState, TaskStateDescriptor>;

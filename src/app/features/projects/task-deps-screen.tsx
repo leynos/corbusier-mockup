@@ -11,7 +11,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findProjectTask } from "../../../data/tasks";
+import type { Task } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -29,21 +29,7 @@ const routeApi = getRouteApi("/projects/$slug/tasks/$id/dependencies");
 export function TaskDepsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-  const { id, slug } = routeApi.useParams();
-  const task = findProjectTask(slug, id);
-
-  if (task === undefined) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-[length:var(--font-size-lg)] font-semibold text-base-content">
-          {t("task-not-found", { defaultValue: "Task not found" })}
-        </p>
-        <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/60">
-          {id}
-        </p>
-      </div>
-    );
-  }
+  const task = routeApi.useLoaderData() as Task;
 
   return (
     <div className="space-y-6">
@@ -117,6 +103,22 @@ export function TaskDepsScreen(): JSX.Element {
           </SectionCard>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function TaskDepsNotFound(): JSX.Element {
+  const { t } = useTranslation();
+  const { id } = routeApi.useParams();
+
+  return (
+    <div className="py-12 text-center">
+      <p className="text-[length:var(--font-size-lg)] font-semibold text-base-content">
+        {t("task-not-found", { defaultValue: "Task not found" })}
+      </p>
+      <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/60">
+        {id}
+      </p>
     </div>
   );
 }

@@ -33,30 +33,45 @@ export function SubtaskChecklist({ subtasks }: SubtaskChecklistProps): JSX.Eleme
       </div>
       <ProgressBar value={percentage} className="mb-3" />
       <ul className="space-y-1">
-        {subtasks.map((sub) => (
-          <li key={sub.id} className="flex items-center gap-2 py-1">
-            {sub.done ? (
-              <IconCircleCheck
-                size={18}
-                stroke={1.5}
-                className="shrink-0 text-success"
-                aria-hidden="true"
-              />
-            ) : (
-              <IconCircle
-                size={18}
-                stroke={1.5}
-                className="shrink-0 text-base-content/30"
-                aria-hidden="true"
-              />
-            )}
-            <span
-              className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
+        {subtasks.map((sub) => {
+          const name = pickLocalization(sub.localizations, locale).name;
+          const status = sub.done
+            ? t("task-subtask-status-complete", { defaultValue: "completed" })
+            : t("task-subtask-status-pending", { defaultValue: "pending" });
+
+          return (
+            <li
+              key={sub.id}
+              aria-label={t("task-subtask-item", {
+                name,
+                status,
+                defaultValue: `${name} (${status})`,
+              })}
+              className="flex items-center gap-2 py-1"
             >
-              {pickLocalization(sub.localizations, locale).name}
-            </span>
-          </li>
-        ))}
+              {sub.done ? (
+                <IconCircleCheck
+                  size={18}
+                  stroke={1.5}
+                  className="shrink-0 text-success"
+                  aria-hidden="true"
+                />
+              ) : (
+                <IconCircle
+                  size={18}
+                  stroke={1.5}
+                  className="shrink-0 text-base-content/30"
+                  aria-hidden="true"
+                />
+              )}
+              <span
+                className={`text-[length:var(--font-size-sm)] ${sub.done ? "text-base-content/60 line-through" : "text-base-content"}`}
+              >
+                {name}
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

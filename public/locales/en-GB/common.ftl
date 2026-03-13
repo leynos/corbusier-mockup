@@ -196,9 +196,16 @@ dashboard-activity-region = Recent activity
 dashboard-activity-heading = Recent Activity
 dashboard-agent-region = Agent utilization
 dashboard-agent-heading = Agent Utilization
-dashboard-agent-turns = turns
+dashboard-agent-turn-count =
+    { $count ->
+        [one] turn
+       *[other] turns
+    }
 
 ## Shared components
 
 activity-timeline-label = Activity timeline
 progress-label = Progress
+task-subtask-status-complete = completed
+task-subtask-status-pending = pending
+task-subtask-item = { $name } ({ $status })

@@ -30,7 +30,7 @@ export function TaskHeader({ task }: TaskHeaderProps): JSX.Element {
           {pickLocalization(task.localizations, locale).name}
         </h1>
         <p className="mt-1 text-[length:var(--font-size-sm)] text-base-content/60">
-          {pickLocalization(projectDescriptors[task.projectSlug]?.localizations, locale).name}{" "}
+          {pickLocalization(projectDescriptors[task.projectSlug].localizations, locale).name}{" "}
           <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>

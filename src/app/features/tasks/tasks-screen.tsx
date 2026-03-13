@@ -6,10 +6,12 @@ import type { JSX } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  PROJECT_SLUGS,
   priorityDescriptors,
   projectDescriptors,
   taskStateDescriptors,
 } from "../../../data/registries";
+import type { ProjectSlug } from "../../../data/registries/project-descriptors";
 import { Priority, TASKS, type Task, TaskState } from "../../../data/tasks";
 import { AvatarStack } from "../../components/avatar-stack";
 import { PriorityTag } from "../../components/priority-tag";
@@ -21,11 +23,7 @@ import { formatShortDate } from "../../utils/date-formatting";
 
 type StateFilter = TaskState | "all";
 type PriorityFilter = Priority | "all";
-type ProjectFilter = string | "all";
-
-/* ── Unique project slugs ────────────────────────────────────────── */
-
-const PROJECT_SLUGS: readonly string[] = [...new Set(TASKS.map((t) => t.projectSlug))];
+type ProjectFilter = ProjectSlug | "all";
 
 /* ── Filter chip ──────────────────────────────────────────────────── */
 
@@ -110,7 +108,7 @@ function buildStateOptions(locale: string, allLabel: string): readonly FilterOpt
     { value: "all", label: allLabel },
     ...Object.values(TaskState).map((state) => ({
       value: state,
-      label: pickLocalization(taskStateDescriptors[state]?.localizations, locale).name,
+      label: pickLocalization(taskStateDescriptors[state].localizations, locale).name,
     })),
   ];
 }
@@ -123,7 +121,7 @@ function buildPriorityOptions(
     { value: "all", label: allLabel },
     ...Object.values(Priority).map((priority) => ({
       value: priority,
-      label: pickLocalization(priorityDescriptors[priority]?.localizations, locale).name,
+      label: pickLocalization(priorityDescriptors[priority].localizations, locale).name,
     })),
   ];
 }
@@ -136,7 +134,7 @@ function buildProjectOptions(
     { value: "all", label: allLabel },
     ...PROJECT_SLUGS.map((slug) => ({
       value: slug,
-      label: pickLocalization(projectDescriptors[slug]?.localizations, locale).name,
+      label: pickLocalization(projectDescriptors[slug].localizations, locale).name,
     })),
   ];
 }
@@ -162,7 +160,7 @@ function TaskRow({ task }: { readonly task: Task }): JSX.Element {
           {pickLocalization(task.localizations, locale).name}
         </p>
         <p className="mt-0.5 text-[length:var(--font-size-xs)] text-base-content/60">
-          {pickLocalization(projectDescriptors[task.projectSlug]?.localizations, locale).name}{" "}
+          {pickLocalization(projectDescriptors[task.projectSlug].localizations, locale).name}{" "}
           <span className="font-[family-name:var(--font-mono)]">{task.id}</span>
         </p>
       </div>

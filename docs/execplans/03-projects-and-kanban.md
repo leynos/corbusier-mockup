@@ -102,10 +102,11 @@ headers.
 
 ## Context and orientation
 
-This plan depends on `01-foundation.md` (app shell, routes, tokens)
-and `02-dashboard-and-tasks.md` (reusable components: status badges,
-task cards, priority tags, avatar stacks). The task card component
-from plan 02 is reused here in the Kanban columns.
+This plan depends on `01-foundation.md` (app shell, routes, tokens),
+`02-dashboard-and-tasks.md` (reusable components: status badges, task
+cards, priority tags, avatar stacks), and its own milestone 0 (shared
+localization-aware fixture registries and entity helpers). The task
+card component from plan 02 is reused here in the Kanban columns.
 
 ### Key files this plan creates
 
@@ -136,7 +137,7 @@ entities to the `EntityLocalizations` pattern:
   `LocalizedAltText`, `ImageAsset`, and the `pickLocalization`
   helper with deterministic fallback (current locale → `en-GB` →
   any available).
-- Create `src/data/registries/` with descriptor registries for:
+- Create `src/data/registries/` with descriptor registries for
   `labelDescriptors`, `priorityDescriptors`, `taskStateDescriptors`,
   `healthStatusDescriptors`, `agentStatusDescriptors`, and
   `eventKindDescriptors`. Each registry entry owns its
@@ -157,7 +158,7 @@ entities to the `EntityLocalizations` pattern:
   chrome (button labels, aria labels, section headings, format
   strings).
 - Move entity strings out of `public/locales/*/common.ftl` into the
-  entity fixture localisation maps.
+  entity fixture localization maps.
 - Update unit and E2E tests to account for the new data shapes.
 - `bun run ff` must pass.
 
@@ -165,7 +166,7 @@ entities to the `EntityLocalizations` pattern:
 
 Create `src/data/projects.ts` defining:
 
-- A `Project` interface with: `slug`,
+- A `Project` interface with `slug`,
   `localizations: EntityLocalizations` (name, description), `lead`
   (assignee), `dateRange`, `status` (active/inactive/completed), and
   `team` (array of assignees).
@@ -315,19 +316,28 @@ export const PROJECT_FIXTURES: readonly Project[] = [
   {
     slug: "apollo-guidance",
     localizations: {
-      "en-GB": { name: "Apollo-Guidance", description: "Space navigation system" },
+      "en-GB": {
+        name: "Apollo-Guidance",
+        description: "Space navigation system",
+      },
     },
   },
   {
     slug: "manhattan-logistics",
     localizations: {
-      "en-GB": { name: "Manhattan-Logistics", description: "Supply chain orchestration" },
+      "en-GB": {
+        name: "Manhattan-Logistics",
+        description: "Supply chain orchestration",
+      },
     },
   },
   {
     slug: "skunkworks-alpha",
     localizations: {
-      "en-GB": { name: "Skunkworks-Alpha", description: "Experimental agent framework" },
+      "en-GB": {
+        name: "Skunkworks-Alpha",
+        description: "Experimental agent framework",
+      },
     },
   },
 ];

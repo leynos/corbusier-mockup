@@ -19,7 +19,7 @@ Both Wildside and Corbusier are client-side single-page applications built on
 the same v2a front-end stack: Bun, Vite, React 19, TanStack Router,
 Tailwind CSS v4, and DaisyUI v5. They share Radix UI primitives for
 interactive components, i18next with Fluent translation bundles for
-localisation, and a common data-model-driven card architecture for presenting
+localization, and a common data-model-driven card architecture for presenting
 domain entities.
 
 The map canvas, tile rendering, and location-aware UI are specific to the
@@ -337,7 +337,7 @@ component that renders them.
 The conventional folder layout is:
 
 - `src/app/domain/entities/` — TypeScript interfaces and type aliases
-  for entity models and their localisation shapes.
+  for entity models and their localization shapes.
 - `src/data/entities/` — fixture data used during the mockup phase,
   structured to match the entity interfaces exactly.
 - `src/data/registries/` — descriptor registry modules that map stable
@@ -364,7 +364,7 @@ front-end stack is:
 - Tailwind CSS v4 plus DaisyUI v5 for styling,
 - Style Dictionary for generated design tokens and themes,
 - Radix UI primitives for interactive components,
-- i18next plus Fluent for localisation,
+- i18next plus Fluent for localization,
 - a data-model-driven card architecture for entity display strings,
 - MapLibre GL JS for map screens (Wildside only),
 - Biome, TypeScript, Stylelint, Semgrep, and custom scripts for code quality,

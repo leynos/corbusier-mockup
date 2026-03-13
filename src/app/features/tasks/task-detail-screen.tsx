@@ -1,4 +1,4 @@
-/** @file Task Detail screen — assembles sub-components for a single task. */
+/** @file Task Detail screen — assembles subcomponents for a single task. */
 
 import {
   IconActivity,
@@ -11,9 +11,10 @@ import {
 } from "@tabler/icons-react";
 import { getRouteApi } from "@tanstack/react-router";
 import type { JSX } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findTask } from "../../../data/tasks";
+import { findTask, TaskState } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -37,6 +38,13 @@ export function TaskDetailScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const task = findTask(id);
+  const [currentState, setCurrentState] = useState<TaskState>(task?.state ?? TaskState.Draft);
+
+  useEffect(() => {
+    if (task !== undefined) {
+      setCurrentState(task.state);
+    }
+  }, [task]);
 
   if (task === undefined) {
     return (
@@ -51,16 +59,18 @@ export function TaskDetailScreen(): JSX.Element {
     );
   }
 
+  const activeTask = currentState === task.state ? task : { ...task, state: currentState };
+
   return (
     <div className="space-y-6">
       {/* Hierarchy breadcrumb */}
       <DependencyHierarchy task={task} />
 
       {/* 1. Task header — loudest */}
-      <TaskHeader task={task} />
+      <TaskHeader task={activeTask} />
 
       {/* 2. State machine controls */}
-      <StateMachineControls currentState={task.state} />
+      <StateMachineControls currentState={currentState} onTransition={setCurrentState} />
 
       {/* Two-column layout: main content + sidebar metadata */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

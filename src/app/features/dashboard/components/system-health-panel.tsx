@@ -21,13 +21,16 @@ const HEALTH_COLOUR: Record<HealthStatus, string> = {
   critical: "text-error",
 };
 
+/**
+ * Render the aggregate system-health panel and last-checked timestamp.
+ */
 export function SystemHealthPanel(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const Icon = HEALTH_ICON[SYSTEM_HEALTH.overall];
   const colour = HEALTH_COLOUR[SYSTEM_HEALTH.overall];
   const label = pickLocalization(
-    healthStatusDescriptors[SYSTEM_HEALTH.overall]?.localizations,
+    healthStatusDescriptors[SYSTEM_HEALTH.overall].localizations,
     locale,
   ).name;
 

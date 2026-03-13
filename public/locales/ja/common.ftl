@@ -195,9 +195,16 @@ dashboard-activity-region = 最近のアクティビティ
 dashboard-activity-heading = 最近のアクティビティ
 dashboard-agent-region = エージェント稼働率
 dashboard-agent-heading = エージェント稼働率
-dashboard-agent-turns = ターン
+dashboard-agent-turn-count =
+    { $count ->
+        [one] ターン
+       *[other] ターン
+    }
 
 ## Shared components
 
 activity-timeline-label = アクティビティタイムライン
 progress-label = 進捗
+task-subtask-status-complete = 完了
+task-subtask-status-pending = 保留
+task-subtask-item = { $name } ({ $status })

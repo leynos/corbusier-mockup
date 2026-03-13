@@ -8,12 +8,7 @@
  */
 
 import type { EntityLocalizations } from "../app/domain/entities/localization";
-
-/** Shorthand: build an en-GB-only localisation entry. */
-function loc(name: string, description?: string): EntityLocalizations {
-  const entry = description !== undefined ? { name, description } : { name };
-  return { "en-GB": entry };
-}
+import { loc } from "./localization-helpers";
 
 /* ── KPI data ──────────────────────────────────────────────────────── */
 
@@ -22,7 +17,8 @@ export type TrendDirection = "up" | "down" | "flat";
 export interface KpiMetric {
   readonly id: string;
   readonly localizations: EntityLocalizations;
-  readonly value: string;
+  readonly value: number;
+  readonly valueFormat: "integer" | "percentage" | "milliseconds";
   readonly trend: TrendDirection;
   readonly trendLocalizations: EntityLocalizations;
 }
@@ -31,7 +27,8 @@ export const KPI_METRICS: readonly KpiMetric[] = [
   {
     id: "active-tasks",
     localizations: { "en-GB": { name: "Active Tasks", description: "across 4 projects" } },
-    value: "47",
+    value: 47,
+    valueFormat: "integer",
     trend: "up",
     trendLocalizations: loc("+3 this week"),
   },
@@ -40,21 +37,24 @@ export const KPI_METRICS: readonly KpiMetric[] = [
     localizations: {
       "en-GB": { name: "Agent Utilization", description: "2 of 3 backends active" },
     },
-    value: "83%",
+    value: 83,
+    valueFormat: "percentage",
     trend: "up",
     trendLocalizations: loc("+5% from yesterday"),
   },
   {
     id: "tool-success-rate",
     localizations: { "en-GB": { name: "Tool Success Rate", description: "last 24 hours" } },
-    value: "98.2%",
+    value: 98.2,
+    valueFormat: "percentage",
     trend: "flat",
     trendLocalizations: loc("stable"),
   },
   {
     id: "sla-p95",
     localizations: { "en-GB": { name: "SLA P95 Latency", description: "target: <1000ms" } },
-    value: "820ms",
+    value: 820,
+    valueFormat: "milliseconds",
     trend: "down",
     trendLocalizations: loc("-40ms from last week"),
   },

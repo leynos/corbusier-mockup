@@ -27,10 +27,18 @@ export function getAgentStatusLabel(status: AgentStatus, locale: string): string
   }
 }
 
+function getAgentTurnCountLabel(turnCount: number, label: string): string {
+  return `${String(turnCount)} ${label}`;
+}
+
 function AgentRow({ agent }: { readonly agent: AgentBackend }): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const style = AGENT_STATUS_STYLE[agent.status];
+  const turnsLabel = t("dashboard-agent-turn-count", {
+    count: agent.turnCount,
+    defaultValue: agent.turnCount === 1 ? "turn" : "turns",
+  });
 
   return (
     <li className="flex items-center gap-3 py-2">
@@ -42,7 +50,7 @@ function AgentRow({ agent }: { readonly agent: AgentBackend }): JSX.Element {
         {getAgentStatusLabel(agent.status, locale)}
       </span>
       <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-        {String(agent.turnCount)} {t("dashboard-agent-turns", { defaultValue: "turns" })}
+        {getAgentTurnCountLabel(agent.turnCount, turnsLabel)}
       </span>
     </li>
   );

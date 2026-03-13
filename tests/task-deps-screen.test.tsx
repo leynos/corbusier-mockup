@@ -1,6 +1,6 @@
 /** @file Verifies project-scoped task dependency routes enforce the project slug. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { createMemoryHistory, createRouter } from "@tanstack/react-router";
 import { cleanup, screen } from "@testing-library/react";
 
@@ -18,10 +18,6 @@ function renderTaskDepsScreen(initialPath: string) {
 }
 
 describe("TaskDepsScreen project scoping", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });

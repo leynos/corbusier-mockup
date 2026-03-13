@@ -10,6 +10,8 @@
  */
 
 import type { EntityLocalizations } from "../app/domain/entities/localization";
+import { loc } from "./localization-helpers";
+import type { ProjectSlug } from "./registries/project-descriptors";
 
 /* ── Enums ─────────────────────────────────────────────────────────── */
 
@@ -77,7 +79,7 @@ export interface Task {
   readonly localizations: EntityLocalizations;
   readonly state: TaskState;
   readonly priority: Priority;
-  readonly projectSlug: string;
+  readonly projectSlug: ProjectSlug;
   readonly assignee: Assignee;
   readonly dueDate: string;
   readonly estimate: string | undefined;
@@ -120,14 +122,6 @@ export function canTransitionTo(from: TaskState, to: TaskState): boolean {
  */
 export function validTransitions(from: TaskState): readonly TaskState[] {
   return VALID_TRANSITIONS.get(from) ?? [];
-}
-
-/* ── Localisation helpers ─────────────────────────────────────────── */
-
-/** Shorthand: build an en-GB-only EntityLocalizations from name + optional description. */
-function loc(name: string, description?: string): EntityLocalizations {
-  const entry = description !== undefined ? { name, description } : { name };
-  return { "en-GB": entry };
 }
 
 /* ── Assignees ─────────────────────────────────────────────────────── */

@@ -19,7 +19,7 @@ export function AvatarStack({ assignees, max = 3, className = "" }: AvatarStackP
     <div className={`flex -space-x-2 ${className}`}>
       {visible.map((a) => (
         <span
-          key={a.initials}
+          key={a.name}
           role="img"
           className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-base-100 bg-primary/15 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-bold text-primary"
           title={a.name}

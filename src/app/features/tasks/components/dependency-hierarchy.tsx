@@ -19,7 +19,7 @@ interface BreadcrumbItem {
 
 export function DependencyHierarchy({ task }: DependencyHierarchyProps): JSX.Element | null {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const locale = i18n.resolvedLanguage ?? i18n.language;
   const items: BreadcrumbItem[] = [];
 
   if (task.hierarchy.goal !== undefined) {

@@ -1,4 +1,10 @@
-/** @file Tests for hard-coded string lint escape hatches and ignored regions. */
+/** @file Tests for hard-coded string lint escape hatches and ignored regions.
+ *
+ * These regressions cover the rule's Unicode matcher, JSX expression
+ * attribute handling, ignored JSX regions, and semantic-lint disable
+ * directives so future refactors do not reintroduce noisy false
+ * positives.
+ */
 
 import { afterEach, describe, expect, it } from "bun:test";
 

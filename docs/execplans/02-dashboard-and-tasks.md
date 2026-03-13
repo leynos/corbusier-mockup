@@ -165,11 +165,10 @@ Files created: 18 new files, well within the 20-file tolerance.
 All files under the 400-line limit.
 
 **Migration note:** Plan 02 entities (Task, KpiMetric, AgentBackend,
-DashboardEvent, Subtask) were implemented with flat string fields and
-Fluent translation keys. These entities will be migrated to the
-`EntityLocalizations` pattern as the first milestone of plan 03
-(Phase 0 of the data model-driven card architecture migration
-roadmap).
+DashboardEvent, Subtask) now use `EntityLocalizations` maps and
+descriptor registries rather than flat string fields. Plan 03
+milestone 0 formalizes that migration path across the remaining
+project- and suggestion-oriented fixture models.
 
 ## Context and orientation
 

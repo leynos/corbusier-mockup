@@ -195,9 +195,16 @@ dashboard-activity-region = النشاط الأخير
 dashboard-activity-heading = النشاط الأخير
 dashboard-agent-region = استخدام الوكلاء
 dashboard-agent-heading = استخدام الوكلاء
-dashboard-agent-turns = دورات
+dashboard-agent-turn-count =
+    { $count ->
+        [one] دورة
+       *[other] دورات
+    }
 
 ## Shared components
 
 activity-timeline-label = سجل النشاط الزمني
 progress-label = التقدم
+task-subtask-status-complete = مكتملة
+task-subtask-status-pending = معلقة
+task-subtask-item = { $name } ({ $status })

@@ -8,9 +8,9 @@ export interface HealthStatusDescriptor {
   readonly localizations: EntityLocalizations;
 }
 
-export const healthStatusDescriptors: Record<string, HealthStatusDescriptor> = {
+export const healthStatusDescriptors = {
   healthy: {
-    id: "healthy" as HealthStatus,
+    id: "healthy",
     localizations: {
       "en-GB": { name: "HEALTHY" },
       ar: { name: "سليم" },
@@ -22,7 +22,7 @@ export const healthStatusDescriptors: Record<string, HealthStatusDescriptor> = {
     },
   },
   degraded: {
-    id: "degraded" as HealthStatus,
+    id: "degraded",
     localizations: {
       "en-GB": { name: "DEGRADED" },
       ar: { name: "متدهور" },
@@ -34,7 +34,7 @@ export const healthStatusDescriptors: Record<string, HealthStatusDescriptor> = {
     },
   },
   critical: {
-    id: "critical" as HealthStatus,
+    id: "critical",
     localizations: {
       "en-GB": { name: "CRITICAL" },
       ar: { name: "حرج" },
@@ -45,4 +45,4 @@ export const healthStatusDescriptors: Record<string, HealthStatusDescriptor> = {
       "zh-CN": { name: "严重" },
     },
   },
-};
+} satisfies Record<HealthStatus, HealthStatusDescriptor>;

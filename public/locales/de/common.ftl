@@ -195,9 +195,16 @@ dashboard-activity-region = Letzte Aktivität
 dashboard-activity-heading = Letzte Aktivität
 dashboard-agent-region = Agentenauslastung
 dashboard-agent-heading = Agentenauslastung
-dashboard-agent-turns = Züge
+dashboard-agent-turn-count =
+    { $count ->
+        [one] Zug
+       *[other] Züge
+    }
 
 ## Shared components
 
 activity-timeline-label = Aktivitätschronik
 progress-label = Fortschritt
+task-subtask-status-complete = abgeschlossen
+task-subtask-status-pending = ausstehend
+task-subtask-item = { $name } ({ $status })

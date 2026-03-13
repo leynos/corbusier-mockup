@@ -195,9 +195,16 @@ dashboard-activity-region = 近期动态
 dashboard-activity-heading = 近期动态
 dashboard-agent-region = 代理利用率
 dashboard-agent-heading = 代理利用率
-dashboard-agent-turns = 轮次
+dashboard-agent-turn-count =
+    { $count ->
+        [one] 轮次
+       *[other] 轮次
+    }
 
 ## Shared components
 
 activity-timeline-label = 动态时间线
 progress-label = 进度
+task-subtask-status-complete = 已完成
+task-subtask-status-pending = 待处理
+task-subtask-item = { $name } ({ $status })

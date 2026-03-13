@@ -81,9 +81,10 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 
 ## Context and orientation
 
-This plan depends on plans 01 (foundation) and 02 (reusable
-components: status badges, category tags, avatar stacks). It is
-relatively self-contained because it touches a single route.
+This plan depends on plans 01 (foundation), 02 (reusable components:
+status badges, category tags, avatar stacks), and 03 milestone 0
+(shared localization-aware data model helpers). It is relatively
+self-contained because it touches a single route.
 
 The shared data model types (`EntityLocalizations`,
 `pickLocalization`, descriptor registries) introduced in plan 03
@@ -109,7 +110,7 @@ in `localizations` maps, not Fluent bundles.
 
 Create `src/data/suggestions.ts` defining:
 
-- A `Suggestion` interface with: `id`, `projectSlug`,
+- A `Suggestion` interface with `id`, `projectSlug`,
   `localizations: EntityLocalizations` (name = title,
   description = rationale), `priority` (high/medium/low),
   `confidence` (0–100), `categoryTagIds: TagId[]` (resolved via

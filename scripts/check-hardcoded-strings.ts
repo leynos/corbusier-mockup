@@ -1,8 +1,13 @@
-/** @file Lint script that detects hard-coded alphabetic strings in JSX
- * that should be wrapped in `t()` calls for localisation. Follows the
- * same pattern as `check-classlist-length.ts` — TypeScript AST parsing,
- * `Bun.Glob` for file discovery, config from semantic-lint.config.json,
- * and `file:line:col` error output.
+/** @file Lint script that detects hard-coded alphabetic strings in JSX.
+ *
+ * The linter flags user-facing JSX text and selected JSX attributes
+ * unless they are wrapped in `t(...)`, suppressed by semantic-lint
+ * directives, or placed inside explicitly ignored regions such as
+ * `<code>`, `<pre>`, or `data-i18n-ignore`.
+ *
+ * This mirrors the general semantic-lint pattern used elsewhere in the
+ * repo: TypeScript AST parsing, `Bun.Glob` file discovery, config from
+ * `tools/semantic-lint.config.json`, and `file:line:col` output.
  */
 
 import { readFileSync } from "node:fs";
@@ -47,6 +52,7 @@ const DEFAULTS: HardcodedStringsConfig = {
   ],
 };
 
+/** Load semantic-lint config with repo defaults for this rule. */
 function loadConfig(): HardcodedStringsConfig {
   const raw = readFileSync(CONFIG_PATH, "utf8");
   const config = JSON.parse(raw) as SemanticConfig;
@@ -63,11 +69,13 @@ function loadConfig(): HardcodedStringsConfig {
   };
 }
 
+/** Return the TSX files scanned by this rule. */
 function getTsxFiles(): string[] {
   const glob = new Bun.Glob("src/app/**/*.tsx");
   return Array.from(glob.scanSync(PROJECT_ROOT));
 }
 
+/** Build the Unicode-aware word matcher used to detect literals. */
 export function buildWordRegex(minLength: number): RegExp {
   return new RegExp(`\\p{L}{${minLength},}`, "u");
 }
@@ -88,6 +96,7 @@ function isInsideTCall(node: ts.Node): boolean {
   return false;
 }
 
+/** Detect `data-i18n-ignore` on an opening JSX element. */
 function hasI18nIgnoreAttribute(element: ts.JsxOpeningLikeElement): boolean {
   return element.attributes.properties.some((attribute) => {
     if (!ts.isJsxAttribute(attribute)) {
@@ -98,6 +107,7 @@ function hasI18nIgnoreAttribute(element: ts.JsxOpeningLikeElement): boolean {
   });
 }
 
+/** Return true for JSX regions intentionally excluded from linting. */
 function isIgnoredJsxElement(node: ts.Node): boolean {
   if (ts.isJsxElement(node)) {
     const tagName = node.openingElement.tagName.getText();
@@ -112,6 +122,7 @@ function isIgnoredJsxElement(node: ts.Node): boolean {
   return false;
 }
 
+/** Collect semantic-lint disable directives for line- and file-scope skips. */
 function collectLintDirectives(sourceText: string, source: ts.SourceFile): LintDirectives {
   const disabledLines = new Set<number>();
   let fileLevelDisabled = false;
@@ -164,6 +175,7 @@ function collectLintDirectives(sourceText: string, source: ts.SourceFile): LintD
   return { disabledLines, fileLevelDisabled };
 }
 
+/** Check whether the current node falls under an active lint skip. */
 function shouldSkipNode(node: ts.Node, source: ts.SourceFile, directives: LintDirectives): boolean {
   if (directives.fileLevelDisabled) {
     return true;
@@ -250,6 +262,7 @@ export function analyseFile(
   visit(source);
 }
 
+/** Run the rule across the project and print any violations. */
 function main(): void {
   const config = loadConfig();
   const wordRegex = buildWordRegex(config.minWordLength);

@@ -19,8 +19,33 @@ import { getRecentActivityEntries } from "./activity-adapter";
 import { AgentUtilizationPanel } from "./components/agent-utilization-panel";
 import { SystemHealthPanel } from "./components/system-health-panel";
 
-/* ── Dashboard screen ──────────────────────────────────────────────── */
+function formatKpiValue(
+  value: number,
+  valueFormat: (typeof KPI_METRICS)[number]["valueFormat"],
+  locale: string,
+): string {
+  switch (valueFormat) {
+    case "integer":
+      return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
+    case "percentage":
+      return new Intl.NumberFormat(locale, {
+        style: "percent",
+        maximumFractionDigits: Number.isInteger(value) ? 0 : 1,
+      }).format(value / 100);
+    case "milliseconds":
+      return new Intl.NumberFormat(locale, {
+        style: "unit",
+        unit: "millisecond",
+        unitDisplay: "narrow",
+        maximumFractionDigits: 0,
+      }).format(value);
+  }
+}
 
+/**
+ * Render the main dashboard overview and compose the major dashboard
+ * panels in visual-priority order.
+ */
 export function DashboardScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
@@ -44,10 +69,13 @@ export function DashboardScreen(): JSX.Element {
           <KpiCard
             key={m.id}
             label={pickLocalization(m.localizations, locale).name}
-            value={m.value}
-            context={pickLocalization(m.localizations, locale).description ?? ""}
+            value={formatKpiValue(m.value, m.valueFormat, locale)}
             trend={m.trend}
             trendLabel={pickLocalization(m.trendLocalizations, locale).name}
+            {...(() => {
+              const context = pickLocalization(m.localizations, locale).description;
+              return context ? { context } : {};
+            })()}
           />
         ))}
       </section>

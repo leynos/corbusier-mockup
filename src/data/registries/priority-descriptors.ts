@@ -1,16 +1,16 @@
 /** @file Priority descriptor registry — resolves priority IDs to localised labels. */
 
 import type { EntityLocalizations } from "../../app/domain/entities/localization";
-import type { Priority } from "../tasks";
+import { Priority } from "../tasks";
 
 export interface PriorityDescriptor {
   readonly id: Priority;
   readonly localizations: EntityLocalizations;
 }
 
-export const priorityDescriptors: Record<string, PriorityDescriptor> = {
+export const priorityDescriptors = {
   low: {
-    id: "low" as Priority,
+    id: Priority.Low,
     localizations: {
       "en-GB": { name: "Low" },
       ar: { name: "منخفضة" },
@@ -22,7 +22,7 @@ export const priorityDescriptors: Record<string, PriorityDescriptor> = {
     },
   },
   medium: {
-    id: "medium" as Priority,
+    id: Priority.Medium,
     localizations: {
       "en-GB": { name: "Medium" },
       ar: { name: "متوسطة" },
@@ -34,7 +34,7 @@ export const priorityDescriptors: Record<string, PriorityDescriptor> = {
     },
   },
   high: {
-    id: "high" as Priority,
+    id: Priority.High,
     localizations: {
       "en-GB": { name: "High" },
       ar: { name: "عالية" },
@@ -46,7 +46,7 @@ export const priorityDescriptors: Record<string, PriorityDescriptor> = {
     },
   },
   critical: {
-    id: "critical" as Priority,
+    id: Priority.Critical,
     localizations: {
       "en-GB": { name: "Critical" },
       ar: { name: "حرجة" },
@@ -57,4 +57,4 @@ export const priorityDescriptors: Record<string, PriorityDescriptor> = {
       "zh-CN": { name: "紧急" },
     },
   },
-};
+} satisfies Record<Priority, PriorityDescriptor>;

@@ -8,11 +8,12 @@ import type { TrendDirection } from "../../data/dashboard";
 interface KpiCardProps {
   readonly label: string;
   readonly value: string;
-  readonly context: string;
+  readonly context?: string;
   readonly trend: TrendDirection;
   readonly trendLabel: string;
 }
 
+/** Visual treatment for trend labels and icons. */
 const TREND_STYLES: Record<
   TrendDirection,
   { readonly text: string; readonly icon: typeof IconTrendingUp | null }
@@ -22,6 +23,9 @@ const TREND_STYLES: Record<
   flat: { text: "text-base-content/60", icon: null },
 };
 
+/**
+ * Render a dashboard KPI card with a formatted value and trend callout.
+ */
 export function KpiCard({ label, value, context, trend, trendLabel }: KpiCardProps): JSX.Element {
   const trendStyle = TREND_STYLES[trend];
   const TrendIcon = trendStyle.icon;
@@ -35,7 +39,9 @@ export function KpiCard({ label, value, context, trend, trendLabel }: KpiCardPro
         <p className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
           {value}
         </p>
-        <p className="text-[length:var(--font-size-xs)] text-base-content/60">{context}</p>
+        {context ? (
+          <p className="text-[length:var(--font-size-xs)] text-base-content/60">{context}</p>
+        ) : null}
         <p
           className={`mt-1 flex items-center gap-1 text-[length:var(--font-size-xs)] font-semibold ${trendStyle.text}`}
         >

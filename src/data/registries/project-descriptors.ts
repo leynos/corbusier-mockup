@@ -3,11 +3,15 @@
 import type { EntityLocalizations } from "../../app/domain/entities/localization";
 
 export interface ProjectDescriptor {
-  readonly id: string;
+  readonly id: ProjectSlug;
   readonly localizations: EntityLocalizations;
 }
 
-export const projectDescriptors: Record<string, ProjectDescriptor> = {
+export const PROJECT_SLUGS = ["platform-api-v3", "mobile-app-v2", "data-pipeline-upgrade"] as const;
+
+export type ProjectSlug = (typeof PROJECT_SLUGS)[number];
+
+export const projectDescriptors = {
   "platform-api-v3": {
     id: "platform-api-v3",
     localizations: {
@@ -44,4 +48,4 @@ export const projectDescriptors: Record<string, ProjectDescriptor> = {
       "zh-CN": { name: "Data Pipeline Upgrade" },
     },
   },
-};
+} satisfies Record<ProjectSlug, ProjectDescriptor>;

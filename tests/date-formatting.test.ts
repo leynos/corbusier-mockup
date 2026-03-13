@@ -50,4 +50,10 @@ describe("formatShortDate", () => {
       "15 Mar 2026",
     );
   });
+
+  it("preserves absolute timestamps that cross the local date boundary", () => {
+    expect(runFormatShortDateInTimezone("America/Los_Angeles", "2026-03-15T02:00:00Z")).toBe(
+      "14 Mar 2026",
+    );
+  });
 });
