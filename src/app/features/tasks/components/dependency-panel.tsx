@@ -3,7 +3,7 @@
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findTask, type Task } from "../../../../data/tasks";
+import { findTask, type Task, type TaskId } from "../../../../data/tasks";
 import { StatusBadge } from "../../../components/status-badge";
 import { pickLocalization } from "../../../domain/entities/localization";
 
@@ -11,7 +11,7 @@ interface DependencyPanelProps {
   readonly task: Task;
 }
 
-function DepCard({ taskId }: { readonly taskId: string }): JSX.Element {
+function DepCard({ taskId }: { readonly taskId: TaskId }): JSX.Element {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const dep = findTask(taskId);

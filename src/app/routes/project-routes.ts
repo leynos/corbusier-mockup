@@ -2,7 +2,7 @@
 
 import { createRoute, lazyRouteComponent, notFound } from "@tanstack/react-router";
 
-import { findProjectTask } from "../../data/tasks";
+import { findProjectTask, parseTaskId } from "../../data/tasks";
 import { rootRoute } from "./root-route";
 
 export const projectsRoute = createRoute({
@@ -75,7 +75,12 @@ export const taskDepsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/projects/$slug/tasks/$id/dependencies",
   loader: ({ params }) => {
-    const task = findProjectTask(params.slug, params.id);
+    const taskId = parseTaskId(params.id);
+    if (taskId === undefined) {
+      throw notFound();
+    }
+
+    const task = findProjectTask(params.slug, taskId);
     if (task === undefined) {
       throw notFound();
     }

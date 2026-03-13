@@ -9,6 +9,7 @@
 
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
+import type { TaskId } from "./tasks";
 
 /* ── KPI data ──────────────────────────────────────────────────────── */
 
@@ -104,7 +105,7 @@ export interface DashboardEvent {
   readonly timestamp: string;
   readonly actor: string;
   readonly localizations: EntityLocalizations;
-  readonly taskRef: string | undefined;
+  readonly taskRef: TaskId | undefined;
 }
 
 export const RECENT_ACTIVITY: readonly DashboardEvent[] = [

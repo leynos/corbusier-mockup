@@ -33,6 +33,9 @@ export enum Priority {
 
 /* ── Supporting types ──────────────────────────────────────────────── */
 
+export type TaskId = `TASK-${number}`;
+export type SubtaskId = `st-${number}`;
+
 export interface Assignee {
   readonly name: string;
   readonly initials: string;
@@ -40,14 +43,14 @@ export interface Assignee {
 }
 
 export interface Subtask {
-  readonly id: string;
+  readonly id: SubtaskId;
   readonly localizations: EntityLocalizations;
   readonly done: boolean;
 }
 
 export interface Dependencies {
-  readonly blockedBy: readonly string[];
-  readonly blocks: readonly string[];
+  readonly blockedBy: readonly TaskId[];
+  readonly blocks: readonly TaskId[];
 }
 
 export type ActivityEventKind =
@@ -75,7 +78,7 @@ export interface TaskHierarchy {
 /* ── Task interface ────────────────────────────────────────────────── */
 
 export interface Task {
-  readonly id: string;
+  readonly id: TaskId;
   readonly localizations: EntityLocalizations;
   readonly state: TaskState;
   readonly priority: Priority;
@@ -90,7 +93,7 @@ export interface Task {
   readonly pullRequestRef: string | undefined;
   readonly activityLog: readonly ActivityEvent[];
   readonly hierarchy: TaskHierarchy;
-  readonly relatedTasks: readonly string[];
+  readonly relatedTasks: readonly TaskId[];
 }
 
 /* ── State machine ─────────────────────────────────────────────────── */
@@ -122,6 +125,13 @@ export function canTransitionTo(from: TaskState, to: TaskState): boolean {
  */
 export function validTransitions(from: TaskState): readonly TaskState[] {
   return VALID_TRANSITIONS.get(from) ?? [];
+}
+
+/**
+ * Parse a route or API string into a strongly typed task ID.
+ */
+export function parseTaskId(id: string): TaskId | undefined {
+  return /^TASK-\d+$/u.test(id) ? (id as TaskId) : undefined;
 }
 
 /* ── Assignees ─────────────────────────────────────────────────────── */
@@ -702,11 +712,11 @@ export const TASKS: readonly Task[] = [
 ];
 
 /** Look up a task by its ID. Returns undefined if not found. */
-export function findTask(id: string): Task | undefined {
+export function findTask(id: TaskId): Task | undefined {
   return TASKS.find((t) => t.id === id);
 }
 
 /** Look up a task by project slug and task ID. Returns undefined if not found. */
-export function findProjectTask(projectSlug: string, id: string): Task | undefined {
+export function findProjectTask(projectSlug: string, id: TaskId): Task | undefined {
   return TASKS.find((task) => task.projectSlug === projectSlug && task.id === id);
 }

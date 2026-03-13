@@ -14,7 +14,7 @@ import type { JSX } from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findTask, TaskState } from "../../../data/tasks";
+import { findTask, parseTaskId, TaskState } from "../../../data/tasks";
 import { ActivityTimeline } from "../../components/activity-timeline";
 import { SectionCard } from "../../components/section-card";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -37,7 +37,8 @@ export function TaskDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const task = findTask(id);
+  const taskId = parseTaskId(id);
+  const task = taskId ? findTask(taskId) : undefined;
   const [currentState, setCurrentState] = useState<TaskState>(task?.state ?? TaskState.Draft);
 
   useEffect(() => {

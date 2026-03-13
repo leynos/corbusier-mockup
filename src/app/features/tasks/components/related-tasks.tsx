@@ -4,12 +4,12 @@ import { Link } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findTask, type Task } from "../../../../data/tasks";
+import { findTask, type Task, type TaskId } from "../../../../data/tasks";
 import { StatusBadge } from "../../../components/status-badge";
 import { pickLocalization } from "../../../domain/entities/localization";
 
 interface RelatedTasksProps {
-  readonly taskIds: readonly string[];
+  readonly taskIds: readonly TaskId[];
 }
 
 export function RelatedTasks({ taskIds }: RelatedTasksProps): JSX.Element {
