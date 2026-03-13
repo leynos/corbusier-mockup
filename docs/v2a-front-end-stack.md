@@ -1,7 +1,7 @@
 # v2a front-end stack
 
 This document describes the df12 Productions v2a front-end stack as used in the
-Wildside Mockup in two layers:
+Wildside and Corbusier mockups in two layers:
 
 - the stack currently declared and wired in the checked-in mockup on
   `origin/main`, and
@@ -15,15 +15,17 @@ fully declared in the current `package.json`.
 
 ## Overview
 
-The application is a client-side single-page application built with Bun, Vite,
-React 19, TanStack Router, Tailwind CSS v4, and DaisyUI v5. It uses Radix UI
-primitives for interactive components, i18next with Fluent translation bundles
-for localization, and MapLibre GL JS for the interactive map screens.
+Both Wildside and Corbusier are client-side single-page applications built on
+the same v2a front-end stack: Bun, Vite, React 19, TanStack Router,
+Tailwind CSS v4, and DaisyUI v5. They share Radix UI primitives for
+interactive components, i18next with Fluent translation bundles for
+localization, and a common data-model-driven card architecture for presenting
+domain entities.
 
-The map canvas, tile rendering, and location-aware UI are specific to this
-product domain. They are part of the Wildside mockup because it models a
-map-based exploration application, not because every front-end in this repo
-family would need them.
+The map canvas, tile rendering, and location-aware UI are specific to the
+Wildside product domain. They are part of the Wildside mockup because it
+models a map-based exploration application, not because every front-end in
+this repo family would need them.
 
 ## Stack layers at a glance
 
@@ -285,6 +287,71 @@ The strict TypeScript settings in `tsconfig.json` include:
 - `noImplicitOverride`, and
 - `noPropertyAccessFromIndexSignature`.
 
+## Data model-driven card architecture
+
+All v2a front ends — Wildside and Corbusier alike — share a common pattern
+for presenting domain entities on cards, lists, and detail screens. Entity
+models carry their own localised strings rather than delegating display-text
+responsibility to the Fluent translation bundles. This keeps Fluent bundles
+focused on UI chrome (button labels, ARIA labels, section headings, format
+strings) while letting each entity own its names, descriptions, and badge
+text per locale.
+
+### Shared primitives
+
+The following types form the shared vocabulary across all v2a front ends:
+
+- **`LocaleCode`** — a branded string identifying a supported locale
+  (e.g. `en-GB`, `ja`).
+- **`LocalizedStringSet`** — a record mapping `LocaleCode` keys to
+  translated display strings.
+- **`EntityLocalizations`** — a per-entity bundle that groups together
+  every `LocalizedStringSet` the entity needs (name, description, badge
+  text, and so on).
+- **`LocalizedAltText`** — a `LocalizedStringSet` specifically for image
+  alt text, kept as a distinct type so that accessibility tooling can
+  enforce its presence.
+- **`ImageAsset`** — a reference to an image file together with its
+  `LocalizedAltText`.
+
+### Locale resolution
+
+A small pure helper, `pickLocalization(localizations, locale)`, resolves
+a `LocalizedStringSet` for the requested locale. If the exact locale is
+not present, the helper falls back to `en-GB`. This single function is
+the only place where locale-fallback logic lives, keeping the rest of the
+rendering code free of null checks or conditional chains.
+
+### Descriptor registries
+
+Stable internal identifiers (e.g. `task-status:in-progress`,
+`priority:high`) are resolved to localised display strings through
+descriptor registries. Each registry maps an identifier to a descriptor
+object whose labels are `LocalizedStringSet` values. This means that
+badge colours, icons, and display names for status values, priority
+levels, and similar enumerations are defined once and shared by every
+component that renders them.
+
+### Folder layout
+
+The conventional folder layout is:
+
+- `src/app/domain/entities/` — TypeScript interfaces and type aliases
+  for entity models and their localization shapes.
+- `src/data/entities/` — fixture data used during the mockup phase,
+  structured to match the entity interfaces exactly.
+- `src/data/registries/` — descriptor registry modules that map stable
+  identifiers to localised descriptors.
+
+### Application-specific schemas
+
+Each application maintains its own
+`docs/data-model-driven-card-architecture.md`, which defines the
+application-specific entity schemas, enumerations, and migration
+roadmap. That document is the authoritative reference for which entities
+exist, what fields they carry, and how the card architecture will evolve
+as the mockup matures toward production data sources.
+
 ## Effective stack summary
 
 For the shortest accurate summary of the checked-in mockup, the current
@@ -298,7 +365,8 @@ front-end stack is:
 - Style Dictionary for generated design tokens and themes,
 - Radix UI primitives for interactive components,
 - i18next plus Fluent for localization,
-- MapLibre GL JS for map screens,
+- a data-model-driven card architecture for entity display strings,
+- MapLibre GL JS for map screens (Wildside only),
 - Biome, TypeScript, Stylelint, Semgrep, and custom scripts for code quality,
   and
 - Happy DOM, Testing Library, Vitest, Playwright, and axe-core for testing.

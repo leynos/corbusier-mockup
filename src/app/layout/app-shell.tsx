@@ -1,6 +1,7 @@
 /** @file Desktop app shell layout: sidebar + header + scrollable content area. */
 
 import type { JSX, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import { HeaderBar } from "./header-bar";
 import { Sidebar } from "./sidebar";
@@ -10,6 +11,7 @@ export interface AppShellProps {
 }
 
 export function AppShell({ children }: AppShellProps): JSX.Element {
+  const { t } = useTranslation();
   return (
     <div className="flex h-screen overflow-hidden bg-base-200 text-base-content">
       <Sidebar />
@@ -20,7 +22,7 @@ export function AppShell({ children }: AppShellProps): JSX.Element {
             href="#app-shell-content"
             className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:z-10 focus:rounded-md focus:bg-base-100 focus:px-3 focus:py-2 focus:text-base-content"
           >
-            Skip to page content
+            {t("app-skip-to-content")}
           </a>
           <div id="app-shell-content">{children}</div>
         </main>

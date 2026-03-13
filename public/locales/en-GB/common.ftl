@@ -19,6 +19,8 @@ controls-drawer-close-button = Close
 controls-reset-to-device-default-label = Reset to device default
 controls-trigger-label = Controls
 
+app-skip-to-content = Skip to page content
+
 nav-sidebar-label = Main navigation
 nav-zone-mainframe = MAINFRAME
 nav-zone-projects = PROJECTS
@@ -115,3 +117,95 @@ page-tenant-management = Tenant Management
 page-tenant-management-sub = Manage tenant configurations and isolation boundaries.
 page-user-detail = User Profile
 page-user-detail-sub = View and edit user details and permissions.
+
+## Task actions (state machine)
+
+task-action-draft = Draft
+task-action-start = Start
+task-action-submit-review = Submit for Review
+task-action-pause = Pause
+task-action-mark-done = Mark Done
+task-action-abandon = Abandon
+task-action-none = No transitions available from this state.
+task-action-transition = Transition to { $target }
+
+## Task hierarchy
+
+task-hierarchy-goal = Goal
+task-hierarchy-idea = Idea
+task-hierarchy-step = Step
+task-hierarchy-task = Task
+task-hierarchy-label = Task hierarchy
+
+## Task sections
+
+task-section-current = Current Task
+task-section-dependencies = Dependencies
+task-section-progress = Progress
+task-section-subtasks = Subtasks
+task-section-source-control = Source Control
+task-section-activity = Activity
+task-section-details = Details
+task-section-description = Description
+task-section-related = Related Tasks
+
+## Task components
+
+task-subtask-heading = Subtasks
+task-deps-none = No dependencies.
+task-deps-blocked-by = Blocked By
+task-deps-blocks = Blocks
+task-deps-subtask-progress = Subtask progress
+task-deps-estimate-label = Estimate:
+task-branch-none = No branch or PR associated.
+task-related-none = No related tasks.
+task-not-found = Task not found
+
+## Task metadata
+
+task-meta-assignee = Assignee
+task-meta-due = Due
+task-meta-priority = Priority
+task-meta-estimate = Estimate
+task-meta-labels = Labels
+
+## Task filters
+
+task-filter-region = Task filters
+task-filter-state = State
+task-filter-priority = Priority
+task-filter-project = Project
+task-filter-all = All
+task-filter-reset = Reset filters
+task-list-region = Task list
+task-list-summary = Showing { $shown } of { $total } tasks
+task-list-empty = No tasks match the current filters.
+
+## Task card
+
+task-card-progress = { $progress }% subtasks complete
+task-card-subtasks = { $done }/{ $total } subtasks
+
+## Dashboard
+
+dashboard-health-status = System Status: { $label }
+dashboard-health-region = System health
+dashboard-health-last-checked = Last checked:
+dashboard-kpi-region = Key metrics
+dashboard-activity-region = Recent activity
+dashboard-activity-heading = Recent Activity
+dashboard-agent-region = Agent utilization
+dashboard-agent-heading = Agent Utilization
+dashboard-agent-turn-count =
+    { $count ->
+        [one] turn
+       *[other] turns
+    }
+
+## Shared components
+
+activity-timeline-label = Activity timeline
+progress-label = Progress
+task-subtask-status-complete = completed
+task-subtask-status-pending = pending
+task-subtask-item = { $name } ({ $status })

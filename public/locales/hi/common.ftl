@@ -19,6 +19,7 @@ controls-drawer-close-button = बंद करें
 controls-reset-to-device-default-label = डिवाइस डिफ़ॉल्ट पर रीसेट करें
 controls-trigger-label = नियंत्रण
 
+app-skip-to-content = पृष्ठ सामग्री पर जाएँ
 nav-sidebar-label = मुख्य नेविगेशन
 nav-zone-mainframe = मुख्य फ़्रेम
 nav-zone-projects = परियोजनाएँ
@@ -115,3 +116,96 @@ page-tenant-management = टेनेंट प्रबंधन
 page-tenant-management-sub = टेनेंट विन्यास और पृथक्करण सीमाओं का प्रबंधन करें।
 page-user-detail = उपयोगकर्ता प्रोफ़ाइल
 page-user-detail-sub = उपयोगकर्ता विवरण और अनुमतियाँ देखें और संपादित करें।
+
+## Task actions (state machine)
+
+task-action-draft = ड्राफ़्ट
+task-action-start = शुरू करें
+task-action-submit-review = समीक्षा के लिए भेजें
+task-action-pause = रोकें
+task-action-mark-done = पूर्ण चिह्नित करें
+task-action-abandon = परित्याग करें
+task-action-none = इस स्थिति से कोई संक्रमण उपलब्ध नहीं है।
+task-action-transition = { $target } में संक्रमण करें
+
+## Task hierarchy
+
+task-hierarchy-goal = लक्ष्य
+task-hierarchy-idea = विचार
+task-hierarchy-step = चरण
+task-hierarchy-task = कार्य
+task-hierarchy-label = कार्य पदानुक्रम
+
+## Task sections
+
+task-section-current = वर्तमान कार्य
+task-section-dependencies = निर्भरताएँ
+task-section-progress = प्रगति
+task-section-subtasks = उप-कार्य
+task-section-source-control = स्रोत नियंत्रण
+task-section-activity = गतिविधि
+task-section-details = विवरण
+task-section-description = वर्णन
+task-section-related = संबंधित कार्य
+
+## Task components
+
+task-subtask-heading = उप-कार्य
+task-deps-none = कोई निर्भरता नहीं।
+task-deps-blocked-by = अवरोधित
+task-deps-blocks = अवरोधित करता है
+task-deps-subtask-progress = उप-कार्य प्रगति
+task-deps-estimate-label = अनुमान:
+task-branch-none = कोई शाखा या PR संबद्ध नहीं।
+task-related-none = कोई संबंधित कार्य नहीं।
+task-not-found = कार्य नहीं मिला
+
+## Task metadata
+
+task-meta-assignee = असाइनी
+task-meta-due = नियत तिथि
+task-meta-priority = प्राथमिकता
+task-meta-estimate = अनुमान
+task-meta-labels = लेबल
+
+## Task filters
+
+task-filter-region = कार्य फ़िल्टर
+task-filter-state = स्थिति
+task-filter-priority = प्राथमिकता
+task-filter-project = परियोजना
+task-filter-all = सभी
+task-filter-reset = फ़िल्टर रीसेट करें
+task-list-region = कार्य सूची
+task-list-summary =
+    { $shown ->
+        [0] { $total } में से { $shown } कार्य दिखाए जा रहे हैं
+        [one] { $total } में से { $shown } कार्य दिखाया जा रहा है
+       *[other] { $total } में से { $shown } कार्य दिखाए जा रहे हैं
+    }
+task-list-empty = वर्तमान फ़िल्टर से कोई कार्य मेल नहीं खाता।
+
+## Task card
+
+task-card-progress = { $progress }% उप-कार्य पूर्ण
+task-card-subtasks = { $done }/{ $total } उप-कार्य
+
+## Dashboard
+
+dashboard-health-status = सिस्टम स्थिति: { $label }
+dashboard-health-region = सिस्टम स्वास्थ्य
+dashboard-health-last-checked = अंतिम जाँच:
+dashboard-kpi-region = प्रमुख मीट्रिक
+dashboard-activity-region = हालिया गतिविधि
+dashboard-activity-heading = हालिया गतिविधि
+dashboard-agent-region = एजेंट उपयोग
+dashboard-agent-heading = एजेंट उपयोग
+dashboard-agent-turn-count = टर्न
+
+## Shared components
+
+activity-timeline-label = गतिविधि टाइमलाइन
+progress-label = प्रगति
+task-subtask-status-complete = पूर्ण
+task-subtask-status-pending = लंबित
+task-subtask-item = { $name } ({ $status })

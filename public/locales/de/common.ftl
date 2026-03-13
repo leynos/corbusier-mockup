@@ -19,6 +19,7 @@ controls-drawer-close-button = Schließen
 controls-reset-to-device-default-label = Auf Geräte-Standard zurücksetzen
 controls-trigger-label = Steuerung
 
+app-skip-to-content = Zum Seiteninhalt springen
 nav-sidebar-label = Hauptnavigation
 nav-zone-mainframe = MAINFRAME
 nav-zone-projects = PROJEKTE
@@ -115,3 +116,95 @@ page-tenant-management = Mandantenverwaltung
 page-tenant-management-sub = Mandantenkonfigurationen und Isolationsgrenzen verwalten.
 page-user-detail = Benutzerprofil
 page-user-detail-sub = Benutzerdetails und Berechtigungen anzeigen und bearbeiten.
+
+## Task actions (state machine)
+
+task-action-draft = Entwurf
+task-action-start = Starten
+task-action-submit-review = Zur Prüfung einreichen
+task-action-pause = Pausieren
+task-action-mark-done = Als erledigt markieren
+task-action-abandon = Abbrechen
+task-action-none = Keine Übergänge aus diesem Status verfügbar.
+task-action-transition = Übergang zu { $target }
+
+## Task hierarchy
+
+task-hierarchy-goal = Ziel
+task-hierarchy-idea = Idee
+task-hierarchy-step = Schritt
+task-hierarchy-task = Aufgabe
+task-hierarchy-label = Aufgabenhierarchie
+
+## Task sections
+
+task-section-current = Aktuelle Aufgabe
+task-section-dependencies = Abhängigkeiten
+task-section-progress = Fortschritt
+task-section-subtasks = Teilaufgaben
+task-section-source-control = Versionsverwaltung
+task-section-activity = Aktivität
+task-section-details = Details
+task-section-description = Beschreibung
+task-section-related = Verwandte Aufgaben
+
+## Task components
+
+task-subtask-heading = Teilaufgaben
+task-deps-none = Keine Abhängigkeiten.
+task-deps-blocked-by = Blockiert durch
+task-deps-blocks = Blockiert
+task-deps-subtask-progress = Fortschritt der Teilaufgaben
+task-deps-estimate-label = Schätzung:
+task-branch-none = Kein Branch oder PR zugeordnet.
+task-related-none = Keine verwandten Aufgaben.
+task-not-found = Aufgabe nicht gefunden
+
+## Task metadata
+
+task-meta-assignee = Zuständig
+task-meta-due = Fällig
+task-meta-priority = Priorität
+task-meta-estimate = Schätzung
+task-meta-labels = Labels
+
+## Task filters
+
+task-filter-region = Aufgabenfilter
+task-filter-state = Status
+task-filter-priority = Priorität
+task-filter-project = Projekt
+task-filter-all = Alle
+task-filter-reset = Filter zurücksetzen
+task-list-region = Aufgabenliste
+task-list-summary = { $shown } von { $total } Aufgaben werden angezeigt
+task-list-empty = Keine Aufgaben entsprechen den aktuellen Filtern.
+
+## Task card
+
+task-card-progress = { $progress } % Teilaufgaben abgeschlossen
+task-card-subtasks = { $done }/{ $total } Teilaufgaben
+
+## Dashboard
+
+dashboard-health-status = Systemstatus: { $label }
+dashboard-health-region = Systemzustand
+dashboard-health-last-checked = Zuletzt geprüft:
+dashboard-kpi-region = Kennzahlen
+dashboard-activity-region = Letzte Aktivität
+dashboard-activity-heading = Letzte Aktivität
+dashboard-agent-region = Agentenauslastung
+dashboard-agent-heading = Agentenauslastung
+dashboard-agent-turn-count =
+    { $count ->
+        [one] Zug
+       *[other] Züge
+    }
+
+## Shared components
+
+activity-timeline-label = Aktivitätschronik
+progress-label = Fortschritt
+task-subtask-status-complete = abgeschlossen
+task-subtask-status-pending = ausstehend
+task-subtask-item = { $name } ({ $status })

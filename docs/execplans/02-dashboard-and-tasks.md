@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -57,7 +57,8 @@ stacks, and state machine controls.
   5. Branch & PR association
   6. Activity timeline
   7. Task metadata (reference data)
-- Status badges must always combine icon + text + colour (WCAG 1.4.1
+- Status badges must always combine icon + text + colour (Web Content
+  Accessibility Guidelines (WCAG) 1.4.1
   — colour must not be the sole means of conveying information).
 - Task cards carry the punch-card chamfer. Information cards (KPI,
   registry) use standard rounded corners.
@@ -91,7 +92,7 @@ stacks, and state machine controls.
   file limit if implemented as a single component.
   Severity: medium
   Likelihood: high
-  Mitigation: Decompose into sub-components: `TaskHeader`,
+  Mitigation: Decompose into subcomponents: `TaskHeader`,
   `DependencyHierarchy`, `SubtaskChecklist`, `DependencyPanel`,
   `BranchPrAssociation`, `ActivityTimeline`, `RelatedTasks`,
   `StateMachineControls`. Each in its own file under
@@ -106,26 +107,68 @@ stacks, and state machine controls.
 
 ## Progress
 
-- [ ] Milestone 1: Fixture data for tasks and dashboard
-- [ ] Milestone 2: Reusable UI components (badges, KPI cards,
+- [x] Milestone 1: Fixture data for tasks and dashboard
+- [x] Milestone 2: Reusable UI components (badges, KPI cards,
       timelines, progress bars, avatar stacks)
-- [ ] Milestone 3: Dashboard page
-- [ ] Milestone 4: My Tasks page
-- [ ] Milestone 5: Task Detail page
-- [ ] Milestone 6: Task Dependencies page
-- [ ] Milestone 7: Tests and validation
+- [x] Milestone 3: Dashboard page
+- [x] Milestone 4: My Tasks page
+- [x] Milestone 5: Task Detail page
+- [x] Milestone 6: Task Dependencies page
+- [x] Milestone 7: Tests and validation
 
 ## Surprises & discoveries
 
-(None yet.)
+- Night theme semantic colours (`text-success` #7A9060, `text-error`
+  #C65A48) fail Web Content Accessibility Guidelines (WCAG) AA
+  contrast (3.98:1) against `bg-base-100`
+  (#262D30). Supplementary text that conveys meaning via icons/labels
+  should use `text-base-content/80` (7.47:1) instead.
+- `text-base-content/50` gives exactly 4.5:1 in night theme — axe
+  may flag this due to rounding. Use `/60` (4.9:1) as the minimum
+  safe opacity for secondary text.
+- `role="progressbar"` requires an accessible name; defaulting the
+  `label` prop to `"Progress"` fixed the axe violation.
+- `<section>` elements only become `region` landmarks when they have
+  an accessible name (via `aria-label` or `aria-labelledby`). Added
+  `aria-labelledby` with `useId()` to the Section wrapper component.
 
 ## Decision log
 
-(None yet.)
+- Used `text-base-content/80` instead of semantic colours for KPI
+  trend labels and agent status text. Semantic colour is carried by
+  icons (which are `aria-hidden` and exempt from contrast rules).
+- Decomposed Task Detail into 8 subcomponents under
+  `src/app/features/tasks/components/` to stay within the 400-line
+  file limit.
+- Filter chips on My Tasks use `useState` with string arrays rather
+  than URL search params, since this is a static mockup.
+- Section wrapper uses `useId()` + `aria-labelledby` rather than
+  `aria-label` to avoid duplicating the heading text.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 7 milestones delivered. Four pages implemented:
+
+- `/` — Dashboard with system health, KPI cards, activity feed,
+  agent utilization summary.
+- `/tasks` — My Tasks with state/priority/project filter chips.
+- `/tasks/:id` — Task Detail with state machine controls, dependency
+  hierarchy, subtask checklist, branch/pull request (PR), activity
+  timeline.
+- `/projects/:slug/tasks/:id/dependencies` — Dependency view with
+  hierarchy, dependency graph, related tasks.
+
+Test coverage: 59 unit tests, 9 end-to-end (E2E) tests (including 3
+axe sweeps), all passing. `bun run ff` gate green throughout.
+
+Files created: 18 new files, well within the 20-file tolerance.
+All files under the 400-line limit.
+
+**Migration note:** Plan 02 entities (Task, KpiMetric, AgentBackend,
+DashboardEvent, Subtask) now use `EntityLocalizations` maps and
+descriptor registries rather than flat string fields. Plan 03
+milestone 0 formalizes that migration path across the remaining
+project- and suggestion-oriented fixture models.
 
 ## Context and orientation
 
@@ -252,7 +295,7 @@ Replace the placeholder with a task list view:
 ### Milestone 5: Task Detail page
 
 Replace the placeholder with the full task detail implementation.
-Decompose into sub-components under
+Decompose into subcomponents under
 `src/app/features/tasks/components/`:
 
 - **`task-header.tsx`** — Title, state badge, assignee, due date,
@@ -274,7 +317,7 @@ Decompose into sub-components under
 
 The screen component (`task-detail-screen.tsx`) reads the task ID from
 the route params, looks up the fixture data, and assembles these
-sub-components.
+subcomponents.
 
 ### Milestone 6: Task Dependencies page
 
@@ -353,8 +396,8 @@ paused → in_progress
 │ ● Subtask completed…        14 Mar 11:42        │
 ├─────────────────────────────────────────────────┤
 │ Agent Utilization                                │
-│ claude_code_sdk  ✓ Active   142 turns           │
-│ codex_cli        ✓ Active    87 turns           │
+│ Claude Code SDK  ✓ Active   142 turns           │
+│ Codex CLI        ✓ Active    87 turns           │
 │ custom_backend   ✕ Inactive   0 turns           │
 └─────────────────────────────────────────────────┘
 ```
@@ -383,25 +426,22 @@ export enum TaskState {
 }
 
 export interface Task {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
+  readonly id: TaskId;
+  readonly localizations: EntityLocalizations;
   readonly state: TaskState;
   readonly priority: Priority;
-  readonly project: string;
+  readonly projectSlug: ProjectSlug;
   readonly assignee: Assignee;
   readonly dueDate: string;
   readonly estimate: string | undefined;
-  readonly labels: readonly string[];
+  readonly labelIds: readonly string[];
   readonly subtasks: readonly Subtask[];
   readonly dependencies: Dependencies;
   readonly branchRef: string | undefined;
   readonly pullRequestRef: string | undefined;
   readonly activityLog: readonly ActivityEvent[];
-  readonly parentGoal: string | undefined;
-  readonly parentIdea: string | undefined;
-  readonly parentStep: string | undefined;
-  readonly relatedTasks: readonly string[];
+  readonly hierarchy: TaskHierarchy;
+  readonly relatedTasks: readonly TaskId[];
 }
 
 export function canTransitionTo(

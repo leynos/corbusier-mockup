@@ -1,128 +1,113 @@
-/** @file Placeholder for the Dashboard screen with chamfer visual demo. */
+/** @file Dashboard screen — the operations room overview.
+ *
+ * Four panels in visual hierarchy order (design language §5):
+ * 1. System health status (loudest)
+ * 2. KPI cards
+ * 3. Recent activity feed
+ * 4. Agent utilization summary
+ */
 
-import type { JSX } from "react";
+import { IconActivity } from "@tabler/icons-react";
+import { type JSX, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ChamferCard } from "../../components/chamfer-card";
-import { isRtlLocale } from "../../i18n/supported-locales";
-import { PlaceholderScreen } from "../placeholder-screen";
+import { KPI_METRICS, type KpiValueFormat } from "../../../data/dashboard";
+import { ActivityTimeline } from "../../components/activity-timeline";
+import { KpiCard } from "../../components/kpi-card";
+import { pickLocalization } from "../../domain/entities/localization";
+import { getRecentActivityEntries } from "./activity-adapter";
+import { AgentUtilizationPanel } from "./components/agent-utilization-panel";
+import { SystemHealthPanel } from "./components/system-health-panel";
 
-type ChamferDemoCardConfig = {
-  readonly reversed: boolean;
-  readonly subtitleKey: string;
-  readonly defaultSubtitle: string;
-};
+function assertUnreachable(value: never): never {
+  throw new Error(`Unhandled KPI value format: ${String(value)}`);
+}
 
-type ChamferDemoLayout = {
-  readonly standard: ChamferDemoCardConfig;
-  readonly blocked: ChamferDemoCardConfig;
-};
-
-export function getChamferDemoLayout(isRtl: boolean): ChamferDemoLayout {
-  if (isRtl) {
-    return {
-      standard: {
-        reversed: true,
-        subtitleKey: "dashboard-demo-card-subtitle-rtl",
-        defaultSubtitle: "Standard chamfer-md (top-left bevel)",
-      },
-      blocked: {
-        reversed: false,
-        subtitleKey: "dashboard-demo-blocked-subtitle-rtl",
-        defaultSubtitle: "Reversed chamfer-md (top-right bevel)",
-      },
-    };
+function formatKpiValue(value: number, valueFormat: KpiValueFormat, locale: string): string {
+  switch (valueFormat) {
+    case "integer":
+      return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
+    case "percentage":
+      return new Intl.NumberFormat(locale, {
+        style: "percent",
+        maximumFractionDigits: Number.isInteger(value) ? 0 : 1,
+      }).format(value / 100);
+    case "milliseconds":
+      return new Intl.NumberFormat(locale, {
+        style: "unit",
+        unit: "millisecond",
+        unitDisplay: "narrow",
+        maximumFractionDigits: 0,
+      }).format(value);
+    default:
+      return assertUnreachable(valueFormat);
   }
-
-  return {
-    standard: {
-      reversed: false,
-      subtitleKey: "dashboard-demo-card-subtitle-ltr",
-      defaultSubtitle: "Standard chamfer-md (top-right bevel)",
-    },
-    blocked: {
-      reversed: true,
-      subtitleKey: "dashboard-demo-blocked-subtitle-ltr",
-      defaultSubtitle: "Reversed chamfer-md (top-left bevel)",
-    },
-  };
 }
 
-function ChamferDemo(): JSX.Element {
-  const { i18n, t } = useTranslation();
-  const isRtl = isRtlLocale(i18n.resolvedLanguage ?? i18n.language);
-  const layout = getChamferDemoLayout(isRtl);
-
-  return (
-    <section
-      aria-label={t("dashboard-demo-region-label", { defaultValue: "Chamfer demo" })}
-      className="mt-8 space-y-6"
-    >
-      <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-        {t("dashboard-demo-heading", { defaultValue: "Punch-card chamfer demo" })}
-      </h2>
-
-      <div className="flex flex-wrap gap-4">
-        {/* Standard task card */}
-        <ChamferCard
-          className="w-64 p-4"
-          reversed={layout.standard.reversed}
-          fillClassName="fill-base-100"
-          strokeClassName="stroke-base-300"
-        >
-          <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
-            {t("dashboard-demo-card-title", { defaultValue: "Task card" })}
-          </p>
-          <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            {t(layout.standard.subtitleKey, {
-              defaultValue: layout.standard.defaultSubtitle,
-            })}
-          </p>
-        </ChamferCard>
-
-        {/* Blocked task card */}
-        <ChamferCard
-          className="w-64 p-4"
-          reversed={layout.blocked.reversed}
-          fillClassName="fill-base-100"
-          strokeClassName="stroke-error"
-        >
-          <p className="text-[length:var(--font-size-sm)] font-semibold text-error">
-            {t("dashboard-demo-blocked-title", { defaultValue: "Blocked card" })}
-          </p>
-          <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-            {t(layout.blocked.subtitleKey, {
-              defaultValue: layout.blocked.defaultSubtitle,
-            })}
-          </p>
-        </ChamferCard>
-      </div>
-
-      {/* Code block demo */}
-      <ChamferCard
-        className="p-4"
-        fillClassName="fill-base-300/30"
-        strokeClassName="stroke-base-300"
-      >
-        <pre className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/80">
-          <code>{"const directive = await agent.plan(task);\nawait directive.execute();"}</code>
-        </pre>
-      </ChamferCard>
-    </section>
-  );
-}
-
+/**
+ * Render the dashboard route in the intended visual hierarchy order.
+ *
+ * KPI value formatting and activity shaping are handled by upstream
+ * helpers so this component remains responsible for composition.
+ */
 export function DashboardScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? i18n.language;
+  const recentActivity = useMemo(() => getRecentActivityEntries(), []);
+
   return (
     <div>
-      <PlaceholderScreen
-        title={t("page-dashboard", { defaultValue: "Dashboard" })}
-        subtitle={t("page-dashboard-sub", {
-          defaultValue: "Overview of your workspace.",
+      <h1 className="mb-6 font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
+        {t("page-dashboard", { defaultValue: "Dashboard" })}
+      </h1>
+
+      {/* 1. System health — loudest */}
+      <SystemHealthPanel />
+
+      {/* 2. KPI cards */}
+      <section
+        aria-label={t("dashboard-kpi-region", { defaultValue: "Key metrics" })}
+        data-testid="dashboard-kpi-region"
+        className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {KPI_METRICS.map((metric) => {
+          const loc = pickLocalization(metric.localizations, locale);
+          const trendLoc = pickLocalization(metric.trendLocalizations, locale);
+          const context = loc.description;
+
+          return (
+            <KpiCard
+              key={metric.id}
+              label={loc.name}
+              value={formatKpiValue(metric.value, metric.valueFormat, locale)}
+              context={context}
+              trend={metric.trend}
+              trendLabel={trendLoc.name}
+            />
+          );
         })}
-      />
-      <ChamferDemo />
+      </section>
+
+      {/* 3 + 4. Activity feed + Agent utilization */}
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Activity feed — 2/3 width */}
+        <section
+          aria-label={t("dashboard-activity-region", { defaultValue: "Recent activity" })}
+          data-testid="dashboard-activity-region"
+          className="card bg-base-100 border border-base-300 shadow-sm lg:col-span-2"
+        >
+          <div className="card-body p-5">
+            <h2 className="mb-3 flex items-center gap-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
+              <IconActivity size={16} stroke={1.5} aria-hidden="true" />
+              {t("dashboard-activity-heading", { defaultValue: "Recent Activity" })}
+            </h2>
+            <ActivityTimeline entries={recentActivity} />
+          </div>
+        </section>
+
+        {/* Agent utilization — 1/3 width */}
+        <AgentUtilizationPanel />
+      </div>
     </div>
   );
 }

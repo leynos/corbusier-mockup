@@ -19,6 +19,7 @@ controls-drawer-close-button = إغلاق
 controls-reset-to-device-default-label = إعادة الضبط إلى الإعداد الافتراضي للجهاز
 controls-trigger-label = عناصر التحكم
 
+app-skip-to-content = انتقل إلى محتوى الصفحة
 nav-sidebar-label = التنقل الرئيسي
 nav-zone-mainframe = الإطار الرئيسي
 nav-zone-projects = المشاريع
@@ -115,3 +116,115 @@ page-tenant-management = إدارة المستأجرين
 page-tenant-management-sub = إدارة إعدادات المستأجرين وحدود العزل.
 page-user-detail = ملف المستخدم
 page-user-detail-sub = عرض تفاصيل المستخدم وصلاحياته وتحريرها.
+
+## Task actions (state machine)
+
+task-action-draft = مسودة
+task-action-start = بدء
+task-action-submit-review = تقديم للمراجعة
+task-action-pause = إيقاف مؤقت
+task-action-mark-done = تحديد كمنجزة
+task-action-abandon = إهمال
+task-action-none = لا تتوفر انتقالات من هذه الحالة.
+task-action-transition = الانتقال إلى { $target }
+
+## Task hierarchy
+
+task-hierarchy-goal = هدف
+task-hierarchy-idea = فكرة
+task-hierarchy-step = خطوة
+task-hierarchy-task = مهمة
+task-hierarchy-label = تسلسل المهام
+
+## Task sections
+
+task-section-current = المهمة الحالية
+task-section-dependencies = التبعيات
+task-section-progress = التقدم
+task-section-subtasks = المهام الفرعية
+task-section-source-control = التحكم بالمصدر
+task-section-activity = النشاط
+task-section-details = التفاصيل
+task-section-description = الوصف
+task-section-related = المهام ذات الصلة
+
+## Task components
+
+task-subtask-heading = المهام الفرعية
+task-deps-none = لا توجد تبعيات.
+task-deps-blocked-by = محظورة بواسطة
+task-deps-blocks = تحظر
+task-deps-subtask-progress = تقدم المهام الفرعية
+task-deps-estimate-label = التقدير:
+task-branch-none = لا يوجد فرع أو طلب سحب مرتبط.
+task-related-none = لا توجد مهام ذات صلة.
+task-not-found = المهمة غير موجودة
+
+## Task metadata
+
+task-meta-assignee = المُكلَّف
+task-meta-due = تاريخ الاستحقاق
+task-meta-priority = الأولوية
+task-meta-estimate = التقدير
+task-meta-labels = التسميات
+
+## Task filters
+
+task-filter-region = مرشحات المهام
+task-filter-state = الحالة
+task-filter-priority = الأولوية
+task-filter-project = المشروع
+task-filter-all = الكل
+task-filter-reset = إعادة تعيين المرشحات
+task-list-region = قائمة المهام
+task-list-summary =
+    { $total ->
+        [zero] عرض { $shown } من { $total } مهام
+        [one] عرض { $shown } من { $total } مهمة
+        [two] عرض { $shown } من { $total } مهمتين
+        [few] عرض { $shown } من { $total } مهام
+        [many] عرض { $shown } من { $total } مهمة
+       *[other] عرض { $shown } من { $total } مهمة
+    }
+task-list-empty = لا توجد مهام تطابق المرشحات الحالية.
+
+## Task card
+
+task-card-progress = { $progress }% من المهام الفرعية مكتملة
+task-card-subtasks =
+    { $total ->
+        [zero] { $done }/{ $total } مهام فرعية
+        [one] { $done }/{ $total } مهمة فرعية
+        [two] { $done }/{ $total } مهمتان فرعيتان
+        [few] { $done }/{ $total } مهام فرعية
+        [many] { $done }/{ $total } مهمة فرعية
+       *[other] { $done }/{ $total } مهمة فرعية
+    }
+
+## Dashboard
+
+dashboard-health-status = حالة النظام: { $label }
+dashboard-health-region = صحة النظام
+dashboard-health-last-checked = آخر فحص:
+dashboard-kpi-region = المقاييس الرئيسية
+dashboard-activity-region = النشاط الأخير
+dashboard-activity-heading = النشاط الأخير
+dashboard-agent-region = استخدام الوكلاء
+dashboard-agent-heading = استخدام الوكلاء
+dashboard-agent-turn-count =
+    { $count ->
+        [zero] دورات
+        [one] دورة
+        [two] دورتان
+        [few] دورات
+        [many] دورة
+       *[other] دورات
+    }
+
+## Shared components
+
+activity-timeline-label = سجل النشاط الزمني
+progress-label = التقدم
+task-subtask-status-complete = مكتملة
+task-subtask-status-pending = معلقة
+task-subtask-item = { $name } ({ $status })

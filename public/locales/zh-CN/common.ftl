@@ -19,6 +19,7 @@ controls-drawer-close-button = 关闭
 controls-reset-to-device-default-label = 重置为设备默认值
 controls-trigger-label = 控件
 
+app-skip-to-content = 跳至页面内容
 nav-sidebar-label = 主导航
 nav-zone-mainframe = 主框架
 nav-zone-projects = 项目
@@ -115,3 +116,95 @@ page-tenant-management = 租户管理
 page-tenant-management-sub = 管理租户配置与隔离边界。
 page-user-detail = 用户资料
 page-user-detail-sub = 查看并编辑用户详情与权限。
+
+## Task actions (state machine)
+
+task-action-draft = 草稿
+task-action-start = 开始
+task-action-submit-review = 提交审核
+task-action-pause = 暂停
+task-action-mark-done = 标记完成
+task-action-abandon = 放弃
+task-action-none = 当前状态无可用转换。
+task-action-transition = 转换到{ $target }
+
+## Task hierarchy
+
+task-hierarchy-goal = 目标
+task-hierarchy-idea = 想法
+task-hierarchy-step = 步骤
+task-hierarchy-task = 任务
+task-hierarchy-label = 任务层级
+
+## Task sections
+
+task-section-current = 当前任务
+task-section-dependencies = 依赖关系
+task-section-progress = 进度
+task-section-subtasks = 子任务
+task-section-source-control = 源代码管理
+task-section-activity = 动态
+task-section-details = 详细信息
+task-section-description = 描述
+task-section-related = 关联任务
+
+## Task components
+
+task-subtask-heading = 子任务
+task-deps-none = 无依赖关系。
+task-deps-blocked-by = 被阻塞于
+task-deps-blocks = 阻塞
+task-deps-subtask-progress = 子任务进度
+task-deps-estimate-label = 估算：
+task-branch-none = 无关联分支或 PR。
+task-related-none = 无关联任务。
+task-not-found = 未找到任务
+
+## Task metadata
+
+task-meta-assignee = 负责人
+task-meta-due = 截止日期
+task-meta-priority = 优先级
+task-meta-estimate = 估算
+task-meta-labels = 标签
+
+## Task filters
+
+task-filter-region = 任务筛选
+task-filter-state = 状态
+task-filter-priority = 优先级
+task-filter-project = 项目
+task-filter-all = 全部
+task-filter-reset = 重置筛选
+task-list-region = 任务列表
+task-list-summary = 显示 { $total } 个任务中的 { $shown } 个
+task-list-empty = 没有符合当前筛选条件的任务。
+
+## Task card
+
+task-card-progress = { $progress }% 子任务已完成
+task-card-subtasks = { $done }/{ $total } 个子任务
+
+## Dashboard
+
+dashboard-health-status = 系统状态：{ $label }
+dashboard-health-region = 系统健康
+dashboard-health-last-checked = 上次检查：
+dashboard-kpi-region = 关键指标
+dashboard-activity-region = 近期动态
+dashboard-activity-heading = 近期动态
+dashboard-agent-region = 代理利用率
+dashboard-agent-heading = 代理利用率
+dashboard-agent-turn-count =
+    { $count ->
+        [one] 轮次
+       *[other] 轮次
+    }
+
+## Shared components
+
+activity-timeline-label = 动态时间线
+progress-label = 进度
+task-subtask-status-complete = 已完成
+task-subtask-status-pending = 待处理
+task-subtask-item = { $name } ({ $status })

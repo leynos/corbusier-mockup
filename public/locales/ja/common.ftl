@@ -19,6 +19,7 @@ controls-drawer-close-button = 閉じる
 controls-reset-to-device-default-label = デバイス既定に戻す
 controls-trigger-label = コントロール
 
+app-skip-to-content = ページコンテンツへスキップ
 nav-sidebar-label = メインナビゲーション
 nav-zone-mainframe = メインフレーム
 nav-zone-projects = プロジェクト
@@ -115,3 +116,95 @@ page-tenant-management = テナント管理
 page-tenant-management-sub = テナント設定と分離境界を管理します。
 page-user-detail = ユーザープロファイル
 page-user-detail-sub = ユーザー詳細と権限を表示して編集します。
+
+## Task actions (state machine)
+
+task-action-draft = 下書き
+task-action-start = 開始
+task-action-submit-review = レビューに提出
+task-action-pause = 一時停止
+task-action-mark-done = 完了にする
+task-action-abandon = 中止
+task-action-none = この状態から利用可能な遷移はありません。
+task-action-transition = { $target } に遷移
+
+## Task hierarchy
+
+task-hierarchy-goal = ゴール
+task-hierarchy-idea = アイデア
+task-hierarchy-step = ステップ
+task-hierarchy-task = タスク
+task-hierarchy-label = タスク階層
+
+## Task sections
+
+task-section-current = 現在のタスク
+task-section-dependencies = 依存関係
+task-section-progress = 進捗
+task-section-subtasks = サブタスク
+task-section-source-control = ソース管理
+task-section-activity = アクティビティ
+task-section-details = 詳細
+task-section-description = 説明
+task-section-related = 関連タスク
+
+## Task components
+
+task-subtask-heading = サブタスク
+task-deps-none = 依存関係はありません。
+task-deps-blocked-by = ブロック元
+task-deps-blocks = ブロック先
+task-deps-subtask-progress = サブタスクの進捗
+task-deps-estimate-label = 見積もり:
+task-branch-none = 関連付けられたブランチまたは PR はありません。
+task-related-none = 関連タスクはありません。
+task-not-found = タスクが見つかりません
+
+## Task metadata
+
+task-meta-assignee = 担当者
+task-meta-due = 期限
+task-meta-priority = 優先度
+task-meta-estimate = 見積もり
+task-meta-labels = ラベル
+
+## Task filters
+
+task-filter-region = タスクフィルター
+task-filter-state = 状態
+task-filter-priority = 優先度
+task-filter-project = プロジェクト
+task-filter-all = すべて
+task-filter-reset = フィルターをリセット
+task-list-region = タスク一覧
+task-list-summary = { $total } 件中 { $shown } 件を表示
+task-list-empty = 現在のフィルターに一致するタスクはありません。
+
+## Task card
+
+task-card-progress = サブタスクの { $progress }% 完了
+task-card-subtasks = サブタスク { $done }/{ $total }
+
+## Dashboard
+
+dashboard-health-status = システム状態: { $label }
+dashboard-health-region = システム健全性
+dashboard-health-last-checked = 最終確認:
+dashboard-kpi-region = 主要指標
+dashboard-activity-region = 最近のアクティビティ
+dashboard-activity-heading = 最近のアクティビティ
+dashboard-agent-region = エージェント稼働率
+dashboard-agent-heading = エージェント稼働率
+dashboard-agent-turn-count =
+    { $count ->
+        [one] ターン
+       *[other] ターン
+    }
+
+## Shared components
+
+activity-timeline-label = アクティビティタイムライン
+progress-label = 進捗
+task-subtask-status-complete = 完了
+task-subtask-status-pending = 保留
+task-subtask-item = { $name } ({ $status })

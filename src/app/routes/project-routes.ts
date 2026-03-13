@@ -1,7 +1,9 @@
 /** @file Route definitions for the PROJECTS zone and project sub-views. */
 
-import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { createRoute, lazyRouteComponent, notFound } from "@tanstack/react-router";
 
+import { PROJECT_SLUGS } from "../../data/registries";
+import { findProjectTask, parseTaskId } from "../../data/tasks";
 import { rootRoute } from "./root-route";
 
 export const projectsRoute = createRoute({
@@ -73,9 +75,31 @@ export const projectTaskDetailRoute = createRoute({
 export const taskDepsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/projects/$slug/tasks/$id/dependencies",
+  loader: ({ params }) => {
+    const projectSlug = PROJECT_SLUGS.find((slug) => slug === params.slug);
+    if (projectSlug === undefined) {
+      throw notFound();
+    }
+
+    const taskId = parseTaskId(params.id);
+    if (taskId === undefined) {
+      throw notFound();
+    }
+
+    const task = findProjectTask(projectSlug, taskId);
+    if (task === undefined) {
+      throw notFound();
+    }
+
+    return task;
+  },
   component: lazyRouteComponent(
     () => import("../features/projects/task-deps-screen"),
     "TaskDepsScreen",
+  ),
+  notFoundComponent: lazyRouteComponent(
+    () => import("../features/projects/task-deps-screen"),
+    "TaskDepsNotFound",
   ),
 });
 

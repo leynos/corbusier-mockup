@@ -51,7 +51,7 @@ headers.
 
 ## Tolerances (exception triggers)
 
-- Scope: if implementation requires more than 15 new files or 2,000
+- Scope: if implementation requires more than 25 new files or 3,500
   lines of code (net), stop and escalate.
 - Dependencies: if drag-and-drop requires a new library, stop and
   escalate. The mockup should use CSS-only drag visual cues or
@@ -80,6 +80,7 @@ headers.
 
 ## Progress
 
+- [ ] Milestone 0: Data model foundation and plan-02 migration
 - [ ] Milestone 1: Project fixture data
 - [ ] Milestone 2: Project list page
 - [ ] Milestone 3: Project landing layout with view switcher
@@ -101,10 +102,11 @@ headers.
 
 ## Context and orientation
 
-This plan depends on `01-foundation.md` (app shell, routes, tokens)
-and `02-dashboard-and-tasks.md` (reusable components: status badges,
-task cards, priority tags, avatar stacks). The task card component
-from plan 02 is reused here in the Kanban columns.
+This plan depends on `01-foundation.md` (app shell, routes, tokens),
+`02-dashboard-and-tasks.md` (reusable components: status badges, task
+cards, priority tags, avatar stacks), and milestone 0 (shared
+localization-aware fixture registries and entity helpers). The task
+card component from plan 02 is reused here in the Kanban columns.
 
 ### Key files this plan creates
 
@@ -125,13 +127,50 @@ from plan 02 is reused here in the Kanban columns.
 
 ## Plan of work
 
+### Milestone 0: Data model foundation and plan-02 migration
+
+Introduce the shared data model types and migrate existing plan-02
+entities to the `EntityLocalizations` pattern.
+
+- Create `src/app/domain/entities/localization.ts` to define
+  `LocaleCode`, `LocalizedStringSet`, `EntityLocalizations`,
+  `LocalizedAltText`, `ImageAsset`, and the `pickLocalization`
+  helper with deterministic fallback (current locale → `en-GB` →
+  any available).
+- Create `src/data/registries/` with the following descriptor
+  registries: `labelDescriptors`, `priorityDescriptors`,
+  `taskStateDescriptors`, `healthStatusDescriptors`,
+  `agentStatusDescriptors`, and `eventKindDescriptors`. Each registry
+  entry owns its
+  `localizations: EntityLocalizations`. The authoritative list of
+  descriptor IDs for each registry is in the "Descriptor registries"
+  section of `docs/data-model-driven-card-architecture.md`.
+- Migrate `src/data/tasks.ts`: replace flat `title`, `description`
+  fields on `Task` with `localizations: EntityLocalizations`. Replace
+  flat `title` on `Subtask` with `localizations`. Replace flat
+  `description` on `ActivityEvent` with `localizations`.
+- Migrate `src/data/dashboard.ts`: replace flat `label`, `context`,
+  `trendLabel` on `KpiMetric` with `localizations` and
+  `trendLocalizations`. Replace flat `displayName` on `AgentBackend`
+  with `localizations`. Replace flat `description` on
+  `DashboardEvent` with `localizations`.
+- Update all plan-02 components to use `pickLocalization` instead of
+  `t()` for entity-owned strings. Fluent bundles retain only UI
+  chrome (button labels, aria labels, section headings, format
+  strings).
+- Move entity strings out of `public/locales/*/common.ftl` into the
+  entity fixture localization maps.
+- Update unit and E2E tests to account for the new data shapes.
+- `bun run ff` must pass.
+
 ### Milestone 1: Project fixture data
 
-Create `src/data/projects.ts` defining:
+Create `src/data/projects.ts` to define:
 
-- A `Project` interface with: `slug`, `name`, `lead` (assignee),
-  `dateRange`, `status` (active/inactive/completed), `description`,
-  and `team` (array of assignees).
+- A `Project` interface with `slug`,
+  `localizations: EntityLocalizations` (name, description), `lead`
+  (assignee), `dateRange`, `status` (active/inactive/completed), and
+  `team` (array of assignees).
 - 3 fixture projects: Apollo-Guidance (active, space navigation
   system), Manhattan-Logistics (active, supply chain orchestration),
   and Skunkworks-Alpha (inactive, experimental agent framework).
@@ -260,11 +299,10 @@ export type KanbanColumnId =
 
 export interface Project {
   readonly slug: string;
-  readonly name: string;
+  readonly localizations: EntityLocalizations;
   readonly lead: Assignee;
   readonly dateRange: { start: string; end: string };
   readonly status: "active" | "inactive" | "completed";
-  readonly description: string;
   readonly team: readonly Assignee[];
 }
 ```
@@ -278,15 +316,30 @@ the view model keeps a single documented source of truth.
 export const PROJECT_FIXTURES: readonly Project[] = [
   {
     slug: "apollo-guidance",
-    name: "Apollo-Guidance",
+    localizations: {
+      "en-GB": {
+        name: "Apollo-Guidance",
+        description: "Space navigation system",
+      },
+    },
   },
   {
     slug: "manhattan-logistics",
-    name: "Manhattan-Logistics",
+    localizations: {
+      "en-GB": {
+        name: "Manhattan-Logistics",
+        description: "Supply chain orchestration",
+      },
+    },
   },
   {
     slug: "skunkworks-alpha",
-    name: "Skunkworks-Alpha",
+    localizations: {
+      "en-GB": {
+        name: "Skunkworks-Alpha",
+        description: "Experimental agent framework",
+      },
+    },
   },
 ];
 

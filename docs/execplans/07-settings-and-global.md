@@ -115,6 +115,12 @@ bar from plan 01 is updated to wire the command palette trigger,
 notifications bell, and user menu into functional components. Settings
 pages use the form input components from the design system.
 
+The shared data model types (`EntityLocalizations`,
+`pickLocalization`, descriptor registries) introduced in plan 03
+milestone 0 are used throughout this plan. Entity-owned strings
+(notification text, integration card names) live in `localizations`
+maps. Settings form labels remain in Fluent bundles as UI chrome.
+
 ### Key files this plan creates
 
 - `src/app/features/command-palette/command-palette.tsx` — The ⌘K
@@ -174,6 +180,9 @@ Create `src/app/layout/notifications-dropdown.tsx`:
   and PR reviews.
 
 Create `src/data/notifications.ts` with 5–8 fixture notifications.
+Each notification uses `localizations: EntityLocalizations`
+(name = notification text) following the data model-driven card
+architecture.
 
 Wire into the header bar.
 
@@ -268,3 +277,23 @@ No new npm dependencies. Uses existing Radix UI packages:
 (notifications), `@radix-ui/react-dropdown-menu` (user menu),
 `@radix-ui/react-switch` and `@radix-ui/react-slider` (settings
 forms).
+
+### Key interfaces
+
+In `src/data/notifications.ts`:
+
+```tsx
+export type NotificationKind =
+  | "task_assigned"
+  | "hook_failure"
+  | "pr_review"
+  | "system_alert";
+
+export interface Notification {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly kind: NotificationKind;
+  readonly timestamp: string;
+  readonly read: boolean;
+}
+```

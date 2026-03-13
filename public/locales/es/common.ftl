@@ -19,6 +19,7 @@ controls-drawer-close-button = Cerrar
 controls-reset-to-device-default-label = Restablecer al valor predeterminado del dispositivo
 controls-trigger-label = Controles
 
+app-skip-to-content = Saltar al contenido de la página
 nav-sidebar-label = Navegación principal
 nav-zone-mainframe = MARCO PRINCIPAL
 nav-zone-projects = PROYECTOS
@@ -115,3 +116,99 @@ page-tenant-management = Gestión de inquilinos
 page-tenant-management-sub = Gestionar configuraciones de inquilinos y límites de aislamiento.
 page-user-detail = Perfil de usuario
 page-user-detail-sub = Ver y editar detalles y permisos del usuario.
+
+## Task actions (state machine)
+
+task-action-draft = Borrador
+task-action-start = Iniciar
+task-action-submit-review = Enviar a revisión
+task-action-pause = Pausar
+task-action-mark-done = Marcar como completada
+task-action-abandon = Abandonar
+task-action-none = No hay transiciones disponibles desde este estado.
+task-action-transition = Pasar a { $target }
+
+## Task hierarchy
+
+task-hierarchy-goal = Objetivo
+task-hierarchy-idea = Idea
+task-hierarchy-step = Paso
+task-hierarchy-task = Tarea
+task-hierarchy-label = Jerarquía de tareas
+
+## Task sections
+
+task-section-current = Tarea actual
+task-section-dependencies = Dependencias
+task-section-progress = Progreso
+task-section-subtasks = Subtareas
+task-section-source-control = Control de versiones
+task-section-activity = Actividad
+task-section-details = Detalles
+task-section-description = Descripción
+task-section-related = Tareas relacionadas
+
+## Task components
+
+task-subtask-heading = Subtareas
+task-deps-none = Sin dependencias.
+task-deps-blocked-by = Bloqueada por
+task-deps-blocks = Bloquea
+task-deps-subtask-progress = Progreso de subtareas
+task-deps-estimate-label = Estimación:
+task-branch-none = Sin rama ni PR asociados.
+task-related-none = Sin tareas relacionadas.
+task-not-found = Tarea no encontrada
+
+## Task metadata
+
+task-meta-assignee = Responsable
+task-meta-due = Vencimiento
+task-meta-priority = Prioridad
+task-meta-estimate = Estimación
+task-meta-labels = Etiquetas
+
+## Task filters
+
+task-filter-region = Filtros de tareas
+task-filter-state = Estado
+task-filter-priority = Prioridad
+task-filter-project = Proyecto
+task-filter-all = Todas
+task-filter-reset = Restablecer filtros
+task-list-region = Lista de tareas
+task-list-summary = Mostrando { $shown } de { $total }
+task-list-empty = Ninguna tarea coincide con los filtros actuales.
+
+## Task card
+
+task-card-progress = { $progress }% de subtareas completadas
+task-card-subtasks =
+    { $total ->
+        [one] { $done }/{ $total } subtarea
+       *[other] { $done }/{ $total } subtareas
+    }
+
+## Dashboard
+
+dashboard-health-status = Estado del sistema: { $label }
+dashboard-health-region = Salud del sistema
+dashboard-health-last-checked = Última comprobación:
+dashboard-kpi-region = Métricas clave
+dashboard-activity-region = Actividad reciente
+dashboard-activity-heading = Actividad reciente
+dashboard-agent-region = Utilización de agentes
+dashboard-agent-heading = Utilización de agentes
+dashboard-agent-turn-count =
+    { $count ->
+        [one] turno
+       *[other] turnos
+    }
+
+## Shared components
+
+activity-timeline-label = Línea de tiempo de actividad
+progress-label = Progreso
+task-subtask-status-complete = completada
+task-subtask-status-pending = pendiente
+task-subtask-item = { $name } ({ $status })

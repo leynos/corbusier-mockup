@@ -81,9 +81,15 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 
 ## Context and orientation
 
-This plan depends on plans 01 (foundation) and 02 (reusable
-components: status badges, category tags, avatar stacks). It is
+This plan depends on plans 01 (foundation), 02 (reusable components:
+status badges, category tags, avatar stacks), and milestone 0 of
+plan 03 (shared localization-aware data model helpers). It is
 relatively self-contained because it touches a single route.
+
+The shared data model types (`EntityLocalizations`,
+`pickLocalization`, descriptor registries) introduced in plan 03
+milestone 0 are used throughout this plan. Entity-owned strings live
+in `localizations` maps, not Fluent bundles.
 
 ### Key files this plan creates
 
@@ -104,10 +110,13 @@ relatively self-contained because it touches a single route.
 
 Create `src/data/suggestions.ts` defining:
 
-- A `Suggestion` interface with: `id`, `project`, `title`,
-  `rationale`, `priority` (high/medium/low), `confidence` (0–100),
-  `categoryTags`, `dependencyContext`, `estimatedDuration`,
-  `suggestedAssignees`.
+- A `Suggestion` interface with `id`, `projectSlug`,
+  `localizations: EntityLocalizations` (name = title,
+  description = rationale), `priority` (high/medium/low),
+  `confidence` (0–100), `categoryTagIds: TagId[]` (resolved via
+  label descriptor registry), `dependencyLocalizations:
+  EntityLocalizations` (name = context summary),
+  `estimatedDuration`, `suggestedAssignees`.
 - 8–10 fixture suggestions spanning all three priority levels and
   multiple projects, with realistic Corbusier-themed content.
 - AI insight bullet points (5–6 observations about schedule
@@ -189,14 +198,19 @@ In `src/data/suggestions.ts`:
 ```tsx
 export interface Suggestion {
   readonly id: string;
-  readonly project: string;
-  readonly title: string;
-  readonly rationale: string;
+  readonly projectSlug: ProjectSlug;
+  readonly localizations: EntityLocalizations;
   readonly priority: "high" | "medium" | "low";
   readonly confidence: number;
-  readonly categoryTags: readonly string[];
-  readonly dependencyContext: string;
+  readonly categoryTagIds: readonly TagId[];
+  readonly dependencyLocalizations: EntityLocalizations;
   readonly estimatedDuration: string;
   readonly suggestedAssignees: readonly Assignee[];
+}
+
+export interface AiInsight {
+  readonly id: string;
+  readonly localizations: EntityLocalizations;
+  readonly severity: "info" | "warning" | "critical";
 }
 ```
