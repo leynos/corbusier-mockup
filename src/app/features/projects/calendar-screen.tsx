@@ -94,8 +94,9 @@ export function CalendarScreen(): JSX.Element {
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
   const now = useNow();
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const projectStart = project ? new Date(project.dateRange.start) : now;
+  const year = projectStart.getFullYear();
+  const month = projectStart.getMonth();
   const firstDayOfWeek = useMemo(() => getFirstDayOfWeek(locale), [locale]);
 
   const dueDateCounts = useMemo(
@@ -175,7 +176,8 @@ export function CalendarScreen(): JSX.Element {
                   const isoDate = `${String(year)}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                   const dueCount = dueDateCounts.get(isoDate) ?? 0;
                   const fullDate = new Date(year, month, day);
-                  const isToday = day === now.getDate();
+                  const isToday =
+                    year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
                   const accessibleDate = fullDateFormatter.format(fullDate);
                   const ariaLabel =
                     dueCount > 0
