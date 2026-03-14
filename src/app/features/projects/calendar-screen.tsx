@@ -18,11 +18,25 @@ import { TASKS } from "../../../data/tasks";
 import { useNow } from "../../hooks/use-now";
 import { ProjectHeader } from "./project-landing-screen";
 
+/**
+ * Runtime schema for ISO year-month prefixes consumed by the calendar parser.
+ *
+ * Accepts strings shaped like `YYYY-MM` only. This schema is intentionally
+ * narrow because `parseIsoYearMonth` derives calendar state from the validated
+ * prefix and falls back when validation fails.
+ */
 const isoYearMonthSchema = v.pipe(
   v.string(),
   v.regex(/^\d{4}-\d{2}$/u, "Expected ISO year-month in YYYY-MM format"),
 );
 
+/**
+ * Count due dates for all tasks belonging to one project.
+ *
+ * @param slug Canonical project slug whose tasks should be counted.
+ * @returns Read-only map keyed by ISO `YYYY-MM-DD` due dates where each value
+ * is the number of tasks due on that date.
+ */
 function buildDueDateCounts(slug: ProjectSlug): ReadonlyMap<string, number> {
   const counts = new Map<string, number>();
 
@@ -33,6 +47,14 @@ function buildDueDateCounts(slug: ProjectSlug): ReadonlyMap<string, number> {
   return counts;
 }
 
+/**
+ * Resolve the locale's first weekday index.
+ *
+ * @param locale BCP 47 locale used to read `Intl.Locale.weekInfo`.
+ * @returns Weekday index in JavaScript's `Date#getDay()` shape where Sunday is
+ * `0`. Falls back to `1` (Monday) when locale metadata is unavailable or
+ * throws.
+ */
 function getFirstDayOfWeek(locale: string): number {
   try {
     const localeInfo = new Intl.Locale(locale) as Intl.Locale & {
@@ -45,6 +67,15 @@ function getFirstDayOfWeek(locale: string): number {
   }
 }
 
+/**
+ * Build a padded month-cell array for the calendar table.
+ *
+ * @param year Full four-digit calendar year.
+ * @param month Zero-based month index where January is `0`.
+ * @param firstDayOfWeek Weekday index that should appear in the first column.
+ * @returns Read-only array whose length is always a multiple of 7. Leading and
+ * trailing empty cells are represented as `null`.
+ */
 function buildCalendarDays(
   year: number,
   month: number,
@@ -68,6 +99,12 @@ function buildCalendarDays(
   return cells;
 }
 
+/**
+ * Split flat calendar cells into week rows.
+ *
+ * @param days Flat array produced by `buildCalendarDays`.
+ * @returns Read-only array of week rows, each containing exactly 7 entries.
+ */
 function chunkCalendarDays(
   days: readonly (number | null)[],
 ): readonly (readonly (number | null)[])[] {
@@ -80,6 +117,14 @@ function chunkCalendarDays(
   return weeks;
 }
 
+/**
+ * Format localized weekday labels using a stable UTC seed.
+ *
+ * @param locale BCP 47 locale used for weekday formatting.
+ * @param firstDayOfWeek Weekday index that should appear first in the result.
+ * @returns Read-only array of 7 localized short weekday labels. Formatting is
+ * forced to UTC so labels do not drift across time zones.
+ */
 function buildWeekdayLabels(locale: string, firstDayOfWeek: number): readonly string[] {
   const formatter = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" });
   const sundaySeedMs = Date.UTC(2026, 0, 4);
@@ -92,6 +137,15 @@ function buildWeekdayLabels(locale: string, firstDayOfWeek: number): readonly st
   });
 }
 
+/**
+ * Parse an ISO year-month prefix for calendar state.
+ *
+ * @param isoDate ISO year-month string in `YYYY-MM` format.
+ * @param fallback Safe zero-based year/month pair used when validation fails.
+ * @returns Object containing a four-digit year and zero-based month index.
+ * Invalid input, non-finite numbers, and out-of-range months all return the
+ * provided fallback instead of propagating `NaN`.
+ */
 function parseIsoYearMonth(
   isoDate: string,
   fallback: { readonly year: number; readonly month: number },
@@ -213,7 +267,7 @@ export function CalendarScreen(): JSX.Element {
                   const isToday =
                     year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
                   const accessibleDate = fullDateFormatter.format(fullDate);
-                  const ariaLabel =
+                  const baseAriaLabel =
                     dueCount > 0
                       ? t("calendar-day-with-tasks", {
                           date: accessibleDate,
@@ -224,6 +278,7 @@ export function CalendarScreen(): JSX.Element {
                           date: accessibleDate,
                           defaultValue: `${accessibleDate} — no tasks due`,
                         });
+                  const ariaLabel = isToday ? `${baseAriaLabel} — today` : baseAriaLabel;
 
                   return (
                     <td

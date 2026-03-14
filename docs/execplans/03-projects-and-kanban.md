@@ -62,14 +62,14 @@ headers.
 
 ## Risks
 
-- Risk: The Calendar and Timeline views are complex to implement fully
-  as static mockups.
+- Risk: Calendar and Timeline remain read-only views rather than fully
+  interactive planning surfaces.
   Severity: medium
   Likelihood: high
-  Mitigation: Implement Calendar and Timeline as styled placeholders
-  with representative layout structure (a month grid for Calendar, a
-  horizontal bar chart skeleton for Timeline) rather than fully
-  interactive components. Note this in the Decision Log.
+  Mitigation: Keep the shipped Calendar table and Timeline
+  milestone-marker view aligned with project data, and add interactive
+  planning controls only when product scope justifies the added
+  accessibility and state-management complexity.
 
 - Risk: Kanban drag-and-drop accessibility is non-trivial.
   Severity: medium
@@ -359,8 +359,9 @@ failure.
 
 ## Interfaces and dependencies
 
-No new npm dependencies. The view switcher uses plain ARIA tab
-semantics instead of a tab library.
+One new npm dependency: `valibot` for calendar year-month parsing
+validation. The view switcher uses plain ARIA tab semantics instead of
+a tab library.
 
 ### Key interfaces
 
