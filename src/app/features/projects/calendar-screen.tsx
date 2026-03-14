@@ -75,15 +75,24 @@ function chunkCalendarDays(
 }
 
 function buildWeekdayLabels(locale: string, firstDayOfWeek: number): readonly string[] {
-  const formatter = new Intl.DateTimeFormat(locale, { weekday: "short" });
-  const sunday = new Date(Date.UTC(2026, 0, 4));
+  const formatter = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" });
+  const sundaySeedMs = Date.UTC(2026, 0, 4);
 
   return Array.from({ length: 7 }, (_, offset) => {
     const weekdayIndex = (firstDayOfWeek + offset) % 7;
-    const date = new Date(sunday);
-    date.setUTCDate(sunday.getUTCDate() + weekdayIndex);
+    const date = new Date(sundaySeedMs);
+    date.setUTCDate(date.getUTCDate() + weekdayIndex);
     return formatter.format(date);
   });
+}
+
+function parseIsoYearMonth(isoDate: string): { readonly year: number; readonly month: number } {
+  const [yearPart = "", monthPart = ""] = isoDate.split("-", 3);
+
+  return {
+    year: Number.parseInt(yearPart, 10),
+    month: Number.parseInt(monthPart, 10) - 1,
+  };
 }
 
 export function CalendarScreen(): JSX.Element {
@@ -94,9 +103,10 @@ export function CalendarScreen(): JSX.Element {
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
   const now = useNow();
-  const projectStart = project ? new Date(project.dateRange.start) : now;
-  const year = projectStart.getFullYear();
-  const month = projectStart.getMonth();
+  const projectStart = project
+    ? parseIsoYearMonth(project.dateRange.start)
+    : { year: now.getFullYear(), month: now.getMonth() };
+  const { year, month } = projectStart;
   const firstDayOfWeek = useMemo(() => getFirstDayOfWeek(locale), [locale]);
 
   const dueDateCounts = useMemo(
@@ -113,8 +123,8 @@ export function CalendarScreen(): JSX.Element {
   );
   const monthLabel = useMemo(
     () =>
-      new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
-        new Date(year, month),
+      new Intl.DateTimeFormat(locale, { month: "long", year: "numeric", timeZone: "UTC" }).format(
+        new Date(Date.UTC(year, month)),
       ),
     [locale, month, year],
   );

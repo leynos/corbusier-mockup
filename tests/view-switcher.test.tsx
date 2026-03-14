@@ -75,23 +75,20 @@ describe("ViewSwitcher", () => {
 
     const tablist = await screen.findByRole("tablist", { name: /project views/i });
     const tabs = within(tablist).getAllByRole("tab");
+    const expectedTabs = [
+      ["Backlog", "backlog"],
+      ["Kanban", "kanban"],
+      ["Calendar", "calendar"],
+      ["List", "list"],
+      ["Timeline", "timeline"],
+    ] as const;
 
     expect(tabs).toHaveLength(5);
-    expect(within(tablist).getByRole("tab", { name: "Backlog" }).getAttribute("href")).toBe(
-      `/projects/${slug}/backlog`,
-    );
-    expect(within(tablist).getByRole("tab", { name: "Kanban" }).getAttribute("href")).toBe(
-      `/projects/${slug}/kanban`,
-    );
-    expect(within(tablist).getByRole("tab", { name: "Calendar" }).getAttribute("href")).toBe(
-      `/projects/${slug}/calendar`,
-    );
-    expect(within(tablist).getByRole("tab", { name: "List" }).getAttribute("href")).toBe(
-      `/projects/${slug}/list`,
-    );
-    expect(within(tablist).getByRole("tab", { name: "Timeline" }).getAttribute("href")).toBe(
-      `/projects/${slug}/timeline`,
-    );
+    for (const [name, path] of expectedTabs) {
+      expect(within(tablist).getByRole("tab", { name }).getAttribute("href")).toBe(
+        `/projects/${slug}/${path}`,
+      );
+    }
   });
 
   it("marks the current sub-route as selected", async () => {

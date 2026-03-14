@@ -225,7 +225,29 @@ dashboard-agent-turn-count =
 
 project-list-region = قائمة المشاريع
 project-card-lead = القائد:
-project-card-task-summary = { $total } مهام · { $inProgress } قيد التنفيذ · { $blocked } محظورة
+project-card-task-summary =
+    { $total ->
+        [zero] لا توجد مهام
+        [one] مهمة واحدة
+        [two] مهمتان
+        [few] { $total } مهام
+        [many] { $total } مهمة
+       *[other] { $total } مهمة
+    } · { $inProgress ->
+        [zero] لا شيء قيد التنفيذ
+        [one] مهمة واحدة قيد التنفيذ
+        [two] مهمتان قيد التنفيذ
+        [few] { $inProgress } مهام قيد التنفيذ
+        [many] { $inProgress } مهمة قيد التنفيذ
+       *[other] { $inProgress } مهمة قيد التنفيذ
+    } · { $blocked ->
+        [zero] لا شيء محظور
+        [one] مهمة واحدة محظورة
+        [two] مهمتان محظورتان
+        [few] { $blocked } مهام محظورة
+        [many] { $blocked } مهمة محظورة
+       *[other] { $blocked } مهمة محظورة
+    }
 project-status-active = نشط
 project-status-inactive = غير نشط
 project-status-completed = مكتمل

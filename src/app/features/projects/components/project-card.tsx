@@ -30,6 +30,7 @@ export function ProjectCard({ project, taskSummary }: ProjectCardProps): JSX.Ele
     <Link
       to="/projects/$slug/kanban"
       params={{ slug: project.slug }}
+      aria-label={`${loc.name} — ${t("project-view-kanban", { defaultValue: "Kanban" })}`}
       className="block transition-transform hover:scale-[1.01]"
     >
       <ChamferCard

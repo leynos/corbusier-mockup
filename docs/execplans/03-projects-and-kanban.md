@@ -20,7 +20,8 @@ After this plan is complete, a developer can navigate to:
   with the punch-card chamfer, priority and category tags, progress
   bars, assignee avatars, and inline "Add New" creation placeholders.
 - **`/projects/:slug/backlog`**, `calendar`, `list`, `timeline` — and
-  see styled placeholder views indicating the view type.
+  see shipped project sub-views. Backlog, Calendar, and List render
+  project data, while Timeline renders the milestone-marker view.
 
 The Kanban board is the primary workspace for project-level task
 management. It exercises the task card component in its natural
@@ -87,10 +88,10 @@ headers.
 - [x] Milestone 2: Project list page — `3841057`
 - [x] Milestone 3: Project landing layout with view switcher — `3841057`
 - [x] Milestone 4: Kanban board — `5b80b4a`
-- [x] Milestone 5: Backlog, Calendar, List, and Timeline placeholders — `8594b0a`
+- [x] Milestone 5: Backlog, Calendar, List, and Timeline views — `8594b0a`
 - [x] Milestone 6: Tests and validation — `5235789`
 - [x] Post-completion review remediation: canonical project navigation,
-  shared draft bucketing, localized calendar semantics, placeholder
+  shared draft bucketing, localized calendar semantics, disabled
   control hardening, and regression coverage were tightened after PR
   review.
 
@@ -129,10 +130,13 @@ headers.
   `@radix-ui/react-tabs` with hand-rolled `role="tablist"` /
   `role="tab"` to avoid the `aria-controls` pointing to non-existent
   panels.
-- **Calendar and Timeline as styled placeholders**: As anticipated in
-  the risks section, these views are structural mockups (month grid
-  with dots, horizontal bar chart) rather than fully interactive
-  components.
+- **Backlog, Calendar, List, and Timeline shipping level**:
+  `src/app/features/projects/backlog-screen.tsx`,
+  `src/app/features/projects/calendar-screen.tsx`, and
+  `src/app/features/projects/list-screen.tsx` now render live project
+  task data. `src/app/features/projects/timeline-screen.tsx` ships the
+  milestone-marker view rather than a fully interactive scheduling
+  surface.
 
 ## Outcomes & retrospective
 
@@ -146,8 +150,8 @@ audits).
 - Project list page with ChamferCard grid
 - Project landing with shared header and view switcher (5 tabs)
 - Kanban board with 5 task columns, count badges, and "Add New" buttons
-- 4 styled placeholder views (Backlog table, Calendar month grid,
-  List dense table, Timeline milestone markers)
+- 4 shipped project sub-views: Backlog table, Calendar month grid,
+  List dense table, and Timeline milestone markers
 - 12 new unit tests, 5 new E2E tests
 
 **Files created:** 14 new files across `src/data/`, `src/app/features/projects/`,
@@ -181,7 +185,11 @@ card component from plan 02 is reused here in the Kanban columns.
   for the project list grid.
 - `src/app/features/projects/components/view-switcher.tsx` — Plain
   ARIA tab-semantics view selector.
-- Placeholder screens for Backlog, Calendar, List, Timeline.
+- `src/app/features/projects/backlog-screen.tsx`,
+  `src/app/features/projects/calendar-screen.tsx`,
+  `src/app/features/projects/list-screen.tsx`, and
+  `src/app/features/projects/timeline-screen.tsx` — project sub-view
+  screens.
 
 ## Plan of work
 
@@ -293,19 +301,21 @@ blocking tasks are not `done`) render with the reversed chamfer.
 
 ### Milestone 5: Backlog, Calendar, List, Timeline
 
-These are styled placeholders that communicate the view type:
+These shipped project sub-views reuse the shared `ProjectHeader` and
+the same view switcher, so navigation stays consistent:
 
-- **Backlog**: A card with heading "Backlog" and a list of unscheduled
-  tasks in a simple table format.
-- **Calendar**: A month grid skeleton showing the current month with
-  task dots on due dates.
-- **List**: A dense table view (reusing the data table component
-  pattern from the design system) with sortable column headers.
-- **Timeline**: A horizontal bar chart skeleton showing tasks as bars
-  against a date axis.
+- **Backlog**: `src/app/features/projects/backlog-screen.tsx` renders
+  the project's draft-task table.
+- **Calendar**: `src/app/features/projects/calendar-screen.tsx`
+  renders the project's month grid with due-date markers.
+- **List**: `src/app/features/projects/list-screen.tsx` renders the
+  project's dense all-task table.
+- **Timeline**: `src/app/features/projects/timeline-screen.tsx`
+  renders the milestone-marker view.
 
-Each placeholder uses the correct page heading and structural layout
-so it reads as a real view, not a blank "coming soon" page.
+Each shipped view uses the correct page heading and structural layout
+from the design references while rendering real project data where
+implemented.
 
 ### Milestone 6: Tests and validation
 

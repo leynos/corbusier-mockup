@@ -2,6 +2,7 @@
 
 import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, screen } from "@testing-library/react";
+import type { ComponentProps } from "react";
 
 import { KanbanColumn } from "../src/app/features/projects/components/kanban-column";
 import { getTasksForProject } from "../src/data/projects";
@@ -13,64 +14,49 @@ const inProgressTasks = getTasksForProject(slug, TASKS).filter(
   (t) => t.state === TaskState.InProgress,
 );
 
+type KanbanColumnProps = ComponentProps<typeof KanbanColumn>;
+
+function buildKanbanColumnProps(overrides: Partial<KanbanColumnProps> = {}): KanbanColumnProps {
+  return {
+    label: "In Progress",
+    tasks: [...inProgressTasks],
+    accentClassName: "bg-warning",
+    slug,
+    addNewLabel: "Add New",
+    ...overrides,
+  };
+}
+
+function renderKanbanColumn(overrides: Partial<KanbanColumnProps> = {}) {
+  return renderWithRouter(<KanbanColumn {...buildKanbanColumnProps(overrides)} />);
+}
+
 describe("KanbanColumn", () => {
   afterEach(() => {
     cleanup();
   });
 
   it("renders the column label as a heading", async () => {
-    renderWithRouter(
-      <KanbanColumn
-        label="In Progress"
-        tasks={[...inProgressTasks]}
-        accentClassName="bg-warning"
-        slug={slug}
-        addNewLabel="Add New"
-      />,
-    );
+    renderKanbanColumn();
 
     expect(await screen.findByRole("heading", { name: "In Progress" })).toBeTruthy();
   });
 
   it("shows the correct task count", async () => {
-    renderWithRouter(
-      <KanbanColumn
-        label="In Progress"
-        tasks={[...inProgressTasks]}
-        accentClassName="bg-warning"
-        slug={slug}
-        addNewLabel="Add New"
-      />,
-    );
+    renderKanbanColumn();
 
     expect(await screen.findByText(String(inProgressTasks.length))).toBeTruthy();
   });
 
   it("renders a task card for each task", async () => {
-    renderWithRouter(
-      <KanbanColumn
-        label="In Progress"
-        tasks={[...inProgressTasks]}
-        accentClassName="bg-warning"
-        slug={slug}
-        addNewLabel="Add New"
-      />,
-    );
+    renderKanbanColumn();
 
     const items = await screen.findAllByRole("listitem");
     expect(items.length).toBe(inProgressTasks.length);
   });
 
   it("renders the Add New button", async () => {
-    renderWithRouter(
-      <KanbanColumn
-        label="In Progress"
-        tasks={[...inProgressTasks]}
-        accentClassName="bg-warning"
-        slug={slug}
-        addNewLabel="Add New"
-      />,
-    );
+    renderKanbanColumn();
 
     const addNewButton = await screen.findByRole("button", { name: "Add New — In Progress" });
     expect(addNewButton.getAttribute("type")).toBe("button");
@@ -78,15 +64,11 @@ describe("KanbanColumn", () => {
   });
 
   it("renders correctly when there are no tasks", async () => {
-    renderWithRouter(
-      <KanbanColumn
-        label="Done"
-        tasks={[]}
-        accentClassName="bg-success"
-        slug={slug}
-        addNewLabel="Add New"
-      />,
-    );
+    renderKanbanColumn({
+      label: "Done",
+      tasks: [],
+      accentClassName: "bg-success",
+    });
 
     expect(await screen.findByText("0")).toBeTruthy();
     expect(screen.queryAllByRole("listitem")).toHaveLength(0);

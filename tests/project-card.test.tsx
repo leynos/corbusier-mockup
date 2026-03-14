@@ -45,7 +45,7 @@ describe("ProjectCard", () => {
   it("links to the kanban view", async () => {
     renderWithRouter(<ProjectCard project={project} taskSummary={taskSummary} />);
 
-    const link = await screen.findByRole("link");
+    const link = await screen.findByRole("link", { name: /kanban/i });
     expect(link.getAttribute("href")).toBe("/projects/apollo-guidance/kanban");
   });
 
