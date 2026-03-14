@@ -9,16 +9,35 @@ import type { JSX } from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { groupTasksByState, PROJECT_FIXTURES } from "../../../data/projects";
+import {
+  type GroupedTasks,
+  groupTasksByState,
+  PROJECT_FIXTURES,
+  type Project,
+} from "../../../data/projects";
 import { TASKS } from "../../../data/tasks";
 import { ProjectCard } from "./components/project-card";
 
-function useProjectsScreenCopy(): {
+interface ProjectsScreenProps {
   readonly heading: string;
   readonly subheading: string;
   readonly projectListLabel: string;
-} {
+  readonly projectSummaries: ReadonlyArray<{
+    readonly project: Project;
+    readonly taskSummary: GroupedTasks;
+  }>;
+}
+
+function useProjectsScreenLogic(): ProjectsScreenProps {
   const { t } = useTranslation();
+  const projectSummaries = useMemo(
+    () =>
+      PROJECT_FIXTURES.map((project) => ({
+        project,
+        taskSummary: groupTasksByState(project.slug, TASKS),
+      })),
+    [],
+  );
 
   return {
     heading: t("page-projects", { defaultValue: "Projects" }),
@@ -26,27 +45,26 @@ function useProjectsScreenCopy(): {
       defaultValue: "All directives and project workspaces.",
     }),
     projectListLabel: t("project-list-region", { defaultValue: "Project list" }),
+    projectSummaries,
   };
 }
 
-export function ProjectsScreen(): JSX.Element {
-  const copy = useProjectsScreenCopy();
-  const projectSummaries = useMemo(
-    () =>
-      PROJECT_FIXTURES.map((p) => ({ project: p, taskSummary: groupTasksByState(p.slug, TASKS) })),
-    [],
-  );
-
+function ProjectsScreenView({
+  heading,
+  subheading,
+  projectListLabel,
+  projectSummaries,
+}: ProjectsScreenProps): JSX.Element {
   return (
     <div>
       <h1 className="mb-6 font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
-        {copy.heading}
+        {heading}
       </h1>
-      <p className="mb-6 text-base-content/70">{copy.subheading}</p>
+      <p className="mb-6 text-base-content/70">{subheading}</p>
 
       <ul
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-        aria-label={copy.projectListLabel}
+        aria-label={projectListLabel}
       >
         {projectSummaries.map(({ project, taskSummary }) => (
           <li key={project.slug} className="list-none">
@@ -56,4 +74,10 @@ export function ProjectsScreen(): JSX.Element {
       </ul>
     </div>
   );
+}
+
+export function ProjectsScreen(): JSX.Element {
+  const props = useProjectsScreenLogic();
+
+  return <ProjectsScreenView {...props} />;
 }
