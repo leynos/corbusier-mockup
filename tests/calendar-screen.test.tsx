@@ -1,21 +1,9 @@
 /** @file Verifies the calendar screen renders the project's full month span. */
 
 import { afterEach, describe, expect, it } from "bun:test";
-import { createMemoryHistory, createRouter } from "@tanstack/react-router";
 import { cleanup, screen } from "@testing-library/react";
 
-import { AppRoutes } from "../src/app/routes/app-routes";
-import { routeTree } from "../src/app/routes/route-tree";
-import { renderWithProviders } from "./utils/render-with-providers";
-
-function renderCalendarScreen(initialPath: string) {
-  const router = createRouter({
-    routeTree,
-    history: createMemoryHistory({ initialEntries: [initialPath] }),
-  });
-
-  return renderWithProviders(<AppRoutes routerInstance={router} />);
-}
+import { renderWithRouter } from "./utils/render-app-routes";
 
 describe("CalendarScreen", () => {
   afterEach(() => {
@@ -23,7 +11,7 @@ describe("CalendarScreen", () => {
   });
 
   it("renders month sections across the project's full date range", async () => {
-    renderCalendarScreen("/projects/apollo-guidance/calendar");
+    renderWithRouter("/projects/apollo-guidance/calendar");
 
     expect(await screen.findByRole("heading", { level: 2, name: "February 2026" })).toBeTruthy();
     expect(screen.getByRole("heading", { level: 2, name: "May 2026" })).toBeTruthy();

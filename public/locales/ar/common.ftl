@@ -255,7 +255,7 @@ project-status-completed = مكتمل
 ## Project landing
 
 project-view-tabs-label = عروض المشروع
-project-view-backlog = قائمة المهام
+project-view-backlog = الأعمال المتراكمة
 project-view-kanban = كانبان
 project-view-calendar = التقويم
 project-view-list = القائمة
