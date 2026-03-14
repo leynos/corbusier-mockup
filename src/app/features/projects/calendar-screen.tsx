@@ -10,12 +10,18 @@ import { Navigate, useParams } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import * as v from "valibot";
 
 import { findProject, getTasksForProject } from "../../../data/projects";
 import { type ProjectSlug, parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { useNow } from "../../hooks/use-now";
 import { ProjectHeader } from "./project-landing-screen";
+
+const isoYearMonthSchema = v.pipe(
+  v.string(),
+  v.regex(/^\d{4}-\d{2}$/u, "Expected ISO year-month in YYYY-MM format"),
+);
 
 function buildDueDateCounts(slug: ProjectSlug): ReadonlyMap<string, number> {
   const counts = new Map<string, number>();
@@ -86,13 +92,30 @@ function buildWeekdayLabels(locale: string, firstDayOfWeek: number): readonly st
   });
 }
 
-function parseIsoYearMonth(isoDate: string): { readonly year: number; readonly month: number } {
-  const [yearPart = "", monthPart = ""] = isoDate.split("-", 3);
+function parseIsoYearMonth(
+  isoDate: string,
+  fallback: { readonly year: number; readonly month: number },
+): { readonly year: number; readonly month: number } {
+  const result = v.safeParse(isoYearMonthSchema, isoDate);
+  if (!result.success) {
+    return fallback;
+  }
 
-  return {
-    year: Number.parseInt(yearPart, 10),
-    month: Number.parseInt(monthPart, 10) - 1,
-  };
+  const [yearPart = "", monthPart = ""] = result.output.split("-");
+  const year = Number.parseInt(yearPart, 10);
+  const startMonth = Number.parseInt(monthPart, 10);
+
+  if (!Number.isFinite(year) || !Number.isInteger(year)) {
+    return fallback;
+  }
+  if (!Number.isFinite(startMonth) || !Number.isInteger(startMonth)) {
+    return fallback;
+  }
+  if (startMonth < 1 || startMonth > 12) {
+    return fallback;
+  }
+
+  return { year, month: startMonth - 1 };
 }
 
 export function CalendarScreen(): JSX.Element {
@@ -103,9 +126,10 @@ export function CalendarScreen(): JSX.Element {
 
   const project = projectSlug ? findProject(projectSlug) : undefined;
   const now = useNow();
+  const currentYearMonth = { year: now.getFullYear(), month: now.getMonth() };
   const projectStart = project
-    ? parseIsoYearMonth(project.dateRange.start)
-    : { year: now.getFullYear(), month: now.getMonth() };
+    ? parseIsoYearMonth(project.dateRange.start.slice(0, 7), currentYearMonth)
+    : currentYearMonth;
   const { year, month } = projectStart;
   const firstDayOfWeek = useMemo(() => getFirstDayOfWeek(locale), [locale]);
 

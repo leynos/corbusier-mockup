@@ -117,7 +117,15 @@ headers.
   roles**: Initially used `role="grid"` /
   `role="gridcell"` / `role="columnheader"` for the calendar month
   layout, but this implied interactive grid navigation that doesn't
-  exist. Switched to `<section aria-label>` with decorative day cells.
+  exist. The shipped calendar in
+  `src/app/features/projects/calendar-screen.tsx` now renders as a
+  semantic HTML `<table>` with `<thead>` / `<tbody>`, weekday column
+  headers via `<th scope="col">`, table rows for weeks, and table
+  cells for dates. The table carries an `aria-label`, each populated
+  date cell gets an `aria-label` describing the date and due-task
+  state, and the current date uses `aria-current="date"` on its
+  `<time>` element. No custom keyboard interaction is implemented
+  beyond the native table semantics.
 
 ## Decision log
 
