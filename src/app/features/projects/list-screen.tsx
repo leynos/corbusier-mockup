@@ -17,7 +17,7 @@ import { PriorityTag } from "../../components/priority-tag";
 import { StatusBadge } from "../../components/status-badge";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
-import { ProjectHeader } from "./project-landing-screen";
+import { ProjectHeader } from "./project-header";
 
 export function useListScreenCopy(): {
   readonly locale: string;

@@ -245,8 +245,14 @@ backlog-col-due = Due
 
 calendar-grid-label = Calendar
 calendar-day-no-tasks = { $date } — no tasks due
+calendar-day-no-tasks-today = { $date } — today — no tasks due
 calendar-day-with-tasks =
     { $date } — { $count ->
+        [one] { $count } task due
+       *[other] { $count } tasks due
+    }
+calendar-day-with-tasks-today =
+    { $date } — today — { $count ->
         [one] { $count } task due
        *[other] { $count } tasks due
     }

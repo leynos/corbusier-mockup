@@ -16,7 +16,7 @@ import { TASKS, TaskState } from "../../../data/tasks";
 import { PriorityTag } from "../../components/priority-tag";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
-import { ProjectHeader } from "./project-landing-screen";
+import { ProjectHeader } from "./project-header";
 
 export function useBacklogScreenCopy(): {
   readonly locale: string;

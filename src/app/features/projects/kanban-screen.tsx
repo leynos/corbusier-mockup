@@ -15,7 +15,7 @@ import { findProject, groupTasksByState, type KanbanColumnId } from "../../../da
 import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS, TaskState } from "../../../data/tasks";
 import { KanbanColumn } from "./components/kanban-column";
-import { ProjectHeader } from "./project-landing-screen";
+import { ProjectHeader } from "./project-header";
 
 /** Accent colours for each Kanban column header dot. */
 const COLUMN_ACCENT: Record<KanbanColumnId, string> = {

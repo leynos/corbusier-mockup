@@ -16,7 +16,7 @@ import { findProject, getTasksForProject } from "../../../data/projects";
 import { type ProjectSlug, parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { useNow } from "../../hooks/use-now";
-import { ProjectHeader } from "./project-landing-screen";
+import { ProjectHeader } from "./project-header";
 
 /**
  * Runtime schema for ISO year-month prefixes consumed by the calendar parser.
@@ -206,6 +206,7 @@ export function CalendarScreen(): JSX.Element {
       ),
     [locale, month, year],
   );
+  const monthHeadingId = `project-calendar-month-${projectSlug ?? "unknown"}`;
   const fullDateFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat(locale, {
@@ -225,16 +226,18 @@ export function CalendarScreen(): JSX.Element {
     <div>
       <ProjectHeader slug={projectSlug} />
 
-      <h2 className="mb-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content">
+      <h2
+        id={monthHeadingId}
+        className="mb-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content"
+      >
         {monthLabel}
       </h2>
 
       <div className="overflow-x-auto">
         <table
           className="w-full table-fixed border-separate border-spacing-px"
-          aria-label={t("calendar-grid-label", { defaultValue: "Calendar" })}
+          aria-labelledby={monthHeadingId}
         >
-          <caption className="sr-only">{monthLabel}</caption>
           <thead>
             <tr>
               {weekdayLabels.map((label) => (
@@ -267,18 +270,23 @@ export function CalendarScreen(): JSX.Element {
                   const isToday =
                     year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
                   const accessibleDate = fullDateFormatter.format(fullDate);
-                  const baseAriaLabel =
+                  const ariaLabel =
                     dueCount > 0
-                      ? t("calendar-day-with-tasks", {
+                      ? t(isToday ? "calendar-day-with-tasks-today" : "calendar-day-with-tasks", {
                           date: accessibleDate,
                           count: dueCount,
-                          defaultValue: `${accessibleDate} — ${String(dueCount)} task due`,
+                          isToday,
+                          defaultValue: isToday
+                            ? `${accessibleDate} — today — ${String(dueCount)} task due`
+                            : `${accessibleDate} — ${String(dueCount)} task due`,
                         })
-                      : t("calendar-day-no-tasks", {
+                      : t(isToday ? "calendar-day-no-tasks-today" : "calendar-day-no-tasks", {
                           date: accessibleDate,
-                          defaultValue: `${accessibleDate} — no tasks due`,
+                          isToday,
+                          defaultValue: isToday
+                            ? `${accessibleDate} — today — no tasks due`
+                            : `${accessibleDate} — no tasks due`,
                         });
-                  const ariaLabel = isToday ? `${baseAriaLabel} — today` : baseAriaLabel;
 
                   return (
                     <td

@@ -14,7 +14,7 @@ import { findProject, getTasksForProject } from "../../../data/projects";
 import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { pickLocalization } from "../../domain/entities/localization";
-import { ProjectHeader } from "./project-landing-screen";
+import { ProjectHeader } from "./project-header";
 
 /** Compute a percentage offset for a date within a range. */
 function dateToPercent(date: string, rangeStart: number, rangeSpan: number): number {

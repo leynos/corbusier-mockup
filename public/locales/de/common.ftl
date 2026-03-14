@@ -250,8 +250,14 @@ backlog-col-due = Fällig
 
 calendar-grid-label = Kalender
 calendar-day-no-tasks = { $date } — keine Aufgaben fällig
+calendar-day-no-tasks-today = { $date } — heute — keine Aufgaben fällig
 calendar-day-with-tasks =
     { $date } — { $count ->
+        [one] { $count } Aufgabe fällig
+       *[other] { $count } Aufgaben fällig
+    }
+calendar-day-with-tasks-today =
+    { $date } — heute — { $count ->
         [one] { $count } Aufgabe fällig
        *[other] { $count } Aufgaben fällig
     }

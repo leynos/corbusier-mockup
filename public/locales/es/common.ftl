@@ -252,8 +252,14 @@ backlog-col-due = Vencimiento
 
 calendar-grid-label = Calendario
 calendar-day-no-tasks = { $date } — no hay tareas vencidas
+calendar-day-no-tasks-today = { $date } — hoy — no hay tareas vencidas
 calendar-day-with-tasks =
     { $date } — { $count ->
+        [one] { $count } tarea vence
+       *[other] { $count } tareas vencen
+    }
+calendar-day-with-tasks-today =
+    { $date } — hoy — { $count ->
         [one] { $count } tarea vence
        *[other] { $count } tareas vencen
     }

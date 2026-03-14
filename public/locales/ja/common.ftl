@@ -240,7 +240,9 @@ backlog-col-due = 期限
 
 calendar-grid-label = カレンダー
 calendar-day-no-tasks = { $date } — 期限のタスクはありません
+calendar-day-no-tasks-today = { $date } — 今日 — 期限のタスクはありません
 calendar-day-with-tasks = { $date } — 期限のタスク { $count } 件
+calendar-day-with-tasks-today = { $date } — 今日 — 期限のタスク { $count } 件
 
 ## List view
 
