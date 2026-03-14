@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -88,23 +88,47 @@ embedded tool-call artefacts.
 
 ## Progress
 
-- [ ] Milestone 1: Conversation and directive fixture data
-- [ ] Milestone 2: Conversation list page
-- [ ] Milestone 3: Conversation detail page
-- [ ] Milestone 4: Directives registry page
-- [ ] Milestone 5: Tests and validation
+- [x] Milestone 1: Conversation and directive fixture data
+- [x] Milestone 2: Conversation list page
+- [x] Milestone 3: Conversation detail page
+- [x] Milestone 4: Directives registry page
+- [x] Milestone 5: Tests and validation
 
 ## Surprises & discoveries
 
-(None yet.)
+- `<ol role="log">` overrides the implicit `list` role, causing axe
+  `list` violations for child `<li>` elements. Fix: wrap with
+  `<div role="log" aria-live="polite">` and keep `<ol>` as plain list.
+- Biome's `useSemanticElements` rejects `<div role="status">` in
+  favour of `<output>` (which carries implicit `status` role).
+- Biome rejects `<li role="separator">` (multiple rules), `<ul
+  role="listbox">`, `<li role="option">`. Use generic `<div>` for
+  ARIA widget roles that conflict with list semantics.
+- `<pre>` with `overflow-x-auto` triggers axe
+  `scrollable-region-focusable`; adding `tabIndex={0}` then triggers
+  Biome `noNoninteractiveTabindex`. Solution: use
+  `whitespace-pre-wrap break-words` to eliminate scrollability.
+- Heading order: page `<h1>` → card `<h3>` skips a level. Changed
+  card headings to `<h2>` with sub-headings at `<h3>`.
 
 ## Decision log
 
-(None yet.)
+- No syntax highlighting library for tool-call output. A plain
+  `<pre><code>` on code surface background with monospace font and
+  chamfered container is sufficient for the mockup.
+- Slash-command input uses a custom combobox (`role="combobox"` on
+  `<input>`, `role="listbox"` + `role="option"` on `<div>` elements)
+  rather than Radix Select, since the behaviour is a mockup filter
+  rather than a true select widget.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All five milestones delivered. `bun run ff` passes fully (118 unit
+tests, 1 a11y test, 22 E2E tests, zero violations). 24 files changed,
+2405 lines added. Key components: MessageBubble, ToolCallCard,
+HandoffAnnotation, AgentStatusBadge, SlashCommandInput,
+DirectiveCard. All seven locale Fluent files updated with ~50 new
+keys each.
 
 ## Context and orientation
 
