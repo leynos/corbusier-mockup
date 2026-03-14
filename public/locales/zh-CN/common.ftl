@@ -201,6 +201,59 @@ dashboard-agent-turn-count =
        *[other] 轮次
     }
 
+## Project cards
+
+project-list-region = 项目列表
+project-card-lead = 负责人:
+project-card-task-summary = { $total } 个任务 · { $inProgress } 进行中 · { $blocked } 个阻塞
+project-status-active = 活跃
+project-status-inactive = 不活跃
+project-status-completed = 已完成
+
+## Project landing
+
+project-view-tabs-label = 项目视图
+project-view-backlog = 待办事项
+project-view-kanban = 看板
+project-view-calendar = 日历
+project-view-list = 列表
+project-view-timeline = 时间线
+
+## Kanban board
+
+kanban-board-label = 看板面板
+kanban-column-todo = 待办
+kanban-column-planned = 已计划
+kanban-column-in-progress = 进行中
+kanban-column-in-review = 审核中
+kanban-column-done = 已完成
+kanban-add-new = 新建
+
+## Backlog view
+
+backlog-col-priority = 优先级
+backlog-col-task = 任务
+backlog-col-assignee = 负责人
+backlog-col-due = 截止日期
+backlog-empty-state = 这个项目没有草稿任务。
+
+## Calendar view
+
+calendar-grid-label = 日历
+calendar-day-no-tasks = { $date } — 无到期任务
+calendar-day-no-tasks-today = { $date } — 今天 — 无到期任务
+calendar-day-with-tasks = { $date } — { $count } 个任务到期
+calendar-day-with-tasks-today = { $date } — 今天 — { $count } 个任务到期
+
+## List view
+
+list-col-id = ID
+list-col-task = 任务
+list-col-status = 状态
+list-col-priority = 优先级
+list-col-assignee = 负责人
+list-col-due = 截止日期
+
 ## Shared components
 
 activity-timeline-label = 动态时间线

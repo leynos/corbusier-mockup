@@ -221,6 +221,97 @@ dashboard-agent-turn-count =
        *[other] دورات
     }
 
+## Project cards
+
+project-list-region = قائمة المشاريع
+project-card-lead = القائد:
+project-card-task-summary =
+    { $total ->
+        [zero] لا توجد مهام
+        [one] مهمة واحدة
+        [two] مهمتان
+        [few] { $total } مهام
+        [many] { $total } مهمة
+       *[other] { $total } مهمة
+    } · { $inProgress ->
+        [zero] لا شيء قيد التنفيذ
+        [one] مهمة واحدة قيد التنفيذ
+        [two] مهمتان قيد التنفيذ
+        [few] { $inProgress } مهام قيد التنفيذ
+        [many] { $inProgress } مهمة قيد التنفيذ
+       *[other] { $inProgress } مهمة قيد التنفيذ
+    } · { $blocked ->
+        [zero] لا شيء محظور
+        [one] مهمة واحدة محظورة
+        [two] مهمتان محظورتان
+        [few] { $blocked } مهام محظورة
+        [many] { $blocked } مهمة محظورة
+       *[other] { $blocked } مهمة محظورة
+    }
+project-status-active = نشط
+project-status-inactive = غير نشط
+project-status-completed = مكتمل
+
+## Project landing
+
+project-view-tabs-label = عروض المشروع
+project-view-backlog = الأعمال المتراكمة
+project-view-kanban = كانبان
+project-view-calendar = التقويم
+project-view-list = القائمة
+project-view-timeline = الجدول الزمني
+
+## Kanban board
+
+kanban-board-label = لوحة كانبان
+kanban-column-todo = للتنفيذ
+kanban-column-planned = مخطط
+kanban-column-in-progress = قيد التنفيذ
+kanban-column-in-review = قيد المراجعة
+kanban-column-done = مكتمل
+kanban-add-new = إضافة جديد
+
+## Backlog view
+
+backlog-col-priority = الأولوية
+backlog-col-task = المهمة
+backlog-col-assignee = المسؤول
+backlog-col-due = الاستحقاق
+backlog-empty-state = لا توجد مهام مسودة لهذا المشروع.
+
+## Calendar view
+
+calendar-grid-label = التقويم
+calendar-day-no-tasks = { $date } — لا توجد مهام مستحقة
+calendar-day-no-tasks-today = { $date } — اليوم — لا توجد مهام مستحقة
+calendar-day-with-tasks =
+    { $date } — { $count ->
+        [zero] لا توجد مهام مستحقة
+        [one] مهمة واحدة مستحقة
+        [two] مهمتان مستحقتان
+        [few] { $count } مهام مستحقة
+        [many] { $count } مهمة مستحقة
+       *[other] { $count } مهمة مستحقة
+    }
+calendar-day-with-tasks-today =
+    { $date } — اليوم — { $count ->
+        [zero] لا توجد مهام مستحقة
+        [one] مهمة واحدة مستحقة
+        [two] مهمتان مستحقتان
+        [few] { $count } مهام مستحقة
+        [many] { $count } مهمة مستحقة
+       *[other] { $count } مهمة مستحقة
+    }
+
+## List view
+
+list-col-id = المعرّف
+list-col-task = المهمة
+list-col-status = الحالة
+list-col-priority = الأولوية
+list-col-assignee = المسؤول
+list-col-due = الاستحقاق
+
 ## Shared components
 
 activity-timeline-label = سجل النشاط الزمني

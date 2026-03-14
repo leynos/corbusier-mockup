@@ -201,6 +201,59 @@ dashboard-agent-turn-count =
        *[other] ターン
     }
 
+## Project cards
+
+project-list-region = プロジェクト一覧
+project-card-lead = リーダー:
+project-card-task-summary = { $total } 件のタスク · { $inProgress } 件進行中 · { $blocked } 件ブロック中
+project-status-active = アクティブ
+project-status-inactive = 非アクティブ
+project-status-completed = 完了
+
+## Project landing
+
+project-view-tabs-label = プロジェクトビュー
+project-view-backlog = バックログ
+project-view-kanban = カンバン
+project-view-calendar = カレンダー
+project-view-list = リスト
+project-view-timeline = タイムライン
+
+## Kanban board
+
+kanban-board-label = カンバンボード
+kanban-column-todo = 未着手
+kanban-column-planned = 計画済み
+kanban-column-in-progress = 進行中
+kanban-column-in-review = レビュー中
+kanban-column-done = 完了
+kanban-add-new = 新規追加
+
+## Backlog view
+
+backlog-col-priority = 優先度
+backlog-col-task = タスク
+backlog-col-assignee = 担当者
+backlog-col-due = 期限
+backlog-empty-state = このプロジェクトにはドラフトのタスクがありません。
+
+## Calendar view
+
+calendar-grid-label = カレンダー
+calendar-day-no-tasks = { $date } — 期限のタスクはありません
+calendar-day-no-tasks-today = { $date } — 今日 — 期限のタスクはありません
+calendar-day-with-tasks = { $date } — 期限のタスク { $count } 件
+calendar-day-with-tasks-today = { $date } — 今日 — 期限のタスク { $count } 件
+
+## List view
+
+list-col-id = ID
+list-col-task = タスク
+list-col-status = ステータス
+list-col-priority = 優先度
+list-col-assignee = 担当者
+list-col-due = 期限
+
 ## Shared components
 
 activity-timeline-label = アクティビティタイムライン

@@ -202,6 +202,71 @@ dashboard-agent-turn-count =
        *[other] turns
     }
 
+## Project cards
+
+project-list-region = Project list
+project-card-lead = Lead:
+project-card-task-summary =
+    { $total ->
+        [one] { $total } task
+       *[other] { $total } tasks
+    } · { $inProgress } in progress · { $blocked } blocked
+project-status-active = Active
+project-status-inactive = Inactive
+project-status-completed = Completed
+
+## Project landing
+
+project-view-tabs-label = Project views
+project-view-backlog = Backlog
+project-view-kanban = Kanban
+project-view-calendar = Calendar
+project-view-list = List
+project-view-timeline = Timeline
+
+## Kanban board
+
+kanban-board-label = Kanban board
+kanban-column-todo = To-Do
+kanban-column-planned = Planned
+kanban-column-in-progress = In Progress
+kanban-column-in-review = In Review
+kanban-column-done = Done
+kanban-add-new = Add New
+
+## Backlog view
+
+backlog-col-priority = Priority
+backlog-col-task = Task
+backlog-col-assignee = Assignee
+backlog-col-due = Due
+backlog-empty-state = No draft tasks for this project.
+
+## Calendar view
+
+calendar-grid-label = Calendar
+calendar-day-no-tasks = { $date } — no tasks due
+calendar-day-no-tasks-today = { $date } — today — no tasks due
+calendar-day-with-tasks =
+    { $date } — { $count ->
+        [one] { $count } task due
+       *[other] { $count } tasks due
+    }
+calendar-day-with-tasks-today =
+    { $date } — today — { $count ->
+        [one] { $count } task due
+       *[other] { $count } tasks due
+    }
+
+## List view
+
+list-col-id = ID
+list-col-task = Task
+list-col-status = Status
+list-col-priority = Priority
+list-col-assignee = Assignee
+list-col-due = Due
+
 ## Shared components
 
 activity-timeline-label = Activity timeline

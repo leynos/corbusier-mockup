@@ -200,7 +200,64 @@ dashboard-activity-region = हालिया गतिविधि
 dashboard-activity-heading = हालिया गतिविधि
 dashboard-agent-region = एजेंट उपयोग
 dashboard-agent-heading = एजेंट उपयोग
-dashboard-agent-turn-count = टर्न
+dashboard-agent-turn-count =
+    { $count ->
+        [one] टर्न
+       *[other] टर्न
+    }
+
+## Project cards
+
+project-list-region = परियोजना सूची
+project-card-lead = नेता:
+project-card-task-summary = { $total } कार्य · { $inProgress } प्रगति में · { $blocked } अवरुद्ध
+project-status-active = सक्रिय
+project-status-inactive = निष्क्रिय
+project-status-completed = पूर्ण
+
+## Project landing
+
+project-view-tabs-label = परियोजना दृश्य
+project-view-backlog = बैकलॉग
+project-view-kanban = कानबान
+project-view-calendar = कैलेंडर
+project-view-list = सूची
+project-view-timeline = समयरेखा
+
+## Kanban board
+
+kanban-board-label = कानबान बोर्ड
+kanban-column-todo = करना है
+kanban-column-planned = योजनाबद्ध
+kanban-column-in-progress = प्रगति में
+kanban-column-in-review = समीक्षा में
+kanban-column-done = हो गया
+kanban-add-new = नया जोड़ें
+
+## Backlog view
+
+backlog-col-priority = प्राथमिकता
+backlog-col-task = कार्य
+backlog-col-assignee = समनुदेशिती
+backlog-col-due = नियत तिथि
+backlog-empty-state = इस प्रोजेक्ट के लिए कोई ड्राफ्ट कार्य नहीं हैं।
+
+## Calendar view
+
+calendar-grid-label = कैलेंडर
+calendar-day-no-tasks = { $date } — कोई कार्य देय नहीं
+calendar-day-no-tasks-today = { $date } — आज — कोई कार्य देय नहीं
+calendar-day-with-tasks = { $date } — { $count } कार्य देय
+calendar-day-with-tasks-today = { $date } — आज — { $count } कार्य देय
+
+## List view
+
+list-col-id = आईडी
+list-col-task = कार्य
+list-col-status = स्थिति
+list-col-priority = प्राथमिकता
+list-col-assignee = समनुदेशिती
+list-col-due = नियत तिथि
 
 ## Shared components
 

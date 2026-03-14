@@ -205,6 +205,75 @@ dashboard-agent-turn-count =
        *[other] turnos
     }
 
+## Project cards
+
+project-list-region = Lista de proyectos
+project-card-lead = Responsable:
+project-card-task-summary =
+    { $total ->
+        [one] { $total } tarea
+       *[other] { $total } tareas
+    } · { $inProgress } en progreso ·
+    { $blocked ->
+        [one] { $blocked } bloqueada
+       *[other] { $blocked } bloqueadas
+    }
+project-status-active = Activo
+project-status-inactive = Inactivo
+project-status-completed = Completado
+
+## Project landing
+
+project-view-tabs-label = Vistas del proyecto
+project-view-backlog = Pendientes
+project-view-kanban = Kanban
+project-view-calendar = Calendario
+project-view-list = Lista
+project-view-timeline = Cronograma
+
+## Kanban board
+
+kanban-board-label = Tablero Kanban
+kanban-column-todo = Por hacer
+kanban-column-planned = Planificado
+kanban-column-in-progress = En progreso
+kanban-column-in-review = En revisión
+kanban-column-done = Hecho
+kanban-add-new = Añadir nuevo
+
+## Backlog view
+
+backlog-col-priority = Prioridad
+backlog-col-task = Tarea
+backlog-col-assignee = Responsable
+backlog-col-due = Vencimiento
+backlog-empty-state = No hay tareas en borrador para este proyecto.
+
+## Calendar view
+
+calendar-grid-label = Calendario
+calendar-day-no-tasks = { $date } — no hay tareas vencidas
+calendar-day-no-tasks-today = { $date } — hoy — no hay tareas vencidas
+calendar-day-with-tasks =
+    { $date } — { $count ->
+        [one] { $count } tarea vence
+       *[other] { $count } tareas vencen
+    }
+calendar-day-with-tasks-today =
+    { $date } — hoy — { $count ->
+        [one] { $count } tarea vence
+       *[other] { $count } tareas vencen
+    }
+
+## List view
+
+list-col-id = ID
+list-col-task = Tarea
+list-col-status = Estado
+list-col-priority = Prioridad
+list-col-assignee = Responsable
+list-col-due = Vencimiento
+
 ## Shared components
 
 activity-timeline-label = Línea de tiempo de actividad
