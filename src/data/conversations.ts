@@ -514,9 +514,11 @@ export const CONVERSATIONS: readonly Conversation[] = [
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
-/** Find a conversation by its ID. */
-export function findConversation(id: string): Conversation | undefined {
-  return CONVERSATIONS.find((c) => c.id === id);
+/** Find a conversation by its project slug and ID. */
+export function findConversation(projectSlug: string, id: string): Conversation | undefined {
+  return CONVERSATIONS.find((conversation) => {
+    return conversation.projectSlug === projectSlug && conversation.id === id;
+  });
 }
 
 /** Get all conversations for a given project slug. */

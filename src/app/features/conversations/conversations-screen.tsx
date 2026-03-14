@@ -30,14 +30,14 @@ interface ConversationRowProps {
   readonly conversation: Conversation;
   readonly locale: string;
   readonly slug: string;
-  readonly messageCountLabel: string;
+  readonly getMessageCountLabel: (count: number) => string;
 }
 
 function ConversationRow({
   conversation,
   locale,
   slug,
-  messageCountLabel,
+  getMessageCountLabel,
 }: ConversationRowProps): JSX.Element {
   const loc = pickLocalization(conversation.localizations, locale);
   const lastActivity = getLastActivityTimestamp(conversation);
@@ -63,9 +63,7 @@ function ConversationRow({
                 <IconRobot size={14} stroke={1.5} aria-hidden="true" />
                 {conversation.agentBackend}
               </span>
-              <span>
-                {conversation.messages.length} {messageCountLabel}
-              </span>
+              <span>{getMessageCountLabel(conversation.messages.length)}</span>
             </p>
           </div>
         </div>
@@ -94,9 +92,11 @@ export function ConversationsScreen(): JSX.Element {
   const { slug } = routeApi.useParams();
   const conversations = getConversationsForProject(slug);
 
-  const messageCountLabel = t("conversation-message-count-label", {
-    defaultValue: "messages",
-  });
+  const getMessageCountLabel = (count: number): string =>
+    t("conversation-message-count-label", {
+      count,
+      defaultValue: "{{count}} messages",
+    });
 
   return (
     <div>
@@ -122,7 +122,7 @@ export function ConversationsScreen(): JSX.Element {
               conversation={c}
               locale={locale}
               slug={slug}
-              messageCountLabel={messageCountLabel}
+              getMessageCountLabel={getMessageCountLabel}
             />
           ))}
         </ol>

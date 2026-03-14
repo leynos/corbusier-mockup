@@ -10,7 +10,7 @@ import type { JSX } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { Message, ToolCallStatus } from "../../../../data/conversations";
+import type { Message, ToolCallInfo, ToolCallStatus } from "../../../../data/conversations";
 import { ChamferCard } from "../../../components/chamfer-card";
 import { formatTimelineTimestamp } from "../../../utils/date-formatting";
 
@@ -36,8 +36,13 @@ const STATUS_LABEL_DEFAULTS: Record<ToolCallStatus, string> = {
 
 /* ── Component ─────────────────────────────────────────────────────── */
 
+type ToolCallMessage = Message & {
+  readonly role: "tool";
+  readonly toolCall: ToolCallInfo;
+};
+
 interface ToolCallCardProps {
-  readonly message: Message;
+  readonly message: ToolCallMessage;
   readonly locale: string;
 }
 
@@ -45,8 +50,6 @@ export function ToolCallCard({ message, locale }: ToolCallCardProps): JSX.Elemen
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const tc = message.toolCall;
-
-  if (!tc) return <li />;
 
   const statusStyle = STATUS_STYLE[tc.status];
   const statusLabel = t(STATUS_LABEL_KEYS[tc.status], {

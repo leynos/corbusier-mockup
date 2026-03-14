@@ -266,7 +266,11 @@ task-subtask-item = { $name } ({ $status })
 
 conversation-list-region = 对话列表
 conversation-list-empty = 此项目没有对话。
-conversation-message-count-label = 条消息
+conversation-message-count-label =
+    { $count ->
+        [one] { $count } 条消息
+       *[other] { $count } 条消息
+    }
 conversation-status-active = 活跃
 conversation-status-idle = 空闲
 conversation-not-found = 未找到对话
@@ -308,6 +312,7 @@ handoff-annotation-prefix = 交接
 
 slash-input-label = 命令输入
 slash-input-placeholder = 输入 / 以使用命令…
+slash-input-suggestions-label = 可用命令
 
 ## Directives
 

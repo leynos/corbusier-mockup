@@ -10,18 +10,21 @@ import { IconRobot, IconUser } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { Message } from "../../../../data/conversations";
+import type { Message, MessageRole } from "../../../../data/conversations";
 import { formatTimelineTimestamp } from "../../../utils/date-formatting";
 
 /* ── Role labels ───────────────────────────────────────────────────── */
 
-const ROLE_LABEL_KEYS: Record<string, string> = {
+type BubbleMessageRole = Exclude<MessageRole, "tool">;
+type BubbleMessage = Message & { readonly role: BubbleMessageRole };
+
+const ROLE_LABEL_KEYS: Record<BubbleMessageRole, string> = {
   user: "message-role-user",
   assistant: "message-role-assistant",
   system: "message-role-system",
 };
 
-const ROLE_LABEL_DEFAULTS: Record<string, string> = {
+const ROLE_LABEL_DEFAULTS: Record<BubbleMessageRole, string> = {
   user: "User",
   assistant: "Agent",
   system: "System",
@@ -30,14 +33,14 @@ const ROLE_LABEL_DEFAULTS: Record<string, string> = {
 /* ── Component ─────────────────────────────────────────────────────── */
 
 interface MessageBubbleProps {
-  readonly message: Message;
+  readonly message: BubbleMessage;
   readonly locale: string;
 }
 
 export function MessageBubble({ message, locale }: MessageBubbleProps): JSX.Element {
   const { t } = useTranslation();
-  const roleLabel = t(ROLE_LABEL_KEYS[message.role] ?? "", {
-    defaultValue: ROLE_LABEL_DEFAULTS[message.role] ?? message.role,
+  const roleLabel = t(ROLE_LABEL_KEYS[message.role], {
+    defaultValue: ROLE_LABEL_DEFAULTS[message.role],
   });
 
   if (message.role === "system") {

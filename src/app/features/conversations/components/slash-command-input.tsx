@@ -57,7 +57,6 @@ export function SlashCommandInput(): JSX.Element {
           ref={inputRef}
           id="slash-command-input"
           type="text"
-          role="combobox"
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -66,39 +65,39 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
-          aria-haspopup="listbox"
-          aria-expanded={showDropdown}
-          aria-controls="slash-command-dropdown"
         />
       </div>
 
       {showDropdown && filteredDirectives.length > 0 ? (
-        <div
-          id="slash-command-dropdown"
-          role="listbox"
+        <section
+          aria-label={t("slash-input-suggestions-label", {
+            defaultValue: "Available commands",
+          })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
         >
-          {filteredDirectives.map((d) => {
-            const loc = pickLocalization(d.localizations, locale);
-            return (
-              <div key={d.id} role="option" tabIndex={0} aria-selected={false}>
-                <button
-                  type="button"
-                  className="flex w-full items-center gap-3 px-3 py-2 text-start hover:bg-base-200"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => handleSelect(loc.name)}
-                >
-                  <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
-                    {loc.name}
-                  </span>
-                  <span className="text-[length:var(--font-size-xs)] text-base-content/60">
-                    {loc.description}
-                  </span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
+          <ul className="space-y-1 px-1">
+            {filteredDirectives.map((d) => {
+              const loc = pickLocalization(d.localizations, locale);
+              return (
+                <li key={d.id}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleSelect(loc.name)}
+                  >
+                    <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
+                      {loc.name}
+                    </span>
+                    <span className="text-[length:var(--font-size-xs)] text-base-content/60">
+                      {loc.description}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
       ) : null}
     </div>
   );

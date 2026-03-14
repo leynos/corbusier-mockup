@@ -266,7 +266,11 @@ task-subtask-item = { $name } ({ $status })
 
 conversation-list-region = 会話リスト
 conversation-list-empty = このプロジェクトに会話はありません。
-conversation-message-count-label = メッセージ
+conversation-message-count-label =
+    { $count ->
+        [one] { $count } 件のメッセージ
+       *[other] { $count } 件のメッセージ
+    }
 conversation-status-active = アクティブ
 conversation-status-idle = アイドル
 conversation-not-found = 会話が見つかりません
@@ -308,6 +312,7 @@ handoff-annotation-prefix = 引き継ぎ
 
 slash-input-label = コマンド入力
 slash-input-placeholder = / を入力してコマンド…
+slash-input-suggestions-label = 利用可能なコマンド
 
 ## Directives
 

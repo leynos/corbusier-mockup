@@ -42,6 +42,13 @@ describe("ConversationsScreen", () => {
     expect(await screen.findByText("TASK-1004")).toBeTruthy();
   });
 
+  it("renders count-aware message labels", async () => {
+    renderWithRouter("/projects/apollo-guidance/conversations");
+
+    const countLabels = await screen.findAllByText("10 messages");
+    expect(countLabels.length).toBeGreaterThanOrEqual(1);
+  });
+
   it("shows status badges", async () => {
     renderWithRouter("/projects/apollo-guidance/conversations");
 

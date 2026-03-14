@@ -279,7 +279,11 @@ task-subtask-item = { $name } ({ $status })
 
 conversation-list-region = Conversation list
 conversation-list-empty = No conversations for this project.
-conversation-message-count-label = messages
+conversation-message-count-label =
+    { $count ->
+        [one] { $count } message
+       *[other] { $count } messages
+    }
 conversation-status-active = Active
 conversation-status-idle = Idle
 conversation-not-found = Conversation not found
@@ -321,6 +325,7 @@ handoff-annotation-prefix = Handoff
 
 slash-input-label = Command input
 slash-input-placeholder = Type / for commands…
+slash-input-suggestions-label = Available commands
 
 ## Directives
 

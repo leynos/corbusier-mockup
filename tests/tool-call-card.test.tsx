@@ -7,7 +7,12 @@ import { ToolCallCard } from "../src/app/features/conversations/components/tool-
 import type { Message } from "../src/data/conversations";
 import { renderWithRouter } from "./utils/render-with-router";
 
-const TOOL_MSG: Message = {
+type ToolCallMessage = Message & {
+  readonly role: "tool";
+  readonly toolCall: NonNullable<Message["toolCall"]>;
+};
+
+const TOOL_MSG: ToolCallMessage = {
   id: "msg-tool",
   role: "tool",
   content: "Executed bash command.",

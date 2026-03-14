@@ -7,14 +7,16 @@ import { MessageBubble } from "../src/app/features/conversations/components/mess
 import type { Message } from "../src/data/conversations";
 import { renderWithRouter } from "./utils/render-with-router";
 
-const USER_MSG: Message = {
+type BubbleMessage = Message & { readonly role: "user" | "assistant" | "system" };
+
+const USER_MSG: BubbleMessage = {
   id: "msg-u",
   role: "user",
   content: "Migrate the pool configuration.",
   timestamp: "2026-03-10T09:01:00Z",
 };
 
-const ASSISTANT_MSG: Message = {
+const ASSISTANT_MSG: BubbleMessage = {
   id: "msg-a",
   role: "assistant",
   content: "I will analyse the existing pool.",
@@ -22,7 +24,7 @@ const ASSISTANT_MSG: Message = {
   agentBackend: "claude_code_sdk",
 };
 
-const SYSTEM_MSG: Message = {
+const SYSTEM_MSG: BubbleMessage = {
   id: "msg-s",
   role: "system",
   content: "Task execution initiated.",

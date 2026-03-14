@@ -31,6 +31,20 @@ type TimelineItem =
   | { readonly kind: "message"; readonly message: Message }
   | { readonly kind: "handoff"; readonly handoff: Handoff };
 
+type NonToolMessage = Message & { readonly role: Exclude<Message["role"], "tool"> };
+type ToolCallMessage = Message & {
+  readonly role: "tool";
+  readonly toolCall: NonNullable<Message["toolCall"]>;
+};
+
+function isToolCallMessage(message: Message): message is ToolCallMessage {
+  return message.role === "tool" && message.toolCall !== undefined;
+}
+
+function isNonToolMessage(message: Message): message is NonToolMessage {
+  return message.role !== "tool";
+}
+
 /** Merge messages and handoffs into a single ordered timeline. */
 function buildTimeline(
   messages: readonly Message[],
@@ -58,8 +72,8 @@ function buildTimeline(
 export function ConversationDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-  const { id } = routeApi.useParams();
-  const conversation = findConversation(id);
+  const { slug, id } = routeApi.useParams();
+  const conversation = findConversation(slug, id);
 
   const timeline = useMemo(
     () => (conversation ? buildTimeline(conversation.messages, conversation.handoffs) : []),
@@ -123,9 +137,11 @@ export function ConversationDetailScreen(): JSX.Element {
               }
 
               const msg = item.message;
-              if (msg.role === "tool" && msg.toolCall) {
+              if (isToolCallMessage(msg)) {
                 return <ToolCallCard key={msg.id} message={msg} locale={locale} />;
               }
+
+              if (!isNonToolMessage(msg)) return null;
 
               return <MessageBubble key={msg.id} message={msg} locale={locale} />;
             })}
