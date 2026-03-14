@@ -9,18 +9,29 @@ import type { EntityLocalizations } from "../app/domain/entities/localization";
 
 /* ── Types ─────────────────────────────────────────────────────────── */
 
+/** One parameter definition exposed by a slash directive. */
 export interface DirectiveParameter {
+  /** Command-line style parameter name without leading dashes. */
   readonly name: string;
+  /** Human-readable type description for the parameter value. */
   readonly type: string;
+  /** Whether callers must provide this parameter. */
   readonly required: boolean;
+  /** Developer-facing explanation of how the parameter is used. */
   readonly description: string;
 }
 
+/** One slash-command directive available in the directives registry. */
 export interface Directive {
+  /** Stable string identifier for routing and rendering keys. */
   readonly id: string;
+  /** Localized directive name and summary text. */
   readonly localizations: EntityLocalizations;
+  /** Supported parameters rendered in the registry card. */
   readonly parameters: readonly DirectiveParameter[];
+  /** Template string showing the directive's invocation shape. */
   readonly template: string;
+  /** Example expansions shown in the card disclosure content. */
   readonly exampleExpansions: readonly string[];
 }
 

@@ -52,16 +52,26 @@ function buildTimeline(
 ): readonly TimelineItem[] {
   const items: TimelineItem[] = [];
   const handoffByPosition = new Map(handoffs.map((h) => [h.position, h]));
+  const emittedHandoffPositions = new Set<number>();
 
   for (let i = 0; i < messages.length; i++) {
     const handoff = handoffByPosition.get(i);
     if (handoff) {
       items.push({ kind: "handoff", handoff });
+      emittedHandoffPositions.add(handoff.position);
     }
     const msg = messages[i];
     if (msg) {
       items.push({ kind: "message", message: msg });
     }
+  }
+
+  const trailingHandoffs = handoffs
+    .filter((handoff) => !emittedHandoffPositions.has(handoff.position))
+    .sort((left, right) => left.position - right.position);
+
+  for (const handoff of trailingHandoffs) {
+    items.push({ kind: "handoff", handoff });
   }
 
   return items;

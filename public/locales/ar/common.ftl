@@ -342,6 +342,7 @@ conversation-timeline-label = الجدول الزمني للمحادثة
 
 message-role-user = المستخدم
 message-role-assistant = الوكيل
+message-role-tool = الأداة
 message-role-system = النظام
 
 ## Agent status

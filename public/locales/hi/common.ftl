@@ -285,6 +285,7 @@ conversation-timeline-label = वार्तालाप समयरेखा
 
 message-role-user = उपयोगकर्ता
 message-role-assistant = एजेंट
+message-role-tool = उपकरण
 message-role-system = सिस्टम
 
 ## Agent status

@@ -9,53 +9,91 @@ import type { EntityLocalizations } from "../app/domain/entities/localization";
 
 /* ── Enums and primitives ──────────────────────────────────────────── */
 
+/** Allowed authorship roles for timeline messages in a conversation. */
 export type MessageRole = "user" | "assistant" | "tool" | "system";
+
+/** Outcome state for a tool invocation captured in the conversation log. */
 export type ToolCallStatus = "succeeded" | "failed" | "pending";
+
+/** High-level activity state for a conversation summary row. */
 export type ConversationStatus = "active" | "idle";
+
+/** Current agent turn status shown in the detail header badge. */
 export type TurnState = "idle" | "processing" | "awaiting_tool_result";
 
 /* ── Tool call info ────────────────────────────────────────────────── */
 
+/**
+ * Structured metadata for one tool execution emitted into the conversation log.
+ */
 export interface ToolCallInfo {
+  /** Stable string identifier for this tool call instance. */
   readonly callId: string;
+  /** Tool name shown in the execution card header. */
   readonly toolName: string;
+  /** Execution outcome displayed in the tool status badge. */
   readonly status: ToolCallStatus;
+  /** Execution duration in milliseconds. */
   readonly durationMs: number;
+  /** Raw tool input captured for the expandable details view. */
   readonly input: string;
+  /** Raw tool output captured for the expandable details view. */
   readonly output: string;
 }
 
 /* ── Message ───────────────────────────────────────────────────────── */
 
+/** One chronological message entry within a conversation timeline. */
 export interface Message {
+  /** Stable string identifier for the message. */
   readonly id: string;
+  /** Author or event role for this message. */
   readonly role: MessageRole;
+  /** Plain-text body content rendered in the timeline. */
   readonly content: string;
+  /** ISO-8601 timestamp string for chronological display. */
   readonly timestamp: string;
+  /** Optional backend identifier for assistant-authored messages. */
   readonly agentBackend?: string;
+  /** Optional tool execution details for tool-role messages. */
   readonly toolCall?: ToolCallInfo;
 }
 
 /* ── Handoff ───────────────────────────────────────────────────────── */
 
+/** Marker describing where agent ownership changes within a conversation. */
 export interface Handoff {
+  /** Zero-based insertion point within the message list. */
   readonly position: number;
+  /** Backend name handing work off. */
   readonly fromBackend: string;
+  /** Backend name receiving work. */
   readonly toBackend: string;
 }
 
 /* ── Conversation ──────────────────────────────────────────────────── */
 
+/** Project-scoped conversation fixture rendered by the conversations UI. */
 export interface Conversation {
+  /** Stable string identifier used in routes and links. */
   readonly id: string;
+  /** Localized conversation title and description content. */
   readonly localizations: EntityLocalizations;
+  /** Task identifier associated with this conversation. */
   readonly taskId: string;
+  /** Project slug that scopes the conversation to one project. */
   readonly projectSlug: string;
+  /** Chronological timeline messages shown in the detail view. */
   readonly messages: readonly Message[];
+  /** Active backend label shown in the agent status badge. */
   readonly agentBackend: string;
+  /** Model identifier shown alongside the backend label. */
   readonly agentModel: string;
+  /** Current turn state surfaced in the header badge. */
   readonly turnState: TurnState;
+  /** Summary activity state used in list views. */
   readonly status: ConversationStatus;
+  /** Handoff markers inserted between messages in the timeline. */
   readonly handoffs: readonly Handoff[];
 }
 

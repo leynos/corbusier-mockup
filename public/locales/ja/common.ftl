@@ -280,6 +280,7 @@ conversation-timeline-label = 会話タイムライン
 
 message-role-user = ユーザー
 message-role-assistant = エージェント
+message-role-tool = ツール
 message-role-system = システム
 
 ## Agent status

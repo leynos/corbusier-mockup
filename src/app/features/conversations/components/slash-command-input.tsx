@@ -7,7 +7,7 @@
 
 import { IconTerminal } from "@tabler/icons-react";
 import type { JSX } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DIRECTIVES } from "../../../../data/directives";
@@ -19,6 +19,15 @@ export function SlashCommandInput(): JSX.Element {
   const [value, setValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
@@ -28,10 +37,20 @@ export function SlashCommandInput(): JSX.Element {
 
   const handleBlur = useCallback(() => {
     /* Delay so click on dropdown items registers first. */
-    setTimeout(() => setShowDropdown(false), 150);
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+    }
+    blurTimeoutRef.current = setTimeout(() => {
+      setShowDropdown(false);
+      blurTimeoutRef.current = null;
+    }, 150);
   }, []);
 
   const handleSelect = useCallback((commandName: string) => {
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
     setValue(`${commandName} `);
     setShowDropdown(false);
     inputRef.current?.focus();
@@ -82,6 +101,9 @@ export function SlashCommandInput(): JSX.Element {
                 <li key={d.id}>
                   <button
                     type="button"
+                    role="option"
+                    tabIndex={0}
+                    aria-selected={false}
                     className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleSelect(loc.name)}

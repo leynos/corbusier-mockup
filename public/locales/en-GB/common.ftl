@@ -293,6 +293,7 @@ conversation-timeline-label = Conversation timeline
 
 message-role-user = User
 message-role-assistant = Agent
+message-role-tool = Tool
 message-role-system = System
 
 ## Agent status

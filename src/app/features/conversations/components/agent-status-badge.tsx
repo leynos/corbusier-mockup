@@ -12,11 +12,17 @@ interface TurnStyle {
   readonly bg: string;
   readonly text: string;
   readonly icon: typeof IconPlayerPause;
+  readonly iconClassName?: string;
 }
 
 const TURN_STYLE: Record<TurnState, TurnStyle> = {
   idle: { bg: "bg-base-300/40", text: "text-base-content/70", icon: IconPlayerPause },
-  processing: { bg: "bg-warning/15", text: "text-warning", icon: IconLoader },
+  processing: {
+    bg: "bg-warning/15",
+    text: "text-warning",
+    icon: IconLoader,
+    iconClassName: "animate-spin",
+  },
   awaiting_tool_result: { bg: "bg-info/15", text: "text-info", icon: IconTool },
 };
 
@@ -77,7 +83,7 @@ export function AgentStatusBadge({
       <span
         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${style.bg} ${style.text}`}
       >
-        <Icon size={14} stroke={1.8} aria-hidden="true" />
+        <Icon size={14} stroke={1.8} className={style.iconClassName} aria-hidden="true" />
         {turnLabel}
       </span>
     </output>

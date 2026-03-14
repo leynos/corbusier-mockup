@@ -300,6 +300,7 @@ conversation-timeline-label = Cronología de la conversación
 
 message-role-user = Usuario
 message-role-assistant = Agente
+message-role-tool = Herramienta
 message-role-system = Sistema
 
 ## Agent status

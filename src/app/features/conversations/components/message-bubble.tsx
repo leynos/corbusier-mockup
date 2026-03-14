@@ -18,15 +18,17 @@ import { formatTimelineTimestamp } from "../../../utils/date-formatting";
 type BubbleMessageRole = Exclude<MessageRole, "tool">;
 type BubbleMessage = Message & { readonly role: BubbleMessageRole };
 
-const ROLE_LABEL_KEYS: Record<BubbleMessageRole, string> = {
+const ROLE_LABEL_KEYS: Record<MessageRole, string> = {
   user: "message-role-user",
   assistant: "message-role-assistant",
+  tool: "message-role-tool",
   system: "message-role-system",
 };
 
-const ROLE_LABEL_DEFAULTS: Record<BubbleMessageRole, string> = {
+const ROLE_LABEL_DEFAULTS: Record<MessageRole, string> = {
   user: "User",
   assistant: "Agent",
+  tool: "Tool",
   system: "System",
 };
 
@@ -40,7 +42,7 @@ interface MessageBubbleProps {
 export function MessageBubble({ message, locale }: MessageBubbleProps): JSX.Element {
   const { t } = useTranslation();
   const roleLabel = t(ROLE_LABEL_KEYS[message.role], {
-    defaultValue: ROLE_LABEL_DEFAULTS[message.role],
+    defaultValue: ROLE_LABEL_DEFAULTS[message.role] || message.role,
   });
 
   if (message.role === "system") {

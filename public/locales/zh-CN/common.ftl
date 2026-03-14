@@ -264,8 +264,8 @@ task-subtask-item = { $name } ({ $status })
 
 ## Conversations
 
-conversation-list-region = 对话列表
-conversation-list-empty = 此项目没有对话。
+conversation-list-region = 会话列表
+conversation-list-empty = 此项目没有会话。
 conversation-message-count-label =
     { $count ->
         [one] { $count } 条消息
@@ -273,13 +273,14 @@ conversation-message-count-label =
     }
 conversation-status-active = 活跃
 conversation-status-idle = 空闲
-conversation-not-found = 未找到对话
-conversation-timeline-label = 对话时间线
+conversation-not-found = 未找到会话
+conversation-timeline-label = 会话时间线
 
 ## Message roles
 
 message-role-user = 用户
 message-role-assistant = 代理
+message-role-tool = 工具
 message-role-system = 系统
 
 ## Agent status
@@ -322,4 +323,4 @@ directive-required = 必填
 directive-template = 模板
 directive-show-examples = 显示示例
 directive-hide-examples = 隐藏示例
-directive-example-heading = 展开示例
+directive-example-heading = 示例

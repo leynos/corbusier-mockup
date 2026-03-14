@@ -110,7 +110,7 @@ embedded tool-call artefacts.
   Biome `noNoninteractiveTabindex`. Solution: use
   `whitespace-pre-wrap break-words` to eliminate scrollability.
 - Heading order: page `<h1>` → card `<h3>` skips a level. Changed
-  card headings to `<h2>` with sub-headings at `<h3>`.
+  card headings to `<h2>` with subheadings at `<h3>`.
 
 ## Decision log
 

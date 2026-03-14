@@ -5,31 +5,32 @@ import { cleanup, screen } from "@testing-library/react";
 
 import { MessageBubble } from "../src/app/features/conversations/components/message-bubble";
 import type { Message } from "../src/data/conversations";
+import { buildMessage } from "./fixtures/messages";
 import { renderWithRouter } from "./utils/render-with-router";
 
 type BubbleMessage = Message & { readonly role: "user" | "assistant" | "system" };
 
-const USER_MSG: BubbleMessage = {
+const USER_MSG: BubbleMessage = buildMessage({
   id: "msg-u",
   role: "user",
   content: "Migrate the pool configuration.",
   timestamp: "2026-03-10T09:01:00Z",
-};
+});
 
-const ASSISTANT_MSG: BubbleMessage = {
+const ASSISTANT_MSG: BubbleMessage = buildMessage({
   id: "msg-a",
   role: "assistant",
   content: "I will analyse the existing pool.",
   timestamp: "2026-03-10T09:02:00Z",
   agentBackend: "claude_code_sdk",
-};
+});
 
-const SYSTEM_MSG: BubbleMessage = {
+const SYSTEM_MSG: BubbleMessage = buildMessage({
   id: "msg-s",
   role: "system",
   content: "Task execution initiated.",
   timestamp: "2026-03-10T09:00:00Z",
-};
+});
 
 describe("MessageBubble", () => {
   afterEach(() => {
