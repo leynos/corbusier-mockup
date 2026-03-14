@@ -319,3 +319,60 @@ progress-label = التقدم
 task-subtask-status-complete = مكتملة
 task-subtask-status-pending = معلقة
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = قائمة المحادثات
+conversation-list-empty = لا توجد محادثات لهذا المشروع.
+conversation-message-count-label = رسائل
+conversation-status-active = نشط
+conversation-status-idle = خامل
+conversation-not-found = المحادثة غير موجودة
+conversation-timeline-label = الجدول الزمني للمحادثة
+
+## Message roles
+
+message-role-user = المستخدم
+message-role-assistant = الوكيل
+message-role-system = النظام
+
+## Agent status
+
+agent-status-label = حالة الوكيل
+agent-status-backend = الخلفية
+agent-status-model = النموذج
+agent-turn-idle = خامل
+agent-turn-processing = قيد المعالجة
+agent-turn-awaiting-tool = في انتظار نتيجة الأداة
+
+## Tool calls
+
+tool-status-succeeded = نجح
+tool-status-failed = فشل
+tool-status-pending = معلق
+tool-call-id = معرّف الاستدعاء
+tool-call-duration = المدة
+tool-call-show = عرض التفاصيل
+tool-call-hide = إخفاء التفاصيل
+tool-call-input = المدخل
+tool-call-output = المخرج
+
+## Handoff annotations
+
+handoff-annotation-label = تسليم الوكيل
+handoff-annotation-prefix = تسليم
+
+## Slash command input
+
+slash-input-label = إدخال الأمر
+slash-input-placeholder = اكتب / للأوامر…
+
+## Directives
+
+directive-list-region = قائمة التوجيهات
+directive-parameters = المعاملات
+directive-required = مطلوب
+directive-template = القالب
+directive-show-examples = عرض الأمثلة
+directive-hide-examples = إخفاء الأمثلة
+directive-example-heading = أمثلة التوسيع

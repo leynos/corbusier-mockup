@@ -261,3 +261,60 @@ progress-label = 进度
 task-subtask-status-complete = 已完成
 task-subtask-status-pending = 待处理
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = 对话列表
+conversation-list-empty = 此项目没有对话。
+conversation-message-count-label = 条消息
+conversation-status-active = 活跃
+conversation-status-idle = 空闲
+conversation-not-found = 未找到对话
+conversation-timeline-label = 对话时间线
+
+## Message roles
+
+message-role-user = 用户
+message-role-assistant = 代理
+message-role-system = 系统
+
+## Agent status
+
+agent-status-label = 代理状态
+agent-status-backend = 后端
+agent-status-model = 模型
+agent-turn-idle = 空闲
+agent-turn-processing = 处理中
+agent-turn-awaiting-tool = 等待工具结果
+
+## Tool calls
+
+tool-status-succeeded = 成功
+tool-status-failed = 失败
+tool-status-pending = 等待中
+tool-call-id = 调用 ID
+tool-call-duration = 耗时
+tool-call-show = 显示详情
+tool-call-hide = 隐藏详情
+tool-call-input = 输入
+tool-call-output = 输出
+
+## Handoff annotations
+
+handoff-annotation-label = 代理交接
+handoff-annotation-prefix = 交接
+
+## Slash command input
+
+slash-input-label = 命令输入
+slash-input-placeholder = 输入 / 以使用命令…
+
+## Directives
+
+directive-list-region = 指令列表
+directive-parameters = 参数
+directive-required = 必填
+directive-template = 模板
+directive-show-examples = 显示示例
+directive-hide-examples = 隐藏示例
+directive-example-heading = 展开示例

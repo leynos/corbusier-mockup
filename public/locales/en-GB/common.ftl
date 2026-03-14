@@ -274,3 +274,60 @@ progress-label = Progress
 task-subtask-status-complete = completed
 task-subtask-status-pending = pending
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = Conversation list
+conversation-list-empty = No conversations for this project.
+conversation-message-count-label = messages
+conversation-status-active = Active
+conversation-status-idle = Idle
+conversation-not-found = Conversation not found
+conversation-timeline-label = Conversation timeline
+
+## Message roles
+
+message-role-user = User
+message-role-assistant = Agent
+message-role-system = System
+
+## Agent status
+
+agent-status-label = Agent status
+agent-status-backend = Backend
+agent-status-model = Model
+agent-turn-idle = Idle
+agent-turn-processing = Processing
+agent-turn-awaiting-tool = Awaiting tool result
+
+## Tool calls
+
+tool-status-succeeded = Succeeded
+tool-status-failed = Failed
+tool-status-pending = Pending
+tool-call-id = Call ID
+tool-call-duration = Duration
+tool-call-show = Show details
+tool-call-hide = Hide details
+tool-call-input = Input
+tool-call-output = Output
+
+## Handoff annotations
+
+handoff-annotation-label = Agent handoff
+handoff-annotation-prefix = Handoff
+
+## Slash command input
+
+slash-input-label = Command input
+slash-input-placeholder = Type / for commands…
+
+## Directives
+
+directive-list-region = Directive list
+directive-parameters = Parameters
+directive-required = required
+directive-template = Template
+directive-show-examples = Show examples
+directive-hide-examples = Hide examples
+directive-example-heading = Example expansions

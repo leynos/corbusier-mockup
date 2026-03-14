@@ -48,7 +48,7 @@ test.describe("Projects", () => {
 
   test("project list has no accessibility violations", async ({ page }) => {
     await page.goto("/projects");
-    await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("heading", { name: "Projects" })).toBeVisible();
 
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);

@@ -261,3 +261,60 @@ progress-label = 進捗
 task-subtask-status-complete = 完了
 task-subtask-status-pending = 保留
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = 会話リスト
+conversation-list-empty = このプロジェクトに会話はありません。
+conversation-message-count-label = メッセージ
+conversation-status-active = アクティブ
+conversation-status-idle = アイドル
+conversation-not-found = 会話が見つかりません
+conversation-timeline-label = 会話タイムライン
+
+## Message roles
+
+message-role-user = ユーザー
+message-role-assistant = エージェント
+message-role-system = システム
+
+## Agent status
+
+agent-status-label = エージェントステータス
+agent-status-backend = バックエンド
+agent-status-model = モデル
+agent-turn-idle = アイドル
+agent-turn-processing = 処理中
+agent-turn-awaiting-tool = ツール結果待ち
+
+## Tool calls
+
+tool-status-succeeded = 成功
+tool-status-failed = 失敗
+tool-status-pending = 保留中
+tool-call-id = コールID
+tool-call-duration = 所要時間
+tool-call-show = 詳細を表示
+tool-call-hide = 詳細を非表示
+tool-call-input = 入力
+tool-call-output = 出力
+
+## Handoff annotations
+
+handoff-annotation-label = エージェント引き継ぎ
+handoff-annotation-prefix = 引き継ぎ
+
+## Slash command input
+
+slash-input-label = コマンド入力
+slash-input-placeholder = / を入力してコマンド…
+
+## Directives
+
+directive-list-region = ディレクティブリスト
+directive-parameters = パラメーター
+directive-required = 必須
+directive-template = テンプレート
+directive-show-examples = 例を表示
+directive-hide-examples = 例を非表示
+directive-example-heading = 展開例
