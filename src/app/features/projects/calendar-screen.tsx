@@ -1,9 +1,9 @@
-/** @file Calendar screen — month grid skeleton with task due-date dots.
+/** @file Calendar screen — project-span month grids with due-date dots.
  *
  * Renders the ProjectHeader with view switcher tabs, followed by a
- * calendar table showing the current month. Days with task due dates
- * display coloured indicator dots and expose the due state to
- * assistive technologies.
+ * calendar table for each month in the project's scheduled span. Days
+ * with task due dates display coloured indicator dots and expose the
+ * due state to assistive technologies.
  */
 
 import { Navigate, useParams } from "@tanstack/react-router";
@@ -172,6 +172,29 @@ function parseIsoYearMonth(
   return { year, month: startMonth - 1 };
 }
 
+/**
+ * Build the inclusive month list spanning one project date range.
+ *
+ * @param start First visible month as a zero-based year/month pair.
+ * @param end Last visible month as a zero-based year/month pair.
+ * @returns Read-only array covering every month between `start` and `end`,
+ * inclusive, in chronological order.
+ */
+function buildVisibleMonths(
+  start: { readonly year: number; readonly month: number },
+  end: { readonly year: number; readonly month: number },
+): readonly { readonly year: number; readonly month: number }[] {
+  const startIndex = start.year * 12 + start.month;
+  const endIndex = end.year * 12 + end.month;
+  const firstIndex = Math.min(startIndex, endIndex);
+  const lastIndex = Math.max(startIndex, endIndex);
+
+  return Array.from({ length: lastIndex - firstIndex + 1 }, (_, offset) => {
+    const index = firstIndex + offset;
+    return { year: Math.floor(index / 12), month: index % 12 };
+  });
+}
+
 export function CalendarScreen(): JSX.Element {
   const { slug } = useParams({ strict: false });
   const { t, i18n } = useTranslation();
@@ -184,7 +207,9 @@ export function CalendarScreen(): JSX.Element {
   const projectStart = project
     ? parseIsoYearMonth(project.dateRange.start.slice(0, 7), currentYearMonth)
     : currentYearMonth;
-  const { year, month } = projectStart;
+  const projectEnd = project
+    ? parseIsoYearMonth(project.dateRange.end.slice(0, 7), currentYearMonth)
+    : currentYearMonth;
   const firstDayOfWeek = useMemo(() => getFirstDayOfWeek(locale), [locale]);
 
   const dueDateCounts = useMemo(
@@ -195,18 +220,14 @@ export function CalendarScreen(): JSX.Element {
     () => buildWeekdayLabels(locale, firstDayOfWeek),
     [firstDayOfWeek, locale],
   );
-  const weeks = useMemo(
-    () => chunkCalendarDays(buildCalendarDays(year, month, firstDayOfWeek)),
-    [firstDayOfWeek, month, year],
+  const visibleMonths = useMemo(
+    () => buildVisibleMonths(projectStart, projectEnd),
+    [projectEnd, projectStart],
   );
-  const monthLabel = useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale, { month: "long", year: "numeric", timeZone: "UTC" }).format(
-        new Date(Date.UTC(year, month)),
-      ),
-    [locale, month, year],
+  const monthFormatter = useMemo(
+    () => new Intl.DateTimeFormat(locale, { month: "long", year: "numeric", timeZone: "UTC" }),
+    [locale],
   );
-  const monthHeadingId = `project-calendar-month-${projectSlug ?? "unknown"}`;
   const fullDateFormatter = useMemo(
     () =>
       new Intl.DateTimeFormat(locale, {
@@ -226,94 +247,119 @@ export function CalendarScreen(): JSX.Element {
     <div>
       <ProjectHeader slug={projectSlug} />
 
-      <h2
-        id={monthHeadingId}
-        className="mb-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content"
-      >
-        {monthLabel}
-      </h2>
+      <div className="space-y-8">
+        {visibleMonths.map(({ year, month }) => {
+          const monthLabel = monthFormatter.format(new Date(Date.UTC(year, month)));
+          const monthHeadingId = `project-calendar-month-${projectSlug}-${String(year)}-${String(month + 1).padStart(2, "0")}`;
+          const weeks = chunkCalendarDays(buildCalendarDays(year, month, firstDayOfWeek));
 
-      <div className="overflow-x-auto">
-        <table
-          className="w-full table-fixed border-separate border-spacing-px"
-          aria-labelledby={monthHeadingId}
-        >
-          <thead>
-            <tr>
-              {weekdayLabels.map((label) => (
-                <th
-                  key={label}
-                  scope="col"
-                  className="pb-2 text-center font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase text-base-content/60"
+          return (
+            <section key={`${String(year)}-${String(month)}`} aria-labelledby={monthHeadingId}>
+              <h2
+                id={monthHeadingId}
+                className="mb-4 font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-bold text-base-content"
+              >
+                {monthLabel}
+              </h2>
+
+              <div className="overflow-x-auto">
+                <table
+                  className="w-full table-fixed border-separate border-spacing-px"
+                  aria-labelledby={monthHeadingId}
                 >
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {weeks.map((week, weekIndex) => (
-              <tr key={`week-${String(weekIndex)}`}>
-                {week.map((day, dayIndex) => {
-                  if (day === null) {
-                    return (
-                      <td
-                        key={`empty-${String(weekIndex)}-${String(dayIndex)}`}
-                        className="h-14 rounded bg-base-200/30"
-                      />
-                    );
-                  }
+                  <thead>
+                    <tr>
+                      {weekdayLabels.map((label) => (
+                        <th
+                          key={`${monthHeadingId}-${label}`}
+                          scope="col"
+                          className="pb-2 text-center font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase text-base-content/60"
+                        >
+                          {label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {weeks.map((week, weekIndex) => (
+                      <tr key={`week-${String(year)}-${String(month)}-${String(weekIndex)}`}>
+                        {week.map((day, dayIndex) => {
+                          if (day === null) {
+                            return (
+                              <td
+                                key={`empty-${String(year)}-${String(month)}-${String(weekIndex)}-${String(dayIndex)}`}
+                                className="h-14 rounded bg-base-200/30"
+                              />
+                            );
+                          }
 
-                  const isoDate = `${String(year)}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                  const dueCount = dueDateCounts.get(isoDate) ?? 0;
-                  const fullDate = new Date(year, month, day);
-                  const isToday =
-                    year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
-                  const accessibleDate = fullDateFormatter.format(fullDate);
-                  const ariaLabel =
-                    dueCount > 0
-                      ? t(isToday ? "calendar-day-with-tasks-today" : "calendar-day-with-tasks", {
-                          date: accessibleDate,
-                          count: dueCount,
-                          isToday,
-                          defaultValue: isToday
-                            ? `${accessibleDate} — today — ${String(dueCount)} task due`
-                            : `${accessibleDate} — ${String(dueCount)} task due`,
-                        })
-                      : t(isToday ? "calendar-day-no-tasks-today" : "calendar-day-no-tasks", {
-                          date: accessibleDate,
-                          isToday,
-                          defaultValue: isToday
-                            ? `${accessibleDate} — today — no tasks due`
-                            : `${accessibleDate} — no tasks due`,
-                        });
+                          const isoDate = `${String(year)}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                          const dueCount = dueDateCounts.get(isoDate) ?? 0;
+                          const fullDate = new Date(year, month, day);
+                          const isToday =
+                            year === now.getFullYear() &&
+                            month === now.getMonth() &&
+                            day === now.getDate();
+                          const accessibleDate = fullDateFormatter.format(fullDate);
+                          const ariaLabel =
+                            dueCount > 0
+                              ? t(
+                                  isToday
+                                    ? "calendar-day-with-tasks-today"
+                                    : "calendar-day-with-tasks",
+                                  {
+                                    date: accessibleDate,
+                                    count: dueCount,
+                                    isToday,
+                                    defaultValue: isToday
+                                      ? `${accessibleDate} — today — ${String(dueCount)} task due`
+                                      : `${accessibleDate} — ${String(dueCount)} task due`,
+                                  },
+                                )
+                              : t(
+                                  isToday ? "calendar-day-no-tasks-today" : "calendar-day-no-tasks",
+                                  {
+                                    date: accessibleDate,
+                                    isToday,
+                                    defaultValue: isToday
+                                      ? `${accessibleDate} — today — no tasks due`
+                                      : `${accessibleDate} — no tasks due`,
+                                  },
+                                );
 
-                  return (
-                    <td
-                      key={isoDate}
-                      aria-label={ariaLabel}
-                      className={`h-14 rounded border border-base-300/30 align-top ${
-                        isToday ? "bg-primary/10 text-primary" : "text-base-content/70"
-                      }`}
-                    >
-                      <div className="flex h-full flex-col items-center justify-start pt-1.5 text-[length:var(--font-size-sm)]">
-                        <time dateTime={isoDate} aria-current={isToday ? "date" : undefined}>
-                          {day}
-                        </time>
-                        {dueCount > 0 ? (
-                          <span
-                            className="mt-1 h-1.5 w-1.5 rounded-full bg-primary"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                          return (
+                            <td
+                              key={isoDate}
+                              aria-label={ariaLabel}
+                              className={`h-14 rounded border border-base-300/30 align-top ${
+                                isToday ? "bg-primary/10 text-primary" : "text-base-content/70"
+                              }`}
+                            >
+                              <div className="flex h-full flex-col items-center justify-start pt-1.5 text-[length:var(--font-size-sm)]">
+                                <time
+                                  dateTime={isoDate}
+                                  aria-current={isToday ? "date" : undefined}
+                                >
+                                  {day}
+                                </time>
+                                {dueCount > 0 ? (
+                                  <span
+                                    className="mt-1 h-1.5 w-1.5 rounded-full bg-primary"
+                                    aria-hidden="true"
+                                  />
+                                ) : null}
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          );
+        })}
       </div>
     </div>
   );

@@ -240,6 +240,7 @@ backlog-col-priority = Priority
 backlog-col-task = Task
 backlog-col-assignee = Assignee
 backlog-col-due = Due
+backlog-empty-state = No draft tasks for this project.
 
 ## Calendar view
 

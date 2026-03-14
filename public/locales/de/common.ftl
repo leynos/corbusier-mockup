@@ -245,6 +245,7 @@ backlog-col-priority = Priorität
 backlog-col-task = Aufgabe
 backlog-col-assignee = Zuständig
 backlog-col-due = Fällig
+backlog-empty-state = Keine Entwurfsaufgaben für dieses Projekt.
 
 ## Calendar view
 

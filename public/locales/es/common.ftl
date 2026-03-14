@@ -247,6 +247,7 @@ backlog-col-priority = Prioridad
 backlog-col-task = Tarea
 backlog-col-assignee = Responsable
 backlog-col-due = Vencimiento
+backlog-empty-state = No hay tareas en borrador para este proyecto.
 
 ## Calendar view
 

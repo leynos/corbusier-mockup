@@ -240,6 +240,7 @@ backlog-col-priority = प्राथमिकता
 backlog-col-task = कार्य
 backlog-col-assignee = समनुदेशिती
 backlog-col-due = नियत तिथि
+backlog-empty-state = इस प्रोजेक्ट के लिए कोई ड्राफ्ट कार्य नहीं हैं।
 
 ## Calendar view
 

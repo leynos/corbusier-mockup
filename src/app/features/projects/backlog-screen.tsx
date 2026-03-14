@@ -24,6 +24,7 @@ export function useBacklogScreenCopy(): {
   readonly taskLabel: string;
   readonly assigneeLabel: string;
   readonly dueLabel: string;
+  readonly emptyStateLabel: string;
 } {
   const { t, i18n } = useTranslation();
 
@@ -33,6 +34,9 @@ export function useBacklogScreenCopy(): {
     taskLabel: t("backlog-col-task", { defaultValue: "Task" }),
     assigneeLabel: t("backlog-col-assignee", { defaultValue: "Assignee" }),
     dueLabel: t("backlog-col-due", { defaultValue: "Due" }),
+    emptyStateLabel: t("backlog-empty-state", {
+      defaultValue: "No draft tasks for this project.",
+    }),
   };
 }
 
@@ -75,20 +79,30 @@ export function BacklogScreen(): JSX.Element {
             </tr>
           </thead>
           <tbody>
-            {draftTasks.map((task) => (
-              <tr key={task.id} className="border-b border-base-300/50">
-                <td className="py-2.5 pr-4">
-                  <PriorityTag priority={task.priority} />
-                </td>
-                <td className="py-2.5 pr-4 text-base-content">
-                  {pickLocalization(task.localizations, copy.locale).name}
-                </td>
-                <td className="py-2.5 pr-4 text-base-content/60">{task.assignee.name}</td>
-                <td className="py-2.5 text-base-content/60">
-                  <time dateTime={task.dueDate}>{formatShortDate(task.dueDate, copy.locale)}</time>
+            {draftTasks.length === 0 ? (
+              <tr className="border-b border-base-300/50">
+                <td colSpan={4} className="py-4 text-center text-base-content/60">
+                  {copy.emptyStateLabel}
                 </td>
               </tr>
-            ))}
+            ) : (
+              draftTasks.map((task) => (
+                <tr key={task.id} className="border-b border-base-300/50">
+                  <td className="py-2.5 pr-4">
+                    <PriorityTag priority={task.priority} />
+                  </td>
+                  <td className="py-2.5 pr-4 text-base-content">
+                    {pickLocalization(task.localizations, copy.locale).name}
+                  </td>
+                  <td className="py-2.5 pr-4 text-base-content/60">{task.assignee.name}</td>
+                  <td className="py-2.5 text-base-content/60">
+                    <time dateTime={task.dueDate}>
+                      {formatShortDate(task.dueDate, copy.locale)}
+                    </time>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

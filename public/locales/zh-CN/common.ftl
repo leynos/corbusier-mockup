@@ -235,6 +235,7 @@ backlog-col-priority = 优先级
 backlog-col-task = 任务
 backlog-col-assignee = 负责人
 backlog-col-due = 截止日期
+backlog-empty-state = 这个项目没有草稿任务。
 
 ## Calendar view
 

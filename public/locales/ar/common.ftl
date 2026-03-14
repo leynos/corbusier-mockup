@@ -277,6 +277,7 @@ backlog-col-priority = الأولوية
 backlog-col-task = المهمة
 backlog-col-assignee = المسؤول
 backlog-col-due = الاستحقاق
+backlog-empty-state = لا توجد مهام مسودة لهذا المشروع.
 
 ## Calendar view
 

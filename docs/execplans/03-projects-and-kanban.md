@@ -91,7 +91,7 @@ headers.
 - [x] Milestone 5: Backlog, Calendar, List, and Timeline views — `8594b0a`
 - [x] Milestone 6: Tests and validation — `5235789`
 - [x] Post-completion review remediation: canonical project navigation,
-  shared draft bucketing, localised calendar semantics, disabled
+  shared draft bucketing, localized calendar semantics, disabled
   control hardening, and regression coverage were tightened after PR
   review.
 

@@ -14,6 +14,7 @@ import { findProject, getTasksForProject } from "../../../data/projects";
 import { parseProjectSlug } from "../../../data/registries/project-descriptors";
 import { TASKS } from "../../../data/tasks";
 import { pickLocalization } from "../../domain/entities/localization";
+import { formatShortDate } from "../../utils/date-formatting";
 import { ProjectHeader } from "./project-header";
 
 /** Compute a percentage offset for a date within a range. */
@@ -56,13 +57,32 @@ export function TimelineScreen(): JSX.Element {
         {tasks.map((task) => {
           const loc = pickLocalization(task.localizations, locale);
           const left = dateToPercent(task.dueDate, rangeStart, rangeSpan);
+          const dueDateLabel = formatShortDate(task.dueDate, locale);
+          const taskLabelId = `timeline-task-${task.id}`;
+          const taskDueDateId = `timeline-task-due-${task.id}`;
 
           return (
             <div key={task.id} className="flex items-center gap-3">
-              <span className="w-36 shrink-0 truncate text-[length:var(--font-size-sm)] text-base-content/70">
-                {loc.name}
-              </span>
-              <div className="relative h-6 flex-1 rounded bg-base-300/20">
+              <div className="w-36 shrink-0">
+                <span
+                  id={taskLabelId}
+                  className="block truncate text-[length:var(--font-size-sm)] text-base-content/70"
+                >
+                  {loc.name}
+                </span>
+                <time
+                  id={taskDueDateId}
+                  dateTime={task.dueDate}
+                  className="block text-[length:var(--font-size-xs)] text-base-content/50"
+                >
+                  {dueDateLabel}
+                </time>
+              </div>
+              <div
+                role="img"
+                className="relative h-6 flex-1 rounded bg-base-300/20"
+                aria-labelledby={`${taskLabelId} ${taskDueDateId}`}
+              >
                 <div
                   className="absolute inset-y-1 w-3 -translate-x-1/2 rounded-full bg-primary/40"
                   style={{ left: `${String(left)}%` }}

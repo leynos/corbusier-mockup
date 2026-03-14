@@ -235,6 +235,7 @@ backlog-col-priority = 優先度
 backlog-col-task = タスク
 backlog-col-assignee = 担当者
 backlog-col-due = 期限
+backlog-empty-state = このプロジェクトにはドラフトのタスクがありません。
 
 ## Calendar view
 
