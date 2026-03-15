@@ -13,7 +13,7 @@
  */
 
 import { IconTerminal } from "@tabler/icons-react";
-import type { JSX } from "react";
+import type { ChangeEvent, FocusEvent, JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -85,14 +85,14 @@ export function SlashCommandInput(): JSX.Element {
   const suggestionsRef = useRef<HTMLElement>(null);
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setValue(v);
     setShowDropdown(v.startsWith("/"));
   }, []);
 
   const handleBlur = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
+    (e: FocusEvent<HTMLInputElement>) => {
       const related = e.relatedTarget as HTMLElement | null;
       const activeEl = related ?? (document.activeElement as HTMLElement | null);
       const isInsideSuggestions = suggestionsRef.current?.contains(activeEl) ?? false;
@@ -129,7 +129,6 @@ export function SlashCommandInput(): JSX.Element {
           ref={inputRef}
           id="slash-command-input"
           type="text"
-          role="combobox"
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -138,10 +137,6 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
-          aria-haspopup="listbox"
-          aria-controls={dropdownActive ? "slash-command-list" : undefined}
-          aria-expanded={dropdownActive}
-          aria-autocomplete="list"
         />
       </div>
 
@@ -153,15 +148,13 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
         >
-          <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
+          <div className="space-y-1 px-1">
             {filteredDirectives.map((d) => {
               const loc = pickLocalization(d.localizations, locale);
               return (
                 <button
                   key={d.id}
                   type="button"
-                  role="option"
-                  aria-selected={false}
                   className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => handleSelect(loc.name)}
