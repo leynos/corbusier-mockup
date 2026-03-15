@@ -13,21 +13,51 @@ import { useTranslation } from "react-i18next";
 import { DIRECTIVES } from "../../../../data/directives";
 import { pickLocalization } from "../../../domain/entities/localization";
 
+function useBlurTimeout(delay: number) {
+  const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (ref.current) clearTimeout(ref.current);
+    };
+  }, []);
+
+  const cancel = useCallback(() => {
+    if (ref.current) {
+      clearTimeout(ref.current);
+      ref.current = null;
+    }
+  }, []);
+
+  const schedule = useCallback(
+    (cb: () => void) => {
+      if (ref.current) clearTimeout(ref.current);
+      ref.current = setTimeout(() => {
+        cb();
+        ref.current = null;
+      }, delay);
+    },
+    [delay],
+  );
+
+  return { cancel, schedule };
+}
+
+function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[number][] {
+  if (!value.startsWith("/")) return [];
+  return DIRECTIVES.filter((d) => {
+    const name = pickLocalization(d.localizations, locale).name;
+    return value === "/" || name.startsWith(value);
+  });
+}
+
 export function SlashCommandInput(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const [value, setValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (blurTimeoutRef.current) {
-        clearTimeout(blurTimeoutRef.current);
-      }
-    };
-  }, []);
+  const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
@@ -36,32 +66,21 @@ export function SlashCommandInput(): JSX.Element {
   }, []);
 
   const handleBlur = useCallback(() => {
-    /* Delay so click on dropdown items registers first. */
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
-    }
-    blurTimeoutRef.current = setTimeout(() => {
+    scheduleBlur(() => setShowDropdown(false));
+  }, [scheduleBlur]);
+
+  const handleSelect = useCallback(
+    (commandName: string) => {
+      cancelBlur();
+      setValue(`${commandName} `);
       setShowDropdown(false);
-      blurTimeoutRef.current = null;
-    }, 150);
-  }, []);
+      inputRef.current?.focus();
+    },
+    [cancelBlur],
+  );
 
-  const handleSelect = useCallback((commandName: string) => {
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
-      blurTimeoutRef.current = null;
-    }
-    setValue(`${commandName} `);
-    setShowDropdown(false);
-    inputRef.current?.focus();
-  }, []);
-
-  const filteredDirectives = value.startsWith("/")
-    ? DIRECTIVES.filter((d) => {
-        const name = pickLocalization(d.localizations, locale).name;
-        return name.startsWith(value) || value === "/";
-      })
-    : [];
+  const filteredDirectives = filterDirectives(value, locale);
+  const dropdownActive = showDropdown && filteredDirectives.length > 0;
 
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
@@ -86,15 +105,13 @@ export function SlashCommandInput(): JSX.Element {
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
           aria-haspopup="listbox"
-          aria-controls={
-            showDropdown && filteredDirectives.length > 0 ? "slash-command-list" : undefined
-          }
-          aria-expanded={showDropdown && filteredDirectives.length > 0}
+          aria-controls={dropdownActive ? "slash-command-list" : undefined}
+          aria-expanded={dropdownActive}
           aria-autocomplete="list"
         />
       </div>
 
-      {showDropdown && filteredDirectives.length > 0 ? (
+      {dropdownActive ? (
         <section
           aria-label={t("slash-input-suggestions-label", {
             defaultValue: "Available commands",
