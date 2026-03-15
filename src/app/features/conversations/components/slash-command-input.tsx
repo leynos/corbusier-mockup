@@ -7,13 +7,14 @@
  * - No command side effects; only reads from directives fixture data.
  * - Autocomplete is static and purely presentational — no actual command execution.
  * - Dropdown closes on blur unless focus moves to a suggestion button.
+ * - Implements full WAI-ARIA combobox pattern with keyboard navigation.
  *
  * @see {@link ../../../../data/directives} — directives fixture module
  * @see {@link ../} — parent conversations feature module
  */
 
 import { IconTerminal } from "@tabler/icons-react";
-import type { ChangeEvent, FocusEvent, JSX } from "react";
+import type { ChangeEvent, FocusEvent, JSX, KeyboardEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -73,6 +74,7 @@ function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[nu
  *
  * Renders a text input that shows a dropdown of available slash commands
  * when the user types `/`. Selection populates the input and closes the dropdown.
+ * Implements WAI-ARIA combobox pattern with full keyboard navigation.
  *
  * @returns The rendered combobox component with dropdown suggestions.
  */
@@ -81,14 +83,19 @@ export function SlashCommandInput(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const [value, setValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLElement>(null);
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
+
+  const filteredDirectives = filterDirectives(value, locale);
+  const dropdownActive = showDropdown && filteredDirectives.length > 0;
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setValue(v);
     setShowDropdown(v.startsWith("/"));
+    setActiveIndex(-1);
   }, []);
 
   const handleBlur = useCallback(
@@ -108,13 +115,58 @@ export function SlashCommandInput(): JSX.Element {
       cancelBlur();
       setValue(`${commandName} `);
       setShowDropdown(false);
+      setActiveIndex(-1);
       inputRef.current?.focus();
     },
     [cancelBlur],
   );
 
-  const filteredDirectives = filterDirectives(value, locale);
-  const dropdownActive = showDropdown && filteredDirectives.length > 0;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (!dropdownActive) {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          setShowDropdown(true);
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          const nextIndex = activeIndex < filteredDirectives.length - 1 ? activeIndex + 1 : 0;
+          setActiveIndex(nextIndex);
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          const prevIndex = activeIndex > 0 ? activeIndex - 1 : filteredDirectives.length - 1;
+          setActiveIndex(prevIndex);
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
+          if (activeIndex >= 0 && activeIndex < filteredDirectives.length) {
+            const directive = filteredDirectives[activeIndex];
+            if (directive) {
+              const loc = pickLocalization(directive.localizations, locale);
+              handleSelect(loc.name);
+            }
+          }
+          break;
+        }
+        case "Escape": {
+          e.preventDefault();
+          setShowDropdown(false);
+          setActiveIndex(-1);
+          break;
+        }
+      }
+    },
+    [dropdownActive, activeIndex, filteredDirectives, locale, handleSelect],
+  );
+
+  const activeDescendantId = activeIndex >= 0 ? `slash-command-option-${activeIndex}` : undefined;
 
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
@@ -129,14 +181,21 @@ export function SlashCommandInput(): JSX.Element {
           ref={inputRef}
           id="slash-command-input"
           type="text"
+          role="combobox"
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
           placeholder={t("slash-input-placeholder", {
             defaultValue: "Type / for commands…",
           })}
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
+          aria-haspopup="listbox"
+          aria-controls={dropdownActive ? "slash-command-list" : undefined}
+          aria-expanded={dropdownActive}
+          aria-autocomplete="list"
+          aria-activedescendant={activeDescendantId}
         />
       </div>
 
@@ -148,13 +207,17 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
         >
-          <div className="space-y-1 px-1">
-            {filteredDirectives.map((d) => {
+          <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
+            {filteredDirectives.map((d, index) => {
               const loc = pickLocalization(d.localizations, locale);
+              const isActive = index === activeIndex;
               return (
                 <button
                   key={d.id}
+                  id={`slash-command-option-${index}`}
                   type="button"
+                  role="option"
+                  aria-selected={isActive}
                   className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => handleSelect(loc.name)}
