@@ -112,6 +112,14 @@ embedded tool-call artefacts.
   `whitespace-pre-wrap break-words` to eliminate scrollability.
 - Heading order: page `<h1>` → card `<h3>` skips a level. Changed
   card headings to `<h2>` with subheadings at `<h3>`.
+- Slash command input combobox accessibility: the input element with
+  `role="combobox"` needed `aria-autocomplete="list"` and
+  `aria-controls` pointing to the dropdown listbox. The dropdown
+  container uses `<div role="listbox">` with direct `<button
+  role="option">` children (not nested in wrapper divs) to satisfy
+  both Biome's `noNoninteractiveElementToInteractiveRole` and
+  `useFocusableInteractive` rules. Removed redundant `tabIndex={0}`
+  from buttons since they are focusable by default.
 
 ## Decision log
 

@@ -86,7 +86,11 @@ export function SlashCommandInput(): JSX.Element {
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
           aria-haspopup="listbox"
+          aria-controls={
+            showDropdown && filteredDirectives.length > 0 ? "slash-command-list" : undefined
+          }
           aria-expanded={showDropdown && filteredDirectives.length > 0}
+          aria-autocomplete="list"
         />
       </div>
 
@@ -97,31 +101,29 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
         >
-          <ul className="space-y-1 px-1">
+          <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
             {filteredDirectives.map((d) => {
               const loc = pickLocalization(d.localizations, locale);
               return (
-                <li key={d.id}>
-                  <button
-                    type="button"
-                    role="option"
-                    tabIndex={0}
-                    aria-selected={false}
-                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => handleSelect(loc.name)}
-                  >
-                    <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
-                      {loc.name}
-                    </span>
-                    <span className="text-[length:var(--font-size-xs)] text-base-content/60">
-                      {loc.description}
-                    </span>
-                  </button>
-                </li>
+                <button
+                  key={d.id}
+                  type="button"
+                  role="option"
+                  aria-selected={false}
+                  className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleSelect(loc.name)}
+                >
+                  <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
+                    {loc.name}
+                  </span>
+                  <span className="text-[length:var(--font-size-xs)] text-base-content/60">
+                    {loc.description}
+                  </span>
+                </button>
               );
             })}
-          </ul>
+          </div>
         </section>
       ) : null}
     </div>
