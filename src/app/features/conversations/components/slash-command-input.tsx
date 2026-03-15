@@ -70,6 +70,73 @@ function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[nu
   });
 }
 
+interface KeyboardNavigationOptions {
+  readonly dropdownActive: boolean;
+  readonly activeIndex: number;
+  readonly filteredDirectives: (typeof DIRECTIVES)[number][];
+  readonly locale: string;
+  readonly setShowDropdown: (v: boolean) => void;
+  readonly setActiveIndex: (v: number) => void;
+  readonly handleSelect: (name: string) => void;
+}
+
+function useKeyboardNavigation({
+  dropdownActive,
+  activeIndex,
+  filteredDirectives,
+  locale,
+  setShowDropdown,
+  setActiveIndex,
+  handleSelect,
+}: KeyboardNavigationOptions): (e: KeyboardEvent<HTMLInputElement>) => void {
+  return useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (!dropdownActive && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+        e.preventDefault();
+        setShowDropdown(true);
+        return;
+      }
+      if (!dropdownActive) return;
+
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          setActiveIndex(activeIndex < filteredDirectives.length - 1 ? activeIndex + 1 : 0);
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          setActiveIndex(activeIndex > 0 ? activeIndex - 1 : filteredDirectives.length - 1);
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
+          const directive = filteredDirectives[activeIndex];
+          if (directive) {
+            handleSelect(pickLocalization(directive.localizations, locale).name);
+          }
+          break;
+        }
+        case "Escape": {
+          e.preventDefault();
+          setShowDropdown(false);
+          setActiveIndex(-1);
+          break;
+        }
+      }
+    },
+    [
+      dropdownActive,
+      activeIndex,
+      filteredDirectives,
+      locale,
+      setShowDropdown,
+      setActiveIndex,
+      handleSelect,
+    ],
+  );
+}
+
 /** Slash command input with autocomplete dropdown (visual mockup).
  *
  * Renders a text input that shows a dropdown of available slash commands
@@ -121,50 +188,15 @@ export function SlashCommandInput(): JSX.Element {
     [cancelBlur],
   );
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent<HTMLInputElement>) => {
-      if (!dropdownActive) {
-        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault();
-          setShowDropdown(true);
-        }
-        return;
-      }
-
-      switch (e.key) {
-        case "ArrowDown": {
-          e.preventDefault();
-          const nextIndex = activeIndex < filteredDirectives.length - 1 ? activeIndex + 1 : 0;
-          setActiveIndex(nextIndex);
-          break;
-        }
-        case "ArrowUp": {
-          e.preventDefault();
-          const prevIndex = activeIndex > 0 ? activeIndex - 1 : filteredDirectives.length - 1;
-          setActiveIndex(prevIndex);
-          break;
-        }
-        case "Enter": {
-          e.preventDefault();
-          if (activeIndex >= 0 && activeIndex < filteredDirectives.length) {
-            const directive = filteredDirectives[activeIndex];
-            if (directive) {
-              const loc = pickLocalization(directive.localizations, locale);
-              handleSelect(loc.name);
-            }
-          }
-          break;
-        }
-        case "Escape": {
-          e.preventDefault();
-          setShowDropdown(false);
-          setActiveIndex(-1);
-          break;
-        }
-      }
-    },
-    [dropdownActive, activeIndex, filteredDirectives, locale, handleSelect],
-  );
+  const handleKeyDown = useKeyboardNavigation({
+    dropdownActive,
+    activeIndex,
+    filteredDirectives,
+    locale,
+    setShowDropdown,
+    setActiveIndex,
+    handleSelect,
+  });
 
   const activeDescendantId = activeIndex >= 0 ? `slash-command-option-${activeIndex}` : undefined;
 
