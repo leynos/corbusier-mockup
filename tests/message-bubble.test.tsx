@@ -10,27 +10,27 @@ import { renderWithRouter } from "./utils/render-with-router";
 
 type BubbleMessage = Message & { readonly role: "user" | "assistant" | "system" };
 
-const USER_MSG: BubbleMessage = buildMessage({
+const USER_MSG = buildMessage({
   id: "msg-u",
   role: "user",
   content: "Migrate the pool configuration.",
   timestamp: "2026-03-10T09:01:00Z",
-});
+}) as BubbleMessage;
 
-const ASSISTANT_MSG: BubbleMessage = buildMessage({
+const ASSISTANT_MSG = buildMessage({
   id: "msg-a",
   role: "assistant",
   content: "I will analyse the existing pool.",
   timestamp: "2026-03-10T09:02:00Z",
   agentBackend: "claude_code_sdk",
-});
+}) as BubbleMessage;
 
-const SYSTEM_MSG: BubbleMessage = buildMessage({
+const SYSTEM_MSG = buildMessage({
   id: "msg-s",
   role: "system",
   content: "Task execution initiated.",
   timestamp: "2026-03-10T09:00:00Z",
-});
+}) as BubbleMessage;
 
 describe("MessageBubble", () => {
   afterEach(() => {

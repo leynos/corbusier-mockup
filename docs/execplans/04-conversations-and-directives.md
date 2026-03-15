@@ -69,7 +69,7 @@ embedded tool-call artefacts.
 
 - Risk: Chat-style layouts with alternating alignment can be
   accessibility-unfriendly if not structured as a list with proper
-  ARIA roles.
+  Accessible Rich Internet Applications (ARIA) roles.
   Severity: medium
   Likelihood: medium
   Mitigation: Render the message timeline as an `<ol>` with
@@ -103,8 +103,7 @@ embedded tool-call artefacts.
   favour of `<output>` (which carries implicit `status` role).
 - Biome rejects `<li role="separator">` (multiple rules), `<ul
   role="listbox">`, `<li role="option">`. Use generic `<div>` for
-  Accessible Rich Internet Applications (ARIA) widget roles that
-  conflict with list semantics.
+  ARIA widget roles that conflict with list semantics.
 - `<pre>` with `overflow-x-auto` triggers axe
   `scrollable-region-focusable`; adding `tabIndex={0}` then triggers
   Biome `noNoninteractiveTabindex`. Solution: use
