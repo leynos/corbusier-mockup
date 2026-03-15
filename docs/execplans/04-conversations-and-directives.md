@@ -38,7 +38,8 @@ embedded tool-call artefacts.
 - Chat message bubbles and tool execution cards use DaisyUI `chat` and
   `card` components (`docs/daisyui-v5-guide.md`). Expandable sections
   use Radix UI primitives for accessible disclosure behaviour
-  (`docs/pure-accessible-and-localizable-react-components.md`).
+  (`docs/pure-accessible-and-localizable-react-components.md`),
+  except where noted in the Decision Log.
 - Message roles must be visually distinct: user messages left-aligned,
   assistant messages right-aligned (or distinctly styled), tool
   messages rendered as expandable cards, system messages rendered as
@@ -72,10 +73,11 @@ embedded tool-call artefacts.
   Accessible Rich Internet Applications (ARIA) roles.
   Severity: medium
   Likelihood: medium
-  Mitigation: Render the message timeline as an `<ol>` with
-  `role="log"` and `aria-live="polite"` (even though this is a
-  static mockup, the markup should be correct for the intended
-  live behaviour). Each message is an `<li>` with role annotation.
+  Mitigation: Render the message timeline as a
+  `<div role="log" aria-live="polite">` wrapping a plain `<ol>`
+  (even though this is a static mockup, the markup should be correct
+  for the intended live behaviour). Each message is an `<li>` with
+  role annotation.
 
 - Risk: Syntax highlighting for tool call output would normally
   require a library (Prism, Shiki, etc.).
@@ -119,6 +121,10 @@ embedded tool-call artefacts.
 - Slash-command input uses a plain text input plus a semantic button
   list for suggestions rather than a partial combobox pattern, since
   the behaviour is a mockup filter rather than a true select widget.
+- `ToolCallCard` expandable disclosure uses a native `<button>` with
+  `aria-expanded` and a conditional panel rather than a Radix UI
+  primitive. No new npm dependency was warranted for a single-component
+  toggle in a mockup context.
 
 ## Outcomes & retrospective
 
@@ -207,7 +213,8 @@ The conversation detail renders:
 
 - **Agent status badge** — At the top of the content area, showing
   backend name, model, and turn state.
-- **Message timeline** — An `<ol role="log">` of messages. Each
+- **Message timeline** — A `<div role="log" aria-live="polite">`
+  wrapping a plain `<ol>` of messages. Each
   message renders differently by role:
   - *User*: left-aligned bubble on base surface.
   - *Assistant*: left-aligned bubble on elevated surface with a teal

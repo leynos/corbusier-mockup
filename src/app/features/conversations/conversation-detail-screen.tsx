@@ -93,11 +93,11 @@ export function ConversationDetailScreen(): JSX.Element {
   if (!conversation) {
     return (
       <div className="py-12 text-center">
-        <p className="text-[length:var(--font-size-lg)] font-semibold text-base-content">
+        <h1 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-lg)] font-semibold text-base-content">
           {t("conversation-not-found", {
             defaultValue: "Conversation not found",
           })}
-        </p>
+        </h1>
         <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/60">
           {id}
         </p>

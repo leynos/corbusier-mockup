@@ -1,7 +1,7 @@
 /** @file Tests for the ConversationsScreen component. */
 
 import { afterEach, describe, expect, it } from "bun:test";
-import { cleanup, screen } from "@testing-library/react";
+import { cleanup, screen, within } from "@testing-library/react";
 
 import { renderWithRouter } from "./utils/render-app-routes";
 
@@ -24,7 +24,7 @@ describe("ConversationsScreen", () => {
     });
     expect(list).toBeTruthy();
 
-    const items = screen.getAllByRole("listitem");
+    const items = within(list).getAllByRole("listitem");
     expect(items.length).toBeGreaterThanOrEqual(2);
   });
 

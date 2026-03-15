@@ -76,6 +76,7 @@ export function SlashCommandInput(): JSX.Element {
           ref={inputRef}
           id="slash-command-input"
           type="text"
+          role="combobox"
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -84,6 +85,8 @@ export function SlashCommandInput(): JSX.Element {
           })}
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
+          aria-haspopup="listbox"
+          aria-expanded={showDropdown && filteredDirectives.length > 0}
         />
       </div>
 
