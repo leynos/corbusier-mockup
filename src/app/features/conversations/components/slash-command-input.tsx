@@ -1,8 +1,15 @@
-/** @file Slash command input with autocomplete dropdown (visual mockup).
+/** @file SlashCommandInput component — slash command input with autocomplete dropdown.
  *
- * Typing `/` shows a static dropdown of available commands from the
- * directives fixture data. This is a visual mockup only — no actual
- * command processing occurs.
+ * Provides a visual mockup of a slash command autocomplete UI. Typing `/` shows
+ * a static dropdown of available commands sourced from the directives fixture.
+ *
+ * @invariants
+ * - No command side effects; only reads from directives fixture data.
+ * - Autocomplete is static and purely presentational — no actual command execution.
+ * - Dropdown closes on blur unless focus moves to a suggestion button.
+ *
+ * @see {@link ../../../../data/directives} — directives fixture module
+ * @see {@link ../} — parent conversations feature module
  */
 
 import { IconTerminal } from "@tabler/icons-react";
@@ -13,6 +20,11 @@ import { useTranslation } from "react-i18next";
 import { DIRECTIVES } from "../../../../data/directives";
 import { pickLocalization } from "../../../domain/entities/localization";
 
+/** Manages a cancellable blur timeout for delayed dropdown dismissal.
+ *
+ * @param delay - Timeout duration in milliseconds.
+ * @returns An object with `cancel` to clear the timeout and `schedule` to queue a callback.
+ */
 function useBlurTimeout(delay: number) {
   const ref = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -43,6 +55,12 @@ function useBlurTimeout(delay: number) {
   return { cancel, schedule };
 }
 
+/** Filters slash directives based on input value and locale.
+ *
+ * @param value - Current input value; returns empty if not starting with `/`.
+ * @param locale - Current locale for localizing directive names.
+ * @returns Array of matching directive items, or all directives if value is just `/`.
+ */
 function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[number][] {
   if (!value.startsWith("/")) return [];
   return DIRECTIVES.filter((d) => {
@@ -51,12 +69,20 @@ function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[nu
   });
 }
 
+/** Slash command input with autocomplete dropdown (visual mockup).
+ *
+ * Renders a text input that shows a dropdown of available slash commands
+ * when the user types `/`. Selection populates the input and closes the dropdown.
+ *
+ * @returns The rendered combobox component with dropdown suggestions.
+ */
 export function SlashCommandInput(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const [value, setValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLElement>(null);
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,9 +91,17 @@ export function SlashCommandInput(): JSX.Element {
     setShowDropdown(v.startsWith("/"));
   }, []);
 
-  const handleBlur = useCallback(() => {
-    scheduleBlur(() => setShowDropdown(false));
-  }, [scheduleBlur]);
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      const related = e.relatedTarget as HTMLElement | null;
+      const activeEl = related ?? (document.activeElement as HTMLElement | null);
+      const isInsideSuggestions = suggestionsRef.current?.contains(activeEl) ?? false;
+      if (!isInsideSuggestions) {
+        scheduleBlur(() => setShowDropdown(false));
+      }
+    },
+    [scheduleBlur],
+  );
 
   const handleSelect = useCallback(
     (commandName: string) => {
@@ -113,6 +147,7 @@ export function SlashCommandInput(): JSX.Element {
 
       {dropdownActive ? (
         <section
+          ref={suggestionsRef}
           aria-label={t("slash-input-suggestions-label", {
             defaultValue: "Available commands",
           })}
