@@ -70,6 +70,20 @@ function filterDirectives(value: string, locale: string): (typeof DIRECTIVES)[nu
   });
 }
 
+/** Options bag for configuring keyboard navigation in the slash command dropdown.
+ *
+ * All properties are readonly to ensure immutability during navigation handling.
+ *
+ * @property dropdownActive - Whether the dropdown is currently visible and interactive.
+ * @property activeIndex - The zero-based index of the currently highlighted suggestion;
+ *   -1 indicates no selection.
+ * @property filteredDirectives - The array of directive items matching the current input filter.
+ * @property locale - The current locale string for localizing directive names during selection.
+ * @property setShowDropdown - Callback to open (true) or close (false) the dropdown.
+ * @property setActiveIndex - Callback to update the highlighted suggestion index.
+ * @property handleSelect - Callback invoked when a directive is selected, receiving the
+ *   localized command name.
+ */
 interface KeyboardNavigationOptions {
   readonly dropdownActive: boolean;
   readonly activeIndex: number;
@@ -80,6 +94,42 @@ interface KeyboardNavigationOptions {
   readonly handleSelect: (name: string) => void;
 }
 
+/** Predicate to check if a key is an arrow navigation key.
+ *
+ * @param key - The keyboard event key value.
+ * @returns True if the key is ArrowDown or ArrowUp.
+ */
+function isArrowKey(key: string): boolean {
+  return key === "ArrowDown" || key === "ArrowUp";
+}
+
+/** Computes the next navigation index for arrow key movement.
+ *
+ * Wraps around the list boundaries: ArrowDown at the end returns 0,
+ * ArrowUp at the start returns the last index.
+ *
+ * @param key - The arrow key pressed ("ArrowDown" or "ArrowUp").
+ * @param activeIndex - Current highlighted index.
+ * @param length - Total number of items in the list.
+ * @returns The new index after applying the navigation direction.
+ */
+function resolveNavigationIndex(key: string, activeIndex: number, length: number): number {
+  if (key === "ArrowDown") {
+    return activeIndex < length - 1 ? activeIndex + 1 : 0;
+  }
+  return activeIndex > 0 ? activeIndex - 1 : length - 1;
+}
+
+/** Keyboard navigation hook for the slash command autocomplete dropdown.
+ *
+ * Handles arrow key navigation to open the dropdown and move through suggestions,
+ * Enter to select the highlighted item, and Escape to close the dropdown.
+ *
+ * @param options - Configuration object containing dropdown state and callbacks.
+ *   See {@link KeyboardNavigationOptions} for detailed property descriptions.
+ * @returns A keyboard event handler of type `(e: KeyboardEvent<HTMLInputElement>) => void`
+ *   to be attached to the input element's `onKeyDown` prop.
+ */
 function useKeyboardNavigation({
   dropdownActive,
   activeIndex,
@@ -91,7 +141,7 @@ function useKeyboardNavigation({
 }: KeyboardNavigationOptions): (e: KeyboardEvent<HTMLInputElement>) => void {
   return useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
-      if (!dropdownActive && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      if (!dropdownActive && isArrowKey(e.key)) {
         e.preventDefault();
         setShowDropdown(true);
         return;
@@ -99,22 +149,17 @@ function useKeyboardNavigation({
       if (!dropdownActive) return;
 
       switch (e.key) {
-        case "ArrowDown": {
-          e.preventDefault();
-          setActiveIndex(activeIndex < filteredDirectives.length - 1 ? activeIndex + 1 : 0);
-          break;
-        }
+        case "ArrowDown":
         case "ArrowUp": {
           e.preventDefault();
-          setActiveIndex(activeIndex > 0 ? activeIndex - 1 : filteredDirectives.length - 1);
+          setActiveIndex(resolveNavigationIndex(e.key, activeIndex, filteredDirectives.length));
           break;
         }
         case "Enter": {
           e.preventDefault();
           const directive = filteredDirectives[activeIndex];
-          if (directive) {
-            handleSelect(pickLocalization(directive.localizations, locale).name);
-          }
+          if (!directive) return;
+          handleSelect(pickLocalization(directive.localizations, locale).name);
           break;
         }
         case "Escape": {
