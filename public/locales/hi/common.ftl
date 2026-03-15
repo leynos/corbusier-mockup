@@ -266,3 +266,66 @@ progress-label = प्रगति
 task-subtask-status-complete = पूर्ण
 task-subtask-status-pending = लंबित
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = वार्तालाप सूची
+conversation-list-empty = इस प्रोजेक्ट के लिए कोई वार्तालाप नहीं।
+conversation-message-count-label =
+    { $count ->
+        [one] { $count } संदेश
+       *[other] { $count } संदेश
+    }
+conversation-status-active = सक्रिय
+conversation-status-idle = निष्क्रिय
+conversation-not-found = वार्तालाप नहीं मिला
+conversation-timeline-label = वार्तालाप समयरेखा
+
+## Message roles
+
+message-role-user = उपयोगकर्ता
+message-role-assistant = एजेंट
+message-role-tool = उपकरण
+message-role-system = सिस्टम
+
+## Agent status
+
+agent-status-label = एजेंट स्थिति
+agent-status-backend = बैकएंड
+agent-status-model = मॉडल
+agent-turn-idle = निष्क्रिय
+agent-turn-processing = प्रोसेसिंग
+agent-turn-awaiting-tool = टूल परिणाम की प्रतीक्षा
+
+## Tool calls
+
+tool-status-succeeded = सफल
+tool-status-failed = विफल
+tool-status-pending = लंबित
+tool-call-id = कॉल आईडी
+tool-call-duration = अवधि
+tool-call-show = विवरण दिखाएँ
+tool-call-hide = विवरण छिपाएँ
+tool-call-input = इनपुट
+tool-call-output = आउटपुट
+
+## Handoff annotations
+
+handoff-annotation-label = एजेंट हैंडऑफ़
+handoff-annotation-prefix = हैंडऑफ़
+
+## Slash command input
+
+slash-input-label = कमांड इनपुट
+slash-input-placeholder = कमांड के लिए / टाइप करें…
+slash-input-suggestions-label = उपलब्ध कमांड
+
+## Directives
+
+directive-list-region = निर्देश सूची
+directive-parameters = पैरामीटर
+directive-required = आवश्यक
+directive-template = टेम्पलेट
+directive-show-examples = उदाहरण दिखाएँ
+directive-hide-examples = उदाहरण छिपाएँ
+directive-example-heading = विस्तार उदाहरण

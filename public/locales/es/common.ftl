@@ -281,3 +281,66 @@ progress-label = Progreso
 task-subtask-status-complete = completada
 task-subtask-status-pending = pendiente
 task-subtask-item = { $name } ({ $status })
+
+## Conversations
+
+conversation-list-region = Lista de conversaciones
+conversation-list-empty = No hay conversaciones para este proyecto.
+conversation-message-count-label =
+    { $count ->
+        [one] { $count } mensaje
+       *[other] { $count } mensajes
+    }
+conversation-status-active = Activo
+conversation-status-idle = Inactivo
+conversation-not-found = Conversación no encontrada
+conversation-timeline-label = Cronología de la conversación
+
+## Message roles
+
+message-role-user = Usuario
+message-role-assistant = Agente
+message-role-tool = Herramienta
+message-role-system = Sistema
+
+## Agent status
+
+agent-status-label = Estado del agente
+agent-status-backend = Backend
+agent-status-model = Modelo
+agent-turn-idle = Inactivo
+agent-turn-processing = Procesando
+agent-turn-awaiting-tool = Esperando resultado de herramienta
+
+## Tool calls
+
+tool-status-succeeded = Exitoso
+tool-status-failed = Fallido
+tool-status-pending = Pendiente
+tool-call-id = ID de llamada
+tool-call-duration = Duración
+tool-call-show = Mostrar detalles
+tool-call-hide = Ocultar detalles
+tool-call-input = Entrada
+tool-call-output = Salida
+
+## Handoff annotations
+
+handoff-annotation-label = Transferencia de agente
+handoff-annotation-prefix = Transferencia
+
+## Slash command input
+
+slash-input-label = Entrada de comando
+slash-input-placeholder = Escribe / para comandos…
+slash-input-suggestions-label = Comandos disponibles
+
+## Directives
+
+directive-list-region = Lista de directivas
+directive-parameters = Parámetros
+directive-required = obligatorio
+directive-template = Plantilla
+directive-show-examples = Mostrar ejemplos
+directive-hide-examples = Ocultar ejemplos
+directive-example-heading = Ejemplos de expansión

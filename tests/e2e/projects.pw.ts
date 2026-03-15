@@ -48,7 +48,35 @@ test.describe("Projects", () => {
 
   test("project list has no accessibility violations", async ({ page }) => {
     await page.goto("/projects");
-    await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("heading", { name: "Projects" })).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test("project conversations list has no accessibility violations", async ({ page }) => {
+    await page.goto("/projects/apollo-guidance/conversations");
+    await expect(
+      page.getByRole("main").getByRole("heading", { name: "Conversations" }),
+    ).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test("project conversation detail has no accessibility violations", async ({ page }) => {
+    await page.goto("/projects/apollo-guidance/conversations/conv-1");
+    await expect(
+      page.getByRole("main").getByRole("heading", { name: "pgBouncer migration" }),
+    ).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test("project directives registry has no accessibility violations", async ({ page }) => {
+    await page.goto("/projects/apollo-guidance/directives");
+    await expect(page.getByRole("main").getByRole("heading", { name: "Directives" })).toBeVisible();
 
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
