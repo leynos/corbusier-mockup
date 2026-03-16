@@ -14,7 +14,14 @@
  */
 
 import { IconTerminal } from "@tabler/icons-react";
-import type { ChangeEvent, FocusEvent, JSX, KeyboardEvent, RefObject } from "react";
+import type {
+  ChangeEvent,
+  FocusEvent,
+  JSX,
+  KeyboardEvent,
+  MutableRefObject,
+  RefObject,
+} from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -228,6 +235,29 @@ function useSuggestionsBlurHandler({
   );
 }
 
+/** Hook to manage auto-scrolling the active option into view during keyboard navigation.
+ *
+ * Creates and maintains a Map of option element refs, and automatically scrolls
+ * the active option into view when keyboard navigation changes the selection.
+ *
+ * @param activeIndex - Index of the currently highlighted suggestion.
+ * @param dropdownActive - Whether the dropdown is currently visible.
+ * @returns A mutable ref object containing a Map of option indices to their DOM elements.
+ */
+function useActiveOptionScroll(
+  activeIndex: number,
+  dropdownActive: boolean,
+): MutableRefObject<Map<number, HTMLButtonElement>> {
+  const optionRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+
+  useEffect(() => {
+    if (!dropdownActive || activeIndex < 0) return;
+    optionRefs.current.get(activeIndex)?.scrollIntoView({ block: "nearest" });
+  }, [dropdownActive, activeIndex]);
+
+  return optionRefs;
+}
+
 /** Props for the suggestions dropdown component.
  *
  * @property listId - The ID for the listbox container element.
@@ -244,11 +274,11 @@ interface SuggestionsDropdownProps {
   readonly listId: string;
   readonly baseId: string;
   readonly suggestionsRef: RefObject<HTMLElement | null>;
+  readonly optionRefs: MutableRefObject<Map<number, HTMLButtonElement>>;
   readonly filteredDirectives: ReturnType<typeof filterDirectives>;
   readonly locale: string;
   readonly activeIndex: number;
   readonly label: string;
-  readonly optionRefs: RefObject<Map<number, HTMLButtonElement>>;
   readonly onBlurCapture: (e: FocusEvent<HTMLElement>) => void;
   readonly onSelect: (name: string) => void;
 }
@@ -333,17 +363,16 @@ export function SlashCommandInput(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLElement>(null);
-  const optionRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
   const filteredDirectives = filterDirectives(value, locale);
   const dropdownActive = showDropdown && filteredDirectives.length > 0;
+  const optionRefs = useActiveOptionScroll(activeIndex, dropdownActive);
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setValue(v);
     setShowDropdown(v.startsWith("/"));
     setActiveIndex(-1);
   }, []);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: setActiveIndex is a stable setState function, but listed for explicitness
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLInputElement>) => {
       const related = e.relatedTarget as HTMLElement | null;
@@ -356,7 +385,7 @@ export function SlashCommandInput(): JSX.Element {
         });
       }
     },
-    [scheduleBlur, setActiveIndex],
+    [scheduleBlur],
   );
   const handleSelect = useCallback(
     (commandName: string) => {
@@ -387,14 +416,6 @@ export function SlashCommandInput(): JSX.Element {
   const inputId = `${baseId}-input`;
   const listId = `${baseId}-list`;
   const activeDescendantId = activeIndex >= 0 ? `${baseId}-option-${activeIndex}` : undefined;
-  useEffect(() => {
-    if (dropdownActive && activeIndex >= 0) {
-      const element = optionRefs.current.get(activeIndex);
-      if (element) {
-        element.scrollIntoView({ block: "nearest" });
-      }
-    }
-  }, [dropdownActive, activeIndex]);
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
       <label htmlFor={inputId} className="sr-only">
