@@ -14,7 +14,7 @@
  */
 
 import { IconTerminal } from "@tabler/icons-react";
-import type { ChangeEvent, FocusEvent, JSX, KeyboardEvent } from "react";
+import type { ChangeEvent, FocusEvent, JSX, KeyboardEvent, RefObject } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -182,6 +182,52 @@ function useKeyboardNavigation({
   );
 }
 
+/** Options bag for configuring suggestions blur handler.
+ *
+ * All properties are readonly to ensure immutability during blur handling.
+ *
+ * @property suggestionsRef - Ref to the suggestions container element.
+ * @property inputRef - Ref to the input element.
+ * @property setShowDropdown - Callback to open (true) or close (false) the dropdown.
+ * @property setActiveIndex - Callback to update the highlighted suggestion index.
+ */
+interface SuggestionsBlurOptions {
+  readonly suggestionsRef: RefObject<HTMLElement | null>;
+  readonly inputRef: RefObject<HTMLInputElement | null>;
+  readonly setShowDropdown: (show: boolean) => void;
+  readonly setActiveIndex: (index: number) => void;
+}
+
+/** Hook to handle blur events on the suggestions dropdown.
+ *
+ * Closes the dropdown when focus moves outside both the suggestions container
+ * and the input field.
+ *
+ * @param options - Configuration object containing refs and callbacks.
+ *   See {@link SuggestionsBlurOptions} for detailed property descriptions.
+ * @returns A blur event handler of type `(e: FocusEvent<HTMLElement>) => void`
+ *   to be attached to the suggestions container's `onBlurCapture` prop.
+ */
+function useSuggestionsBlurHandler({
+  suggestionsRef,
+  inputRef,
+  setShowDropdown,
+  setActiveIndex,
+}: SuggestionsBlurOptions): (e: FocusEvent<HTMLElement>) => void {
+  return useCallback(
+    (e: FocusEvent<HTMLElement>) => {
+      const next = e.relatedTarget as Node | null;
+      const staysInSuggestions =
+        next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
+      const returnsToInput = next === inputRef.current;
+      if (staysInSuggestions || returnsToInput) return;
+      setShowDropdown(false);
+      setActiveIndex(-1);
+    },
+    [suggestionsRef, inputRef, setShowDropdown, setActiveIndex],
+  );
+}
+
 /** Slash command input with autocomplete dropdown (visual mockup).
  *
  * Renders a text input that shows a dropdown of available slash commands
@@ -238,15 +284,12 @@ export function SlashCommandInput(): JSX.Element {
     [cancelBlur],
   );
 
-  const handleSuggestionsBlur = useCallback((e: FocusEvent<HTMLElement>) => {
-    const next = e.relatedTarget as Node | null;
-    const staysInSuggestions =
-      next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
-    const returnsToInput = next === inputRef.current;
-    if (staysInSuggestions || returnsToInput) return;
-    setShowDropdown(false);
-    setActiveIndex(-1);
-  }, []);
+  const handleSuggestionsBlur = useSuggestionsBlurHandler({
+    suggestionsRef,
+    inputRef,
+    setShowDropdown,
+    setActiveIndex,
+  });
 
   const handleKeyDown = useKeyboardNavigation({
     dropdownActive,
