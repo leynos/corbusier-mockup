@@ -228,6 +228,94 @@ function useSuggestionsBlurHandler({
   );
 }
 
+/** Props for the suggestions dropdown component.
+ *
+ * @property listId - The ID for the listbox container element.
+ * @property baseId - The base ID used to generate unique option IDs.
+ * @property suggestionsRef - Ref to the suggestions container element.
+ * @property filteredDirectives - Array of directive items matching the current filter.
+ * @property locale - Current locale for localizing directive names.
+ * @property activeIndex - Index of the currently highlighted suggestion.
+ * @property label - Accessible label for the suggestions section.
+ * @property onBlurCapture - Blur handler for the suggestions container.
+ * @property onSelect - Callback invoked when a directive is selected.
+ */
+interface SuggestionsDropdownProps {
+  readonly listId: string;
+  readonly baseId: string;
+  readonly suggestionsRef: RefObject<HTMLElement | null>;
+  readonly filteredDirectives: ReturnType<typeof filterDirectives>;
+  readonly locale: string;
+  readonly activeIndex: number;
+  readonly label: string;
+  readonly optionRefs: RefObject<Map<number, HTMLButtonElement>>;
+  readonly onBlurCapture: (e: FocusEvent<HTMLElement>) => void;
+  readonly onSelect: (name: string) => void;
+}
+
+/** Suggestions dropdown component for slash command autocomplete.
+ *
+ * Renders the dropdown panel containing available command options with
+ * proper ARIA attributes for accessibility.
+ *
+ * @param props - Component properties as defined in {@link SuggestionsDropdownProps}.
+ * @returns The rendered suggestions dropdown section.
+ */
+function SuggestionsDropdown({
+  listId,
+  baseId,
+  suggestionsRef,
+  filteredDirectives,
+  locale,
+  activeIndex,
+  label,
+  optionRefs,
+  onBlurCapture,
+  onSelect,
+}: SuggestionsDropdownProps): JSX.Element {
+  return (
+    <section
+      ref={suggestionsRef}
+      aria-label={label}
+      className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
+      onBlurCapture={onBlurCapture}
+    >
+      <div id={listId} role="listbox" className="space-y-1 px-1">
+        {filteredDirectives.map((d, index) => {
+          const loc = pickLocalization(d.localizations, locale);
+          const isActive = index === activeIndex;
+          return (
+            <button
+              key={d.id}
+              ref={(el) => {
+                if (el) {
+                  optionRefs.current?.set(index, el);
+                } else {
+                  optionRefs.current?.delete(index);
+                }
+              }}
+              id={`${baseId}-option-${index}`}
+              type="button"
+              role="option"
+              aria-selected={isActive}
+              className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200 ${isActive ? "bg-base-200" : ""}`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => onSelect(loc.name)}
+            >
+              <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
+                {loc.name}
+              </span>
+              <span className="text-[length:var(--font-size-xs)] text-base-content/60">
+                {loc.description}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 /** Slash command input with autocomplete dropdown (visual mockup).
  *
  * Renders a text input that shows a dropdown of available slash commands
@@ -247,17 +335,14 @@ export function SlashCommandInput(): JSX.Element {
   const suggestionsRef = useRef<HTMLElement>(null);
   const optionRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
-
   const filteredDirectives = filterDirectives(value, locale);
   const dropdownActive = showDropdown && filteredDirectives.length > 0;
-
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setValue(v);
     setShowDropdown(v.startsWith("/"));
     setActiveIndex(-1);
   }, []);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: setActiveIndex is a stable setState function, but listed for explicitness
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLInputElement>) => {
@@ -273,7 +358,6 @@ export function SlashCommandInput(): JSX.Element {
     },
     [scheduleBlur, setActiveIndex],
   );
-
   const handleSelect = useCallback(
     (commandName: string) => {
       cancelBlur();
@@ -284,7 +368,6 @@ export function SlashCommandInput(): JSX.Element {
     },
     [cancelBlur],
   );
-
   const handleSuggestionsBlur = useSuggestionsBlurHandler({
     suggestionsRef,
     inputRef,
@@ -301,11 +384,9 @@ export function SlashCommandInput(): JSX.Element {
     setActiveIndex,
     handleSelect,
   });
-
   const inputId = `${baseId}-input`;
   const listId = `${baseId}-list`;
   const activeDescendantId = activeIndex >= 0 ? `${baseId}-option-${activeIndex}` : undefined;
-
   useEffect(() => {
     if (dropdownActive && activeIndex >= 0) {
       const element = optionRefs.current.get(activeIndex);
@@ -314,7 +395,6 @@ export function SlashCommandInput(): JSX.Element {
       }
     }
   }, [dropdownActive, activeIndex]);
-
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
       <label htmlFor={inputId} className="sr-only">
@@ -345,49 +425,21 @@ export function SlashCommandInput(): JSX.Element {
           aria-activedescendant={activeDescendantId}
         />
       </div>
-
       {dropdownActive ? (
-        <section
-          ref={suggestionsRef}
-          aria-label={t("slash-input-suggestions-label", {
+        <SuggestionsDropdown
+          listId={listId}
+          baseId={baseId}
+          suggestionsRef={suggestionsRef}
+          filteredDirectives={filteredDirectives}
+          locale={locale}
+          activeIndex={activeIndex}
+          label={t("slash-input-suggestions-label", {
             defaultValue: "Available commands",
           })}
-          className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
+          optionRefs={optionRefs}
           onBlurCapture={handleSuggestionsBlur}
-        >
-          <div id={listId} role="listbox" className="space-y-1 px-1">
-            {filteredDirectives.map((d, index) => {
-              const loc = pickLocalization(d.localizations, locale);
-              const isActive = index === activeIndex;
-              return (
-                <button
-                  key={d.id}
-                  ref={(el) => {
-                    if (el) {
-                      optionRefs.current.set(index, el);
-                    } else {
-                      optionRefs.current.delete(index);
-                    }
-                  }}
-                  id={`${baseId}-option-${index}`}
-                  type="button"
-                  role="option"
-                  aria-selected={isActive}
-                  className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200 ${isActive ? "bg-base-200" : ""}`}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => handleSelect(loc.name)}
-                >
-                  <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
-                    {loc.name}
-                  </span>
-                  <span className="text-[length:var(--font-size-xs)] text-base-content/60">
-                    {loc.description}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </section>
+          onSelect={handleSelect}
+        />
       ) : null}
     </div>
   );
