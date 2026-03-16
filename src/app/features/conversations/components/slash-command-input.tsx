@@ -245,6 +245,7 @@ export function SlashCommandInput(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLElement>(null);
+  const optionRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const { cancel: cancelBlur, schedule: scheduleBlur } = useBlurTimeout(150);
 
   const filteredDirectives = filterDirectives(value, locale);
@@ -305,6 +306,15 @@ export function SlashCommandInput(): JSX.Element {
   const listId = `${baseId}-list`;
   const activeDescendantId = activeIndex >= 0 ? `${baseId}-option-${activeIndex}` : undefined;
 
+  useEffect(() => {
+    if (dropdownActive && activeIndex >= 0) {
+      const element = optionRefs.current.get(activeIndex);
+      if (element) {
+        element.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [dropdownActive, activeIndex]);
+
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
       <label htmlFor={inputId} className="sr-only">
@@ -352,11 +362,18 @@ export function SlashCommandInput(): JSX.Element {
               return (
                 <button
                   key={d.id}
+                  ref={(el) => {
+                    if (el) {
+                      optionRefs.current.set(index, el);
+                    } else {
+                      optionRefs.current.delete(index);
+                    }
+                  }}
                   id={`${baseId}-option-${index}`}
                   type="button"
                   role="option"
                   aria-selected={isActive}
-                  className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200"
+                  className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200 ${isActive ? "bg-base-200" : ""}`}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => handleSelect(loc.name)}
                 >
