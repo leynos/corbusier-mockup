@@ -237,6 +237,16 @@ export function SlashCommandInput(): JSX.Element {
     [cancelBlur],
   );
 
+  const handleSuggestionsBlur = useCallback((e: FocusEvent<HTMLElement>) => {
+    const next = e.relatedTarget as Node | null;
+    const staysInSuggestions =
+      next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
+    const returnsToInput = next === inputRef.current;
+    if (staysInSuggestions || returnsToInput) return;
+    setShowDropdown(false);
+    setActiveIndex(-1);
+  }, []);
+
   const handleKeyDown = useKeyboardNavigation({
     dropdownActive,
     activeIndex,
@@ -287,15 +297,7 @@ export function SlashCommandInput(): JSX.Element {
             defaultValue: "Available commands",
           })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
-          onBlurCapture={(e) => {
-            const next = e.relatedTarget as Node | null;
-            const staysInSuggestions =
-              next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
-            const returnsToInput = next === inputRef.current;
-            if (staysInSuggestions || returnsToInput) return;
-            setShowDropdown(false);
-            setActiveIndex(-1);
-          }}
+          onBlurCapture={handleSuggestionsBlur}
         >
           <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
             {filteredDirectives.map((d, index) => {
