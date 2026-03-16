@@ -210,16 +210,20 @@ export function SlashCommandInput(): JSX.Element {
     setActiveIndex(-1);
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: setActiveIndex is a stable setState function, but listed for explicitness
   const handleBlur = useCallback(
     (e: FocusEvent<HTMLInputElement>) => {
       const related = e.relatedTarget as HTMLElement | null;
       const activeEl = related ?? (document.activeElement as HTMLElement | null);
       const isInsideSuggestions = suggestionsRef.current?.contains(activeEl) ?? false;
       if (!isInsideSuggestions) {
-        scheduleBlur(() => setShowDropdown(false));
+        scheduleBlur(() => {
+          setShowDropdown(false);
+          setActiveIndex(-1);
+        });
       }
     },
-    [scheduleBlur],
+    [scheduleBlur, setActiveIndex],
   );
 
   const handleSelect = useCallback(
@@ -283,6 +287,15 @@ export function SlashCommandInput(): JSX.Element {
             defaultValue: "Available commands",
           })}
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
+          onBlurCapture={(e) => {
+            const next = e.relatedTarget as Node | null;
+            const staysInSuggestions =
+              next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
+            const returnsToInput = next === inputRef.current;
+            if (staysInSuggestions || returnsToInput) return;
+            setShowDropdown(false);
+            setActiveIndex(-1);
+          }}
         >
           <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
             {filteredDirectives.map((d, index) => {
