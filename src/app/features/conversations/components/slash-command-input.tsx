@@ -15,7 +15,7 @@
 
 import { IconTerminal } from "@tabler/icons-react";
 import type { ChangeEvent, FocusEvent, JSX, KeyboardEvent } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DIRECTIVES } from "../../../../data/directives";
@@ -193,6 +193,7 @@ function useKeyboardNavigation({
 export function SlashCommandInput(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const baseId = useId();
   const [value, setValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -257,11 +258,13 @@ export function SlashCommandInput(): JSX.Element {
     handleSelect,
   });
 
-  const activeDescendantId = activeIndex >= 0 ? `slash-command-option-${activeIndex}` : undefined;
+  const inputId = `${baseId}-input`;
+  const listId = `${baseId}-list`;
+  const activeDescendantId = activeIndex >= 0 ? `${baseId}-option-${activeIndex}` : undefined;
 
   return (
     <div className="relative border-t border-base-300 bg-base-200/60 px-4 py-3">
-      <label htmlFor="slash-command-input" className="sr-only">
+      <label htmlFor={inputId} className="sr-only">
         {t("slash-input-label", { defaultValue: "Command input" })}
       </label>
       <div className="relative">
@@ -270,7 +273,7 @@ export function SlashCommandInput(): JSX.Element {
         </span>
         <input
           ref={inputRef}
-          id="slash-command-input"
+          id={inputId}
           type="text"
           role="combobox"
           value={value}
@@ -283,7 +286,7 @@ export function SlashCommandInput(): JSX.Element {
           className="w-full rounded-lg border border-base-300 bg-base-100 py-2.5 pe-4 ps-9 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           autoComplete="off"
           aria-haspopup="listbox"
-          aria-controls={dropdownActive ? "slash-command-list" : undefined}
+          aria-controls={dropdownActive ? listId : undefined}
           aria-expanded={dropdownActive}
           aria-autocomplete="list"
           aria-activedescendant={activeDescendantId}
@@ -299,14 +302,14 @@ export function SlashCommandInput(): JSX.Element {
           className="absolute inset-x-4 bottom-full mb-1 max-h-60 overflow-y-auto rounded-lg border border-base-300 bg-base-100 py-1 shadow-lg"
           onBlurCapture={handleSuggestionsBlur}
         >
-          <div id="slash-command-list" role="listbox" className="space-y-1 px-1">
+          <div id={listId} role="listbox" className="space-y-1 px-1">
             {filteredDirectives.map((d, index) => {
               const loc = pickLocalization(d.localizations, locale);
               const isActive = index === activeIndex;
               return (
                 <button
                   key={d.id}
-                  id={`slash-command-option-${index}`}
+                  id={`${baseId}-option-${index}`}
                   type="button"
                   role="option"
                   aria-selected={isActive}
