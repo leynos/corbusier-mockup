@@ -106,9 +106,7 @@ interface KeyboardNavigationOptions {
  * @param key - The keyboard event key value.
  * @returns True if the key is ArrowDown or ArrowUp.
  */
-function isArrowKey(key: string): boolean {
-  return key === "ArrowDown" || key === "ArrowUp";
-}
+const isArrowKey = (key: string): boolean => key === "ArrowDown" || key === "ArrowUp";
 
 /** Computes the next navigation index for arrow key movement.
  *
@@ -189,6 +187,16 @@ function useKeyboardNavigation({
   );
 }
 
+/** Pure predicate to check if focus remains inside a container element.
+ *
+ * @param next - The focus target node, typically from relatedTarget or activeElement.
+ * @param container - The container element to check containment against.
+ * @returns True if next is a Node and is contained within the container element.
+ */
+function isFocusInsideElement(next: Node | null, container: HTMLElement | null): boolean {
+  return next instanceof Node && (container?.contains(next) ?? false);
+}
+
 /** Options bag for configuring suggestions blur handler.
  *
  * All properties are readonly to ensure immutability during blur handling.
@@ -224,14 +232,59 @@ function useSuggestionsBlurHandler({
   return useCallback(
     (e: FocusEvent<HTMLElement>) => {
       const next = e.relatedTarget as Node | null;
-      const staysInSuggestions =
-        next instanceof Node && (suggestionsRef.current?.contains(next) ?? false);
-      const returnsToInput = next === inputRef.current;
-      if (staysInSuggestions || returnsToInput) return;
+      if (isFocusInsideElement(next, suggestionsRef.current) || next === inputRef.current) return;
       setShowDropdown(false);
       setActiveIndex(-1);
     },
     [suggestionsRef, inputRef, setShowDropdown, setActiveIndex],
+  );
+}
+
+/** Options bag for configuring input blur handler.
+ *
+ * All properties are readonly to ensure immutability during blur handling.
+ *
+ * @property suggestionsRef - Ref to the suggestions container element.
+ * @property scheduleBlur - Callback to schedule a delayed blur action.
+ * @property setShowDropdown - Callback to open (true) or close (false) the dropdown.
+ * @property setActiveIndex - Callback to update the highlighted suggestion index.
+ */
+interface InputBlurOptions {
+  readonly suggestionsRef: RefObject<HTMLElement | null>;
+  readonly scheduleBlur: (cb: () => void) => void;
+  readonly setShowDropdown: (show: boolean) => void;
+  readonly setActiveIndex: (index: number) => void;
+}
+
+/** Hook to handle blur events on the input element.
+ *
+ * Schedules dropdown closure when focus moves outside the suggestions container.
+ * Uses the isFocusInsideElement predicate to determine if focus remains within
+ * the interactive region.
+ *
+ * @param options - Configuration object containing refs and callbacks.
+ *   See {@link InputBlurOptions} for detailed property descriptions.
+ * @returns A blur event handler of type `(e: FocusEvent<HTMLInputElement>) => void`
+ *   to be attached to the input element's `onBlur` prop.
+ */
+function useInputBlurHandler({
+  suggestionsRef,
+  scheduleBlur,
+  setShowDropdown,
+  setActiveIndex,
+}: InputBlurOptions): (e: FocusEvent<HTMLInputElement>) => void {
+  return useCallback(
+    (e: FocusEvent<HTMLInputElement>) => {
+      const related = e.relatedTarget as HTMLElement | null;
+      const activeEl = related ?? (document.activeElement as HTMLElement | null);
+      if (!isFocusInsideElement(activeEl, suggestionsRef.current)) {
+        scheduleBlur(() => {
+          setShowDropdown(false);
+          setActiveIndex(-1);
+        });
+      }
+    },
+    [suggestionsRef, scheduleBlur, setShowDropdown, setActiveIndex],
   );
 }
 
@@ -269,6 +322,7 @@ function useActiveOptionScroll(
  * @property label - Accessible label for the suggestions section.
  * @property onBlurCapture - Blur handler for the suggestions container.
  * @property onSelect - Callback invoked when a directive is selected.
+ * @property cancelBlur - Callback to cancel any pending blur timeout.
  */
 interface SuggestionsDropdownProps {
   readonly listId: string;
@@ -281,6 +335,7 @@ interface SuggestionsDropdownProps {
   readonly label: string;
   readonly onBlurCapture: (e: FocusEvent<HTMLElement>) => void;
   readonly onSelect: (name: string) => void;
+  readonly cancelBlur: () => void;
 }
 
 /** Suggestions dropdown component for slash command autocomplete.
@@ -302,6 +357,7 @@ function SuggestionsDropdown({
   optionRefs,
   onBlurCapture,
   onSelect,
+  cancelBlur,
 }: SuggestionsDropdownProps): JSX.Element {
   return (
     <section
@@ -329,7 +385,10 @@ function SuggestionsDropdown({
               role="option"
               aria-selected={isActive}
               className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-start hover:bg-base-200 ${isActive ? "bg-base-200" : ""}`}
-              onMouseDown={(e) => e.preventDefault()}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                cancelBlur();
+              }}
               onClick={() => onSelect(loc.name)}
             >
               <span className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] font-semibold text-primary">
@@ -373,20 +432,15 @@ export function SlashCommandInput(): JSX.Element {
     setShowDropdown(v.startsWith("/"));
     setActiveIndex(-1);
   }, []);
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      const related = e.relatedTarget as HTMLElement | null;
-      const activeEl = related ?? (document.activeElement as HTMLElement | null);
-      const isInsideSuggestions = suggestionsRef.current?.contains(activeEl) ?? false;
-      if (!isInsideSuggestions) {
-        scheduleBlur(() => {
-          setShowDropdown(false);
-          setActiveIndex(-1);
-        });
-      }
-    },
-    [scheduleBlur],
-  );
+  const handleBlur = useInputBlurHandler({
+    suggestionsRef,
+    scheduleBlur,
+    setShowDropdown,
+    setActiveIndex,
+  });
+  const handleFocus = useCallback(() => {
+    cancelBlur();
+  }, [cancelBlur]);
   const handleSelect = useCallback(
     (commandName: string) => {
       cancelBlur();
@@ -432,6 +486,7 @@ export function SlashCommandInput(): JSX.Element {
           role="combobox"
           value={value}
           onChange={handleChange}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={t("slash-input-placeholder", {
@@ -460,6 +515,7 @@ export function SlashCommandInput(): JSX.Element {
           optionRefs={optionRefs}
           onBlurCapture={handleSuggestionsBlur}
           onSelect={handleSelect}
+          cancelBlur={cancelBlur}
         />
       ) : null}
     </div>
