@@ -125,6 +125,66 @@ function resolveNavigationIndex(key: string, activeIndex: number, length: number
   return activeIndex > 0 ? activeIndex - 1 : length - 1;
 }
 
+/** Selects the directive at the active index, if one exists.
+ *
+ * @param activeIndex - Currently highlighted option index.
+ * @param filteredDirectives - Current filtered directive list.
+ * @param locale - Current locale for name localisation.
+ * @param handleSelect - Selection callback.
+ */
+function tryEnterSelect(
+  activeIndex: number,
+  filteredDirectives: (typeof DIRECTIVES)[number][],
+  locale: string,
+  handleSelect: (name: string) => void,
+): void {
+  const directive = filteredDirectives[activeIndex];
+  if (!directive) return;
+  handleSelect(pickLocalization(directive.localizations, locale).name);
+}
+
+/** Dispatches a keyboard event when the dropdown is open.
+ *
+ * Handles arrow navigation, Enter selection, and Escape dismissal.
+ *
+ * @param e - The keyboard event from the input element.
+ * @param activeIndex - Currently highlighted option index.
+ * @param filteredDirectives - Current filtered directive list.
+ * @param locale - Current locale for name localisation.
+ * @param setShowDropdown - Callback to toggle dropdown visibility.
+ * @param setActiveIndex - Callback to update the active option.
+ * @param handleSelect - Selection callback.
+ */
+function handleOpenDropdownKey(
+  e: KeyboardEvent<HTMLInputElement>,
+  activeIndex: number,
+  filteredDirectives: (typeof DIRECTIVES)[number][],
+  locale: string,
+  setShowDropdown: (v: boolean) => void,
+  setActiveIndex: (v: number) => void,
+  handleSelect: (name: string) => void,
+): void {
+  switch (e.key) {
+    case "ArrowDown":
+    case "ArrowUp": {
+      e.preventDefault();
+      setActiveIndex(resolveNavigationIndex(e.key, activeIndex, filteredDirectives.length));
+      break;
+    }
+    case "Enter": {
+      e.preventDefault();
+      tryEnterSelect(activeIndex, filteredDirectives, locale, handleSelect);
+      break;
+    }
+    case "Escape": {
+      e.preventDefault();
+      setShowDropdown(false);
+      setActiveIndex(-1);
+      break;
+    }
+  }
+}
+
 /** Keyboard navigation hook for the slash command autocomplete dropdown.
  *
  * Handles arrow key navigation to open the dropdown and move through suggestions,
@@ -152,28 +212,15 @@ function useKeyboardNavigation({
         return;
       }
       if (!dropdownActive) return;
-
-      switch (e.key) {
-        case "ArrowDown":
-        case "ArrowUp": {
-          e.preventDefault();
-          setActiveIndex(resolveNavigationIndex(e.key, activeIndex, filteredDirectives.length));
-          break;
-        }
-        case "Enter": {
-          e.preventDefault();
-          const directive = filteredDirectives[activeIndex];
-          if (!directive) return;
-          handleSelect(pickLocalization(directive.localizations, locale).name);
-          break;
-        }
-        case "Escape": {
-          e.preventDefault();
-          setShowDropdown(false);
-          setActiveIndex(-1);
-          break;
-        }
-      }
+      handleOpenDropdownKey(
+        e,
+        activeIndex,
+        filteredDirectives,
+        locale,
+        setShowDropdown,
+        setActiveIndex,
+        handleSelect,
+      );
     },
     [
       dropdownActive,
