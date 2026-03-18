@@ -11,15 +11,14 @@
 import type { JSX } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
+import type { ProjectSlug } from "../../../data/registries/project-descriptors";
+import { projectDescriptors } from "../../../data/registries/project-descriptors";
 import {
   AI_INSIGHTS,
   SUGGESTIONS,
   type Suggestion,
   type SuggestionPriority,
 } from "../../../data/suggestions";
-import { projectDescriptors } from "../../../data/registries/project-descriptors";
-import type { ProjectSlug } from "../../../data/registries/project-descriptors";
 import { pickLocalization } from "../../domain/entities/localization";
 import { InsightsPanel } from "./components/insights-panel";
 import { SuggestionCard } from "./components/suggestion-card";
@@ -63,12 +62,8 @@ export function SuggestionsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
 
-  const [dismissedIds, setDismissedIds] = useState<ReadonlySet<string>>(
-    new Set(),
-  );
-  const [activeProject, setActiveProject] = useState<ProjectSlug | "all">(
-    "all",
-  );
+  const [dismissedIds, setDismissedIds] = useState<ReadonlySet<string>>(new Set());
+  const [activeProject, setActiveProject] = useState<ProjectSlug | "all">("all");
 
   const visibleSuggestions = useMemo(() => {
     return SUGGESTIONS.filter((s) => {
@@ -97,8 +92,7 @@ export function SuggestionsScreen(): JSX.Element {
       </h1>
       <p className="mt-1 text-base-content/70">
         {t("page-ai-suggestions-sub", {
-          defaultValue:
-            "Intelligent recommendations from your agent backends.",
+          defaultValue: "Intelligent recommendations from your agent backends.",
         })}
       </p>
 
@@ -130,10 +124,7 @@ export function SuggestionsScreen(): JSX.Element {
           {t("suggestion-filter-all", { defaultValue: "All Projects" })}
         </button>
         {projects.map((slug) => {
-          const pLoc = pickLocalization(
-            projectDescriptors[slug].localizations,
-            locale,
-          );
+          const pLoc = pickLocalization(projectDescriptors[slug].localizations, locale);
           return (
             <button
               key={slug}
@@ -154,9 +145,7 @@ export function SuggestionsScreen(): JSX.Element {
         {/* Suggestion groups */}
         <div className="flex-1 space-y-6">
           {PRIORITY_ORDER.map((priority) => {
-            const items = visibleSuggestions.filter(
-              (s) => s.priority === priority,
-            );
+            const items = visibleSuggestions.filter((s) => s.priority === priority);
             if (items.length === 0) return null;
             return (
               <PriorityGroup

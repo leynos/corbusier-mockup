@@ -8,8 +8,8 @@
  */
 
 import type { EntityLocalizations } from "../app/domain/entities/localization";
-import type { Assignee } from "./tasks";
 import type { ProjectSlug } from "./registries/project-descriptors";
+import type { Assignee } from "./tasks";
 
 /* -- Tag ID type --------------------------------------------------------- */
 
@@ -160,8 +160,7 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       hi: {
         name: "एजेंट बैकएंड कॉल में सर्किट ब्रेकर जोड़ें",
-        description:
-          "एजेंट बैकएंड HTTP कॉल में वर्तमान में सर्किट ब्रेकर नहीं है। इसे जोड़ने से कैस्केड विफलताएँ रुकेंगी।",
+        description: "एजेंट बैकएंड HTTP कॉल में वर्तमान में सर्किट ब्रेकर नहीं है। इसे जोड़ने से कैस्केड विफलताएँ रुकेंगी।",
       },
       ja: {
         name: "エージェントバックエンド呼び出しにサーキットブレーカーを追加",
@@ -170,7 +169,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "为代理后端调用添加熔断器",
-        description: "代理后端HTTP调用目前缺少熔断器。添加后可防止级联故障，将平均恢复时间从分钟缩短至秒。",
+        description:
+          "代理后端HTTP调用目前缺少熔断器。添加后可防止级联故障，将平均恢复时间从分钟缩短至秒。",
       },
     },
     priority: "high",
@@ -199,7 +199,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "فرض تسجيل تدقيق الوصول إلى الأدوات",
-        description: "طبقة الحوكمة تسجل تقييمات السياسة لكنها لا تلتقط قرارات استدعاء الأدوات الفردية.",
+        description:
+          "طبقة الحوكمة تسجل تقييمات السياسة لكنها لا تلتقط قرارات استدعاء الأدوات الفردية.",
       },
       de: {
         name: "Audit-Logging für Tool-Zugriff durchsetzen",
@@ -217,11 +218,13 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ja: {
         name: "ツールアクセス監査ログを義務化",
-        description: "ガバナンス層はポリシー評価を記録していますが、個々のツール呼び出し決定は捕捉していません。",
+        description:
+          "ガバナンス層はポリシー評価を記録していますが、個々のツール呼び出し決定は捕捉していません。",
       },
       "zh-CN": {
         name: "强制工具访问审计日志",
-        description: "治理层记录了策略评估，但未捕获单个工具调用决策。添加结构化审计追踪可满足合规要求。",
+        description:
+          "治理层记录了策略评估，但未捕获单个工具调用决策。添加结构化审计追踪可满足合规要求。",
       },
     },
     priority: "high",
@@ -250,7 +253,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "استخراج أنواع دورة حياة الخطاف المشتركة",
-        description: "يتشارك مشغّلا ما قبل وما بعد الخطاف شكل حدث مشترك، لكن الأنواع معرّفة بشكل مضمّن.",
+        description:
+          "يتشارك مشغّلا ما قبل وما بعد الخطاف شكل حدث مشترك، لكن الأنواع معرّفة بشكل مضمّن.",
       },
       de: {
         name: "Gemeinsame Hook-Lifecycle-Typen extrahieren",
@@ -274,7 +278,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "提取共享钩子生命周期类型",
-        description: "前置和后置钩子运行器共享通用事件结构，但类型在各模块中内联定义。提取共享接口可减少重复。",
+        description:
+          "前置和后置钩子运行器共享通用事件结构，但类型在各模块中内联定义。提取共享接口可减少重复。",
       },
     },
     priority: "medium",
@@ -328,7 +333,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "为SSE重连添加重试逻辑",
-        description: "当前SSE客户端在断开后立即重连。添加指数退避和抖动可防止后端重启时的重连风暴。",
+        description:
+          "当前SSE客户端在断开后立即重连。添加指数退避和抖动可防止后端重启时的重连风暴。",
       },
     },
     priority: "medium",
@@ -357,7 +363,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "إضافة طبقة اختصارات لوحة المفاتيح لتفاصيل المحادثة",
-        description: "سيستفيد المستخدمون المتقدمون من مرجع اختصارات لوحة المفاتيح في سلاسل المحادثة.",
+        description:
+          "سيستفيد المستخدمون المتقدمون من مرجع اختصارات لوحة المفاتيح في سلاسل المحادثة.",
       },
       de: {
         name: "Tastaturkürzel-Overlay für Konversationsdetails hinzufügen",
@@ -375,11 +382,13 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ja: {
         name: "会話詳細にキーボードショートカットオーバーレイを追加",
-        description: "会話スレッドを操作するパワーユーザーにキーボードショートカットリファレンスが役立ちます。",
+        description:
+          "会話スレッドを操作するパワーユーザーにキーボードショートカットリファレンスが役立ちます。",
       },
       "zh-CN": {
         name: "为对话详情添加键盘快捷键浮层",
-        description: "高级用户在浏览对话线程时将受益于键盘快捷键参考。可发现的浮层将缩短首次高效操作的时间。",
+        description:
+          "高级用户在浏览对话线程时将受益于键盘快捷键参考。可发现的浮层将缩短首次高效操作的时间。",
       },
     },
     priority: "low",
@@ -408,7 +417,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "أتمتة تنظيف مساحة اسم المستأجر عند إلغاء التزويد",
-        description: "عند إلغاء تزويد مستأجر، تبقى موارد يتيمة في مساحة الاسم. الأتمتة ستمنع تسرب الموارد.",
+        description:
+          "عند إلغاء تزويد مستأجر، تبقى موارد يتيمة في مساحة الاسم. الأتمتة ستمنع تسرب الموارد.",
       },
       de: {
         name: "Automatische Namespace-Bereinigung bei Tenant-Deprovisionierung",
@@ -432,7 +442,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "在租户取消配置时自动清理命名空间",
-        description: "当租户取消配置时，孤立资源留在命名空间中。添加自动清理可防止资源泄漏并降低基础设施成本。",
+        description:
+          "当租户取消配置时，孤立资源留在命名空间中。添加自动清理可防止资源泄漏并降低基础设施成本。",
       },
     },
     priority: "high",
@@ -461,7 +472,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "إضافة رؤوس تتبع الطلبات عبر المستأجرين",
-        description: "لا ينشر التتبع الموزع سياق المستأجر عبر حدود الخدمات. إضافة رأس تتبع سيسرع التحليل.",
+        description:
+          "لا ينشر التتبع الموزع سياق المستأجر عبر حدود الخدمات. إضافة رأس تتبع سيسرع التحليل.",
       },
       de: {
         name: "Cross-Tenant-Request-Tracing-Header hinzufügen",
@@ -514,7 +526,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "زيادة تغطية اختبار الوحدة لمقيّم السياسات",
-        description: "يبلغ مقيّم سياسة الوصول للأدوات تغطية 62%. رفعها فوق 85% سيلتقط الحالات الحدية.",
+        description:
+          "يبلغ مقيّم سياسة الوصول للأدوات تغطية 62%. رفعها فوق 85% سيلتقط الحالات الحدية.",
       },
       de: {
         name: "Unit-Test-Abdeckung für Policy-Evaluator erhöhen",
@@ -537,7 +550,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "提高策略评估器的单元测试覆盖率",
-        description: "工具访问策略评估器的行覆盖率为62%。将其提高到85%以上可在权限边界逻辑到达生产前捕获边缘情况。",
+        description:
+          "工具访问策略评估器的行覆盖率为62%。将其提高到85%以上可在权限边界逻辑到达生产前捕获边缘情况。",
       },
     },
     priority: "medium",
@@ -591,7 +605,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       "zh-CN": {
         name: "为看板列过渡添加加载骨架",
-        description: "当任务在看板列间移动时，会出现空状态闪烁。添加骨架占位符可平滑视觉过渡并减少感知延迟。",
+        description:
+          "当任务在看板列间移动时，会出现空状态闪烁。添加骨架占位符可平滑视觉过渡并减少感知延迟。",
       },
     },
     priority: "low",
@@ -620,7 +635,8 @@ export const SUGGESTIONS: readonly Suggestion[] = [
       },
       ar: {
         name: "إضافة اختبار تكامل لتدفق تزويد المستأجرين",
-        description: "لا يوجد اختبار تكامل شامل لتدفق تزويد المستأجرين. إضافته سيتحقق من اكتمال العملية.",
+        description:
+          "لا يوجد اختبار تكامل شامل لتدفق تزويد المستأجرين. إضافته سيتحقق من اكتمال العملية.",
       },
       de: {
         name: "Integrationstest für Tenant-Provisioning-Flow hinzufügen",
@@ -673,7 +689,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     localizations: {
       "en-GB": {
         name: "Sprint velocity trending downward",
-        description: "Velocity has decreased 18% over the past 3 sprints. Consider reviewing scope commitments.",
+        description:
+          "Velocity has decreased 18% over the past 3 sprints. Consider reviewing scope commitments.",
       },
       ar: {
         name: "سرعة السبرنت في اتجاه هبوطي",
@@ -693,7 +710,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       ja: {
         name: "スプリント速度が低下傾向",
-        description: "過去3スプリントで速度が18%低下しています。スコープコミットメントの見直しを検討してください。",
+        description:
+          "過去3スプリントで速度が18%低下しています。スコープコミットメントの見直しを検討してください。",
       },
       "zh-CN": {
         name: "迭代速度呈下降趋势",
@@ -732,7 +750,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       "zh-CN": {
         name: "三项任务被阻塞超过5天",
-        description: "TASK-1003、TASK-1004和TASK-1012已被阻塞超过5个工作日。解除阻塞将释放8个故事点。",
+        description:
+          "TASK-1003、TASK-1004和TASK-1012已被阻塞超过5个工作日。解除阻塞将释放8个故事点。",
       },
     },
     severity: "critical",
@@ -742,7 +761,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     localizations: {
       "en-GB": {
         name: "Agent backend error rate within normal range",
-        description: "Claude Code SDK error rate is 0.3% and Codex CLI is 0.1% — both within the 1% threshold.",
+        description:
+          "Claude Code SDK error rate is 0.3% and Codex CLI is 0.1% — both within the 1% threshold.",
       },
       ar: {
         name: "معدل خطأ الوكيل الخلفي ضمن النطاق الطبيعي",
@@ -750,7 +770,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       de: {
         name: "Agent-Backend-Fehlerrate im Normalbereich",
-        description: "Claude Code SDK Fehlerrate 0,3%, Codex CLI 0,1% — beide unter dem 1%-Schwellenwert.",
+        description:
+          "Claude Code SDK Fehlerrate 0,3%, Codex CLI 0,1% — beide unter dem 1%-Schwellenwert.",
       },
       es: {
         name: "Tasa de error de backend de agentes en rango normal",
@@ -762,7 +783,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       ja: {
         name: "エージェントバックエンドのエラー率は正常範囲内",
-        description: "Claude Code SDKのエラー率は0.3%、Codex CLIは0.1% — どちらも1%のしきい値内です。",
+        description:
+          "Claude Code SDKのエラー率は0.3%、Codex CLIは0.1% — どちらも1%のしきい値内です。",
       },
       "zh-CN": {
         name: "代理后端错误率在正常范围内",
@@ -797,7 +819,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       ja: {
         name: "高優先タスクの完了率は40%",
-        description: "5つの高優先タスクのうち2つのみが順調です。ワークロードの再分配を検討してください。",
+        description:
+          "5つの高優先タスクのうち2つのみが順調です。ワークロードの再分配を検討してください。",
       },
       "zh-CN": {
         name: "高优先级任务完成率为40%",
@@ -832,7 +855,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       ja: {
         name: "Skunkworks-Alphaがデリバリーマイルストーンに接近",
-        description: "テナント分離（TASK-1011）は80%完了しています。今週完了するとオンボーディング自動化のブロックが解除されます。",
+        description:
+          "テナント分離（TASK-1011）は80%完了しています。今週完了するとオンボーディング自動化のブロックが解除されます。",
       },
       "zh-CN": {
         name: "Skunkworks-Alpha接近交付里程碑",
@@ -855,11 +879,13 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       de: {
         name: "Frontend-Testabdeckung unter Team-Ziel",
-        description: "Manhattan-Logistics Frontend-Abdeckung liegt bei 54%, unter der 70%-Schwelle des Teams.",
+        description:
+          "Manhattan-Logistics Frontend-Abdeckung liegt bei 54%, unter der 70%-Schwelle des Teams.",
       },
       es: {
         name: "Cobertura de tests frontend por debajo del objetivo del equipo",
-        description: "La cobertura frontend de Manhattan-Logistics es del 54%, por debajo del 70% del equipo.",
+        description:
+          "La cobertura frontend de Manhattan-Logistics es del 54%, por debajo del 70% del equipo.",
       },
       hi: {
         name: "फ्रंटएंड टेस्ट कवरेज टीम लक्ष्य से नीचे",
@@ -867,7 +893,8 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
       },
       ja: {
         name: "フロントエンドテストカバレッジがチーム目標以下",
-        description: "Manhattan-Logisticsのフロントエンドカバレッジは54%で、チームの70%しきい値を下回っています。",
+        description:
+          "Manhattan-Logisticsのフロントエンドカバレッジは54%で、チームの70%しきい値を下回っています。",
       },
       "zh-CN": {
         name: "前端测试覆盖率低于团队目标",
