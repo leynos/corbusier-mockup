@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -62,22 +62,51 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 
 ## Progress
 
-- [ ] Milestone 1: Suggestion fixture data
-- [ ] Milestone 2: Suggestion card component
-- [ ] Milestone 3: AI Suggestions page
-- [ ] Milestone 4: Tests and validation
+- [x] Milestone 1: Suggestion fixture data — `b3adbb0`
+- [x] Milestone 2: Suggestion card component — `a25f258`
+- [x] Milestone 3: AI Suggestions page — `1ef9655`
+- [x] Milestone 4: Tests and validation — `6139114`
 
 ## Surprises & discoveries
 
-(None yet.)
+- Biome `useSemanticElements` rejects `<div role="region">` — must use
+  `<section>` instead.
+- Biome `useAriaPropsSupportedByRole` rejects `aria-label` on plain
+  `<div>` and `<span>` — the assignee avatar stack needed `<fieldset>`
+  with `border-none p-0` and individual avatars needed `role="img"`.
+- The `loc()` helper from `localization-helpers.ts` only creates en-GB
+  entries, so 7-locale translations for fixture data had to be written
+  manually (matching the conversations.ts/directives.ts pattern).
 
 ## Decision log
 
-(None yet.)
+- Confidence badge: implemented as inline SVG with
+  `stroke-dasharray`/`stroke-dashoffset` arc (26 lines). Used
+  `role="img"` with `aria-label` for accessibility.
+- Category tags: created a `CATEGORY_TAGS` descriptor registry
+  (Record<string, EntityLocalizations>) with 8 tag IDs, rather than
+  reusing label descriptors, because tags are suggestion-specific.
+- Insights panel severity colours: `bg-error` (critical), `bg-warning`
+  (warning), `bg-primary` (info) — follows DaisyUI semantic colour
+  tokens.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 4 milestones delivered. Files created:
+- `src/data/suggestions.ts` — 10 suggestions, 6 insights, 8 category
+  tags, all with 7-locale translations.
+- `src/app/features/suggestions/components/confidence-badge.tsx`
+- `src/app/features/suggestions/components/suggestion-card.tsx`
+- `src/app/features/suggestions/components/summary-bar.tsx`
+- `src/app/features/suggestions/components/insights-panel.tsx`
+- `src/app/features/suggestions/suggestions-screen.tsx` (replaced
+  placeholder)
+- `tests/suggestions-screen.test.tsx` — 9 unit tests
+- `tests/e2e/suggestions.pw.ts` — 6 E2E tests (incl. axe sweep)
+
+All 7 locale FTL files updated with 19 suggestion-related keys each.
+`bun run ff` passes with 0 errors: 130 unit tests, 31 E2E tests,
+0 axe violations.
 
 ## Context and orientation
 
