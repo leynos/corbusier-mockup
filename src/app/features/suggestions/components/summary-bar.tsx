@@ -50,18 +50,14 @@ export function SummaryBar({
   ];
 
   return (
-    <div
+    <section
       className="grid grid-cols-2 gap-3 sm:grid-cols-4"
-      role="region"
       aria-label={t("suggestion-summary-region", {
         defaultValue: "Suggestion summary",
       })}
     >
       {tiles.map((tile) => (
-        <div
-          key={tile.label}
-          className="rounded-lg bg-base-100 p-3"
-        >
+        <div key={tile.label} className="rounded-lg bg-base-100 p-3">
           <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wider text-base-content/60">
             {tile.label}
           </p>
@@ -70,6 +66,6 @@ export function SummaryBar({
           </p>
         </div>
       ))}
-    </div>
+    </section>
   );
 }

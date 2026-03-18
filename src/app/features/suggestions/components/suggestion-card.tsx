@@ -10,10 +10,9 @@
 
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-
+import { projectDescriptors } from "../../../../data/registries/project-descriptors";
 import type { Suggestion } from "../../../../data/suggestions";
 import { CATEGORY_TAGS } from "../../../../data/suggestions";
-import { projectDescriptors } from "../../../../data/registries/project-descriptors";
 import { ChamferCard } from "../../../components/chamfer-card";
 import { pickLocalization } from "../../../domain/entities/localization";
 import { ConfidenceBadge } from "./confidence-badge";
@@ -41,27 +40,15 @@ export function SuggestionCard({
 
   return (
     <li>
-      <ChamferCard
-        size="md"
-        fillClassName="fill-base-100"
-        strokeClassName="stroke-base-300"
-      >
+      <ChamferCard size="md" fillClassName="fill-base-100" strokeClassName="stroke-base-300">
         <div className="p-4">
           {/* Top row: project badge + category tags + confidence */}
           <div className="flex flex-wrap items-start gap-2">
-            <span className="badge badge-outline badge-sm">
-              {projectLoc.name}
-            </span>
+            <span className="badge badge-outline badge-sm">{projectLoc.name}</span>
             {suggestion.categoryTagIds.map((tagKey) => {
-              const tagLoc = pickLocalization(
-                CATEGORY_TAGS[tagKey],
-                locale,
-              );
+              const tagLoc = pickLocalization(CATEGORY_TAGS[tagKey], locale);
               return (
-                <span
-                  key={tagKey}
-                  className="badge badge-ghost badge-sm"
-                >
+                <span key={tagKey} className="badge badge-ghost badge-sm">
                   {tagLoc.name}
                 </span>
               );
@@ -93,13 +80,12 @@ export function SuggestionCard({
           {/* Duration + Assignees row */}
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <span className="text-[length:var(--font-size-xs)] text-base-content/60">
-              {t("suggestion-duration", { defaultValue: "Est." })}{" "}
-              {suggestion.estimatedDuration}
+              {t("suggestion-duration", { defaultValue: "Est." })} {suggestion.estimatedDuration}
             </span>
 
             {/* Assignee avatar stack */}
-            <div
-              className="flex -space-x-2"
+            <fieldset
+              className="flex -space-x-2 border-none p-0"
               aria-label={t("suggestion-assignees-label", {
                 defaultValue: "Suggested assignees",
               })}
@@ -107,6 +93,7 @@ export function SuggestionCard({
               {suggestion.suggestedAssignees.map((a) => (
                 <span
                   key={a.initials}
+                  role="img"
                   className="inline-flex size-7 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-xs)] font-semibold text-primary-content ring-2 ring-base-100"
                   title={a.name}
                   aria-label={a.name}
@@ -114,7 +101,7 @@ export function SuggestionCard({
                   {a.initials}
                 </span>
               ))}
-            </div>
+            </fieldset>
           </div>
 
           {/* Action buttons */}
