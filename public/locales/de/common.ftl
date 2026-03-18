@@ -342,3 +342,24 @@ directive-template = Vorlage
 directive-show-examples = Beispiele anzeigen
 directive-hide-examples = Beispiele ausblenden
 directive-example-heading = Beispielerweiterungen
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% Konfidenz
+suggestion-duration = Geschätzt
+suggestion-assignees-label = Vorgeschlagene Verantwortliche
+suggestion-dismiss = Verwerfen
+suggestion-add-backlog = Zum Backlog hinzufügen
+suggestion-metric-analysed = Analysierte Elemente
+suggestion-metric-suggested = Vorgeschlagene Aufgaben
+suggestion-metric-confidence = Durchschn. Konfidenz
+suggestion-metric-updated = Zuletzt aktualisiert
+suggestion-summary-region = Vorschlagsübersicht
+suggestion-filter-tabs = Projektfilter
+suggestion-filter-all = Alle Projekte
+suggestion-priority-high = Hohe Priorität
+suggestion-priority-medium = Mittlere Priorität
+suggestion-priority-low = Niedrige Priorität
+suggestion-empty = Keine Vorschläge vorhanden.
+suggestion-insights-region = KI-Erkenntnisse
+suggestion-insights-heading = KI-Erkenntnisse

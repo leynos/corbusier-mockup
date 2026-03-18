@@ -329,3 +329,24 @@ directive-template = टेम्पलेट
 directive-show-examples = उदाहरण दिखाएँ
 directive-hide-examples = उदाहरण छिपाएँ
 directive-example-heading = विस्तार उदाहरण
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% विश्वास
+suggestion-duration = अनुमानित
+suggestion-assignees-label = सुझाए गए कार्यकर्ता
+suggestion-dismiss = खारिज करें
+suggestion-add-backlog = बैकलॉग में जोड़ें
+suggestion-metric-analysed = विश्लेषित आइटम
+suggestion-metric-suggested = सुझाए गए कार्य
+suggestion-metric-confidence = औसत विश्वास
+suggestion-metric-updated = अंतिम अपडेट
+suggestion-summary-region = सुझाव सारांश
+suggestion-filter-tabs = प्रोजेक्ट फ़िल्टर
+suggestion-filter-all = सभी प्रोजेक्ट
+suggestion-priority-high = उच्च प्राथमिकता
+suggestion-priority-medium = मध्यम प्राथमिकता
+suggestion-priority-low = निम्न प्राथमिकता
+suggestion-empty = प्रदर्शित करने के लिए कोई सुझाव नहीं।
+suggestion-insights-region = AI अंतर्दृष्टि
+suggestion-insights-heading = AI अंतर्दृष्टि
