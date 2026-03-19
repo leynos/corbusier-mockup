@@ -17,6 +17,7 @@ import {
   AI_INSIGHTS,
   SUGGESTIONS,
   type Suggestion,
+  type SuggestionId,
   type SuggestionPriority,
 } from "../../../data/suggestions";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -27,6 +28,7 @@ import { SummaryBar } from "./components/summary-bar";
 /* -- Helpers ------------------------------------------------------------- */
 
 const PRIORITY_ORDER: readonly SuggestionPriority[] = ["high", "medium", "low"];
+const ANALYSED_ITEMS_PER_SUGGESTION = 12;
 
 function averageConfidence(items: readonly Suggestion[]): number {
   if (items.length === 0) return 0;
@@ -62,7 +64,7 @@ export function SuggestionsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
 
-  const [dismissedIds, setDismissedIds] = useState<ReadonlySet<string>>(new Set());
+  const [dismissedIds, setDismissedIds] = useState<ReadonlySet<SuggestionId>>(new Set());
   const [activeProject, setActiveProject] = useState<ProjectSlug | "all">("all");
 
   const visibleSuggestions = useMemo(() => {
@@ -77,11 +79,11 @@ export function SuggestionsScreen(): JSX.Element {
 
   const projects = useMemo(() => uniqueProjects(SUGGESTIONS), []);
 
-  const handleDismiss = (id: string): void => {
+  const handleDismiss = (id: SuggestionId): void => {
     setDismissedIds((prev) => new Set([...prev, id]));
   };
 
-  const handleAddToBacklog = (id: string): void => {
+  const handleAddToBacklog = (id: SuggestionId): void => {
     setDismissedIds((prev) => new Set([...prev, id]));
   };
 
@@ -99,7 +101,7 @@ export function SuggestionsScreen(): JSX.Element {
       {/* Summary bar */}
       <div className="mt-4">
         <SummaryBar
-          analysedCount={SUGGESTIONS.length * 12}
+          analysedCount={SUGGESTIONS.length * ANALYSED_ITEMS_PER_SUGGESTION}
           suggestedCount={visibleSuggestions.length}
           averageConfidence={averageConfidence(visibleSuggestions)}
           lastUpdated={new Intl.DateTimeFormat(locale, {
@@ -110,19 +112,17 @@ export function SuggestionsScreen(): JSX.Element {
         />
       </div>
 
-      {/* Project filter tabs */}
-      <div
-        className="mt-4"
-        role="tablist"
-        aria-label={t("suggestion-filter-tabs", {
-          defaultValue: "Project filter",
-        })}
-      >
+      {/* Project filter buttons */}
+      <fieldset className="mt-4 flex flex-wrap gap-2 border-none p-0">
+        <legend className="sr-only">
+          {t("suggestion-filter-tabs", {
+            defaultValue: "Project filter",
+          })}
+        </legend>
         <button
           type="button"
-          role="tab"
-          aria-selected={activeProject === "all"}
-          className={`btn btn-sm me-2 ${activeProject === "all" ? "btn-primary" : "btn-ghost"}`}
+          aria-pressed={activeProject === "all"}
+          className={`btn btn-sm ${activeProject === "all" ? "btn-primary" : "btn-ghost"}`}
           onClick={() => setActiveProject("all")}
         >
           {t("suggestion-filter-all", { defaultValue: "All Projects" })}
@@ -133,16 +133,15 @@ export function SuggestionsScreen(): JSX.Element {
             <button
               key={slug}
               type="button"
-              role="tab"
-              aria-selected={activeProject === slug}
-              className={`btn btn-sm me-2 ${activeProject === slug ? "btn-primary" : "btn-ghost"}`}
+              aria-pressed={activeProject === slug}
+              className={`btn btn-sm ${activeProject === slug ? "btn-primary" : "btn-ghost"}`}
               onClick={() => setActiveProject(slug)}
             >
               {pLoc.name}
             </button>
           );
         })}
-      </div>
+      </fieldset>
 
       {/* Main content: suggestions + insights */}
       <div className="mt-6 flex flex-col gap-6 lg:flex-row">
@@ -187,8 +186,8 @@ interface PriorityGroupProps {
   readonly priority: SuggestionPriority;
   readonly suggestions: readonly Suggestion[];
   readonly locale: string;
-  readonly onDismiss: (id: string) => void;
-  readonly onAddToBacklog: (id: string) => void;
+  readonly onDismiss: (id: SuggestionId) => void;
+  readonly onAddToBacklog: (id: SuggestionId) => void;
 }
 
 function PriorityGroup({
@@ -206,7 +205,7 @@ function PriorityGroup({
       <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-wider text-base-content/60">
         {label}
       </h2>
-      <ol className="mt-2 space-y-3" aria-label={label}>
+      <ol className="mt-2 space-y-3">
         {suggestions.map((s) => (
           <SuggestionCard
             key={s.id}

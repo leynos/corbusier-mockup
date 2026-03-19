@@ -7,9 +7,19 @@
 
 export type {
   AiInsight,
+  AiInsightId,
+  CategoryTagId,
   InsightSeverity,
   Suggestion,
+  SuggestionId,
   SuggestionPriority,
   TagId,
 } from "./suggestion-fixtures";
-export { AI_INSIGHTS, CATEGORY_TAGS, SUGGESTIONS, tagId } from "./suggestion-fixtures";
+export {
+  AI_INSIGHTS,
+  aiInsightId,
+  CATEGORY_TAGS,
+  SUGGESTIONS,
+  suggestionId,
+  tagId,
+} from "./suggestion-fixtures";

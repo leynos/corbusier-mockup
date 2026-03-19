@@ -9,10 +9,19 @@ import { MANHATTAN_LOGISTICS_SUGGESTIONS } from "./manhattan-logistics";
 import { SKUNKWORKS_ALPHA_SUGGESTIONS } from "./skunkworks-alpha";
 import type { Suggestion } from "./types";
 
+export type { CategoryTagId } from "./category-tags";
 export { CATEGORY_TAGS } from "./category-tags";
 export { AI_INSIGHTS } from "./insights";
-export type { AiInsight, InsightSeverity, Suggestion, SuggestionPriority, TagId } from "./types";
-export { tagId } from "./types";
+export type {
+  AiInsight,
+  AiInsightId,
+  InsightSeverity,
+  Suggestion,
+  SuggestionId,
+  SuggestionPriority,
+  TagId,
+} from "./types";
+export { aiInsightId, suggestionId, tagId } from "./types";
 
 export const SUGGESTIONS: readonly Suggestion[] = [
   ...APOLLO_GUIDANCE_SUGGESTIONS,

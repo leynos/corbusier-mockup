@@ -6,7 +6,7 @@
 
 import type { EntityLocalizations } from "../../app/domain/entities/localization";
 
-export const CATEGORY_TAGS: Record<string, EntityLocalizations> = {
+const CATEGORY_TAGS_BY_ID = {
   performance: {
     "en-GB": { name: "Performance" },
     ar: { name: "الأداء" },
@@ -79,4 +79,8 @@ export const CATEGORY_TAGS: Record<string, EntityLocalizations> = {
     ja: { name: "自動化" },
     "zh-CN": { name: "自动化" },
   },
-};
+} satisfies Record<string, EntityLocalizations>;
+
+export type CategoryTagId = keyof typeof CATEGORY_TAGS_BY_ID;
+
+export const CATEGORY_TAGS: Record<CategoryTagId, EntityLocalizations> = CATEGORY_TAGS_BY_ID;

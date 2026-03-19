@@ -5,11 +5,11 @@
  * maps with 7-locale translations.
  */
 
-import type { AiInsight } from "./types";
+import { type AiInsight, aiInsightId } from "./types";
 
 export const AI_INSIGHTS: readonly AiInsight[] = [
   {
-    id: "ins-01",
+    id: aiInsightId("ins-01"),
     localizations: {
       "en-GB": {
         name: "Sprint velocity trending downward",
@@ -45,7 +45,7 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     severity: "warning",
   },
   {
-    id: "ins-02",
+    id: aiInsightId("ins-02"),
     localizations: {
       "en-GB": {
         name: "Three tasks blocked for over 5 days",
@@ -81,7 +81,7 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     severity: "critical",
   },
   {
-    id: "ins-03",
+    id: aiInsightId("ins-03"),
     localizations: {
       "en-GB": {
         name: "Agent backend error rate within normal range",
@@ -118,7 +118,7 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     severity: "info",
   },
   {
-    id: "ins-04",
+    id: aiInsightId("ins-04"),
     localizations: {
       "en-GB": {
         name: "High-priority task completion rate is 40%",
@@ -154,7 +154,7 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     severity: "warning",
   },
   {
-    id: "ins-05",
+    id: aiInsightId("ins-05"),
     localizations: {
       "en-GB": {
         name: "Skunkworks-Alpha nearing delivery milestone",
@@ -190,7 +190,7 @@ export const AI_INSIGHTS: readonly AiInsight[] = [
     severity: "info",
   },
   {
-    id: "ins-06",
+    id: aiInsightId("ins-06"),
     localizations: {
       "en-GB": {
         name: "Frontend test coverage below team target",

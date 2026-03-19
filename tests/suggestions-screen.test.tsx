@@ -31,17 +31,17 @@ describe("SuggestionsScreen", () => {
     expect(within(region).getByText("Last Updated")).toBeTruthy();
   });
 
-  it("renders project filter tabs", async () => {
+  it("renders project filter buttons", async () => {
     renderWithRouter("/suggestions");
 
-    const tablist = await screen.findByRole("tablist", {
+    const filterGroup = await screen.findByRole("group", {
       name: /project filter/i,
     });
-    expect(tablist).toBeTruthy();
+    expect(filterGroup).toBeTruthy();
 
-    const allTab = within(tablist).getByRole("tab", { name: "All Projects" });
-    expect(allTab).toBeTruthy();
-    expect(allTab.getAttribute("aria-selected")).toBe("true");
+    const allButton = within(filterGroup).getByRole("button", { name: "All Projects" });
+    expect(allButton).toBeTruthy();
+    expect(allButton.getAttribute("aria-pressed")).toBe("true");
   });
 
   it("renders high-priority suggestion cards", async () => {
@@ -96,19 +96,20 @@ describe("SuggestionsScreen", () => {
     await clickFirstCardActionAndExpectRemoval("Add to Backlog");
   });
 
-  it("filters suggestions by project when a tab is clicked", async () => {
+  it("filters suggestions by project when a filter button is clicked", async () => {
     renderWithRouter("/suggestions");
     const user = userEvent.setup();
 
-    const tablist = await screen.findByRole("tablist", {
+    const filterGroup = await screen.findByRole("group", {
       name: /project filter/i,
     });
 
-    /* Click the Skunkworks-Alpha project tab. */
-    const projectTab = within(tablist).getByRole("tab", {
+    /* Click the Skunkworks-Alpha project button. */
+    const projectButton = within(filterGroup).getByRole("button", {
       name: "Skunkworks-Alpha",
     });
-    await user.click(projectTab);
+    await user.click(projectButton);
+    expect(projectButton.getAttribute("aria-pressed")).toBe("true");
 
     /* The Skunkworks-Alpha suggestion should still be present. */
     expect(

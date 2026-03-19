@@ -6,11 +6,11 @@
 
 import { PRIYA, TOMAS } from "./assignees";
 import type { Suggestion } from "./types";
-import { tagId } from "./types";
+import { suggestionId, tagId } from "./types";
 
 export const MANHATTAN_LOGISTICS_SUGGESTIONS: readonly Suggestion[] = [
   {
-    id: "sug-04",
+    id: suggestionId("sug-04"),
     projectSlug: "manhattan-logistics",
     localizations: {
       "en-GB": {
@@ -65,7 +65,7 @@ export const MANHATTAN_LOGISTICS_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [TOMAS],
   },
   {
-    id: "sug-05",
+    id: suggestionId("sug-05"),
     projectSlug: "manhattan-logistics",
     localizations: {
       "en-GB": {
@@ -119,7 +119,7 @@ export const MANHATTAN_LOGISTICS_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [PRIYA],
   },
   {
-    id: "sug-09",
+    id: suggestionId("sug-09"),
     projectSlug: "manhattan-logistics",
     localizations: {
       "en-GB": {

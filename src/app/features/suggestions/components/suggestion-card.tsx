@@ -20,8 +20,8 @@ import { ConfidenceBadge } from "./confidence-badge";
 interface SuggestionCardProps {
   readonly suggestion: Suggestion;
   readonly locale: string;
-  readonly onDismiss: (id: string) => void;
-  readonly onAddToBacklog: (id: string) => void;
+  readonly onDismiss: (id: Suggestion["id"]) => void;
+  readonly onAddToBacklog: (id: Suggestion["id"]) => void;
 }
 
 export function SuggestionCard({

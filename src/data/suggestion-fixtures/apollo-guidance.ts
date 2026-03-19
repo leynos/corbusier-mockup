@@ -6,11 +6,11 @@
 
 import { AVA, ELENA, JAMES, MARCUS } from "./assignees";
 import type { Suggestion } from "./types";
-import { tagId } from "./types";
+import { suggestionId, tagId } from "./types";
 
 export const APOLLO_GUIDANCE_SUGGESTIONS: readonly Suggestion[] = [
   {
-    id: "sug-01",
+    id: suggestionId("sug-01"),
     projectSlug: "apollo-guidance",
     localizations: {
       "en-GB": {
@@ -64,7 +64,7 @@ export const APOLLO_GUIDANCE_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [MARCUS, AVA],
   },
   {
-    id: "sug-02",
+    id: suggestionId("sug-02"),
     projectSlug: "apollo-guidance",
     localizations: {
       "en-GB": {
@@ -118,7 +118,7 @@ export const APOLLO_GUIDANCE_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [JAMES],
   },
   {
-    id: "sug-03",
+    id: suggestionId("sug-03"),
     projectSlug: "apollo-guidance",
     localizations: {
       "en-GB": {
@@ -173,7 +173,7 @@ export const APOLLO_GUIDANCE_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [JAMES, MARCUS],
   },
   {
-    id: "sug-08",
+    id: suggestionId("sug-08"),
     projectSlug: "apollo-guidance",
     localizations: {
       "en-GB": {

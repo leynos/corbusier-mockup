@@ -24,24 +24,28 @@ export function SummaryBar({
 
   const tiles = [
     {
+      id: "analysed",
       label: t("suggestion-metric-analysed", {
         defaultValue: "Items Analysed",
       }),
       value: String(analysedCount),
     },
     {
+      id: "suggested",
       label: t("suggestion-metric-suggested", {
         defaultValue: "Tasks Suggested",
       }),
       value: String(suggestedCount),
     },
     {
+      id: "confidence",
       label: t("suggestion-metric-confidence", {
         defaultValue: "Avg. Confidence",
       }),
       value: `${String(Math.round(averageConfidence))}%`,
     },
     {
+      id: "updated",
       label: t("suggestion-metric-updated", {
         defaultValue: "Last Updated",
       }),
@@ -57,7 +61,7 @@ export function SummaryBar({
       })}
     >
       {tiles.map((tile) => (
-        <div key={tile.label} className="rounded-lg bg-base-100 p-3">
+        <div key={tile.id} className="rounded-lg bg-base-100 p-3">
           <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wider text-base-content/60">
             {tile.label}
           </p>

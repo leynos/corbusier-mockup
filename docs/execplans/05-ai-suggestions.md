@@ -278,9 +278,9 @@ erDiagram
 a branded string type. SuggestionPriority and InsightSeverity are
 union enumerations. Suggestion aggregates EntityLocalizations (for
 both its own display strings and dependency context),
-ProjectSlug, TagId references, and Assignee records. AiInsight
+ProjectSlug, CategoryTagId references, and Assignee records. AiInsight
 and the CATEGORY\_TAGS registry also compose EntityLocalizations.
-All localisation maps provide per-locale name and description
+All localization maps provide per-locale name and description
 strings.*
 
 ```mermaid
@@ -321,25 +321,25 @@ classDiagram
   }
 
   class Suggestion {
-    +string id
+    +SuggestionId id
     +ProjectSlug projectSlug
     +EntityLocalizations localizations
     +SuggestionPriority priority
     +number confidence
-    +TagId[] categoryTagIds
+    +CategoryTagId[] categoryTagIds
     +EntityLocalizations dependencyLocalizations
     +string estimatedDuration
     +Assignee[] suggestedAssignees
   }
 
   class AiInsight {
-    +string id
+    +AiInsightId id
     +EntityLocalizations localizations
     +InsightSeverity severity
   }
 
   class CATEGORY_TAGS {
-    +Record_string_EntityLocalizations_ tags
+    +Record_CategoryTagId_EntityLocalizations_ tags
   }
 
   class String {
@@ -369,19 +369,19 @@ In `src/data/suggestions.ts`:
 
 ```tsx
 export interface Suggestion {
-  readonly id: string;
+  readonly id: SuggestionId;
   readonly projectSlug: ProjectSlug;
   readonly localizations: EntityLocalizations;
   readonly priority: "high" | "medium" | "low";
   readonly confidence: number;
-  readonly categoryTagIds: readonly TagId[];
+  readonly categoryTagIds: readonly CategoryTagId[];
   readonly dependencyLocalizations: EntityLocalizations;
   readonly estimatedDuration: string;
   readonly suggestedAssignees: readonly Assignee[];
 }
 
 export interface AiInsight {
-  readonly id: string;
+  readonly id: AiInsightId;
   readonly localizations: EntityLocalizations;
   readonly severity: "info" | "warning" | "critical";
 }

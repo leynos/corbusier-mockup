@@ -6,11 +6,11 @@
 
 import { ELENA, JAMES, TOMAS } from "./assignees";
 import type { Suggestion } from "./types";
-import { tagId } from "./types";
+import { suggestionId, tagId } from "./types";
 
 export const SKUNKWORKS_ALPHA_SUGGESTIONS: readonly Suggestion[] = [
   {
-    id: "sug-06",
+    id: suggestionId("sug-06"),
     projectSlug: "skunkworks-alpha",
     localizations: {
       "en-GB": {
@@ -65,7 +65,7 @@ export const SKUNKWORKS_ALPHA_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [TOMAS, JAMES],
   },
   {
-    id: "sug-07",
+    id: suggestionId("sug-07"),
     projectSlug: "skunkworks-alpha",
     localizations: {
       "en-GB": {
@@ -119,7 +119,7 @@ export const SKUNKWORKS_ALPHA_SUGGESTIONS: readonly Suggestion[] = [
     suggestedAssignees: [TOMAS],
   },
   {
-    id: "sug-10",
+    id: suggestionId("sug-10"),
     projectSlug: "skunkworks-alpha",
     localizations: {
       "en-GB": {
