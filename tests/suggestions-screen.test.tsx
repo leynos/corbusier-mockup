@@ -71,38 +71,29 @@ describe("SuggestionsScreen", () => {
     expect(within(region).getByText("Sprint velocity trending downward")).toBeTruthy();
   });
 
-  it("dismisses a card when Dismiss is clicked", async () => {
+  async function clickFirstCardActionAndExpectRemoval(buttonName: string): Promise<void> {
     renderWithRouter("/suggestions");
     const user = userEvent.setup();
 
     const title = await screen.findByText("Add circuit breaker to agent backend calls");
     expect(title).toBeTruthy();
 
-    const dismissButtons = await screen.findAllByRole("button", {
-      name: "Dismiss",
+    const buttons = await screen.findAllByRole("button", {
+      name: buttonName,
     });
-    const firstDismiss = dismissButtons[0];
-    if (!firstDismiss) throw new Error("No Dismiss button found");
-    await user.click(firstDismiss);
+    const first = buttons[0];
+    if (!first) throw new Error(`No "${buttonName}" button found`);
+    await user.click(first);
 
     expect(screen.queryByText("Add circuit breaker to agent backend calls")).toBeNull();
+  }
+
+  it("dismisses a card when Dismiss is clicked", async () => {
+    await clickFirstCardActionAndExpectRemoval("Dismiss");
   });
 
   it("removes a card when Add to Backlog is clicked", async () => {
-    renderWithRouter("/suggestions");
-    const user = userEvent.setup();
-
-    const title = await screen.findByText("Add circuit breaker to agent backend calls");
-    expect(title).toBeTruthy();
-
-    const addButtons = await screen.findAllByRole("button", {
-      name: "Add to Backlog",
-    });
-    const firstAdd = addButtons[0];
-    if (!firstAdd) throw new Error("No Add to Backlog button found");
-    await user.click(firstAdd);
-
-    expect(screen.queryByText("Add circuit breaker to agent backend calls")).toBeNull();
+    await clickFirstCardActionAndExpectRemoval("Add to Backlog");
   });
 
   it("filters suggestions by project when a tab is clicked", async () => {
