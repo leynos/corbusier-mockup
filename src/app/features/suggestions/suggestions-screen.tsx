@@ -22,12 +22,13 @@ import {
 } from "../../../data/suggestions";
 import { pickLocalization } from "../../domain/entities/localization";
 import { InsightsPanel } from "./components/insights-panel";
-import { SuggestionCard } from "./components/suggestion-card";
+import { SuggestionCard, type SuggestionCardLabels } from "./components/suggestion-card";
 import { SummaryBar } from "./components/summary-bar";
 
 /* -- Helpers ------------------------------------------------------------- */
 
 const PRIORITY_ORDER: readonly SuggestionPriority[] = ["high", "medium", "low"];
+// Each suggestion summarizes twelve analysed signals from the agent backends.
 const ANALYSED_ITEMS_PER_SUGGESTION = 12;
 
 function averageConfidence(items: readonly Suggestion[]): number {
@@ -44,7 +45,7 @@ function uniqueProjects(items: readonly Suggestion[]): readonly ProjectSlug[] {
 
 /* -- Priority section labels --------------------------------------------- */
 
-function usePriorityLabel(
+function getPriorityLabel(
   priority: SuggestionPriority,
   t: (key: string, opts: { defaultValue: string }) => string,
 ): string {
@@ -58,11 +59,27 @@ function usePriorityLabel(
   }
 }
 
+function useSuggestionLabels(): SuggestionCardLabels {
+  const { t } = useTranslation();
+
+  return {
+    duration: t("suggestion-duration", { defaultValue: "Est." }),
+    assigneesAriaLabel: t("suggestion-assignees-label", {
+      defaultValue: "Suggested assignees",
+    }),
+    dismiss: t("suggestion-dismiss", { defaultValue: "Dismiss" }),
+    addToBacklog: t("suggestion-add-backlog", {
+      defaultValue: "Add to Backlog",
+    }),
+  };
+}
+
 /* -- Component ----------------------------------------------------------- */
 
 export function SuggestionsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const suggestionLabels = useSuggestionLabels();
 
   const [dismissedIds, setDismissedIds] = useState<ReadonlySet<SuggestionId>>(new Set());
   const [activeProject, setActiveProject] = useState<ProjectSlug | "all">("all");
@@ -156,6 +173,7 @@ export function SuggestionsScreen(): JSX.Element {
                 priority={priority}
                 suggestions={items}
                 locale={locale}
+                labels={suggestionLabels}
                 onDismiss={handleDismiss}
                 onAddToBacklog={handleAddToBacklog}
               />
@@ -186,6 +204,7 @@ interface PriorityGroupProps {
   readonly priority: SuggestionPriority;
   readonly suggestions: readonly Suggestion[];
   readonly locale: string;
+  readonly labels: SuggestionCardLabels;
   readonly onDismiss: (id: SuggestionId) => void;
   readonly onAddToBacklog: (id: SuggestionId) => void;
 }
@@ -194,11 +213,12 @@ function PriorityGroup({
   priority,
   suggestions,
   locale,
+  labels,
   onDismiss,
   onAddToBacklog,
 }: PriorityGroupProps): JSX.Element {
   const { t } = useTranslation();
-  const label = usePriorityLabel(priority, t);
+  const label = getPriorityLabel(priority, t);
 
   return (
     <section aria-label={label}>
@@ -211,6 +231,7 @@ function PriorityGroup({
             key={s.id}
             suggestion={s}
             locale={locale}
+            labels={labels}
             onDismiss={onDismiss}
             onAddToBacklog={onAddToBacklog}
           />
