@@ -1,6 +1,6 @@
 /** @file AI Suggestions screen.
  *
- * Renders a summary bar (4 metrics), project filter tabs,
+ * Renders a summary bar (four metrics), project filter tabs,
  * suggestion cards grouped by priority (high, medium, low), and an
  * AI Insights panel with bullet observations.
  *
