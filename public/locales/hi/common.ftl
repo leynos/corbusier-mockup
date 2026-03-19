@@ -350,3 +350,6 @@ suggestion-priority-low = निम्न प्राथमिकता
 suggestion-empty = प्रदर्शित करने के लिए कोई सुझाव नहीं।
 suggestion-insights-region = AI अंतर्दृष्टि
 suggestion-insights-heading = AI अंतर्दृष्टि
+insight-severity-critical = गंभीर
+insight-severity-warning = चेतावनी
+insight-severity-info = जानकारी

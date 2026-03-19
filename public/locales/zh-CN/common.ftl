@@ -345,3 +345,6 @@ suggestion-priority-low = 低优先级
 suggestion-empty = 暂无建议可显示。
 suggestion-insights-region = AI 洞察
 suggestion-insights-heading = AI 洞察
+insight-severity-critical = 严重
+insight-severity-warning = 警告
+insight-severity-info = 信息

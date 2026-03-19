@@ -365,3 +365,6 @@ suggestion-priority-low = Prioridad Baja
 suggestion-empty = No hay sugerencias para mostrar.
 suggestion-insights-region = Perspectivas de IA
 suggestion-insights-heading = Perspectivas de IA
+insight-severity-critical = Crítico
+insight-severity-warning = Advertencia
+insight-severity-info = Info

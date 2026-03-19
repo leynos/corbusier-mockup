@@ -90,9 +90,9 @@ export function SuggestionCard({
                 defaultValue: "Suggested assignees",
               })}
             >
-              {suggestion.suggestedAssignees.map((a) => (
+              {suggestion.suggestedAssignees.map((a, index) => (
                 <span
-                  key={a.initials}
+                  key={`${a.name}-${String(index)}`}
                   role="img"
                   className="inline-flex size-7 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-xs)] font-semibold text-primary-content ring-2 ring-base-100"
                   title={a.name}

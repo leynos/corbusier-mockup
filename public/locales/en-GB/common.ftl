@@ -358,3 +358,6 @@ suggestion-priority-low = Low Priority
 suggestion-empty = No suggestions to display.
 suggestion-insights-region = AI Insights
 suggestion-insights-heading = AI Insights
+insight-severity-critical = Critical
+insight-severity-warning = Warning
+insight-severity-info = Info

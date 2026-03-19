@@ -363,3 +363,6 @@ suggestion-priority-low = Niedrige Priorität
 suggestion-empty = Keine Vorschläge vorhanden.
 suggestion-insights-region = KI-Erkenntnisse
 suggestion-insights-heading = KI-Erkenntnisse
+insight-severity-critical = Kritisch
+insight-severity-warning = Warnung
+insight-severity-info = Info

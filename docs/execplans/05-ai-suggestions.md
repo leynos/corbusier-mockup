@@ -102,9 +102,9 @@ All 4 milestones delivered. Files created:
 - `src/app/features/suggestions/suggestions-screen.tsx` (replaced
   placeholder)
 - `tests/suggestions-screen.test.tsx` — 9 unit tests
-- `tests/e2e/suggestions.pw.ts` — 6 E2E tests (incl. axe sweep)
+- `tests/e2e/suggestions.pw.ts` — 6 end-to-end (E2E) tests (incl. axe sweep)
 
-All 7 locale FTL files updated with 19 suggestion-related keys each.
+All 7 locale Fluent (FTL) files updated with 19 suggestion-related keys each.
 `bun run ff` passes with 0 errors: 130 unit tests, 31 E2E tests,
 0 axe violations.
 
@@ -222,12 +222,12 @@ No new npm dependencies.
 
 ### Entity–relationship diagram
 
-*Figure 1: Entity–relationship diagram showing how Suggestions,
-AiInsights, CategoryTags, Projects, Assignees, and
+*Figure 1: Entity–relationship diagram showing how Suggestion,
+AiInsight, CategoryTag, Project, Assignee, and
 EntityLocalizations relate. A Project has many Suggestions; each
 Suggestion has many CategoryTags and Assignees; Suggestions,
-AiInsights, and CategoryTags each carry EntityLocalizations for
-multi-locale display strings.*
+AiInsight records, and CategoryTags each carry EntityLocalizations
+for multi-locale display strings.*
 
 ```mermaid
 erDiagram

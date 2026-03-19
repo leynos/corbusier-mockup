@@ -28,14 +28,17 @@ function severityBulletClass(severity: InsightSeverity): string {
   }
 }
 
-function severityLabel(severity: InsightSeverity): string {
+function severityLabel(
+  severity: InsightSeverity,
+  t: (key: string, opts: { defaultValue: string }) => string,
+): string {
   switch (severity) {
     case "critical":
-      return "Critical";
+      return t("insight-severity-critical", { defaultValue: "Critical" });
     case "warning":
-      return "Warning";
+      return t("insight-severity-warning", { defaultValue: "Warning" });
     case "info":
-      return "Info";
+      return t("insight-severity-info", { defaultValue: "Info" });
   }
 }
 
@@ -68,7 +71,7 @@ export function InsightsPanel({ insights, locale }: InsightsPanelProps): JSX.Ele
                 <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
                   {loc.name}
                   <span className="ms-2 text-[length:var(--font-size-xs)] font-normal text-base-content/60">
-                    {severityLabel(insight.severity)}
+                    {severityLabel(insight.severity, t)}
                   </span>
                 </p>
                 {loc.description ? (

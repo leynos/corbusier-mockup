@@ -407,3 +407,6 @@ suggestion-priority-low = أولوية منخفضة
 suggestion-empty = لا توجد اقتراحات للعرض.
 suggestion-insights-region = رؤى الذكاء الاصطناعي
 suggestion-insights-heading = رؤى الذكاء الاصطناعي
+insight-severity-critical = حرج
+insight-severity-warning = تحذير
+insight-severity-info = معلومات

@@ -345,3 +345,6 @@ suggestion-priority-low = 低優先度
 suggestion-empty = 表示する提案はありません。
 suggestion-insights-region = AIインサイト
 suggestion-insights-heading = AIインサイト
+insight-severity-critical = 重大
+insight-severity-warning = 警告
+insight-severity-info = 情報

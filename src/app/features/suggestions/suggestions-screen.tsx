@@ -102,7 +102,11 @@ export function SuggestionsScreen(): JSX.Element {
           analysedCount={SUGGESTIONS.length * 12}
           suggestedCount={visibleSuggestions.length}
           averageConfidence={averageConfidence(visibleSuggestions)}
-          lastUpdated="18 Mar 2026"
+          lastUpdated={new Intl.DateTimeFormat(locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }).format(new Date(2026, 2, 18))}
         />
       </div>
 
