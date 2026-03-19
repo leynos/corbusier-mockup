@@ -222,6 +222,13 @@ No new npm dependencies.
 
 ### Entity–relationship diagram
 
+*Figure 1: Entity–relationship diagram showing how Suggestions,
+AiInsights, CategoryTags, Projects, Assignees, and
+EntityLocalizations relate. A Project has many Suggestions; each
+Suggestion has many CategoryTags and Assignees; Suggestions,
+AiInsights, and CategoryTags each carry EntityLocalizations for
+multi-locale display strings.*
+
 ```mermaid
 erDiagram
   Suggestion {
@@ -263,6 +270,97 @@ erDiagram
   Suggestion ||--o{ EntityLocalizations : uses
   AiInsight ||--o{ EntityLocalizations : uses
   CategoryTag ||--o{ EntityLocalizations : uses
+```
+
+### Class diagram
+
+*Figure 2: Class diagram for the AI Suggestions data model. TagId is
+a branded string type. SuggestionPriority and InsightSeverity are
+union enumerations. Suggestion aggregates EntityLocalizations (for
+both its own display strings and dependency context),
+ProjectSlug, TagId references, and Assignee records. AiInsight
+and the CATEGORY\_TAGS registry also compose EntityLocalizations.
+All localisation maps provide per-locale name and description
+strings.*
+
+```mermaid
+classDiagram
+  class TagId {
+  }
+
+  class SuggestionPriority {
+    <<enumeration>>
+    high
+    medium
+    low
+  }
+
+  class InsightSeverity {
+    <<enumeration>>
+    info
+    warning
+    critical
+  }
+
+  class EntityLocalizations {
+    +map<locale,EntityLocalization> entries
+  }
+
+  class EntityLocalization {
+    +string name
+    +string description
+  }
+
+  class ProjectSlug {
+  }
+
+  class Assignee {
+    +string name
+    +string initials
+    +string role
+  }
+
+  class Suggestion {
+    +string id
+    +ProjectSlug projectSlug
+    +EntityLocalizations localizations
+    +SuggestionPriority priority
+    +number confidence
+    +TagId[] categoryTagIds
+    +EntityLocalizations dependencyLocalizations
+    +string estimatedDuration
+    +Assignee[] suggestedAssignees
+  }
+
+  class AiInsight {
+    +string id
+    +EntityLocalizations localizations
+    +InsightSeverity severity
+  }
+
+  class CATEGORY_TAGS {
+    +Record_string_EntityLocalizations_ tags
+  }
+
+  class String {
+  }
+
+  TagId <|-- String
+  SuggestionPriority <.. Suggestion
+  InsightSeverity <.. AiInsight
+  EntityLocalizations <.. Suggestion
+  EntityLocalizations <.. AiInsight
+  EntityLocalizations <.. CATEGORY_TAGS
+  ProjectSlug <.. Suggestion
+  Assignee <.. Suggestion
+
+  CATEGORY_TAGS o-- EntityLocalizations : provides
+  Suggestion o-- EntityLocalizations : localizations
+  Suggestion o-- EntityLocalizations : dependencyLocalizations
+  AiInsight o-- EntityLocalizations : localizations
+  Suggestion "*" o-- "1" ProjectSlug : projectSlug
+  Suggestion "*" o-- "*" TagId : categoryTagIds
+  Suggestion "*" o-- "*" Assignee : suggestedAssignees
 ```
 
 ### Key interfaces
