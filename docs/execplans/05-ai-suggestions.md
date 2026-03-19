@@ -220,6 +220,51 @@ Each milestone produces a commit. Retry from last commit on failure.
 
 No new npm dependencies.
 
+### Entity–relationship diagram
+
+```mermaid
+erDiagram
+  Suggestion {
+    string id
+    ProjectSlug projectSlug
+    SuggestionPriority priority
+    number confidence
+    string estimatedDuration
+  }
+
+  AiInsight {
+    string id
+    InsightSeverity severity
+  }
+
+  CategoryTag {
+    TagId id
+  }
+
+  Project {
+    ProjectSlug slug
+  }
+
+  Assignee {
+    string name
+    string initials
+    string role
+  }
+
+  EntityLocalizations {
+    string locale
+    string name
+    string description
+  }
+
+  Project ||--o{ Suggestion : has
+  Suggestion }o--o{ CategoryTag : has
+  Suggestion }o--o{ Assignee : suggested_for
+  Suggestion ||--o{ EntityLocalizations : uses
+  AiInsight ||--o{ EntityLocalizations : uses
+  CategoryTag ||--o{ EntityLocalizations : uses
+```
+
 ### Key interfaces
 
 In `src/data/suggestions.ts`:
