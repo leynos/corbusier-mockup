@@ -56,6 +56,10 @@ function getPriorityLabel(
       return t("suggestion-priority-medium", { defaultValue: "Medium Priority" });
     case "low":
       return t("suggestion-priority-low", { defaultValue: "Low Priority" });
+    default: {
+      const _exhaustive: never = priority;
+      throw new Error(`Unhandled suggestion priority: ${String(_exhaustive)}`);
+    }
   }
 }
 
@@ -96,11 +100,7 @@ export function SuggestionsScreen(): JSX.Element {
 
   const projects = useMemo(() => uniqueProjects(SUGGESTIONS), []);
 
-  const handleDismiss = (id: SuggestionId): void => {
-    setDismissedIds((prev) => new Set([...prev, id]));
-  };
-
-  const handleAddToBacklog = (id: SuggestionId): void => {
+  const removeSuggestion = (id: SuggestionId): void => {
     setDismissedIds((prev) => new Set([...prev, id]));
   };
 
@@ -174,8 +174,8 @@ export function SuggestionsScreen(): JSX.Element {
                 suggestions={items}
                 locale={locale}
                 labels={suggestionLabels}
-                onDismiss={handleDismiss}
-                onAddToBacklog={handleAddToBacklog}
+                onDismiss={removeSuggestion}
+                onAddToBacklog={removeSuggestion}
               />
             );
           })}
