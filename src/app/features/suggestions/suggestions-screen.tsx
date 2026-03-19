@@ -167,10 +167,11 @@ export function SuggestionsScreen(): JSX.Element {
           {PRIORITY_ORDER.map((priority) => {
             const items = visibleSuggestions.filter((s) => s.priority === priority);
             if (items.length === 0) return null;
+            const label = getPriorityLabel(priority, t);
             return (
               <PriorityGroup
                 key={priority}
-                priority={priority}
+                label={label}
                 suggestions={items}
                 locale={locale}
                 labels={suggestionLabels}
@@ -201,7 +202,7 @@ export function SuggestionsScreen(): JSX.Element {
 /* -- Priority group ------------------------------------------------------ */
 
 interface PriorityGroupProps {
-  readonly priority: SuggestionPriority;
+  readonly label: string;
   readonly suggestions: readonly Suggestion[];
   readonly locale: string;
   readonly labels: SuggestionCardLabels;
@@ -210,16 +211,13 @@ interface PriorityGroupProps {
 }
 
 function PriorityGroup({
-  priority,
+  label,
   suggestions,
   locale,
   labels,
   onDismiss,
   onAddToBacklog,
 }: PriorityGroupProps): JSX.Element {
-  const { t } = useTranslation();
-  const label = getPriorityLabel(priority, t);
-
   return (
     <section aria-label={label}>
       <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-wider text-base-content/60">
