@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -62,22 +62,51 @@ than rubber-stamps it" philosophy described in `docs/concept.md`.
 
 ## Progress
 
-- [ ] Milestone 1: Suggestion fixture data
-- [ ] Milestone 2: Suggestion card component
-- [ ] Milestone 3: AI Suggestions page
-- [ ] Milestone 4: Tests and validation
+- [x] Milestone 1: Suggestion fixture data — `b3adbb0`
+- [x] Milestone 2: Suggestion card component — `a25f258`
+- [x] Milestone 3: AI Suggestions page — `1ef9655`
+- [x] Milestone 4: Tests and validation — `6139114`
 
 ## Surprises & discoveries
 
-(None yet.)
+- Biome `useSemanticElements` rejects `<div role="region">` — must use
+  `<section>` instead.
+- Biome `useAriaPropsSupportedByRole` rejects `aria-label` on plain
+  `<div>` and `<span>` — the assignee avatar stack needed `<fieldset>`
+  with `border-none p-0` and individual avatars needed `role="img"`.
+- The `loc()` helper from `localization-helpers.ts` only creates en-GB
+  entries, so 7-locale translations for fixture data had to be written
+  manually (matching the conversations.ts/directives.ts pattern).
 
 ## Decision log
 
-(None yet.)
+- Confidence badge: implemented as inline SVG with
+  `stroke-dasharray`/`stroke-dashoffset` arc (26 lines). Used
+  `role="img"` with `aria-label` for accessibility.
+- Category tags: created a `CATEGORY_TAGS` descriptor registry
+  (Record<string, EntityLocalizations>) with 8 tag IDs, rather than
+  reusing label descriptors, because tags are suggestion-specific.
+- Insights panel severity colours: `bg-error` (critical), `bg-warning`
+  (warning), `bg-primary` (info) — follows DaisyUI semantic colour
+  tokens.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 4 milestones delivered. Files created:
+- `src/data/suggestions.ts` — 10 suggestions, 6 insights, 8 category
+  tags, all with 7-locale translations.
+- `src/app/features/suggestions/components/confidence-badge.tsx`
+- `src/app/features/suggestions/components/suggestion-card.tsx`
+- `src/app/features/suggestions/components/summary-bar.tsx`
+- `src/app/features/suggestions/components/insights-panel.tsx`
+- `src/app/features/suggestions/suggestions-screen.tsx` (replaced
+  placeholder)
+- `tests/suggestions-screen.test.tsx` — 9 unit tests
+- `tests/e2e/suggestions.pw.ts` — 6 end-to-end (E2E) tests (incl. axe sweep)
+
+All 7 locale Fluent (FTL) files updated with 19 suggestion-related keys each.
+`bun run ff` passes with 0 errors: 130 unit tests, 31 E2E tests,
+0 axe violations.
 
 ## Context and orientation
 
@@ -191,25 +220,168 @@ Each milestone produces a commit. Retry from last commit on failure.
 
 No new npm dependencies.
 
+### Entity–relationship diagram
+
+*Figure 1: Entity–relationship diagram showing how Suggestion,
+AiInsight, CategoryTag, Project, Assignee, and
+EntityLocalizations relate. A Project has many Suggestions; each
+Suggestion has many CategoryTags and Assignees; Suggestions,
+AiInsight records, and CategoryTags each carry EntityLocalizations
+for multi-locale display strings.*
+
+```mermaid
+erDiagram
+  Suggestion {
+    string id
+    ProjectSlug projectSlug
+    SuggestionPriority priority
+    number confidence
+    string estimatedDuration
+  }
+
+  AiInsight {
+    string id
+    InsightSeverity severity
+  }
+
+  CategoryTag {
+    TagId id
+  }
+
+  Project {
+    ProjectSlug slug
+  }
+
+  Assignee {
+    string name
+    string initials
+    string role
+  }
+
+  EntityLocalizations {
+    string locale
+    string name
+    string description
+  }
+
+  Project ||--o{ Suggestion : has
+  Suggestion }o--o{ CategoryTag : has
+  Suggestion }o--o{ Assignee : suggested_for
+  Suggestion ||--o{ EntityLocalizations : uses
+  AiInsight ||--o{ EntityLocalizations : uses
+  CategoryTag ||--o{ EntityLocalizations : uses
+```
+
+### Class diagram
+
+*Figure 2: Class diagram for the AI Suggestions data model. TagId is
+a branded string type. SuggestionPriority and InsightSeverity are
+union enumerations. Suggestion aggregates EntityLocalizations (for
+both its own display strings and dependency context),
+ProjectSlug, CategoryTagId references, and Assignee records. AiInsight
+and the CATEGORY\_TAGS registry also compose EntityLocalizations.
+All localization maps provide per-locale name and description
+strings.*
+
+```mermaid
+classDiagram
+  class TagId {
+  }
+
+  class SuggestionPriority {
+    <<enumeration>>
+    high
+    medium
+    low
+  }
+
+  class InsightSeverity {
+    <<enumeration>>
+    info
+    warning
+    critical
+  }
+
+  class EntityLocalizations {
+    +map<locale,EntityLocalization> entries
+  }
+
+  class EntityLocalization {
+    +string name
+    +string description
+  }
+
+  class ProjectSlug {
+  }
+
+  class Assignee {
+    +string name
+    +string initials
+    +string role
+  }
+
+  class Suggestion {
+    +SuggestionId id
+    +ProjectSlug projectSlug
+    +EntityLocalizations localizations
+    +SuggestionPriority priority
+    +number confidence
+    +CategoryTagId[] categoryTagIds
+    +EntityLocalizations dependencyLocalizations
+    +string estimatedDuration
+    +Assignee[] suggestedAssignees
+  }
+
+  class AiInsight {
+    +AiInsightId id
+    +EntityLocalizations localizations
+    +InsightSeverity severity
+  }
+
+  class CATEGORY_TAGS {
+    +Record_CategoryTagId_EntityLocalizations_ tags
+  }
+
+  class String {
+  }
+
+  TagId <|-- String
+  SuggestionPriority <.. Suggestion
+  InsightSeverity <.. AiInsight
+  EntityLocalizations <.. Suggestion
+  EntityLocalizations <.. AiInsight
+  EntityLocalizations <.. CATEGORY_TAGS
+  ProjectSlug <.. Suggestion
+  Assignee <.. Suggestion
+
+  CATEGORY_TAGS o-- EntityLocalizations : provides
+  Suggestion o-- EntityLocalizations : localizations
+  Suggestion o-- EntityLocalizations : dependencyLocalizations
+  AiInsight o-- EntityLocalizations : localizations
+  Suggestion "*" o-- "1" ProjectSlug : projectSlug
+  Suggestion "*" o-- "*" TagId : categoryTagIds
+  Suggestion "*" o-- "*" Assignee : suggestedAssignees
+```
+
 ### Key interfaces
 
 In `src/data/suggestions.ts`:
 
 ```tsx
 export interface Suggestion {
-  readonly id: string;
+  readonly id: SuggestionId;
   readonly projectSlug: ProjectSlug;
   readonly localizations: EntityLocalizations;
   readonly priority: "high" | "medium" | "low";
   readonly confidence: number;
-  readonly categoryTagIds: readonly TagId[];
+  readonly categoryTagIds: readonly CategoryTagId[];
   readonly dependencyLocalizations: EntityLocalizations;
   readonly estimatedDuration: string;
   readonly suggestedAssignees: readonly Assignee[];
 }
 
 export interface AiInsight {
-  readonly id: string;
+  readonly id: AiInsightId;
   readonly localizations: EntityLocalizations;
   readonly severity: "info" | "warning" | "critical";
 }

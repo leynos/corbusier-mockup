@@ -337,3 +337,27 @@ directive-template = Template
 directive-show-examples = Show examples
 directive-hide-examples = Hide examples
 directive-example-heading = Example expansions
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% confidence
+suggestion-duration = Est.
+suggestion-assignees-label = Suggested assignees
+suggestion-dismiss = Dismiss
+suggestion-add-backlog = Add to Backlog
+suggestion-metric-analysed = Items Analysed
+suggestion-metric-suggested = Tasks Suggested
+suggestion-metric-confidence = Avg. Confidence
+suggestion-metric-updated = Last Updated
+suggestion-summary-region = Suggestion summary
+suggestion-filter-tabs = Project filter
+suggestion-filter-all = All Projects
+suggestion-priority-high = High Priority
+suggestion-priority-medium = Medium Priority
+suggestion-priority-low = Low Priority
+suggestion-empty = No suggestions to display.
+suggestion-insights-region = AI Insights
+suggestion-insights-heading = AI Insights
+insight-severity-critical = Critical
+insight-severity-warning = Warning
+insight-severity-info = Info

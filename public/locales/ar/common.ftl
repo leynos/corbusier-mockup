@@ -386,3 +386,27 @@ directive-template = القالب
 directive-show-examples = عرض الأمثلة
 directive-hide-examples = إخفاء الأمثلة
 directive-example-heading = أمثلة التوسيع
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% ثقة
+suggestion-duration = تقدير
+suggestion-assignees-label = المسؤولون المقترحون
+suggestion-dismiss = رفض
+suggestion-add-backlog = إضافة إلى قائمة الانتظار
+suggestion-metric-analysed = العناصر المحللة
+suggestion-metric-suggested = المهام المقترحة
+suggestion-metric-confidence = متوسط الثقة
+suggestion-metric-updated = آخر تحديث
+suggestion-summary-region = ملخص الاقتراحات
+suggestion-filter-tabs = تصفية المشاريع
+suggestion-filter-all = جميع المشاريع
+suggestion-priority-high = أولوية عالية
+suggestion-priority-medium = أولوية متوسطة
+suggestion-priority-low = أولوية منخفضة
+suggestion-empty = لا توجد اقتراحات للعرض.
+suggestion-insights-region = رؤى الذكاء الاصطناعي
+suggestion-insights-heading = رؤى الذكاء الاصطناعي
+insight-severity-critical = حرج
+insight-severity-warning = تحذير
+insight-severity-info = معلومات

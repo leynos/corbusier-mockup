@@ -324,3 +324,27 @@ directive-template = 模板
 directive-show-examples = 显示示例
 directive-hide-examples = 隐藏示例
 directive-example-heading = 示例
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% 置信度
+suggestion-duration = 预估
+suggestion-assignees-label = 建议负责人
+suggestion-dismiss = 忽略
+suggestion-add-backlog = 添加到待办
+suggestion-metric-analysed = 分析项目
+suggestion-metric-suggested = 建议任务
+suggestion-metric-confidence = 平均置信度
+suggestion-metric-updated = 最后更新
+suggestion-summary-region = 建议摘要
+suggestion-filter-tabs = 项目筛选
+suggestion-filter-all = 所有项目
+suggestion-priority-high = 高优先级
+suggestion-priority-medium = 中优先级
+suggestion-priority-low = 低优先级
+suggestion-empty = 暂无建议可显示。
+suggestion-insights-region = AI 洞察
+suggestion-insights-heading = AI 洞察
+insight-severity-critical = 严重
+insight-severity-warning = 警告
+insight-severity-info = 信息

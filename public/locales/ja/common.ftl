@@ -324,3 +324,27 @@ directive-template = テンプレート
 directive-show-examples = 例を表示
 directive-hide-examples = 例を非表示
 directive-example-heading = 展開例
+
+## AI Suggestions
+
+suggestion-confidence-label = { $value }% 確信度
+suggestion-duration = 見積
+suggestion-assignees-label = 推奨担当者
+suggestion-dismiss = 却下
+suggestion-add-backlog = バックログに追加
+suggestion-metric-analysed = 分析済みアイテム
+suggestion-metric-suggested = 提案タスク
+suggestion-metric-confidence = 平均確信度
+suggestion-metric-updated = 最終更新
+suggestion-summary-region = 提案サマリー
+suggestion-filter-tabs = プロジェクトフィルター
+suggestion-filter-all = すべてのプロジェクト
+suggestion-priority-high = 高優先度
+suggestion-priority-medium = 中優先度
+suggestion-priority-low = 低優先度
+suggestion-empty = 表示する提案はありません。
+suggestion-insights-region = AIインサイト
+suggestion-insights-heading = AIインサイト
+insight-severity-critical = 重大
+insight-severity-warning = 警告
+insight-severity-info = 情報
