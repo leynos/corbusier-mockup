@@ -207,6 +207,13 @@ interface LocalizedComplianceCheck extends ComplianceCheck {
   readonly statusLabel: string;
 }
 
+interface TabNavContext {
+  readonly index: number;
+  readonly tab: ReportTab;
+  readonly setActiveTab: (t: ReportTab) => void;
+  readonly focusAt: (i: number) => void;
+}
+
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
 function AuditTrailPanel({
@@ -422,19 +429,10 @@ function buildReportStrings(
   };
 }
 
-function handleTabKeyDown({
-  event,
-  index,
-  setActiveTab,
-  focusAt,
-}: {
-  readonly event: KeyboardEvent<HTMLButtonElement>;
-  readonly index: number;
-  readonly setActiveTab: (t: ReportTab) => void;
-  readonly focusAt: (i: number) => void;
-}): void {
-  const tab = TAB_IDS[index];
-  if (!tab) return;
+function handleTabKeyDown(
+  event: KeyboardEvent<HTMLButtonElement>,
+  { index, tab, setActiveTab, focusAt }: TabNavContext,
+): void {
   switch (event.key) {
     case "ArrowRight":
       event.preventDefault();
@@ -541,9 +539,9 @@ export function ReportsScreen(): JSX.Element {
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => {
-                handleTabKeyDown({
-                  event,
+                handleTabKeyDown(event, {
                   index,
+                  tab,
                   setActiveTab,
                   focusAt: (nextIndex) => {
                     focusTabAtIndex(tabButtonRefs.current, nextIndex);
