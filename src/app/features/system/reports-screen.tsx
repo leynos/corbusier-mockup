@@ -14,7 +14,7 @@
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 import type { TFunction } from "i18next";
-import { type JSX, useRef, useState } from "react";
+import { type JSX, type KeyboardEvent, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
@@ -187,6 +187,14 @@ const COMPLIANCE_DEFAULT_DETAILS: Record<string, string> = {
   "comp-4": "AES-256 verified",
   "comp-5": "2 overruns in last 7 days",
   "comp-6": "All repos compliant",
+};
+
+const AUDIT_ACTION_DEFAULT_LABELS: Record<string, string> = {
+  state_change: "State change",
+  pr_merge: "PR merge",
+  tool_call: "Tool call",
+  comment: "Comment",
+  agent_turn: "Agent turn",
 };
 
 interface LocalizedPerformanceMetric extends PerformanceMetric {
@@ -420,7 +428,7 @@ function handleTabKeyDown({
   setActiveTab,
   focusAt,
 }: {
-  readonly event: React.KeyboardEvent<HTMLButtonElement>;
+  readonly event: KeyboardEvent<HTMLButtonElement>;
   readonly index: number;
   readonly setActiveTab: (t: ReportTab) => void;
   readonly focusAt: (i: number) => void;
@@ -478,7 +486,9 @@ export function ReportsScreen(): JSX.Element {
   } = buildReportStrings(t, locale);
   const translatedAuditRows: readonly LocalizedAuditEvent[] = AUDIT_EVENTS.map((event) => ({
     ...event,
-    action: t(`reports-audit-action-${event.action}`, { defaultValue: event.action }),
+    action: t(`reports-audit-action-${event.action}`, {
+      defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] || event.action,
+    }),
   }));
   const panels: Record<ReportTab, () => JSX.Element> = {
     audit: () => (
