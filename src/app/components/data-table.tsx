@@ -1,0 +1,89 @@
+/** @file Reusable data table with proper semantics and accessible markup.
+ *
+ * Renders a `<table>` using DaisyUI `table` classes with column
+ * headers (`<th scope="col">`), row hover, zebra striping, tabular
+ * figures, and a minimum row height of 36 px (WCAG 2.5.8).
+ */
+
+import type { JSX, ReactNode } from "react";
+
+/* ── Public interface ─────────────────────────────────────────────── */
+
+export interface Column<T> {
+  readonly key: keyof T & string;
+  readonly header: string;
+  readonly render?: (value: T[keyof T], row: T) => ReactNode;
+  readonly className?: string;
+}
+
+export interface DataTableProps<T> {
+  readonly columns: readonly Column<T>[];
+  readonly data: readonly T[];
+  readonly rowKey: (row: T) => string;
+  readonly onRowClick?: (row: T) => void;
+  readonly label: string;
+}
+
+/* ── Component ────────────────────────────────────────────────────── */
+
+export function DataTable<T>({
+  columns,
+  data,
+  rowKey,
+  onRowClick,
+  label,
+}: DataTableProps<T>): JSX.Element {
+  return (
+    <div className="overflow-x-auto">
+      <table className="table table-zebra w-full" aria-label={label}>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                scope="col"
+                className={`font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60 ${col.className ?? ""}`}
+              >
+                {col.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => {
+            const key = rowKey(row);
+            const interactive = onRowClick !== undefined;
+            return (
+              <tr
+                key={key}
+                className={`min-h-9 ${interactive ? "cursor-pointer hover:bg-base-200/60" : "hover:bg-base-200/40"}`}
+                onClick={interactive ? () => onRowClick(row) : undefined}
+                onKeyDown={
+                  interactive
+                    ? (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onRowClick(row);
+                        }
+                      }
+                    : undefined
+                }
+                tabIndex={interactive ? 0 : undefined}
+                role={interactive ? "link" : undefined}
+              >
+                {columns.map((col) => (
+                  <td
+                    key={col.key}
+                    className={`font-[font-feature-settings:'tnum'] text-[length:var(--font-size-sm)] ${col.className ?? ""}`}
+                  >
+                    {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
