@@ -116,13 +116,13 @@ page-tenant-management = टेनेंट प्रबंधन
 page-tenant-management-sub = टेनेंट विन्यास और पृथक्करण सीमाओं का प्रबंधन करें।
 page-user-detail = उपयोगकर्ता प्रोफ़ाइल
 page-user-detail-sub = उपयोगकर्ता विवरण और अनुमतियाँ देखें और संपादित करें।
-personnel-not-found = Personnel not found.
-personnel-detail-id = Personnel ID
-personnel-detail-tasks = Assigned Tasks
-personnel-detail-last-active = Last Active
-personnel-activity-region = Activity history
-personnel-activity-heading = Personnel Activity History
-personnel-activity-empty = No activity recorded.
+personnel-not-found = कर्मचारी नहीं मिला
+personnel-detail-id = कर्मचारी आईडी
+personnel-detail-tasks = निर्धारित कार्य
+personnel-detail-last-active = अंतिम सक्रियता
+personnel-activity-region = गतिविधि इतिहास
+personnel-activity-heading = कर्मचारी गतिविधि इतिहास
+personnel-activity-empty = कोई गतिविधि दर्ज नहीं है
 
 ## Task actions (state machine)
 

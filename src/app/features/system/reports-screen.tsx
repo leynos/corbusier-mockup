@@ -1,4 +1,16 @@
-/** @file Reports screen — three tabs: Audit Trail, Performance, Compliance. */
+/** @file Render the system reports registry view and its three panels.
+ *
+ * Purpose: host the Audit Trail, Performance, and Compliance tabs inside the
+ * shared registry-page shell.
+ *
+ * Invariants: exactly one report tab is active at a time, whilst all three
+ * tabpanel containers remain mounted for stable ARIA wiring.
+ *
+ * Related modules:
+ * - `src/app/features/system/components/registry-list.tsx` for the shared
+ *   registry page wrapper.
+ * - `src/app/utils/date-formatting.ts` for timeline timestamp formatting.
+ */
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { type JSX, useRef, useState } from "react";
@@ -14,6 +26,14 @@ type ReportTab = "audit" | "performance" | "compliance";
 /* ── Audit trail fixture ──────────────────────────────────────────── */
 
 interface AuditEvent {
+  readonly id: string;
+  readonly timestamp: string;
+  readonly actor: string;
+  readonly action: string;
+  readonly target: string;
+}
+
+interface LocalizedAuditEvent {
   readonly id: string;
   readonly timestamp: string;
   readonly actor: string;
@@ -181,6 +201,7 @@ interface LocalizedComplianceCheck extends ComplianceCheck {
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
 function AuditTrailPanel({
+  rows,
   locale,
   tableLabel,
   timeLabel,
@@ -188,6 +209,7 @@ function AuditTrailPanel({
   actionLabel,
   targetLabel,
 }: {
+  readonly rows: readonly LocalizedAuditEvent[];
   readonly locale: string;
   readonly tableLabel: string;
   readonly timeLabel: string;
@@ -227,7 +249,7 @@ function AuditTrailPanel({
           </tr>
         </thead>
         <tbody>
-          {AUDIT_EVENTS.map((e) => (
+          {rows.map((e) => (
             <tr key={e.id} className="min-h-9 hover:bg-base-200/40">
               <td className="whitespace-nowrap font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
                 <time dateTime={e.timestamp}>{formatTimelineTimestamp(e.timestamp, locale)}</time>
@@ -329,6 +351,22 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
   compliance: { key: "reports-tab-compliance", defaultValue: "Compliance" },
 };
 
+interface ReportsModel {
+  readonly translatedAuditRows: readonly LocalizedAuditEvent[];
+  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
+  readonly complianceChecks: readonly LocalizedComplianceCheck[];
+  readonly tabListLabel: string;
+  readonly auditTableLabel: string;
+  readonly timeLabel: string;
+  readonly actorLabel: string;
+  readonly actionLabel: string;
+  readonly targetLabel: string;
+  readonly performanceRegionLabel: string;
+  readonly complianceSummaryLabel: string;
+  readonly complianceListLabel: string;
+  readonly focusTabAtIndex: (index: number) => void;
+}
+
 function handleTabKeyDown(
   event: React.KeyboardEvent<HTMLButtonElement>,
   index: number,
@@ -363,16 +401,23 @@ function handleTabKeyDown(
   }
 }
 
-export function ReportsScreen(): JSX.Element {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? i18n.language;
-  const [activeTab, setActiveTab] = useState<ReportTab>("audit");
-  const tabButtonRefs = useRef<Record<ReportTab, HTMLButtonElement | null>>({
-    audit: null,
-    performance: null,
-    compliance: null,
-  });
-  const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
+/**
+ * Build the display-ready screen model for the reports registry page.
+ *
+ * This keeps translations, derived labels, and tab-focus plumbing outside the
+ * JSX tree so `ReportsScreen` stays a thin orchestrator.
+ */
+function useReportsModel({
+  t,
+  tabButtonRefs,
+}: {
+  readonly t: ReturnType<typeof useTranslation>["t"];
+  readonly tabButtonRefs: React.RefObject<Record<ReportTab, HTMLButtonElement | null>>;
+}): ReportsModel {
+  const translatedAuditRows: readonly LocalizedAuditEvent[] = AUDIT_EVENTS.map((event) => ({
+    ...event,
+    action: t(`reports-audit-action-${event.action}`, { defaultValue: event.action }),
+  }));
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
@@ -389,6 +434,7 @@ export function ReportsScreen(): JSX.Element {
     }),
     statusLabel: c.passed ? passLabel : failLabel,
   }));
+  const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
   const auditTableLabel = t("reports-audit-table", { defaultValue: "Audit trail events" });
   const timeLabel = t("reports-col-time", { defaultValue: "Time" });
   const actorLabel = t("reports-col-actor", { defaultValue: "Actor" });
@@ -403,9 +449,57 @@ export function ReportsScreen(): JSX.Element {
   const complianceListLabel = t("reports-compliance-list", {
     defaultValue: "Compliance checks",
   });
+  const focusTabAtIndex = (index: number): void => {
+    const nextTab = TAB_IDS[index];
+    if (!nextTab) return;
+    tabButtonRefs.current[nextTab]?.focus();
+  };
+
+  return {
+    translatedAuditRows,
+    performanceMetrics,
+    complianceChecks,
+    tabListLabel,
+    auditTableLabel,
+    timeLabel,
+    actorLabel,
+    actionLabel,
+    targetLabel,
+    performanceRegionLabel,
+    complianceSummaryLabel,
+    complianceListLabel,
+    focusTabAtIndex,
+  };
+}
+
+export function ReportsScreen(): JSX.Element {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? i18n.language;
+  const [activeTab, setActiveTab] = useState<ReportTab>("audit");
+  const tabButtonRefs = useRef<Record<ReportTab, HTMLButtonElement | null>>({
+    audit: null,
+    performance: null,
+    compliance: null,
+  });
+  const {
+    translatedAuditRows,
+    performanceMetrics,
+    complianceChecks,
+    tabListLabel,
+    auditTableLabel,
+    timeLabel,
+    actorLabel,
+    actionLabel,
+    targetLabel,
+    performanceRegionLabel,
+    complianceSummaryLabel,
+    complianceListLabel,
+    focusTabAtIndex,
+  } = useReportsModel({ t, tabButtonRefs });
   const panels: Record<ReportTab, () => JSX.Element> = {
     audit: () => (
       <AuditTrailPanel
+        rows={translatedAuditRows}
         locale={locale}
         tableLabel={auditTableLabel}
         timeLabel={timeLabel}
@@ -424,12 +518,6 @@ export function ReportsScreen(): JSX.Element {
         listLabel={complianceListLabel}
       />
     ),
-  };
-
-  const focusTabAtIndex = (index: number): void => {
-    const nextTab = TAB_IDS[index];
-    if (!nextTab) return;
-    tabButtonRefs.current[nextTab]?.focus();
   };
 
   return (

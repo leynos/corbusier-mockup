@@ -18,6 +18,7 @@ import { StatusBadge } from "./components/status-badge";
 
 const routeApi = getRouteApi("/system/agents/$id");
 
+/** Labels for the read-only agent metadata grid cards and timestamp line. */
 interface AgentMetadataLabels {
   readonly agentId: string;
   readonly vendor: string;
@@ -26,36 +27,62 @@ interface AgentMetadataLabels {
   readonly lastActive: string;
 }
 
+/** Display-ready label state for one capability toggle row. */
 interface AgentCapabilityLabel {
   readonly key: string;
   readonly label: string;
   readonly enabled: boolean;
 }
 
+/** Labels and capability toggle data for the capabilities card. */
 interface AgentCapabilitiesLabels {
   readonly region: string;
   readonly heading: string;
   readonly capabilities: readonly AgentCapabilityLabel[];
 }
 
+function assertNever(value: never): never {
+  throw new Error(`Unhandled agent backend status: ${String(value)}`);
+}
+
+/**
+ * Resolve the translated badge label for an agent backend status.
+ *
+ * @param status - Backend status value from fixture data.
+ * @param locale - Active locale used to choose descriptor localizations.
+ * @param translate - Screen-owned translation function for the final label.
+ * @returns The localized status label for the badge.
+ */
 function getAgentStatusLabel(
   status: AgentBackendStatus,
   locale: string,
   translate: (key: string, options: { defaultValue: string }) => string,
 ): string {
-  const isActive = status === "active";
-  const localizedLabel = pickLocalization(
-    isActive
-      ? agentStatusDescriptors.active.localizations
-      : agentStatusDescriptors.inactive.localizations,
-    locale,
-  ).name;
-
-  return isActive
-    ? translate("agent-status-active", { defaultValue: localizedLabel })
-    : translate("agent-status-inactive", { defaultValue: localizedLabel });
+  switch (status) {
+    case "active": {
+      const localizedLabel = pickLocalization(
+        agentStatusDescriptors.active.localizations,
+        locale,
+      ).name;
+      return translate("agent-status-active", { defaultValue: localizedLabel });
+    }
+    case "inactive": {
+      const localizedLabel = pickLocalization(
+        agentStatusDescriptors.inactive.localizations,
+        locale,
+      ).name;
+      return translate("agent-status-inactive", { defaultValue: localizedLabel });
+    }
+    default:
+      return assertNever(status);
+  }
 }
 
+/**
+ * @internal Render the not-found fallback for an unknown agent backend id.
+ *
+ * Props: the back-link label and the fallback message body.
+ */
 function AgentNotFound({
   backLabel,
   notFoundMessage,
@@ -77,6 +104,11 @@ function AgentNotFound({
   );
 }
 
+/**
+ * @internal Render read-only metadata cards and the last-active timestamp.
+ *
+ * Props: the agent entry, active locale, and translated metadata labels.
+ */
 function AgentMetadataGrid({
   agent,
   locale,
@@ -128,6 +160,11 @@ function AgentMetadataGrid({
   );
 }
 
+/**
+ * @internal Render the read-only capability checklist for an agent backend.
+ *
+ * Props: translated region metadata and display-ready capability labels.
+ */
 function AgentCapabilitiesCard({
   labels,
 }: {

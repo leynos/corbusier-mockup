@@ -116,13 +116,13 @@ page-tenant-management = 租户管理
 page-tenant-management-sub = 管理租户配置与隔离边界。
 page-user-detail = 用户资料
 page-user-detail-sub = 查看并编辑用户详情与权限。
-personnel-not-found = Personnel not found.
-personnel-detail-id = Personnel ID
-personnel-detail-tasks = Assigned Tasks
-personnel-detail-last-active = Last Active
-personnel-activity-region = Activity history
-personnel-activity-heading = Personnel Activity History
-personnel-activity-empty = No activity recorded.
+personnel-not-found = 未找到人员
+personnel-detail-id = 人员 ID
+personnel-detail-tasks = 分配的任务
+personnel-detail-last-active = 最后活跃时间
+personnel-activity-region = 活动记录
+personnel-activity-heading = 人员活动历史
+personnel-activity-empty = 暂无活动记录
 
 ## Task actions (state machine)
 

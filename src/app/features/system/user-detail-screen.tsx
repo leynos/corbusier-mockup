@@ -31,6 +31,13 @@ const EVENT_KIND_MAP: Record<PersonnelEventKind, ActivityEventKind> = {
   review_approved: "pr_opened",
 };
 
+/**
+ * Convert personnel activity entries into the shared timeline view model.
+ *
+ * @param entries - Read-only personnel activity entries to adapt.
+ * @param actorName - Display name used as the actor on every timeline item.
+ * @returns Timeline entries carrying id, kind, timestamp, actor, and localizations.
+ */
 function toTimelineEntries(
   entries: readonly PersonnelActivityEntry[],
   actorName: string,
@@ -46,23 +53,31 @@ function toTimelineEntries(
 
 /* ── Screen ───────────────────────────────────────────────────────── */
 
+/**
+ * Render the personnel detail route with metadata and activity history.
+ *
+ * @returns A `JSX.Element` for the personnel detail screen.
+ */
 export function PersonnelDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const personnelId = parsePersonnelId(id);
   const user = personnelId ? findPersonnelById(personnelId) : undefined;
+  const BackToPersonnelLink = (): JSX.Element => (
+    <Link
+      to="/system/personnel"
+      className="inline-flex items-center gap-1 text-primary hover:underline"
+    >
+      <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
+      {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
+    </Link>
+  );
 
   if (!user) {
     return (
       <div>
-        <Link
-          to="/system/personnel"
-          className="inline-flex items-center gap-1 text-primary hover:underline"
-        >
-          <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-          {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
-        </Link>
+        <BackToPersonnelLink />
         <p className="mt-4 text-base-content/60">
           {t("personnel-not-found", { defaultValue: "Personnel not found." })}
         </p>
@@ -76,13 +91,7 @@ export function PersonnelDetailScreen(): JSX.Element {
 
   return (
     <div>
-      <Link
-        to="/system/personnel"
-        className="inline-flex items-center gap-1 text-primary hover:underline"
-      >
-        <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
-      </Link>
+      <BackToPersonnelLink />
 
       {/* Header */}
       <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

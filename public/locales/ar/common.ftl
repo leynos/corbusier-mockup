@@ -116,13 +116,13 @@ page-tenant-management = إدارة المستأجرين
 page-tenant-management-sub = إدارة إعدادات المستأجرين وحدود العزل.
 page-user-detail = ملف المستخدم
 page-user-detail-sub = عرض تفاصيل المستخدم وصلاحياته وتحريرها.
-personnel-not-found = Personnel not found.
-personnel-detail-id = Personnel ID
-personnel-detail-tasks = Assigned Tasks
-personnel-detail-last-active = Last Active
-personnel-activity-region = Activity history
-personnel-activity-heading = Personnel Activity History
-personnel-activity-empty = No activity recorded.
+personnel-not-found = لم يتم العثور على الموظف.
+personnel-detail-id = معرّف الموظف
+personnel-detail-tasks = المهام المعيّنة
+personnel-detail-last-active = آخر نشاط
+personnel-activity-region = سجل النشاط
+personnel-activity-heading = سجل نشاط الموظف
+personnel-activity-empty = لا يوجد أي نشاط مسجّل.
 
 ## Task actions (state machine)
 
