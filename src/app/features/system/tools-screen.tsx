@@ -21,14 +21,14 @@ const LIFECYCLE_STYLE: Record<McpLifecycleState, StatusBadgeTone> = {
   stopped: "neutral",
 };
 
-function LifecycleBadge({ state }: { readonly state: McpLifecycleState }): JSX.Element {
-  const { t } = useTranslation();
-  return (
-    <StatusBadge
-      label={t(`tool-lifecycle-${state}`, { defaultValue: state })}
-      tone={LIFECYCLE_STYLE[state]}
-    />
-  );
+function LifecycleBadge({
+  state,
+  label,
+}: {
+  readonly state: McpLifecycleState;
+  readonly label: string;
+}): JSX.Element {
+  return <StatusBadge label={label} tone={LIFECYCLE_STYLE[state]} />;
 }
 
 /* ── Screen ───────────────────────────────────────────────────────── */
@@ -66,7 +66,14 @@ export function ToolsScreen(): JSX.Element {
     {
       key: "lifecycleState",
       header: t("tools-col-lifecycle", { defaultValue: "Lifecycle" }),
-      render: (_v, row) => <LifecycleBadge state={row.lifecycleState} />,
+      render: (_v, row) => (
+        <LifecycleBadge
+          state={row.lifecycleState}
+          label={t(`tool-lifecycle-${row.lifecycleState}`, {
+            defaultValue: row.lifecycleState,
+          })}
+        />
+      ),
     },
     {
       key: "healthStatus",

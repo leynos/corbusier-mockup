@@ -22,12 +22,18 @@ const OUTCOME_STYLE: Record<ExecutionOutcome, string> = {
   skip: "bg-base-300/40 text-base-content/50",
 };
 
-function OutcomeBadge({ outcome }: { readonly outcome: ExecutionOutcome }): JSX.Element {
+function OutcomeBadge({
+  outcome,
+  label,
+}: {
+  readonly outcome: ExecutionOutcome;
+  readonly label?: string;
+}): JSX.Element {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${OUTCOME_STYLE[outcome]}`}
     >
-      {outcome}
+      {label ?? outcome}
     </span>
   );
 }
@@ -98,6 +104,13 @@ function HookConfigSection({
   readonly actionsLabel: string;
   readonly priorityLabel: string;
 }): JSX.Element {
+  const actionOccurrences = new Map<string, number>();
+  const actionItems = hook.actions.map((action) => {
+    const occurrence = (actionOccurrences.get(action) ?? 0) + 1;
+    actionOccurrences.set(action, occurrence);
+    return { action, occurrence };
+  });
+
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
@@ -130,9 +143,9 @@ function HookConfigSection({
             </dt>
             <dd className="mt-1">
               <ol className="flex flex-wrap gap-2">
-                {hook.actions.map((action, i) => (
+                {actionItems.map(({ action, occurrence }, i) => (
                   <li
-                    key={action}
+                    key={`${action}-${occurrence}`}
                     className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-primary"
                   >
                     <span className="tabular-nums text-primary/60">{i + 1}.</span>
@@ -165,6 +178,7 @@ function HookExecutionLog({
   detailLabel,
   durationLabel,
   emptyLabel,
+  outcomeLabels,
   formatDuration,
 }: {
   readonly hook: HookDefinition;
@@ -177,6 +191,7 @@ function HookExecutionLog({
   readonly detailLabel: string;
   readonly durationLabel: string;
   readonly emptyLabel: string;
+  readonly outcomeLabels: Record<ExecutionOutcome, string>;
   readonly formatDuration: (value: number) => string;
 }): JSX.Element {
   return (
@@ -230,7 +245,10 @@ function HookExecutionLog({
                         </time>
                       </td>
                       <td>
-                        <OutcomeBadge outcome={entry.outcome} />
+                        <OutcomeBadge
+                          outcome={entry.outcome}
+                          label={outcomeLabels[entry.outcome]}
+                        />
                       </td>
                       <td className="text-[length:var(--font-size-sm)]">{entryLoc.name}</td>
                       <td className="text-right font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] tabular-nums text-base-content/60">
@@ -256,6 +274,11 @@ export function HookDetailScreen(): JSX.Element {
   const { id } = routeApi.useParams();
   const hook = findHookById(id);
   const backToHooksLabel = t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" });
+  const outcomeLabels: Record<ExecutionOutcome, string> = {
+    pass: t("outcome-pass", { defaultValue: "Pass" }),
+    fail: t("outcome-fail", { defaultValue: "Fail" }),
+    skip: t("outcome-skip", { defaultValue: "Skip" }),
+  };
 
   if (!hook) {
     return (
@@ -303,6 +326,7 @@ export function HookDetailScreen(): JSX.Element {
         detailLabel={t("hook-exec-col-detail", { defaultValue: "Detail" })}
         durationLabel={t("hook-exec-col-duration", { defaultValue: "Duration" })}
         emptyLabel={t("hook-exec-empty", { defaultValue: "No executions recorded." })}
+        outcomeLabels={outcomeLabels}
         formatDuration={(value) => t("unit-ms", { defaultValue: "{{value}}ms", value })}
       />
     </div>

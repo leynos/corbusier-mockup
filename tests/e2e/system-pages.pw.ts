@@ -80,6 +80,14 @@ test.describe("System Pages", () => {
 
     await expect(page.getByRole("heading", { name: "Tool Registry" })).toBeVisible();
     await expect(page.getByText("workspace_tools")).toBeVisible();
+
+    await page
+      .getByRole("button", { name: /workspace_tools/ })
+      .first()
+      .click();
+
+    await expect(page.getByRole("heading", { name: "workspace_tools" })).toBeVisible();
+    await expect(page).toHaveURL(/\/system\/tools\/MCP-001$/);
   });
 
   /* ── Hooks & Policies ──────────────────────────────────────────── */
@@ -89,6 +97,14 @@ test.describe("System Pages", () => {
 
     await expect(page.getByRole("heading", { name: "Hooks & Policies" })).toBeVisible();
     await expect(page.getByText("Pre-commit lint gate")).toBeVisible();
+
+    await page
+      .getByRole("button", { name: /Pre-commit lint gate/ })
+      .first()
+      .click();
+
+    await expect(page).toHaveURL(/\/system\/hooks\/HK-001$/);
+    await expect(page.getByRole("heading", { name: "Configuration" })).toBeVisible();
   });
 
   /* ── Reports ───────────────────────────────────────────────────── */
