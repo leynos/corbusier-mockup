@@ -6,7 +6,7 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import { type ExecutionOutcome, findHookById, type HookDefinition } from "../../../data/hooks";
-import { pickLocalization } from "../../domain/entities/localization";
+import { type LocalizedStringSet, pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
 import { StatusBadge } from "./components/status-badge";
 
@@ -91,7 +91,7 @@ function HookDetailHeader({
   disabledLabel,
 }: {
   readonly hook: HookDefinition;
-  readonly loc: { readonly name: string; readonly description?: string };
+  readonly loc: LocalizedStringSet;
   readonly enabledLabel: string;
   readonly disabledLabel: string;
 }): JSX.Element {
