@@ -10,7 +10,6 @@ import { RegistryList } from "./components/registry-list";
 /* ── Tab types ────────────────────────────────────────────────────── */
 
 type ReportTab = "audit" | "performance" | "compliance";
-type TabKeyAction = "focus_next" | "focus_previous" | "focus_first" | "focus_last" | "activate";
 
 /* ── Audit trail fixture ──────────────────────────────────────────── */
 
@@ -144,6 +143,31 @@ const COMPLIANCE_CHECKS: readonly ComplianceCheck[] = [
   { id: "comp-6", passed: true },
 ];
 
+const PERF_DEFAULT_LABELS: Record<string, string> = {
+  "perf-1": "P50 Latency",
+  "perf-2": "P95 Latency",
+  "perf-3": "P99 Latency",
+  "perf-4": "Throughput",
+};
+
+const COMPLIANCE_DEFAULT_LABELS: Record<string, string> = {
+  "comp-1": "RBAC enforcement",
+  "comp-2": "Audit trail completeness",
+  "comp-3": "Data retention policy",
+  "comp-4": "Encryption at rest",
+  "comp-5": "Token budget limits",
+  "comp-6": "Branch protection rules",
+};
+
+const COMPLIANCE_DEFAULT_DETAILS: Record<string, string> = {
+  "comp-1": "All routes gated",
+  "comp-2": "100% of state changes logged",
+  "comp-3": "90-day retention active",
+  "comp-4": "AES-256 verified",
+  "comp-5": "2 overruns in last 7 days",
+  "comp-6": "All repos compliant",
+};
+
 interface LocalizedPerformanceMetric extends PerformanceMetric {
   readonly label: string;
 }
@@ -153,31 +177,6 @@ interface LocalizedComplianceCheck extends ComplianceCheck {
   readonly detail: string;
   readonly statusLabel: string;
 }
-
-const PERF_METRIC_LABELS: Record<string, string> = {
-  "perf-1": "P50 Latency",
-  "perf-2": "P95 Latency",
-  "perf-3": "P99 Latency",
-  "perf-4": "Throughput",
-};
-
-const COMPLIANCE_LABELS: Record<string, string> = {
-  "comp-1": "RBAC enforcement",
-  "comp-2": "Audit trail completeness",
-  "comp-3": "Data retention policy",
-  "comp-4": "Encryption at rest",
-  "comp-5": "Token budget limits",
-  "comp-6": "Branch protection rules",
-};
-
-const COMPLIANCE_DETAILS: Record<string, string> = {
-  "comp-1": "All routes gated",
-  "comp-2": "100% of state changes logged",
-  "comp-3": "90-day retention active",
-  "comp-4": "AES-256 verified",
-  "comp-5": "2 overruns in last 7 days",
-  "comp-6": "All repos compliant",
-};
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
@@ -283,17 +282,17 @@ function PerformancePanel({
 
 function CompliancePanel({
   checks,
-  summary,
+  summaryLabel,
   listLabel,
 }: {
   readonly checks: readonly LocalizedComplianceCheck[];
-  readonly summary: string;
+  readonly summaryLabel: string;
   readonly listLabel: string;
 }): JSX.Element {
   return (
     <div>
       <p className="mb-4 tabular-nums text-[length:var(--font-size-sm)] text-base-content/70">
-        {summary}
+        {summaryLabel}
       </p>
       <ul className="space-y-2" aria-label={listLabel}>
         {checks.map((c) => (
@@ -330,76 +329,37 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
   compliance: { key: "reports-tab-compliance", defaultValue: "Compliance" },
 };
 
-const TAB_KEY_ACTIONS: Partial<Record<string, TabKeyAction>> = {
-  ArrowRight: "focus_next",
-  ArrowLeft: "focus_previous",
-  Home: "focus_first",
-  End: "focus_last",
-  Enter: "activate",
-  " ": "activate",
-};
-
-interface ReportPanelRendererArgs {
-  readonly locale: string;
-  readonly tab: ReportTab;
-  readonly activeTab: ReportTab;
-  readonly auditTableLabel: string;
-  readonly timeLabel: string;
-  readonly actorLabel: string;
-  readonly actionLabel: string;
-  readonly targetLabel: string;
-  readonly performanceRegionLabel: string;
-  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
-  readonly complianceChecks: readonly LocalizedComplianceCheck[];
-  readonly complianceSummary: string;
-  readonly complianceListLabel: string;
-}
-
-const PANEL_RENDERERS: Record<ReportTab, (args: ReportPanelRendererArgs) => JSX.Element> = {
-  audit: ({ locale, auditTableLabel, timeLabel, actorLabel, actionLabel, targetLabel }) => (
-    <AuditTrailPanel
-      locale={locale}
-      tableLabel={auditTableLabel}
-      timeLabel={timeLabel}
-      actorLabel={actorLabel}
-      actionLabel={actionLabel}
-      targetLabel={targetLabel}
-    />
-  ),
-  performance: ({ performanceRegionLabel, performanceMetrics }) => (
-    <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
-  ),
-  compliance: ({ complianceChecks, complianceSummary, complianceListLabel }) => (
-    <CompliancePanel
-      checks={complianceChecks}
-      summary={complianceSummary}
-      listLabel={complianceListLabel}
-    />
-  ),
-};
-
-function handleTabKey(
-  eventKey: string,
+function handleTabKeyDown(
+  event: React.KeyboardEvent<HTMLButtonElement>,
   index: number,
-  tabCount: number,
   tab: ReportTab,
-):
-  | { readonly kind: "focus"; readonly index: number }
-  | { readonly kind: "activate"; readonly tab: ReportTab }
-  | null {
-  switch (TAB_KEY_ACTIONS[eventKey]) {
-    case "focus_next":
-      return { kind: "focus", index: (index + 1) % tabCount };
-    case "focus_previous":
-      return { kind: "focus", index: (index - 1 + tabCount) % tabCount };
-    case "focus_first":
-      return { kind: "focus", index: 0 };
-    case "focus_last":
-      return { kind: "focus", index: tabCount - 1 };
-    case "activate":
-      return { kind: "activate", tab };
+  setActiveTab: (t: ReportTab) => void,
+  focusAt: (i: number) => void,
+): void {
+  switch (event.key) {
+    case "ArrowRight":
+      event.preventDefault();
+      focusAt((index + 1) % TAB_IDS.length);
+      break;
+    case "ArrowLeft":
+      event.preventDefault();
+      focusAt((index - 1 + TAB_IDS.length) % TAB_IDS.length);
+      break;
+    case "Home":
+      event.preventDefault();
+      focusAt(0);
+      break;
+    case "End":
+      event.preventDefault();
+      focusAt(TAB_IDS.length - 1);
+      break;
+    case "Enter":
+    case " ":
+      event.preventDefault();
+      setActiveTab(tab);
+      break;
     default:
-      return null;
+      break;
   }
 }
 
@@ -413,23 +373,21 @@ export function ReportsScreen(): JSX.Element {
     compliance: null,
   });
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
-  const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((metric) => ({
-    ...metric,
-    label: t(`reports-performance-${metric.id}`, {
-      defaultValue: PERF_METRIC_LABELS[metric.id] ?? metric.id,
-    }),
+  const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
+    ...m,
+    label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
   }));
   const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
   const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
-  const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((check) => ({
-    ...check,
-    label: t(`reports-compliance-${check.id}-label`, {
-      defaultValue: COMPLIANCE_LABELS[check.id] ?? check.id,
+  const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((c) => ({
+    ...c,
+    label: t(`reports-compliance-${c.id}-label`, {
+      defaultValue: COMPLIANCE_DEFAULT_LABELS[c.id] ?? c.id,
     }),
-    detail: t(`reports-compliance-${check.id}-detail`, {
-      defaultValue: COMPLIANCE_DETAILS[check.id] ?? check.id,
+    detail: t(`reports-compliance-${c.id}-detail`, {
+      defaultValue: COMPLIANCE_DEFAULT_DETAILS[c.id] ?? "",
     }),
-    statusLabel: check.passed ? passLabel : failLabel,
+    statusLabel: c.passed ? passLabel : failLabel,
   }));
   const auditTableLabel = t("reports-audit-table", { defaultValue: "Audit trail events" });
   const timeLabel = t("reports-col-time", { defaultValue: "Time" });
@@ -437,7 +395,7 @@ export function ReportsScreen(): JSX.Element {
   const actionLabel = t("reports-col-action", { defaultValue: "Action" });
   const targetLabel = t("reports-col-target", { defaultValue: "Target" });
   const performanceRegionLabel = t("reports-perf-region", { defaultValue: "Performance metrics" });
-  const complianceSummary = t("reports-compliance-summary", {
+  const complianceSummaryLabel = t("reports-compliance-summary", {
     defaultValue: "{{pass}} of {{total}} checks passing",
     pass: complianceChecks.filter((check) => check.passed).length,
     total: complianceChecks.length,
@@ -445,28 +403,34 @@ export function ReportsScreen(): JSX.Element {
   const complianceListLabel = t("reports-compliance-list", {
     defaultValue: "Compliance checks",
   });
+  const panels: Record<ReportTab, () => JSX.Element> = {
+    audit: () => (
+      <AuditTrailPanel
+        locale={locale}
+        tableLabel={auditTableLabel}
+        timeLabel={timeLabel}
+        actorLabel={actorLabel}
+        actionLabel={actionLabel}
+        targetLabel={targetLabel}
+      />
+    ),
+    performance: () => (
+      <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
+    ),
+    compliance: () => (
+      <CompliancePanel
+        checks={complianceChecks}
+        summaryLabel={complianceSummaryLabel}
+        listLabel={complianceListLabel}
+      />
+    ),
+  };
 
   const focusTabAtIndex = (index: number): void => {
     const nextTab = TAB_IDS[index];
     if (!nextTab) return;
     tabButtonRefs.current[nextTab]?.focus();
   };
-  const renderPanel = (tab: ReportTab): JSX.Element =>
-    PANEL_RENDERERS[tab]({
-      locale,
-      tab,
-      activeTab,
-      auditTableLabel,
-      timeLabel,
-      actorLabel,
-      actionLabel,
-      targetLabel,
-      performanceRegionLabel,
-      performanceMetrics,
-      complianceChecks,
-      complianceSummary,
-      complianceListLabel,
-    });
 
   return (
     <RegistryList
@@ -495,14 +459,7 @@ export function ReportsScreen(): JSX.Element {
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => {
-                const action = handleTabKey(event.key, index, TAB_IDS.length, tab);
-                if (!action) return;
-                event.preventDefault();
-                if (action.kind === "focus") {
-                  focusTabAtIndex(action.index);
-                  return;
-                }
-                setActiveTab(action.tab);
+                handleTabKeyDown(event, index, tab, setActiveTab, focusTabAtIndex);
               }}
             >
               {t(label.key, { defaultValue: label.defaultValue })}
@@ -520,11 +477,10 @@ export function ReportsScreen(): JSX.Element {
             id={`panel-${tab}`}
             role="tabpanel"
             aria-labelledby={`tab-${tab}`}
-            tabIndex={isActive ? 0 : -1}
             hidden={!isActive}
             aria-hidden={!isActive}
           >
-            {renderPanel(tab)}
+            {panels[tab]()}
           </div>
         );
       })}
