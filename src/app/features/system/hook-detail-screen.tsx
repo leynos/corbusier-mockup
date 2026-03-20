@@ -22,6 +22,26 @@ const OUTCOME_STYLE: Record<ExecutionOutcome, string> = {
   skip: "bg-base-300/40 text-base-content/50",
 };
 
+interface HookConfigLabels {
+  readonly region: string;
+  readonly heading: string;
+  readonly triggerType: string;
+  readonly predicate: string;
+  readonly actions: string;
+  readonly priority: string;
+}
+
+interface HookExecutionLogLabels {
+  readonly region: string;
+  readonly heading: string;
+  readonly table: string;
+  readonly time: string;
+  readonly outcome: string;
+  readonly detail: string;
+  readonly duration: string;
+  readonly empty: string;
+}
+
 function OutcomeBadge({
   outcome,
   label,
@@ -39,17 +59,22 @@ function OutcomeBadge({
 }
 
 function HookNotFound({
+  heading,
   backToHooksLabel,
   notFoundMessage,
 }: {
+  readonly heading: string;
   readonly backToHooksLabel: string;
   readonly notFoundMessage: string;
 }): JSX.Element {
   return (
     <div>
+      <h1 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
+        {heading}
+      </h1>
       <Link
         to="/system/hooks"
-        className="inline-flex items-center gap-1 text-primary hover:underline"
+        className="mt-4 inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
         {backToHooksLabel}
@@ -89,20 +114,10 @@ function HookDetailHeader({
 
 function HookConfigSection({
   hook,
-  regionLabel,
-  headingLabel,
-  triggerTypeLabel,
-  predicateLabel,
-  actionsLabel,
-  priorityLabel,
+  configLabels,
 }: {
   readonly hook: HookDefinition;
-  readonly regionLabel: string;
-  readonly headingLabel: string;
-  readonly triggerTypeLabel: string;
-  readonly predicateLabel: string;
-  readonly actionsLabel: string;
-  readonly priorityLabel: string;
+  readonly configLabels: HookConfigLabels;
 }): JSX.Element {
   const actionOccurrences = new Map<string, number>();
   const actionItems = hook.actions.map((action) => {
@@ -114,16 +129,16 @@ function HookConfigSection({
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={regionLabel}
+      aria-label={configLabels.region}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {headingLabel}
+          {configLabels.heading}
         </h2>
         <dl className="space-y-3">
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {triggerTypeLabel}
+              {configLabels.triggerType}
             </dt>
             <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
               {hook.triggerType}
@@ -131,7 +146,7 @@ function HookConfigSection({
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {predicateLabel}
+              {configLabels.predicate}
             </dt>
             <dd className="mt-1 rounded-lg bg-base-200 p-3 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)]">
               <pre className="whitespace-pre-wrap break-words">{hook.predicate}</pre>
@@ -139,7 +154,7 @@ function HookConfigSection({
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {actionsLabel}
+              {configLabels.actions}
             </dt>
             <dd className="mt-1">
               <ol className="flex flex-wrap gap-2">
@@ -157,7 +172,7 @@ function HookConfigSection({
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {priorityLabel}
+              {configLabels.priority}
             </dt>
             <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">{hook.priority}</dd>
           </div>
@@ -170,67 +185,53 @@ function HookConfigSection({
 function HookExecutionLog({
   hook,
   locale,
-  regionLabel,
-  headingLabel,
-  tableLabel,
-  timeLabel,
-  outcomeLabel,
-  detailLabel,
-  durationLabel,
-  emptyLabel,
+  executionLogLabels,
   outcomeLabels,
   formatDuration,
 }: {
   readonly hook: HookDefinition;
   readonly locale: string;
-  readonly regionLabel: string;
-  readonly headingLabel: string;
-  readonly tableLabel: string;
-  readonly timeLabel: string;
-  readonly outcomeLabel: string;
-  readonly detailLabel: string;
-  readonly durationLabel: string;
-  readonly emptyLabel: string;
+  readonly executionLogLabels: HookExecutionLogLabels;
   readonly outcomeLabels: Record<ExecutionOutcome, string>;
   readonly formatDuration: (value: number) => string;
 }): JSX.Element {
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={regionLabel}
+      aria-label={executionLogLabels.region}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {headingLabel}
+          {executionLogLabels.heading}
         </h2>
         {hook.executionLog.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-full" aria-label={tableLabel}>
+            <table className="table table-zebra w-full" aria-label={executionLogLabels.table}>
               <thead>
                 <tr>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {timeLabel}
+                    {executionLogLabels.time}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {outcomeLabel}
+                    {executionLogLabels.outcome}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {detailLabel}
+                    {executionLogLabels.detail}
                   </th>
                   <th
                     scope="col"
                     className="text-right font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {durationLabel}
+                    {executionLogLabels.duration}
                   </th>
                 </tr>
               </thead>
@@ -261,7 +262,7 @@ function HookExecutionLog({
             </table>
           </div>
         ) : (
-          <p className="text-base-content/60">{emptyLabel}</p>
+          <p className="text-base-content/60">{executionLogLabels.empty}</p>
         )}
       </div>
     </section>
@@ -283,6 +284,7 @@ export function HookDetailScreen(): JSX.Element {
   if (!hook) {
     return (
       <HookNotFound
+        heading={t("page-hooks-policies", { defaultValue: "Hooks & Policies" })}
         backToHooksLabel={backToHooksLabel}
         notFoundMessage={t("hook-not-found", { defaultValue: "Hook not found." })}
       />
@@ -308,24 +310,28 @@ export function HookDetailScreen(): JSX.Element {
       />
       <HookConfigSection
         hook={hook}
-        regionLabel={t("hook-config-region", { defaultValue: "Hook configuration" })}
-        headingLabel={t("hook-config-heading", { defaultValue: "Configuration" })}
-        triggerTypeLabel={t("hook-trigger-type", { defaultValue: "Trigger Type" })}
-        predicateLabel={t("hook-predicate", { defaultValue: "Predicate" })}
-        actionsLabel={t("hook-actions", { defaultValue: "Action Chain" })}
-        priorityLabel={t("hook-priority", { defaultValue: "Priority" })}
+        configLabels={{
+          region: t("hook-config-region", { defaultValue: "Hook configuration" }),
+          heading: t("hook-config-heading", { defaultValue: "Configuration" }),
+          triggerType: t("hook-trigger-type", { defaultValue: "Trigger Type" }),
+          predicate: t("hook-predicate", { defaultValue: "Predicate" }),
+          actions: t("hook-actions", { defaultValue: "Action Chain" }),
+          priority: t("hook-priority", { defaultValue: "Priority" }),
+        }}
       />
       <HookExecutionLog
         hook={hook}
         locale={locale}
-        regionLabel={t("hook-exec-region", { defaultValue: "Execution log" })}
-        headingLabel={t("hook-exec-heading", { defaultValue: "Execution Log" })}
-        tableLabel={t("hook-exec-table-label", { defaultValue: "Hook execution log" })}
-        timeLabel={t("hook-exec-col-time", { defaultValue: "Time" })}
-        outcomeLabel={t("hook-exec-col-outcome", { defaultValue: "Outcome" })}
-        detailLabel={t("hook-exec-col-detail", { defaultValue: "Detail" })}
-        durationLabel={t("hook-exec-col-duration", { defaultValue: "Duration" })}
-        emptyLabel={t("hook-exec-empty", { defaultValue: "No executions recorded." })}
+        executionLogLabels={{
+          region: t("hook-exec-region", { defaultValue: "Execution log" }),
+          heading: t("hook-exec-heading", { defaultValue: "Execution Log" }),
+          table: t("hook-exec-table-label", { defaultValue: "Hook execution log" }),
+          time: t("hook-exec-col-time", { defaultValue: "Time" }),
+          outcome: t("hook-exec-col-outcome", { defaultValue: "Outcome" }),
+          detail: t("hook-exec-col-detail", { defaultValue: "Detail" }),
+          duration: t("hook-exec-col-duration", { defaultValue: "Duration" }),
+          empty: t("hook-exec-empty", { defaultValue: "No executions recorded." }),
+        }}
         outcomeLabels={outcomeLabels}
         formatDuration={(value) => t("unit-ms", { defaultValue: "{{value}}ms", value })}
       />
