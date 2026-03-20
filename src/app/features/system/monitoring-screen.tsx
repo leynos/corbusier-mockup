@@ -135,12 +135,149 @@ const HC_COLOUR: Record<HealthStatus, string> = {
   critical: "text-error",
 };
 
-/* ── Screen ───────────────────────────────────────────────────────── */
+function AlertsSection({ locale }: { readonly locale: string }): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <section
+      className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
+      aria-label={t("monitoring-alerts-region", { defaultValue: "Active alerts" })}
+    >
+      <div className="card-body p-5">
+        <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
+          {t("monitoring-alerts-heading", { defaultValue: "Active Alerts" })}
+        </h2>
+        {MONITORING_ALERTS.length > 0 ? (
+          <div>
+            <table
+              className="table table-zebra w-full"
+              aria-label={t("monitoring-alerts-table", { defaultValue: "Alert list" })}
+            >
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+                  >
+                    {t("alert-col-severity", { defaultValue: "Severity" })}
+                  </th>
+                  <th
+                    scope="col"
+                    className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+                  >
+                    {t("alert-col-description", { defaultValue: "Alert" })}
+                  </th>
+                  <th
+                    scope="col"
+                    className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+                  >
+                    {t("alert-col-fired", { defaultValue: "Fired" })}
+                  </th>
+                  <th
+                    scope="col"
+                    className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+                  >
+                    {t("alert-col-ack", { defaultValue: "Acknowledged" })}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {MONITORING_ALERTS.map((alert) => {
+                  const alertLoc = pickLocalization(alert.localizations, locale);
+                  const style = getAlertStyle(alert.severity);
+                  const Icon = style.icon;
+                  return (
+                    <tr key={alert.id} className="min-h-9 hover:bg-base-200/40">
+                      <td>
+                        <span className={`inline-flex items-center gap-1 ${style.colour}`}>
+                          <Icon size={16} stroke={1.5} aria-hidden="true" />
+                          <span className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase">
+                            {alert.severity}
+                          </span>
+                        </span>
+                      </td>
+                      <td>
+                        <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
+                          {alertLoc.name}
+                        </p>
+                        {alertLoc.description ? (
+                          <p className="text-[length:var(--font-size-xs)] text-base-content/60">
+                            {alertLoc.description}
+                          </p>
+                        ) : null}
+                      </td>
+                      <td className="whitespace-nowrap font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
+                        <time dateTime={alert.firedAt}>
+                          {formatTimelineTimestamp(alert.firedAt, locale)}
+                        </time>
+                      </td>
+                      <td className="text-[length:var(--font-size-sm)]">
+                        {alert.acknowledged
+                          ? t("alert-ack-yes", { defaultValue: "Yes" })
+                          : t("alert-ack-no", { defaultValue: "No" })}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-base-content/60">
+            {t("monitoring-no-alerts", { defaultValue: "No active alerts." })}
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function HealthChecksSection({ locale }: { readonly locale: string }): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <section
+      className="mt-6"
+      aria-label={t("monitoring-health-region", { defaultValue: "Health checks" })}
+    >
+      <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
+        {t("monitoring-health-heading", { defaultValue: "Health Check Endpoints" })}
+      </h2>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {HEALTH_CHECKS.map((hc) => {
+          const hcLoc = pickLocalization(hc.localizations, locale);
+          const HcIcon = HC_ICON[hc.status];
+          return (
+            <div key={hc.path} className="rounded-lg border border-base-300 bg-base-100 p-4">
+              <div className="flex items-center gap-2">
+                <HcIcon size={18} className={HC_COLOUR[hc.status]} aria-hidden="true" />
+                <p className="font-semibold text-[length:var(--font-size-sm)] text-base-content">
+                  {hcLoc.name}
+                </p>
+              </div>
+              <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
+                {hc.path}
+              </p>
+              <div className="mt-2 flex items-center justify-between">
+                <HealthBadge status={hc.status} />
+                <span className="tabular-nums font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
+                  {t("unit-ms", { defaultValue: "{{value}}ms", value: hc.responseTimeMs })}
+                </span>
+              </div>
+              {hcLoc.description ? (
+                <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
+                  {hcLoc.description}
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
 
 export function MonitoringScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-
   return (
     <RegistryList
       heading={t("page-monitoring", { defaultValue: "Monitoring" })}
@@ -148,7 +285,6 @@ export function MonitoringScreen(): JSX.Element {
         defaultValue: "System health, logs, and performance metrics.",
       })}
     >
-      {/* Metric panels — 2x2 grid */}
       <section
         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
         aria-label={t("monitoring-metrics-region", { defaultValue: "Metric panels" })}
@@ -157,138 +293,8 @@ export function MonitoringScreen(): JSX.Element {
           <MetricPanel key={m.id} metric={m} locale={locale} />
         ))}
       </section>
-
-      {/* Active alerts */}
-      <section
-        className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-        aria-label={t("monitoring-alerts-region", { defaultValue: "Active alerts" })}
-      >
-        <div className="card-body p-5">
-          <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("monitoring-alerts-heading", { defaultValue: "Active Alerts" })}
-          </h2>
-          {MONITORING_ALERTS.length > 0 ? (
-            <div>
-              <table
-                className="table table-zebra w-full"
-                aria-label={t("monitoring-alerts-table", { defaultValue: "Alert list" })}
-              >
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-                    >
-                      {t("alert-col-severity", { defaultValue: "Severity" })}
-                    </th>
-                    <th
-                      scope="col"
-                      className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-                    >
-                      {t("alert-col-description", { defaultValue: "Alert" })}
-                    </th>
-                    <th
-                      scope="col"
-                      className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-                    >
-                      {t("alert-col-fired", { defaultValue: "Fired" })}
-                    </th>
-                    <th
-                      scope="col"
-                      className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-                    >
-                      {t("alert-col-ack", { defaultValue: "Acknowledged" })}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {MONITORING_ALERTS.map((alert) => {
-                    const alertLoc = pickLocalization(alert.localizations, locale);
-                    const style = getAlertStyle(alert.severity);
-                    const Icon = style.icon;
-                    return (
-                      <tr key={alert.id} className="min-h-9 hover:bg-base-200/40">
-                        <td>
-                          <span className={`inline-flex items-center gap-1 ${style.colour}`}>
-                            <Icon size={16} stroke={1.5} aria-hidden="true" />
-                            <span className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase">
-                              {alert.severity}
-                            </span>
-                          </span>
-                        </td>
-                        <td>
-                          <p className="text-[length:var(--font-size-sm)] font-semibold text-base-content">
-                            {alertLoc.name}
-                          </p>
-                          {alertLoc.description ? (
-                            <p className="text-[length:var(--font-size-xs)] text-base-content/60">
-                              {alertLoc.description}
-                            </p>
-                          ) : null}
-                        </td>
-                        <td className="whitespace-nowrap font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-                          <time dateTime={alert.firedAt}>
-                            {formatTimelineTimestamp(alert.firedAt, locale)}
-                          </time>
-                        </td>
-                        <td className="text-[length:var(--font-size-sm)]">
-                          {alert.acknowledged
-                            ? t("alert-ack-yes", { defaultValue: "Yes" })
-                            : t("alert-ack-no", { defaultValue: "No" })}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="text-base-content/60">
-              {t("monitoring-no-alerts", { defaultValue: "No active alerts." })}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Health check endpoints */}
-      <section
-        className="mt-6"
-        aria-label={t("monitoring-health-region", { defaultValue: "Health checks" })}
-      >
-        <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("monitoring-health-heading", { defaultValue: "Health Check Endpoints" })}
-        </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {HEALTH_CHECKS.map((hc) => {
-            const hcLoc = pickLocalization(hc.localizations, locale);
-            const HcIcon = HC_ICON[hc.status];
-            return (
-              <div key={hc.path} className="rounded-lg border border-base-300 bg-base-100 p-4">
-                <div className="flex items-center gap-2">
-                  <HcIcon size={18} className={HC_COLOUR[hc.status]} aria-hidden="true" />
-                  <p className="font-semibold text-[length:var(--font-size-sm)] text-base-content">
-                    {hcLoc.name}
-                  </p>
-                </div>
-                <p className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-                  {hc.path}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <HealthBadge status={hc.status} />
-                  <span className="tabular-nums font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-                    {t("unit-ms", { defaultValue: "{{value}}ms", value: hc.responseTimeMs })}
-                  </span>
-                </div>
-                {hcLoc.description ? (
-                  <p className="mt-1 text-[length:var(--font-size-xs)] text-base-content/60">
-                    {hcLoc.description}
-                  </p>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      <AlertsSection locale={locale} />
+      <HealthChecksSection locale={locale} />
     </RegistryList>
   );
 }
