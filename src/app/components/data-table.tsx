@@ -58,27 +58,34 @@ export function DataTable<T>({
                 key={key}
                 className={`min-h-9 ${interactive ? "cursor-pointer hover:bg-base-200/60" : "hover:bg-base-200/40"}`}
                 onClick={interactive ? () => onRowClick(row) : undefined}
-                onKeyDown={
-                  interactive
-                    ? (e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          onRowClick(row);
-                        }
-                      }
-                    : undefined
-                }
-                tabIndex={interactive ? 0 : undefined}
-                role={interactive ? "link" : undefined}
               >
-                {columns.map((col) => (
-                  <td
-                    key={col.key}
-                    className={`font-[font-feature-settings:'tnum'] text-[length:var(--font-size-sm)] ${col.className ?? ""}`}
-                  >
-                    {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
-                  </td>
-                ))}
+                {columns.map((col, index) => {
+                  const content = col.render
+                    ? col.render(row[col.key], row)
+                    : String(row[col.key] ?? "");
+                  const isPrimaryInteractiveCell = interactive && index === 0;
+                  return (
+                    <td
+                      key={col.key}
+                      className={`text-[length:var(--font-size-sm)] ${col.className ?? ""}`}
+                    >
+                      {isPrimaryInteractiveCell ? (
+                        <button
+                          type="button"
+                          className="block w-full cursor-pointer bg-transparent text-left"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRowClick(row);
+                          }}
+                        >
+                          {content}
+                        </button>
+                      ) : (
+                        content
+                      )}
+                    </td>
+                  );
+                })}
               </tr>
             );
           })}

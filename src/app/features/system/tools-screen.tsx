@@ -4,27 +4,28 @@ import { useNavigate } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MCP_SERVERS, type McpServer } from "../../../data/mcp-servers";
+import { MCP_SERVERS, type McpLifecycleState, type McpServer } from "../../../data/mcp-servers";
 import { type Column, DataTable } from "../../components/data-table";
 import { pickLocalization } from "../../domain/entities/localization";
 import { HealthBadge } from "./components/health-badge";
 import { RegistryList } from "./components/registry-list";
+import { StatusBadge, type StatusBadgeTone } from "./components/status-badge";
 
 /* ── Lifecycle badge ──────────────────────────────────────────────── */
 
-const LIFECYCLE_STYLE: Record<string, string> = {
-  running: "bg-success/15 text-success",
-  registered: "bg-info/15 text-info",
-  stopped: "bg-base-300/40 text-base-content/50",
+const LIFECYCLE_STYLE: Record<McpLifecycleState, StatusBadgeTone> = {
+  running: "success",
+  registered: "info",
+  stopped: "neutral",
 };
 
-function LifecycleBadge({ state }: { readonly state: string }): JSX.Element {
+function LifecycleBadge({ state }: { readonly state: McpLifecycleState }): JSX.Element {
+  const { t } = useTranslation();
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${LIFECYCLE_STYLE[state] ?? ""}`}
-    >
-      {state}
-    </span>
+    <StatusBadge
+      label={t(`tool-lifecycle-${state}`, { defaultValue: state })}
+      tone={LIFECYCLE_STYLE[state]}
+    />
   );
 }
 

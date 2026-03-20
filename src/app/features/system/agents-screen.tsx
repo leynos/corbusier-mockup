@@ -4,24 +4,45 @@ import { useNavigate } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AGENT_BACKENDS, type AgentBackendEntry } from "../../../data/agents";
+import {
+  AGENT_BACKENDS,
+  type AgentBackendEntry,
+  type AgentBackendStatus,
+} from "../../../data/agents";
+import { agentStatusDescriptors } from "../../../data/registries/agent-status-descriptors";
 import { type Column, DataTable } from "../../components/data-table";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
 import { RegistryList } from "./components/registry-list";
+import { StatusBadge } from "./components/status-badge";
 
 /* ── Status badge ─────────────────────────────────────────────────── */
 
-function AgentStatusBadge({ status }: { readonly status: string }): JSX.Element {
+function AgentStatusBadge({
+  status,
+  locale,
+}: {
+  readonly status: AgentBackendStatus;
+  readonly locale: string;
+}): JSX.Element {
+  const { t } = useTranslation();
   const isActive = status === "active";
+  const localizedLabel = pickLocalization(
+    isActive
+      ? agentStatusDescriptors.active.localizations
+      : agentStatusDescriptors.inactive.localizations,
+    locale,
+  ).name;
+
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${
-        isActive ? "bg-success/15 text-success" : "bg-base-300/40 text-base-content/50"
-      }`}
-    >
-      {isActive ? "Active" : "Inactive"}
-    </span>
+    <StatusBadge
+      label={
+        isActive
+          ? t("agent-status-active", { defaultValue: localizedLabel })
+          : t("agent-status-inactive", { defaultValue: localizedLabel })
+      }
+      tone={isActive ? "success" : "neutral"}
+    />
   );
 }
 
@@ -62,7 +83,7 @@ export function AgentsScreen(): JSX.Element {
     {
       key: "status",
       header: t("agents-col-status", { defaultValue: "Status" }),
-      render: (_v, row) => <AgentStatusBadge status={row.status} />,
+      render: (_v, row) => <AgentStatusBadge status={row.status} locale={locale} />,
     },
     {
       key: "turnCount",

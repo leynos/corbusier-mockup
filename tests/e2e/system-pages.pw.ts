@@ -23,7 +23,7 @@ test.describe("System Pages", () => {
     await page.goto("/system/personnel");
 
     await page
-      .getByRole("link", { name: /Ava Chen/ })
+      .getByRole("button", { name: /Ava Chen/ })
       .first()
       .click();
 
@@ -57,7 +57,7 @@ test.describe("System Pages", () => {
     await page.goto("/system/agents");
 
     await page
-      .getByRole("link", { name: /Claude Code SDK/ })
+      .getByRole("button", { name: /Claude Code SDK/ })
       .first()
       .click();
 

@@ -7,6 +7,7 @@ import { TENANT } from "../../../data/tenant";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatShortDate } from "../../utils/date-formatting";
 import { RegistryList } from "./components/registry-list";
+import { StatusBadge } from "./components/status-badge";
 
 export function TenantsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
@@ -31,15 +32,15 @@ export function TenantsScreen(): JSX.Element {
               <p className="mt-1 text-base-content/70">{loc.description}</p>
             ) : null}
           </div>
-          <span
-            className={`inline-flex items-center rounded-full px-3 py-1 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${
-              TENANT.status === "active" ? "bg-success/15 text-success" : "bg-error/15 text-error"
-            }`}
-          >
-            {TENANT.status === "active"
-              ? t("tenant-status-active", { defaultValue: "Active" })
-              : t("tenant-status-suspended", { defaultValue: "Suspended" })}
-          </span>
+          <StatusBadge
+            label={
+              TENANT.status === "active"
+                ? t("tenant-status-active", { defaultValue: "Active" })
+                : t("tenant-status-suspended", { defaultValue: "Suspended" })
+            }
+            tone={TENANT.status === "active" ? "success" : "error"}
+            size="regular"
+          />
         </div>
 
         {/* Metadata grid */}

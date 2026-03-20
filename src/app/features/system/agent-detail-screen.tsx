@@ -8,13 +8,30 @@ import { useTranslation } from "react-i18next";
 
 import {
   type AgentBackendEntry,
+  type AgentBackendStatus,
   type AgentCapabilities,
   findAgentBackendById,
 } from "../../../data/agents";
+import { agentStatusDescriptors } from "../../../data/registries/agent-status-descriptors";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
+import { StatusBadge } from "./components/status-badge";
 
 const routeApi = getRouteApi("/system/agents/$id");
+
+function getAgentStatusLabel(status: AgentBackendStatus, locale: string, t: TFunction): string {
+  const isActive = status === "active";
+  const localizedLabel = pickLocalization(
+    isActive
+      ? agentStatusDescriptors.active.localizations
+      : agentStatusDescriptors.inactive.localizations,
+    locale,
+  ).name;
+
+  return isActive
+    ? t("agent-status-active", { defaultValue: localizedLabel })
+    : t("agent-status-inactive", { defaultValue: localizedLabel });
+}
 
 function AgentNotFound({ t }: { readonly t: TFunction }): JSX.Element {
   return (
@@ -161,6 +178,7 @@ export function AgentDetailScreen(): JSX.Element {
 
   const loc = pickLocalization(agent.localizations, locale);
   const isActive = agent.status === "active";
+  const statusLabel = getAgentStatusLabel(agent.status, locale, t);
 
   return (
     <div>
@@ -178,15 +196,7 @@ export function AgentDetailScreen(): JSX.Element {
           </h1>
           {loc.description ? <p className="mt-1 text-base-content/70">{loc.description}</p> : null}
         </div>
-        <span
-          className={`inline-flex items-center rounded-full px-3 py-1 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${
-            isActive ? "bg-success/15 text-success" : "bg-base-300/40 text-base-content/50"
-          }`}
-        >
-          {isActive
-            ? t("agent-status-active", { defaultValue: "Active" })
-            : t("agent-status-inactive", { defaultValue: "Inactive" })}
-        </span>
+        <StatusBadge label={statusLabel} tone={isActive ? "success" : "neutral"} size="regular" />
       </div>
       <AgentMetadataGrid agent={agent} locale={locale} t={t} />
       <div className="mt-6">

@@ -107,7 +107,7 @@ surfaces that make governance and observability tangible.
 - The `check-hardcoded-strings` semantic lint catches unit suffixes
   like `{value}ms` as hard-coded JSX text — must use `t("unit-ms")`
   with interpolation.
-- Pre-existing E2E test failures in suggestions tests: the tests
+- Pre-existing end-to-end (E2E) test failures in suggestions tests: the tests
   expected `role="tablist"` / `role="tab"` but the implementation uses
   `<fieldset>` with `<button aria-pressed>`. Fixed to match the
   actual implementation.
@@ -125,7 +125,8 @@ surfaces that make governance and observability tangible.
   (`src/app/features/system/components/health-badge.tsx`) using
   `healthStatusDescriptors` from the existing registries.
 - Reports page uses proper `role="tablist"` / `role="tab"` /
-  `role="tabpanel"` ARIA pattern for the three report views.
+  `role="tabpanel"` Accessible Rich Internet Applications (ARIA)
+  pattern for the three report views.
 
 ## Outcomes & retrospective
 
@@ -134,10 +135,10 @@ components, and 11 page screens replacing all system placeholders.
 The implementation stays within tolerances: 20 new files, well under
 3,500 net lines.
 
-`bun run ff` passes fully: 147 unit tests, 1 a11y test, 43 E2E tests
-(12 system-pages-specific, including 3 axe a11y sweeps). All semantic
-lints, Biome CI, TypeScript checks, Fluent var checks, and Stylelint
-pass.
+`bun run ff` passes fully: 147 unit tests, 1 accessibility (a11y)
+test, 43 end-to-end (E2E) tests (12 system-pages-specific, including
+3 axe a11y sweeps). All semantic lints, Biome continuous integration
+(CI) checks, TypeScript checks, Fluent var checks, and Stylelint pass.
 
 Also fixed 2 pre-existing E2E test failures in the suggestions suite
 where test selectors did not match the actual implementation (tablist

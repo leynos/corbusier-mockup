@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 import type { HealthStatus } from "../../../data/dashboard";
 import {
+  type AlertSeverity,
   HEALTH_CHECKS,
   MONITORING_ALERTS,
   MONITORING_METRICS,
@@ -113,7 +114,7 @@ function MetricPanel({
 
 /* ── Alert severity icon ──────────────────────────────────────────── */
 
-function getAlertStyle(severity: string): {
+function getAlertStyle(severity: AlertSeverity): {
   readonly icon: typeof IconAlertTriangle;
   readonly colour: string;
 } {

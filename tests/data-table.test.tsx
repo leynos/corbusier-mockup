@@ -75,7 +75,7 @@ describe("DataTable", () => {
     expect(alpha.tagName).toBe("STRONG");
   });
 
-  it("makes interactive rows focusable when onRowClick is provided", () => {
+  it("renders focusable buttons for interactive rows", () => {
     renderWithProviders(
       <DataTable
         columns={TEST_COLUMNS}
@@ -86,8 +86,8 @@ describe("DataTable", () => {
       />,
     );
 
-    const rows = screen.getAllByRole("link");
-    expect(rows).toHaveLength(3);
+    const buttons = screen.getAllByRole("button");
+    expect(buttons).toHaveLength(3);
   });
 
   it("renders an accessible table label", () => {

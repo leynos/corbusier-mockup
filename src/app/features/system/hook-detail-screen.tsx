@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { type ExecutionOutcome, findHookById, type HookDefinition } from "../../../data/hooks";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
+import { StatusBadge } from "./components/status-badge";
 
 /* ── Route API ────────────────────────────────────────────────────── */
 
@@ -65,15 +66,15 @@ function HookDetailHeader({
         </h1>
         {loc.description ? <p className="mt-1 text-base-content/70">{loc.description}</p> : null}
       </div>
-      <span
-        className={`inline-flex items-center rounded-full px-3 py-1 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${
-          hook.enabled ? "bg-success/15 text-success" : "bg-base-300/40 text-base-content/50"
-        }`}
-      >
-        {hook.enabled
-          ? t("hook-enabled", { defaultValue: "Enabled" })
-          : t("hook-disabled", { defaultValue: "Disabled" })}
-      </span>
+      <StatusBadge
+        label={
+          hook.enabled
+            ? t("hook-enabled", { defaultValue: "Enabled" })
+            : t("hook-disabled", { defaultValue: "Disabled" })
+        }
+        tone={hook.enabled ? "success" : "neutral"}
+        size="regular"
+      />
     </div>
   );
 }

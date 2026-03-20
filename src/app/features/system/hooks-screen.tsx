@@ -8,6 +8,7 @@ import { HOOKS, type HookDefinition } from "../../../data/hooks";
 import { type Column, DataTable } from "../../components/data-table";
 import { pickLocalization } from "../../domain/entities/localization";
 import { RegistryList } from "./components/registry-list";
+import { StatusBadge } from "./components/status-badge";
 
 /* ── Screen ───────────────────────────────────────────────────────── */
 
@@ -48,15 +49,14 @@ export function HooksScreen(): JSX.Element {
       key: "enabled",
       header: t("hooks-col-status", { defaultValue: "Status" }),
       render: (_v, row) => (
-        <span
-          className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${
-            row.enabled ? "bg-success/15 text-success" : "bg-base-300/40 text-base-content/50"
-          }`}
-        >
-          {row.enabled
-            ? t("hook-enabled", { defaultValue: "Enabled" })
-            : t("hook-disabled", { defaultValue: "Disabled" })}
-        </span>
+        <StatusBadge
+          label={
+            row.enabled
+              ? t("hook-enabled", { defaultValue: "Enabled" })
+              : t("hook-disabled", { defaultValue: "Disabled" })
+          }
+          tone={row.enabled ? "success" : "neutral"}
+        />
       ),
     },
   ];
