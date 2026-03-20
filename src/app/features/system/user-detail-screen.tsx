@@ -64,7 +64,7 @@ export function PersonnelDetailScreen(): JSX.Element {
           {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
         </Link>
         <p className="mt-4 text-base-content/60">
-          {t("user-not-found", { defaultValue: "Personnel not found." })}
+          {t("personnel-not-found", { defaultValue: "Personnel not found." })}
         </p>
       </div>
     );
@@ -101,7 +101,7 @@ export function PersonnelDetailScreen(): JSX.Element {
       <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-detail-id", { defaultValue: "Personnel ID" })}
+            {t("personnel-detail-id", { defaultValue: "Personnel ID" })}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
             {user.id}
@@ -109,7 +109,7 @@ export function PersonnelDetailScreen(): JSX.Element {
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-detail-tasks", { defaultValue: "Assigned Tasks" })}
+            {t("personnel-detail-tasks", { defaultValue: "Assigned Tasks" })}
           </dt>
           <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">
             {user.assignedTaskCount}
@@ -117,7 +117,7 @@ export function PersonnelDetailScreen(): JSX.Element {
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-detail-last-active", { defaultValue: "Last Active" })}
+            {t("personnel-detail-last-active", { defaultValue: "Last Active" })}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)]">
             <time dateTime={user.lastActive}>
@@ -130,17 +130,17 @@ export function PersonnelDetailScreen(): JSX.Element {
       {/* Activity history */}
       <section
         className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-        aria-label={t("user-activity-region", { defaultValue: "Activity history" })}
+        aria-label={t("personnel-activity-region", { defaultValue: "Activity history" })}
       >
         <div className="card-body p-5">
           <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-activity-heading", { defaultValue: "Personnel Activity History" })}
+            {t("personnel-activity-heading", { defaultValue: "Personnel Activity History" })}
           </h2>
           {timelineEntries.length > 0 ? (
             <ActivityTimeline entries={timelineEntries} />
           ) : (
             <p className="text-base-content/60">
-              {t("user-activity-empty", { defaultValue: "No activity recorded." })}
+              {t("personnel-activity-empty", { defaultValue: "No activity recorded." })}
             </p>
           )}
         </div>

@@ -10,6 +10,7 @@ import { RegistryList } from "./components/registry-list";
 /* ── Tab types ────────────────────────────────────────────────────── */
 
 type ReportTab = "audit" | "performance" | "compliance";
+type TabKeyAction = "focus_next" | "focus_previous" | "focus_first" | "focus_last" | "activate";
 
 /* ── Audit trail fixture ──────────────────────────────────────────── */
 
@@ -329,6 +330,79 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
   compliance: { key: "reports-tab-compliance", defaultValue: "Compliance" },
 };
 
+const TAB_KEY_ACTIONS: Partial<Record<string, TabKeyAction>> = {
+  ArrowRight: "focus_next",
+  ArrowLeft: "focus_previous",
+  Home: "focus_first",
+  End: "focus_last",
+  Enter: "activate",
+  " ": "activate",
+};
+
+interface ReportPanelRendererArgs {
+  readonly locale: string;
+  readonly tab: ReportTab;
+  readonly activeTab: ReportTab;
+  readonly auditTableLabel: string;
+  readonly timeLabel: string;
+  readonly actorLabel: string;
+  readonly actionLabel: string;
+  readonly targetLabel: string;
+  readonly performanceRegionLabel: string;
+  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
+  readonly complianceChecks: readonly LocalizedComplianceCheck[];
+  readonly complianceSummary: string;
+  readonly complianceListLabel: string;
+}
+
+const PANEL_RENDERERS: Record<ReportTab, (args: ReportPanelRendererArgs) => JSX.Element> = {
+  audit: ({ locale, auditTableLabel, timeLabel, actorLabel, actionLabel, targetLabel }) => (
+    <AuditTrailPanel
+      locale={locale}
+      tableLabel={auditTableLabel}
+      timeLabel={timeLabel}
+      actorLabel={actorLabel}
+      actionLabel={actionLabel}
+      targetLabel={targetLabel}
+    />
+  ),
+  performance: ({ performanceRegionLabel, performanceMetrics }) => (
+    <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
+  ),
+  compliance: ({ complianceChecks, complianceSummary, complianceListLabel }) => (
+    <CompliancePanel
+      checks={complianceChecks}
+      summary={complianceSummary}
+      listLabel={complianceListLabel}
+    />
+  ),
+};
+
+function handleTabKey(
+  eventKey: string,
+  index: number,
+  tabCount: number,
+  tab: ReportTab,
+):
+  | { readonly kind: "focus"; readonly index: number }
+  | { readonly kind: "activate"; readonly tab: ReportTab }
+  | null {
+  switch (TAB_KEY_ACTIONS[eventKey]) {
+    case "focus_next":
+      return { kind: "focus", index: (index + 1) % tabCount };
+    case "focus_previous":
+      return { kind: "focus", index: (index - 1 + tabCount) % tabCount };
+    case "focus_first":
+      return { kind: "focus", index: 0 };
+    case "focus_last":
+      return { kind: "focus", index: tabCount - 1 };
+    case "activate":
+      return { kind: "activate", tab };
+    default:
+      return null;
+  }
+}
+
 export function ReportsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
@@ -377,6 +451,22 @@ export function ReportsScreen(): JSX.Element {
     if (!nextTab) return;
     tabButtonRefs.current[nextTab]?.focus();
   };
+  const renderPanel = (tab: ReportTab): JSX.Element =>
+    PANEL_RENDERERS[tab]({
+      locale,
+      tab,
+      activeTab,
+      auditTableLabel,
+      timeLabel,
+      actorLabel,
+      actionLabel,
+      targetLabel,
+      performanceRegionLabel,
+      performanceMetrics,
+      complianceChecks,
+      complianceSummary,
+      complianceListLabel,
+    });
 
   return (
     <RegistryList
@@ -405,30 +495,14 @@ export function ReportsScreen(): JSX.Element {
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => {
-                if (event.key === "ArrowRight") {
-                  event.preventDefault();
-                  focusTabAtIndex((index + 1) % TAB_IDS.length);
+                const action = handleTabKey(event.key, index, TAB_IDS.length, tab);
+                if (!action) return;
+                event.preventDefault();
+                if (action.kind === "focus") {
+                  focusTabAtIndex(action.index);
                   return;
                 }
-                if (event.key === "ArrowLeft") {
-                  event.preventDefault();
-                  focusTabAtIndex((index - 1 + TAB_IDS.length) % TAB_IDS.length);
-                  return;
-                }
-                if (event.key === "Home") {
-                  event.preventDefault();
-                  focusTabAtIndex(0);
-                  return;
-                }
-                if (event.key === "End") {
-                  event.preventDefault();
-                  focusTabAtIndex(TAB_IDS.length - 1);
-                  return;
-                }
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setActiveTab(tab);
-                }
+                setActiveTab(action.tab);
               }}
             >
               {t(label.key, { defaultValue: label.defaultValue })}
@@ -450,26 +524,7 @@ export function ReportsScreen(): JSX.Element {
             hidden={!isActive}
             aria-hidden={!isActive}
           >
-            {tab === "audit" ? (
-              <AuditTrailPanel
-                locale={locale}
-                tableLabel={auditTableLabel}
-                timeLabel={timeLabel}
-                actorLabel={actorLabel}
-                actionLabel={actionLabel}
-                targetLabel={targetLabel}
-              />
-            ) : null}
-            {tab === "performance" ? (
-              <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
-            ) : null}
-            {tab === "compliance" ? (
-              <CompliancePanel
-                checks={complianceChecks}
-                summary={complianceSummary}
-                listLabel={complianceListLabel}
-              />
-            ) : null}
+            {renderPanel(tab)}
           </div>
         );
       })}

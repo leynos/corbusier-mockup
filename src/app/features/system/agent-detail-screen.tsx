@@ -2,14 +2,12 @@
 
 import { IconArrowLeft } from "@tabler/icons-react";
 import { getRouteApi, Link } from "@tanstack/react-router";
-import type { TFunction } from "i18next";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
   type AgentBackendEntry,
   type AgentBackendStatus,
-  type AgentCapabilities,
   findAgentBackendById,
   parseAgentBackendId,
 } from "../../../data/agents";
@@ -20,7 +18,31 @@ import { StatusBadge } from "./components/status-badge";
 
 const routeApi = getRouteApi("/system/agents/$id");
 
-function getAgentStatusLabel(status: AgentBackendStatus, locale: string, t: TFunction): string {
+interface AgentMetadataLabels {
+  readonly agentId: string;
+  readonly vendor: string;
+  readonly version: string;
+  readonly totalTurns: string;
+  readonly lastActive: string;
+}
+
+interface AgentCapabilityLabel {
+  readonly key: string;
+  readonly label: string;
+  readonly enabled: boolean;
+}
+
+interface AgentCapabilitiesLabels {
+  readonly region: string;
+  readonly heading: string;
+  readonly capabilities: readonly AgentCapabilityLabel[];
+}
+
+function getAgentStatusLabel(
+  status: AgentBackendStatus,
+  locale: string,
+  translate: (key: string, options: { defaultValue: string }) => string,
+): string {
   const isActive = status === "active";
   const localizedLabel = pickLocalization(
     isActive
@@ -30,11 +52,17 @@ function getAgentStatusLabel(status: AgentBackendStatus, locale: string, t: TFun
   ).name;
 
   return isActive
-    ? t("agent-status-active", { defaultValue: localizedLabel })
-    : t("agent-status-inactive", { defaultValue: localizedLabel });
+    ? translate("agent-status-active", { defaultValue: localizedLabel })
+    : translate("agent-status-inactive", { defaultValue: localizedLabel });
 }
 
-function AgentNotFound({ t }: { readonly t: TFunction }): JSX.Element {
+function AgentNotFound({
+  backLabel,
+  notFoundMessage,
+}: {
+  readonly backLabel: string;
+  readonly notFoundMessage: string;
+}): JSX.Element {
   return (
     <div>
       <Link
@@ -42,11 +70,9 @@ function AgentNotFound({ t }: { readonly t: TFunction }): JSX.Element {
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-agents", { defaultValue: "Back to Agent Backends" })}
+        {backLabel}
       </Link>
-      <p className="mt-4 text-base-content/60">
-        {t("agent-not-found", { defaultValue: "Agent backend not found." })}
-      </p>
+      <p className="mt-4 text-base-content/60">{notFoundMessage}</p>
     </div>
   );
 }
@@ -54,18 +80,18 @@ function AgentNotFound({ t }: { readonly t: TFunction }): JSX.Element {
 function AgentMetadataGrid({
   agent,
   locale,
-  t,
+  labels,
 }: {
   readonly agent: AgentBackendEntry;
   readonly locale: string;
-  readonly t: TFunction;
+  readonly labels: AgentMetadataLabels;
 }): JSX.Element {
   return (
     <>
       <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("agent-detail-id", { defaultValue: "Agent ID" })}
+            {labels.agentId}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
             {agent.id}
@@ -73,13 +99,13 @@ function AgentMetadataGrid({
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("agent-detail-vendor", { defaultValue: "Vendor" })}
+            {labels.vendor}
           </dt>
           <dd className="mt-1 text-[length:var(--font-size-sm)]">{agent.vendor}</dd>
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("agent-detail-version", { defaultValue: "Version" })}
+            {labels.version}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
             {agent.version}
@@ -87,13 +113,13 @@ function AgentMetadataGrid({
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("agent-detail-turns", { defaultValue: "Total Turns" })}
+            {labels.totalTurns}
           </dt>
           <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">{agent.turnCount}</dd>
         </div>
       </dl>
       <p className="mt-4 text-[length:var(--font-size-xs)] text-base-content/60">
-        {t("agent-detail-last-active", { defaultValue: "Last active:" })}{" "}
+        {labels.lastActive}{" "}
         <time dateTime={agent.lastActive} className="font-[family-name:var(--font-mono)]">
           {formatTimelineTimestamp(agent.lastActive, locale)}
         </time>
@@ -103,50 +129,21 @@ function AgentMetadataGrid({
 }
 
 function AgentCapabilitiesCard({
-  capabilities,
-  t,
+  labels,
 }: {
-  readonly capabilities: AgentCapabilities;
-  readonly t: TFunction;
+  readonly labels: AgentCapabilitiesLabels;
 }): JSX.Element {
-  const capabilityLabels: readonly {
-    readonly key: string;
-    readonly label: string;
-    readonly enabled: boolean;
-  }[] = [
-    {
-      key: "streaming",
-      label: t("cap-streaming", { defaultValue: "Streaming" }),
-      enabled: capabilities.supportsStreaming,
-    },
-    {
-      key: "tools",
-      label: t("cap-tools", { defaultValue: "Tool Use" }),
-      enabled: capabilities.supportsTools,
-    },
-    {
-      key: "multi-turn",
-      label: t("cap-multi-turn", { defaultValue: "Multi-turn" }),
-      enabled: capabilities.supportsMultiTurn,
-    },
-    {
-      key: "handoff",
-      label: t("cap-handoff", { defaultValue: "Handoff" }),
-      enabled: capabilities.supportsHandoff,
-    },
-  ];
-
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("agent-capabilities-region", { defaultValue: "Capabilities" })}
+      aria-label={labels.region}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("agent-capabilities-heading", { defaultValue: "Capabilities" })}
+          {labels.heading}
         </h2>
         <div className="flex flex-wrap gap-3">
-          {capabilityLabels.map((cap) => (
+          {labels.capabilities.map((cap) => (
             <label
               key={cap.key}
               className="flex items-center gap-2 text-[length:var(--font-size-sm)]"
@@ -154,7 +151,7 @@ function AgentCapabilitiesCard({
               <input
                 type="checkbox"
                 checked={cap.enabled}
-                readOnly
+                disabled
                 className="checkbox checkbox-sm checkbox-primary"
               />
               <span className={cap.enabled ? "text-base-content" : "text-base-content/50"}>
@@ -173,16 +170,51 @@ export function AgentDetailScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const agentId = parseAgentBackendId(id);
+  const backLabel = t("back-to-agents", { defaultValue: "Back to Agent Backends" });
+  const notFoundMessage = t("agent-not-found", { defaultValue: "Agent backend not found." });
 
-  if (!agentId) return <AgentNotFound t={t} />;
+  if (!agentId) return <AgentNotFound backLabel={backLabel} notFoundMessage={notFoundMessage} />;
 
   const agent = findAgentBackendById(agentId);
 
-  if (!agent) return <AgentNotFound t={t} />;
+  if (!agent) return <AgentNotFound backLabel={backLabel} notFoundMessage={notFoundMessage} />;
 
   const loc = pickLocalization(agent.localizations, locale);
   const isActive = agent.status === "active";
   const statusLabel = getAgentStatusLabel(agent.status, locale, t);
+  const metadataLabels: AgentMetadataLabels = {
+    agentId: t("agent-detail-id", { defaultValue: "Agent ID" }),
+    vendor: t("agent-detail-vendor", { defaultValue: "Vendor" }),
+    version: t("agent-detail-version", { defaultValue: "Version" }),
+    totalTurns: t("agent-detail-turns", { defaultValue: "Total Turns" }),
+    lastActive: t("agent-detail-last-active", { defaultValue: "Last active:" }),
+  };
+  const capabilityLabels: AgentCapabilitiesLabels = {
+    region: t("agent-capabilities-region", { defaultValue: "Capabilities" }),
+    heading: t("agent-capabilities-heading", { defaultValue: "Capabilities" }),
+    capabilities: [
+      {
+        key: "streaming",
+        label: t("cap-streaming", { defaultValue: "Streaming" }),
+        enabled: agent.capabilities.supportsStreaming,
+      },
+      {
+        key: "tools",
+        label: t("cap-tools", { defaultValue: "Tool Use" }),
+        enabled: agent.capabilities.supportsTools,
+      },
+      {
+        key: "multi-turn",
+        label: t("cap-multi-turn", { defaultValue: "Multi-turn" }),
+        enabled: agent.capabilities.supportsMultiTurn,
+      },
+      {
+        key: "handoff",
+        label: t("cap-handoff", { defaultValue: "Handoff" }),
+        enabled: agent.capabilities.supportsHandoff,
+      },
+    ],
+  };
 
   return (
     <div>
@@ -191,7 +223,7 @@ export function AgentDetailScreen(): JSX.Element {
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-agents", { defaultValue: "Back to Agent Backends" })}
+        {backLabel}
       </Link>
       <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -202,7 +234,7 @@ export function AgentDetailScreen(): JSX.Element {
         </div>
         <StatusBadge label={statusLabel} tone={isActive ? "success" : "neutral"} size="regular" />
       </div>
-      <AgentMetadataGrid agent={agent} locale={locale} t={t} />
+      <AgentMetadataGrid agent={agent} locale={locale} labels={metadataLabels} />
       <div className="mt-6">
         <button
           type="button"
@@ -214,7 +246,7 @@ export function AgentDetailScreen(): JSX.Element {
             : t("agent-action-activate", { defaultValue: "Activate" })}
         </button>
       </div>
-      <AgentCapabilitiesCard capabilities={agent.capabilities} t={t} />
+      <AgentCapabilitiesCard labels={capabilityLabels} />
     </div>
   );
 }

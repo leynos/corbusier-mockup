@@ -116,6 +116,13 @@ page-tenant-management = Gestión de inquilinos
 page-tenant-management-sub = Gestionar configuraciones de inquilinos y límites de aislamiento.
 page-user-detail = Perfil de usuario
 page-user-detail-sub = Ver y editar detalles y permisos del usuario.
+personnel-not-found = Personnel not found.
+personnel-detail-id = Personnel ID
+personnel-detail-tasks = Assigned Tasks
+personnel-detail-last-active = Last Active
+personnel-activity-region = Activity history
+personnel-activity-heading = Personnel Activity History
+personnel-activity-empty = No activity recorded.
 
 ## Task actions (state machine)
 
