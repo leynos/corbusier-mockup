@@ -11,6 +11,7 @@ import {
   type AgentBackendStatus,
   type AgentCapabilities,
   findAgentBackendById,
+  parseAgentBackendId,
 } from "../../../data/agents";
 import { agentStatusDescriptors } from "../../../data/registries/agent-status-descriptors";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -171,7 +172,11 @@ export function AgentDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const agent = findAgentBackendById(id);
+  const agentId = parseAgentBackendId(id);
+
+  if (!agentId) return <AgentNotFound t={t} />;
+
+  const agent = findAgentBackendById(agentId);
 
   if (!agent) return <AgentNotFound t={t} />;
 

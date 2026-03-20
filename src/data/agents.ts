@@ -23,6 +23,11 @@ export function agentBackendId(raw: string): AgentBackendId {
   return v.parse(agentBackendIdSchema, raw) as AgentBackendId;
 }
 
+export function parseAgentBackendId(raw: string): AgentBackendId | undefined {
+  const result = v.safeParse(agentBackendIdSchema, raw);
+  return result.success ? (result.output as AgentBackendId) : undefined;
+}
+
 export interface AgentCapabilities {
   readonly supportsStreaming: boolean;
   readonly supportsTools: boolean;
@@ -99,6 +104,6 @@ export const AGENT_BACKENDS: readonly AgentBackendEntry[] = [
 
 /* ── Lookup helpers ───────────────────────────────────────────────── */
 
-export function findAgentBackendById(id: string): AgentBackendEntry | undefined {
+export function findAgentBackendById(id: AgentBackendId): AgentBackendEntry | undefined {
   return AGENT_BACKENDS.find((a) => a.id === id);
 }

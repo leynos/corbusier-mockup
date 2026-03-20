@@ -150,7 +150,33 @@ interface LocalizedPerformanceMetric extends PerformanceMetric {
 interface LocalizedComplianceCheck extends ComplianceCheck {
   readonly label: string;
   readonly detail: string;
+  readonly statusLabel: string;
 }
+
+const PERF_METRIC_LABELS: Record<string, string> = {
+  "perf-1": "P50 Latency",
+  "perf-2": "P95 Latency",
+  "perf-3": "P99 Latency",
+  "perf-4": "Throughput",
+};
+
+const COMPLIANCE_LABELS: Record<string, string> = {
+  "comp-1": "RBAC enforcement",
+  "comp-2": "Audit trail completeness",
+  "comp-3": "Data retention policy",
+  "comp-4": "Encryption at rest",
+  "comp-5": "Token budget limits",
+  "comp-6": "Branch protection rules",
+};
+
+const COMPLIANCE_DETAILS: Record<string, string> = {
+  "comp-1": "All routes gated",
+  "comp-2": "100% of state changes logged",
+  "comp-3": "90-day retention active",
+  "comp-4": "AES-256 verified",
+  "comp-5": "2 overruns in last 7 days",
+  "comp-6": "All repos compliant",
+};
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
@@ -256,21 +282,17 @@ function PerformancePanel({
 
 function CompliancePanel({
   checks,
-  summaryLabel,
+  summary,
   listLabel,
 }: {
   readonly checks: readonly LocalizedComplianceCheck[];
-  readonly summaryLabel: string;
+  readonly summary: string;
   readonly listLabel: string;
 }): JSX.Element {
-  const passCount = checks.filter((c) => c.passed).length;
-  const totalCount = checks.length;
   return (
     <div>
       <p className="mb-4 tabular-nums text-[length:var(--font-size-sm)] text-base-content/70">
-        {summaryLabel
-          .replace("{{pass}}", String(passCount))
-          .replace("{{total}}", String(totalCount))}
+        {summary}
       </p>
       <ul className="space-y-2" aria-label={listLabel}>
         {checks.map((c) => (
@@ -284,8 +306,9 @@ function CompliancePanel({
               <IconX size={18} className="shrink-0 text-error" aria-hidden="true" />
             )}
             <div className="min-w-0">
-              <p className="font-semibold text-[length:var(--font-size-sm)] text-base-content">
+              <p className="flex items-center gap-2 font-semibold text-[length:var(--font-size-sm)] text-base-content">
                 {c.label}
+                <span className={c.passed ? "text-success" : "text-error"}>{c.statusLabel}</span>
               </p>
               <p className="text-[length:var(--font-size-xs)] text-base-content/60">{c.detail}</p>
             </div>
@@ -319,46 +342,20 @@ export function ReportsScreen(): JSX.Element {
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((metric) => ({
     ...metric,
     label: t(`reports-performance-${metric.id}`, {
-      defaultValue:
-        metric.id === "perf-1"
-          ? "P50 Latency"
-          : metric.id === "perf-2"
-            ? "P95 Latency"
-            : metric.id === "perf-3"
-              ? "P99 Latency"
-              : "Throughput",
+      defaultValue: PERF_METRIC_LABELS[metric.id] ?? metric.id,
     }),
   }));
+  const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
+  const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
   const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((check) => ({
     ...check,
     label: t(`reports-compliance-${check.id}-label`, {
-      defaultValue:
-        check.id === "comp-1"
-          ? "RBAC enforcement"
-          : check.id === "comp-2"
-            ? "Audit trail completeness"
-            : check.id === "comp-3"
-              ? "Data retention policy"
-              : check.id === "comp-4"
-                ? "Encryption at rest"
-                : check.id === "comp-5"
-                  ? "Token budget limits"
-                  : "Branch protection rules",
+      defaultValue: COMPLIANCE_LABELS[check.id] ?? check.id,
     }),
     detail: t(`reports-compliance-${check.id}-detail`, {
-      defaultValue:
-        check.id === "comp-1"
-          ? "All routes gated"
-          : check.id === "comp-2"
-            ? "100% of state changes logged"
-            : check.id === "comp-3"
-              ? "90-day retention active"
-              : check.id === "comp-4"
-                ? "AES-256 verified"
-                : check.id === "comp-5"
-                  ? "2 overruns in last 7 days"
-                  : "All repos compliant",
+      defaultValue: COMPLIANCE_DETAILS[check.id] ?? check.id,
     }),
+    statusLabel: check.passed ? passLabel : failLabel,
   }));
   const auditTableLabel = t("reports-audit-table", { defaultValue: "Audit trail events" });
   const timeLabel = t("reports-col-time", { defaultValue: "Time" });
@@ -366,10 +363,10 @@ export function ReportsScreen(): JSX.Element {
   const actionLabel = t("reports-col-action", { defaultValue: "Action" });
   const targetLabel = t("reports-col-target", { defaultValue: "Target" });
   const performanceRegionLabel = t("reports-perf-region", { defaultValue: "Performance metrics" });
-  const complianceSummaryLabel = t("reports-compliance-summary", {
+  const complianceSummary = t("reports-compliance-summary", {
     defaultValue: "{{pass}} of {{total}} checks passing",
-    pass: "{{pass}}",
-    total: "{{total}}",
+    pass: complianceChecks.filter((check) => check.passed).length,
+    total: complianceChecks.length,
   });
   const complianceListLabel = t("reports-compliance-list", {
     defaultValue: "Compliance checks",
@@ -449,6 +446,7 @@ export function ReportsScreen(): JSX.Element {
             id={`panel-${tab}`}
             role="tabpanel"
             aria-labelledby={`tab-${tab}`}
+            tabIndex={isActive ? 0 : -1}
             hidden={!isActive}
             aria-hidden={!isActive}
           >
@@ -468,7 +466,7 @@ export function ReportsScreen(): JSX.Element {
             {tab === "compliance" ? (
               <CompliancePanel
                 checks={complianceChecks}
-                summaryLabel={complianceSummaryLabel}
+                summary={complianceSummary}
                 listLabel={complianceListLabel}
               />
             ) : null}

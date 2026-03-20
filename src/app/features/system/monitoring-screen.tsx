@@ -52,10 +52,17 @@ function MetricPanel({
   const svgW = 240;
   const svgH = 80;
   const padding = 4;
+  const getPointCoords = (
+    index: number,
+    value: number,
+  ): { readonly x: number; readonly y: number } => {
+    const x = padding + (index / Math.max(metric.series.length - 1, 1)) * (svgW - 2 * padding);
+    const y = svgH - padding - (value / maxVal) * (svgH - 2 * padding);
+    return { x, y };
+  };
   const points = metric.series
     .map((p, i) => {
-      const x = padding + (i / Math.max(metric.series.length - 1, 1)) * (svgW - 2 * padding);
-      const y = svgH - padding - (p.value / maxVal) * (svgH - 2 * padding);
+      const { x, y } = getPointCoords(i, p.value);
       return `${x},${y}`;
     })
     .join(" ");
@@ -104,8 +111,7 @@ function MetricPanel({
         />
         {/* Data points */}
         {metric.series.map((p, i) => {
-          const x = padding + (i / Math.max(metric.series.length - 1, 1)) * (svgW - 2 * padding);
-          const y = svgH - padding - (p.value / maxVal) * (svgH - 2 * padding);
+          const { x, y } = getPointCoords(i, p.value);
           return <circle key={p.timestamp} cx={x} cy={y} r="3" fill={colour} />;
         })}
       </svg>
@@ -115,12 +121,19 @@ function MetricPanel({
 
 /* ── Alert severity icon ──────────────────────────────────────────── */
 
+const ALERT_STYLE_MAP: Record<
+  AlertSeverity,
+  { readonly icon: typeof IconAlertTriangle; readonly colour: string }
+> = {
+  critical: { icon: IconCircleX, colour: "text-error" },
+  warning: { icon: IconAlertTriangle, colour: "text-warning" },
+};
+
 function getAlertStyle(severity: AlertSeverity): {
   readonly icon: typeof IconAlertTriangle;
   readonly colour: string;
 } {
-  if (severity === "critical") return { icon: IconCircleX, colour: "text-error" };
-  return { icon: IconAlertTriangle, colour: "text-warning" };
+  return ALERT_STYLE_MAP[severity];
 }
 
 /* ── Health check card colours ────────────────────────────────────── */

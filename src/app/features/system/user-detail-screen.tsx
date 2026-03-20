@@ -1,4 +1,4 @@
-/** @file User detail screen — profile with metadata and activity history. */
+/** @file Personnel detail screen — profile with metadata and activity history. */
 
 import { IconArrowLeft } from "@tabler/icons-react";
 import { getRouteApi, Link } from "@tanstack/react-router";
@@ -46,7 +46,7 @@ function toTimelineEntries(
 
 /* ── Screen ───────────────────────────────────────────────────────── */
 
-export function UserDetailScreen(): JSX.Element {
+export function PersonnelDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
@@ -64,7 +64,7 @@ export function UserDetailScreen(): JSX.Element {
           {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
         </Link>
         <p className="mt-4 text-base-content/60">
-          {t("user-not-found", { defaultValue: "User not found." })}
+          {t("user-not-found", { defaultValue: "Personnel not found." })}
         </p>
       </div>
     );
@@ -101,7 +101,7 @@ export function UserDetailScreen(): JSX.Element {
       <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-detail-id", { defaultValue: "User ID" })}
+            {t("user-detail-id", { defaultValue: "Personnel ID" })}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
             {user.id}
@@ -134,7 +134,7 @@ export function UserDetailScreen(): JSX.Element {
       >
         <div className="card-body p-5">
           <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-            {t("user-activity-heading", { defaultValue: "Activity History" })}
+            {t("user-activity-heading", { defaultValue: "Personnel Activity History" })}
           </h2>
           {timelineEntries.length > 0 ? (
             <ActivityTimeline entries={timelineEntries} />

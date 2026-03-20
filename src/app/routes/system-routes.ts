@@ -13,12 +13,12 @@ export const personnelRoute = createRoute({
   ),
 });
 
-export const userDetailRoute = createRoute({
+export const personnelDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/personnel/$id",
   component: lazyRouteComponent(
     () => import("../features/system/user-detail-screen"),
-    "UserDetailScreen",
+    "PersonnelDetailScreen",
   ),
 });
 
@@ -90,7 +90,7 @@ export const tenantsRoute = createRoute({
 
 export const systemRoutes = [
   personnelRoute,
-  userDetailRoute,
+  personnelDetailRoute,
   reportsRoute,
   agentsRoute,
   agentDetailRoute,

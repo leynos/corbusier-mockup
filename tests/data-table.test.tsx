@@ -1,7 +1,7 @@
 /** @file Tests for the DataTable component. */
 
-import { afterEach, describe, expect, it } from "bun:test";
-import { cleanup, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, mock } from "bun:test";
+import { cleanup, fireEvent, screen, within } from "@testing-library/react";
 
 import { type Column, DataTable } from "../src/app/components/data-table";
 import { renderWithProviders } from "./utils/render-with-providers";
@@ -75,19 +75,29 @@ describe("DataTable", () => {
     expect(alpha.tagName).toBe("STRONG");
   });
 
-  it("renders focusable buttons for interactive rows", () => {
+  it("activates the clicked row button with the matching row", () => {
+    const onRowClick = mock();
+
     renderWithProviders(
       <DataTable
         columns={TEST_COLUMNS}
         data={TEST_DATA}
         rowKey={(r) => r.id}
         label="Test table"
-        onRowClick={() => {}}
+        onRowClick={onRowClick}
       />,
     );
 
-    const buttons = screen.getAllByRole("button");
+    const table = screen.getByRole("table", { name: "Test table" });
+    const buttons = within(table).getAllByRole("button");
+
     expect(buttons).toHaveLength(3);
+    const [firstButton] = buttons;
+    if (!firstButton) throw new Error("Expected the first row button to exist.");
+    fireEvent.click(firstButton);
+
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).toHaveBeenCalledWith(TEST_DATA[0]);
   });
 
   it("renders an accessible table label", () => {
