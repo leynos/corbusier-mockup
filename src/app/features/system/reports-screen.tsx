@@ -13,6 +13,7 @@
  */
 
 import { IconCheck, IconX } from "@tabler/icons-react";
+import type { TFunction } from "i18next";
 import { type JSX, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -351,20 +352,66 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
   compliance: { key: "reports-tab-compliance", defaultValue: "Compliance" },
 };
 
-interface ReportsModel {
-  readonly translatedAuditRows: readonly LocalizedAuditEvent[];
+function focusTabAtIndex(
+  refs: Readonly<Record<ReportTab, HTMLButtonElement | null>>,
+  index: number,
+): void {
+  const next = TAB_IDS[index];
+  if (!next) return;
+  refs[next]?.focus();
+}
+
+function buildReportStrings(
+  t: TFunction,
+  locale: string,
+): {
+  readonly tabListLabel: string;
   readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
   readonly complianceChecks: readonly LocalizedComplianceCheck[];
-  readonly tabListLabel: string;
   readonly auditTableLabel: string;
   readonly timeLabel: string;
   readonly actorLabel: string;
   readonly actionLabel: string;
   readonly targetLabel: string;
   readonly performanceRegionLabel: string;
-  readonly complianceSummaryLabel: string;
+  readonly complianceSummary: string;
   readonly complianceListLabel: string;
-  readonly focusTabAtIndex: (index: number) => void;
+} {
+  void locale;
+  const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
+  const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
+    ...m,
+    label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
+  }));
+  const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
+  const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
+  const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((c) => ({
+    ...c,
+    label: t(`reports-compliance-${c.id}-label`, {
+      defaultValue: COMPLIANCE_DEFAULT_LABELS[c.id] ?? c.id,
+    }),
+    detail: t(`reports-compliance-${c.id}-detail`, {
+      defaultValue: COMPLIANCE_DEFAULT_DETAILS[c.id] ?? "",
+    }),
+    statusLabel: c.passed ? passLabel : failLabel,
+  }));
+  return {
+    tabListLabel,
+    performanceMetrics,
+    complianceChecks,
+    auditTableLabel: t("reports-audit-table", { defaultValue: "Audit trail events" }),
+    timeLabel: t("reports-col-time", { defaultValue: "Time" }),
+    actorLabel: t("reports-col-actor", { defaultValue: "Actor" }),
+    actionLabel: t("reports-col-action", { defaultValue: "Action" }),
+    targetLabel: t("reports-col-target", { defaultValue: "Target" }),
+    performanceRegionLabel: t("reports-perf-region", { defaultValue: "Performance metrics" }),
+    complianceSummary: t("reports-compliance-summary", {
+      defaultValue: "{{pass}} of {{total}} checks passing",
+      pass: complianceChecks.filter((check) => check.passed).length,
+      total: complianceChecks.length,
+    }),
+    complianceListLabel: t("reports-compliance-list", { defaultValue: "Compliance checks" }),
+  };
 }
 
 function handleTabKeyDown(
@@ -401,77 +448,6 @@ function handleTabKeyDown(
   }
 }
 
-/**
- * Build the display-ready screen model for the reports registry page.
- *
- * This keeps translations, derived labels, and tab-focus plumbing outside the
- * JSX tree so `ReportsScreen` stays a thin orchestrator.
- */
-function useReportsModel({
-  t,
-  tabButtonRefs,
-}: {
-  readonly t: ReturnType<typeof useTranslation>["t"];
-  readonly tabButtonRefs: React.RefObject<Record<ReportTab, HTMLButtonElement | null>>;
-}): ReportsModel {
-  const translatedAuditRows: readonly LocalizedAuditEvent[] = AUDIT_EVENTS.map((event) => ({
-    ...event,
-    action: t(`reports-audit-action-${event.action}`, { defaultValue: event.action }),
-  }));
-  const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
-    ...m,
-    label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
-  }));
-  const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
-  const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
-  const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((c) => ({
-    ...c,
-    label: t(`reports-compliance-${c.id}-label`, {
-      defaultValue: COMPLIANCE_DEFAULT_LABELS[c.id] ?? c.id,
-    }),
-    detail: t(`reports-compliance-${c.id}-detail`, {
-      defaultValue: COMPLIANCE_DEFAULT_DETAILS[c.id] ?? "",
-    }),
-    statusLabel: c.passed ? passLabel : failLabel,
-  }));
-  const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
-  const auditTableLabel = t("reports-audit-table", { defaultValue: "Audit trail events" });
-  const timeLabel = t("reports-col-time", { defaultValue: "Time" });
-  const actorLabel = t("reports-col-actor", { defaultValue: "Actor" });
-  const actionLabel = t("reports-col-action", { defaultValue: "Action" });
-  const targetLabel = t("reports-col-target", { defaultValue: "Target" });
-  const performanceRegionLabel = t("reports-perf-region", { defaultValue: "Performance metrics" });
-  const complianceSummaryLabel = t("reports-compliance-summary", {
-    defaultValue: "{{pass}} of {{total}} checks passing",
-    pass: complianceChecks.filter((check) => check.passed).length,
-    total: complianceChecks.length,
-  });
-  const complianceListLabel = t("reports-compliance-list", {
-    defaultValue: "Compliance checks",
-  });
-  const focusTabAtIndex = (index: number): void => {
-    const nextTab = TAB_IDS[index];
-    if (!nextTab) return;
-    tabButtonRefs.current[nextTab]?.focus();
-  };
-
-  return {
-    translatedAuditRows,
-    performanceMetrics,
-    complianceChecks,
-    tabListLabel,
-    auditTableLabel,
-    timeLabel,
-    actorLabel,
-    actionLabel,
-    targetLabel,
-    performanceRegionLabel,
-    complianceSummaryLabel,
-    complianceListLabel,
-    focusTabAtIndex,
-  };
-}
-
 export function ReportsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
@@ -482,20 +458,22 @@ export function ReportsScreen(): JSX.Element {
     compliance: null,
   });
   const {
-    translatedAuditRows,
+    tabListLabel,
     performanceMetrics,
     complianceChecks,
-    tabListLabel,
     auditTableLabel,
     timeLabel,
     actorLabel,
     actionLabel,
     targetLabel,
     performanceRegionLabel,
-    complianceSummaryLabel,
+    complianceSummary,
     complianceListLabel,
-    focusTabAtIndex,
-  } = useReportsModel({ t, tabButtonRefs });
+  } = buildReportStrings(t, locale);
+  const translatedAuditRows: readonly LocalizedAuditEvent[] = AUDIT_EVENTS.map((event) => ({
+    ...event,
+    action: t(`reports-audit-action-${event.action}`, { defaultValue: event.action }),
+  }));
   const panels: Record<ReportTab, () => JSX.Element> = {
     audit: () => (
       <AuditTrailPanel
@@ -514,7 +492,7 @@ export function ReportsScreen(): JSX.Element {
     compliance: () => (
       <CompliancePanel
         checks={complianceChecks}
-        summaryLabel={complianceSummaryLabel}
+        summaryLabel={complianceSummary}
         listLabel={complianceListLabel}
       />
     ),
@@ -547,7 +525,9 @@ export function ReportsScreen(): JSX.Element {
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => {
-                handleTabKeyDown(event, index, tab, setActiveTab, focusTabAtIndex);
+                handleTabKeyDown(event, index, tab, setActiveTab, (nextIndex) => {
+                  focusTabAtIndex(tabButtonRefs.current, nextIndex);
+                });
               }}
             >
               {t(label.key, { defaultValue: label.defaultValue })}
