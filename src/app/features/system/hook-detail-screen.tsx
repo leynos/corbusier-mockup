@@ -47,13 +47,13 @@ function OutcomeBadge({
   label,
 }: {
   readonly outcome: ExecutionOutcome;
-  readonly label?: string;
+  readonly label: string;
 }): JSX.Element {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-wide ${OUTCOME_STYLE[outcome]}`}
     >
-      {label ?? outcome}
+      {label}
     </span>
   );
 }
