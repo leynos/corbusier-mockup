@@ -42,7 +42,7 @@ interface AgentCapabilitiesLabels {
 }
 
 function assertNever(value: never): never {
-  throw new Error(`Unhandled agent backend status: ${String(value)}`);
+  throw new Error(`Unhandled agent backend status: ${String(value)}`, { cause: value });
 }
 
 /**
@@ -118,6 +118,11 @@ function AgentMetadataGrid({
   readonly locale: string;
   readonly labels: AgentMetadataLabels;
 }): JSX.Element {
+  const formattedTurnCount =
+    typeof agent.turnCount === "number"
+      ? new Intl.NumberFormat(locale).format(agent.turnCount)
+      : String(agent.turnCount ?? "");
+
   return (
     <>
       <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -147,7 +152,9 @@ function AgentMetadataGrid({
           <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
             {labels.totalTurns}
           </dt>
-          <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">{agent.turnCount}</dd>
+          <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">
+            {formattedTurnCount}
+          </dd>
         </div>
       </dl>
       <p className="mt-4 text-[length:var(--font-size-xs)] text-base-content/60">

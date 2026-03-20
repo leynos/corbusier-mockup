@@ -51,6 +51,18 @@ function toTimelineEntries(
   }));
 }
 
+function BackToPersonnelLink({ label }: { readonly label: string }): JSX.Element {
+  return (
+    <Link
+      to="/system/personnel"
+      className="inline-flex items-center gap-1 text-primary hover:underline"
+    >
+      <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
+      {label}
+    </Link>
+  );
+}
+
 /* ── Screen ───────────────────────────────────────────────────────── */
 
 /**
@@ -64,20 +76,12 @@ export function PersonnelDetailScreen(): JSX.Element {
   const { id } = routeApi.useParams();
   const personnelId = parsePersonnelId(id);
   const user = personnelId ? findPersonnelById(personnelId) : undefined;
-  const BackToPersonnelLink = (): JSX.Element => (
-    <Link
-      to="/system/personnel"
-      className="inline-flex items-center gap-1 text-primary hover:underline"
-    >
-      <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-      {t("back-to-personnel", { defaultValue: "Back to Personnel" })}
-    </Link>
-  );
+  const backToPersonnelLabel = t("back-to-personnel", { defaultValue: "Back to Personnel" });
 
   if (!user) {
     return (
       <div>
-        <BackToPersonnelLink />
+        <BackToPersonnelLink label={backToPersonnelLabel} />
         <p className="mt-4 text-base-content/60">
           {t("personnel-not-found", { defaultValue: "Personnel not found." })}
         </p>
@@ -91,7 +95,7 @@ export function PersonnelDetailScreen(): JSX.Element {
 
   return (
     <div>
-      <BackToPersonnelLink />
+      <BackToPersonnelLink label={backToPersonnelLabel} />
 
       {/* Header */}
       <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

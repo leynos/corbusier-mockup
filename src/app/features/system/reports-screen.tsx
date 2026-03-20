@@ -414,13 +414,19 @@ function buildReportStrings(
   };
 }
 
-function handleTabKeyDown(
-  event: React.KeyboardEvent<HTMLButtonElement>,
-  index: number,
-  tab: ReportTab,
-  setActiveTab: (t: ReportTab) => void,
-  focusAt: (i: number) => void,
-): void {
+function handleTabKeyDown({
+  event,
+  index,
+  setActiveTab,
+  focusAt,
+}: {
+  readonly event: React.KeyboardEvent<HTMLButtonElement>;
+  readonly index: number;
+  readonly setActiveTab: (t: ReportTab) => void;
+  readonly focusAt: (i: number) => void;
+}): void {
+  const tab = TAB_IDS[index];
+  if (!tab) return;
   switch (event.key) {
     case "ArrowRight":
       event.preventDefault();
@@ -525,8 +531,13 @@ export function ReportsScreen(): JSX.Element {
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => {
-                handleTabKeyDown(event, index, tab, setActiveTab, (nextIndex) => {
-                  focusTabAtIndex(tabButtonRefs.current, nextIndex);
+                handleTabKeyDown({
+                  event,
+                  index,
+                  setActiveTab,
+                  focusAt: (nextIndex) => {
+                    focusTabAtIndex(tabButtonRefs.current, nextIndex);
+                  },
                 });
               }}
             >
@@ -545,6 +556,7 @@ export function ReportsScreen(): JSX.Element {
             id={`panel-${tab}`}
             role="tabpanel"
             aria-labelledby={`tab-${tab}`}
+            tabIndex={isActive ? 0 : -1}
             hidden={!isActive}
             aria-hidden={!isActive}
           >

@@ -5,7 +5,12 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { type ExecutionOutcome, findHookById, type HookDefinition } from "../../../data/hooks";
+import {
+  type ExecutionOutcome,
+  findHookById,
+  type HookDefinition,
+  hookId,
+} from "../../../data/hooks";
 import { type LocalizedStringSet, pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
 import { StatusBadge } from "./components/status-badge";
@@ -273,7 +278,14 @@ export function HookDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const hook = findHookById(id);
+  const validatedHookId = (() => {
+    try {
+      return hookId(id);
+    } catch {
+      return undefined;
+    }
+  })();
+  const hook = validatedHookId ? findHookById(validatedHookId) : undefined;
   const backToHooksLabel = t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" });
   const outcomeLabels: Record<ExecutionOutcome, string> = {
     pass: t("outcome-pass", { defaultValue: "Pass" }),
