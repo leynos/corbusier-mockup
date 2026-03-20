@@ -32,8 +32,13 @@ function OutcomeBadge({ outcome }: { readonly outcome: ExecutionOutcome }): JSX.
   );
 }
 
-function HookNotFound(): JSX.Element {
-  const { t } = useTranslation();
+function HookNotFound({
+  backToHooksLabel,
+  notFoundMessage,
+}: {
+  readonly backToHooksLabel: string;
+  readonly notFoundMessage: string;
+}): JSX.Element {
   return (
     <div>
       <Link
@@ -41,11 +46,9 @@ function HookNotFound(): JSX.Element {
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" })}
+        {backToHooksLabel}
       </Link>
-      <p className="mt-4 text-base-content/60">
-        {t("hook-not-found", { defaultValue: "Hook not found." })}
-      </p>
+      <p className="mt-4 text-base-content/60">{notFoundMessage}</p>
     </div>
   );
 }
@@ -53,11 +56,14 @@ function HookNotFound(): JSX.Element {
 function HookDetailHeader({
   hook,
   loc,
+  enabledLabel,
+  disabledLabel,
 }: {
   readonly hook: HookDefinition;
   readonly loc: { readonly name: string; readonly description?: string };
+  readonly enabledLabel: string;
+  readonly disabledLabel: string;
 }): JSX.Element {
-  const { t } = useTranslation();
   return (
     <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
@@ -67,11 +73,7 @@ function HookDetailHeader({
         {loc.description ? <p className="mt-1 text-base-content/70">{loc.description}</p> : null}
       </div>
       <StatusBadge
-        label={
-          hook.enabled
-            ? t("hook-enabled", { defaultValue: "Enabled" })
-            : t("hook-disabled", { defaultValue: "Disabled" })
-        }
+        label={hook.enabled ? enabledLabel : disabledLabel}
         tone={hook.enabled ? "success" : "neutral"}
         size="regular"
       />
@@ -79,21 +81,36 @@ function HookDetailHeader({
   );
 }
 
-function HookConfigSection({ hook }: { readonly hook: HookDefinition }): JSX.Element {
-  const { t } = useTranslation();
+function HookConfigSection({
+  hook,
+  regionLabel,
+  headingLabel,
+  triggerTypeLabel,
+  predicateLabel,
+  actionsLabel,
+  priorityLabel,
+}: {
+  readonly hook: HookDefinition;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
+  readonly triggerTypeLabel: string;
+  readonly predicateLabel: string;
+  readonly actionsLabel: string;
+  readonly priorityLabel: string;
+}): JSX.Element {
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("hook-config-region", { defaultValue: "Hook configuration" })}
+      aria-label={regionLabel}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("hook-config-heading", { defaultValue: "Configuration" })}
+          {headingLabel}
         </h2>
         <dl className="space-y-3">
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("hook-trigger-type", { defaultValue: "Trigger Type" })}
+              {triggerTypeLabel}
             </dt>
             <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
               {hook.triggerType}
@@ -101,7 +118,7 @@ function HookConfigSection({ hook }: { readonly hook: HookDefinition }): JSX.Ele
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("hook-predicate", { defaultValue: "Predicate" })}
+              {predicateLabel}
             </dt>
             <dd className="mt-1 rounded-lg bg-base-200 p-3 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)]">
               <pre className="whitespace-pre-wrap break-words">{hook.predicate}</pre>
@@ -109,7 +126,7 @@ function HookConfigSection({ hook }: { readonly hook: HookDefinition }): JSX.Ele
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("hook-actions", { defaultValue: "Action Chain" })}
+              {actionsLabel}
             </dt>
             <dd className="mt-1">
               <ol className="flex flex-wrap gap-2">
@@ -127,7 +144,7 @@ function HookConfigSection({ hook }: { readonly hook: HookDefinition }): JSX.Ele
           </div>
           <div>
             <dt className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-              {t("hook-priority", { defaultValue: "Priority" })}
+              {priorityLabel}
             </dt>
             <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">{hook.priority}</dd>
           </div>
@@ -140,51 +157,65 @@ function HookConfigSection({ hook }: { readonly hook: HookDefinition }): JSX.Ele
 function HookExecutionLog({
   hook,
   locale,
+  regionLabel,
+  headingLabel,
+  tableLabel,
+  timeLabel,
+  outcomeLabel,
+  detailLabel,
+  durationLabel,
+  emptyLabel,
+  formatDuration,
 }: {
   readonly hook: HookDefinition;
   readonly locale: string;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
+  readonly tableLabel: string;
+  readonly timeLabel: string;
+  readonly outcomeLabel: string;
+  readonly detailLabel: string;
+  readonly durationLabel: string;
+  readonly emptyLabel: string;
+  readonly formatDuration: (value: number) => string;
 }): JSX.Element {
-  const { t } = useTranslation();
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("hook-exec-region", { defaultValue: "Execution log" })}
+      aria-label={regionLabel}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("hook-exec-heading", { defaultValue: "Execution Log" })}
+          {headingLabel}
         </h2>
         {hook.executionLog.length > 0 ? (
           <div className="overflow-x-auto">
-            <table
-              className="table table-zebra w-full"
-              aria-label={t("hook-exec-table-label", { defaultValue: "Hook execution log" })}
-            >
+            <table className="table table-zebra w-full" aria-label={tableLabel}>
               <thead>
                 <tr>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("hook-exec-col-time", { defaultValue: "Time" })}
+                    {timeLabel}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("hook-exec-col-outcome", { defaultValue: "Outcome" })}
+                    {outcomeLabel}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("hook-exec-col-detail", { defaultValue: "Detail" })}
+                    {detailLabel}
                   </th>
                   <th
                     scope="col"
                     className="text-right font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("hook-exec-col-duration", { defaultValue: "Duration" })}
+                    {durationLabel}
                   </th>
                 </tr>
               </thead>
@@ -203,7 +234,7 @@ function HookExecutionLog({
                       </td>
                       <td className="text-[length:var(--font-size-sm)]">{entryLoc.name}</td>
                       <td className="text-right font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] tabular-nums text-base-content/60">
-                        {t("unit-ms", { defaultValue: "{{value}}ms", value: entry.durationMs })}
+                        {formatDuration(entry.durationMs)}
                       </td>
                     </tr>
                   );
@@ -212,9 +243,7 @@ function HookExecutionLog({
             </table>
           </div>
         ) : (
-          <p className="text-base-content/60">
-            {t("hook-exec-empty", { defaultValue: "No executions recorded." })}
-          </p>
+          <p className="text-base-content/60">{emptyLabel}</p>
         )}
       </div>
     </section>
@@ -226,8 +255,16 @@ export function HookDetailScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
   const hook = findHookById(id);
+  const backToHooksLabel = t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" });
 
-  if (!hook) return <HookNotFound />;
+  if (!hook) {
+    return (
+      <HookNotFound
+        backToHooksLabel={backToHooksLabel}
+        notFoundMessage={t("hook-not-found", { defaultValue: "Hook not found." })}
+      />
+    );
+  }
 
   const loc = pickLocalization(hook.localizations, locale);
 
@@ -238,11 +275,36 @@ export function HookDetailScreen(): JSX.Element {
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" })}
+        {backToHooksLabel}
       </Link>
-      <HookDetailHeader hook={hook} loc={loc} />
-      <HookConfigSection hook={hook} />
-      <HookExecutionLog hook={hook} locale={locale} />
+      <HookDetailHeader
+        hook={hook}
+        loc={loc}
+        enabledLabel={t("hook-enabled", { defaultValue: "Enabled" })}
+        disabledLabel={t("hook-disabled", { defaultValue: "Disabled" })}
+      />
+      <HookConfigSection
+        hook={hook}
+        regionLabel={t("hook-config-region", { defaultValue: "Hook configuration" })}
+        headingLabel={t("hook-config-heading", { defaultValue: "Configuration" })}
+        triggerTypeLabel={t("hook-trigger-type", { defaultValue: "Trigger Type" })}
+        predicateLabel={t("hook-predicate", { defaultValue: "Predicate" })}
+        actionsLabel={t("hook-actions", { defaultValue: "Action Chain" })}
+        priorityLabel={t("hook-priority", { defaultValue: "Priority" })}
+      />
+      <HookExecutionLog
+        hook={hook}
+        locale={locale}
+        regionLabel={t("hook-exec-region", { defaultValue: "Execution log" })}
+        headingLabel={t("hook-exec-heading", { defaultValue: "Execution Log" })}
+        tableLabel={t("hook-exec-table-label", { defaultValue: "Hook execution log" })}
+        timeLabel={t("hook-exec-col-time", { defaultValue: "Time" })}
+        outcomeLabel={t("hook-exec-col-outcome", { defaultValue: "Outcome" })}
+        detailLabel={t("hook-exec-col-detail", { defaultValue: "Detail" })}
+        durationLabel={t("hook-exec-col-duration", { defaultValue: "Duration" })}
+        emptyLabel={t("hook-exec-empty", { defaultValue: "No executions recorded." })}
+        formatDuration={(value) => t("unit-ms", { defaultValue: "{{value}}ms", value })}
+      />
     </div>
   );
 }

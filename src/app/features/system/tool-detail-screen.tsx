@@ -5,7 +5,14 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { findMcpServerById, type McpServer, type McpTool } from "../../../data/mcp-servers";
+import type { HealthStatus } from "../../../data/dashboard";
+import {
+  findMcpServerById,
+  type McpServer,
+  type McpTool,
+  mcpServerId,
+} from "../../../data/mcp-servers";
+import { healthStatusDescriptors } from "../../../data/registries";
 import { ChamferCard } from "../../components/chamfer-card";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
@@ -43,8 +50,13 @@ function ToolCatalogItem({
   );
 }
 
-function ToolNotFound(): JSX.Element {
-  const { t } = useTranslation();
+function ToolNotFound({
+  backToToolsLabel,
+  notFoundMessage,
+}: {
+  readonly backToToolsLabel: string;
+  readonly notFoundMessage: string;
+}): JSX.Element {
   return (
     <div>
       <Link
@@ -52,11 +64,9 @@ function ToolNotFound(): JSX.Element {
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-tools", { defaultValue: "Back to Tool Registry" })}
+        {backToToolsLabel}
       </Link>
-      <p className="mt-4 text-base-content/60">
-        {t("tool-not-found", { defaultValue: "MCP server not found." })}
-      </p>
+      <p className="mt-4 text-base-content/60">{notFoundMessage}</p>
     </div>
   );
 }
@@ -64,11 +74,14 @@ function ToolNotFound(): JSX.Element {
 function ToolDetailHeader({
   server,
   locale,
+  backToToolsLabel,
+  healthLabel,
 }: {
   readonly server: McpServer;
   readonly locale: string;
+  readonly backToToolsLabel: string;
+  readonly healthLabel: string;
 }): JSX.Element {
-  const { t } = useTranslation();
   const loc = pickLocalization(server.localizations, locale);
   return (
     <div>
@@ -77,7 +90,7 @@ function ToolDetailHeader({
         className="inline-flex items-center gap-1 text-primary hover:underline"
       >
         <IconArrowLeft size={16} stroke={1.5} aria-hidden="true" />
-        {t("back-to-tools", { defaultValue: "Back to Tool Registry" })}
+        {backToToolsLabel}
       </Link>
       <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -86,37 +99,48 @@ function ToolDetailHeader({
           </h1>
           {loc.description ? <p className="mt-1 text-base-content/70">{loc.description}</p> : null}
         </div>
-        <HealthBadge status={server.healthStatus} />
+        <HealthBadge status={server.healthStatus} label={healthLabel} />
       </div>
     </div>
   );
 }
 
-function ToolMetadataGrid({ server }: { readonly server: McpServer }): JSX.Element {
-  const { t } = useTranslation();
+function ToolMetadataGrid({
+  server,
+  serverIdLabel,
+  transportLabel,
+  lifecycleLabel,
+  toolsCountLabel,
+}: {
+  readonly server: McpServer;
+  readonly serverIdLabel: string;
+  readonly transportLabel: string;
+  readonly lifecycleLabel: string;
+  readonly toolsCountLabel: string;
+}): JSX.Element {
   const items = [
     {
       key: "id",
-      label: t("tool-detail-id", { defaultValue: "Server ID" }),
+      label: serverIdLabel,
       value: server.id,
       valueClassName: "mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]",
     },
     {
       key: "transport",
-      label: t("tool-detail-transport", { defaultValue: "Transport" }),
+      label: transportLabel,
       value: server.transport,
       valueClassName: "mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]",
     },
     {
       key: "lifecycle",
-      label: t("tool-detail-lifecycle", { defaultValue: "Lifecycle" }),
+      label: lifecycleLabel,
       value: server.lifecycleState,
       valueClassName:
         "mt-1 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] uppercase",
     },
     {
       key: "tools-count",
-      label: t("tool-detail-tools-count", { defaultValue: "Tools" }),
+      label: toolsCountLabel,
       value: server.toolCatalog.length,
       valueClassName: "mt-1 tabular-nums text-[length:var(--font-size-sm)]",
     },
@@ -136,18 +160,23 @@ function ToolMetadataGrid({ server }: { readonly server: McpServer }): JSX.Eleme
   );
 }
 
-function ToolControls({ isRunning }: { readonly isRunning: boolean }): JSX.Element {
-  const { t } = useTranslation();
+function ToolControls({
+  isRunning,
+  startLabel,
+  stopLabel,
+}: {
+  readonly isRunning: boolean;
+  readonly startLabel: string;
+  readonly stopLabel: string;
+}): JSX.Element {
   return (
     <div className="mt-6 flex gap-3">
       <button
         type="button"
         className={`btn btn-sm ${isRunning ? "btn-error btn-outline" : "btn-success"}`}
-        aria-disabled="true"
+        disabled
       >
-        {isRunning
-          ? t("tool-action-stop", { defaultValue: "Stop" })
-          : t("tool-action-start", { defaultValue: "Start" })}
+        {isRunning ? stopLabel : startLabel}
       </button>
     </div>
   );
@@ -156,19 +185,22 @@ function ToolControls({ isRunning }: { readonly isRunning: boolean }): JSX.Eleme
 function ToolCatalogSection({
   server,
   locale,
+  regionLabel,
+  headingLabel,
 }: {
   readonly server: McpServer;
   readonly locale: string;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
 }): JSX.Element {
-  const { t } = useTranslation();
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("tool-catalog-region", { defaultValue: "Tool catalog" })}
+      aria-label={regionLabel}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("tool-catalog-heading", { defaultValue: "Tool Catalog" })}
+          {headingLabel}
         </h2>
         <ul className="space-y-4">
           {server.toolCatalog.map((tool) => (
@@ -183,26 +215,31 @@ function ToolCatalogSection({
 function ToolHealthHistorySection({
   server,
   locale,
+  regionLabel,
+  headingLabel,
+  getHealthLabel,
 }: {
   readonly server: McpServer;
   readonly locale: string;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
+  readonly getHealthLabel: (status: HealthStatus) => string;
 }): JSX.Element {
-  const { t } = useTranslation();
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("tool-health-region", { defaultValue: "Health history" })}
+      aria-label={regionLabel}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("tool-health-heading", { defaultValue: "Health History" })}
+          {headingLabel}
         </h2>
         <ol className="space-y-3">
           {server.healthHistory.map((entry) => {
             const entryLoc = pickLocalization(entry.localizations, locale);
             return (
               <li key={`${entry.timestamp}-${entry.status}`} className="flex items-center gap-3">
-                <HealthBadge status={entry.status} />
+                <HealthBadge status={entry.status} label={getHealthLabel(entry.status)} />
                 <time
                   dateTime={entry.timestamp}
                   className="whitespace-nowrap font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60"
@@ -222,20 +259,62 @@ function ToolHealthHistorySection({
 }
 
 export function ToolDetailScreen(): JSX.Element {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const server = findMcpServerById(id);
+  const backToToolsLabel = t("back-to-tools", { defaultValue: "Back to Tool Registry" });
+  const getHealthLabel = (status: HealthStatus): string =>
+    pickLocalization(healthStatusDescriptors[status].localizations, locale).name;
 
-  if (!server) return <ToolNotFound />;
+  let server: McpServer | undefined;
+  try {
+    server = findMcpServerById(mcpServerId(id));
+  } catch {
+    server = undefined;
+  }
+
+  if (!server) {
+    return (
+      <ToolNotFound
+        backToToolsLabel={backToToolsLabel}
+        notFoundMessage={t("tool-not-found", { defaultValue: "MCP server not found." })}
+      />
+    );
+  }
 
   return (
     <div>
-      <ToolDetailHeader server={server} locale={locale} />
-      <ToolMetadataGrid server={server} />
-      <ToolControls isRunning={server.lifecycleState === "running"} />
-      <ToolCatalogSection server={server} locale={locale} />
-      <ToolHealthHistorySection server={server} locale={locale} />
+      <ToolDetailHeader
+        server={server}
+        locale={locale}
+        backToToolsLabel={backToToolsLabel}
+        healthLabel={getHealthLabel(server.healthStatus)}
+      />
+      <ToolMetadataGrid
+        server={server}
+        serverIdLabel={t("tool-detail-id", { defaultValue: "Server ID" })}
+        transportLabel={t("tool-detail-transport", { defaultValue: "Transport" })}
+        lifecycleLabel={t("tool-detail-lifecycle", { defaultValue: "Lifecycle" })}
+        toolsCountLabel={t("tool-detail-tools-count", { defaultValue: "Tools" })}
+      />
+      <ToolControls
+        isRunning={server.lifecycleState === "running"}
+        startLabel={t("tool-action-start", { defaultValue: "Start" })}
+        stopLabel={t("tool-action-stop", { defaultValue: "Stop" })}
+      />
+      <ToolCatalogSection
+        server={server}
+        locale={locale}
+        regionLabel={t("tool-catalog-region", { defaultValue: "Tool catalog" })}
+        headingLabel={t("tool-catalog-heading", { defaultValue: "Tool Catalog" })}
+      />
+      <ToolHealthHistorySection
+        server={server}
+        locale={locale}
+        regionLabel={t("tool-health-region", { defaultValue: "Health history" })}
+        headingLabel={t("tool-health-heading", { defaultValue: "Health History" })}
+        getHealthLabel={getHealthLabel}
+      />
     </div>
   );
 }

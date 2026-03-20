@@ -1,7 +1,7 @@
 /** @file Reports screen — three tabs: Audit Trail, Performance, Compliance. */
 
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { type JSX, useState } from "react";
+import { type JSX, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
@@ -299,7 +299,18 @@ export function ReportsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const [activeTab, setActiveTab] = useState<ReportTab>("audit");
+  const tabButtonRefs = useRef<Record<ReportTab, HTMLButtonElement | null>>({
+    audit: null,
+    performance: null,
+    compliance: null,
+  });
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
+
+  const focusTabAtIndex = (index: number): void => {
+    const nextTab = TAB_IDS[index];
+    if (!nextTab) return;
+    tabButtonRefs.current[nextTab]?.focus();
+  };
 
   return (
     <RegistryList
@@ -310,19 +321,49 @@ export function ReportsScreen(): JSX.Element {
     >
       {/* Tab bar */}
       <div role="tablist" aria-label={tabListLabel} className="tabs tabs-bordered mb-6">
-        {TAB_IDS.map((tab) => {
+        {TAB_IDS.map((tab, index) => {
           const label = TAB_LABELS[tab];
           const isActive = tab === activeTab;
           return (
             <button
               key={tab}
+              ref={(element) => {
+                tabButtonRefs.current[tab] = element;
+              }}
               type="button"
               role="tab"
+              tabIndex={isActive ? 0 : -1}
               aria-selected={isActive}
               aria-controls={`panel-${tab}`}
               id={`tab-${tab}`}
               className={`tab ${isActive ? "tab-active" : ""}`}
               onClick={() => setActiveTab(tab)}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowRight") {
+                  event.preventDefault();
+                  focusTabAtIndex((index + 1) % TAB_IDS.length);
+                  return;
+                }
+                if (event.key === "ArrowLeft") {
+                  event.preventDefault();
+                  focusTabAtIndex((index - 1 + TAB_IDS.length) % TAB_IDS.length);
+                  return;
+                }
+                if (event.key === "Home") {
+                  event.preventDefault();
+                  focusTabAtIndex(0);
+                  return;
+                }
+                if (event.key === "End") {
+                  event.preventDefault();
+                  focusTabAtIndex(TAB_IDS.length - 1);
+                  return;
+                }
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setActiveTab(tab);
+                }
+              }}
             >
               {t(label.key, { defaultValue: label.defaultValue })}
             </button>
@@ -331,11 +372,23 @@ export function ReportsScreen(): JSX.Element {
       </div>
 
       {/* Tab panels */}
-      <div id={`panel-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
-        {activeTab === "audit" ? <AuditTrailPanel locale={locale} /> : null}
-        {activeTab === "performance" ? <PerformancePanel /> : null}
-        {activeTab === "compliance" ? <CompliancePanel /> : null}
-      </div>
+      {TAB_IDS.map((tab) => {
+        const isActive = tab === activeTab;
+        return (
+          <div
+            key={tab}
+            id={`panel-${tab}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${tab}`}
+            hidden={!isActive}
+            aria-hidden={!isActive}
+          >
+            {tab === "audit" ? <AuditTrailPanel locale={locale} /> : null}
+            {tab === "performance" ? <PerformancePanel /> : null}
+            {tab === "compliance" ? <CompliancePanel /> : null}
+          </div>
+        );
+      })}
     </RegistryList>
   );
 }

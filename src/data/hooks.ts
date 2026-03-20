@@ -4,6 +4,7 @@
  * expression, action chain, priority, enabled flag, and execution log.
  */
 
+import * as v from "valibot";
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
 
@@ -11,8 +12,10 @@ import { loc } from "./localization-helpers";
 
 export type HookId = `HK-${number}`;
 
+const hookIdSchema = v.pipe(v.string(), v.regex(/^HK-\d+$/, "Hook IDs must match HK-{number}."));
+
 export function hookId(raw: string): HookId {
-  return raw as HookId;
+  return v.parse(hookIdSchema, raw) as HookId;
 }
 
 export type ExecutionOutcome = "pass" | "fail" | "skip";

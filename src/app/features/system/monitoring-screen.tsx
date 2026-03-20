@@ -17,6 +17,7 @@ import {
   MONITORING_METRICS,
   type MonitoringMetric,
 } from "../../../data/monitoring";
+import { healthStatusDescriptors } from "../../../data/registries";
 import { pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
 import { HealthBadge } from "./components/health-badge";
@@ -43,7 +44,7 @@ function MetricPanel({
 }): JSX.Element {
   const loc = pickLocalization(metric.localizations, locale);
   const colour = chartColour(metric);
-  const maxVal = Math.max(...metric.series.map((p) => p.value), 1);
+  const maxVal = Math.max(...metric.series.map((p) => p.value), metric.threshold ?? 1, 1);
   const lastPoint = metric.series[metric.series.length - 1];
   const currentValue = lastPoint?.value ?? 0;
 
@@ -136,48 +137,68 @@ const HC_COLOUR: Record<HealthStatus, string> = {
   critical: "text-error",
 };
 
-function AlertsSection({ locale }: { readonly locale: string }): JSX.Element {
-  const { t } = useTranslation();
+function AlertsSection({
+  locale,
+  regionLabel,
+  headingLabel,
+  tableLabel,
+  severityLabel,
+  descriptionLabel,
+  firedLabel,
+  acknowledgedLabel,
+  acknowledgedYesLabel,
+  acknowledgedNoLabel,
+  emptyLabel,
+}: {
+  readonly locale: string;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
+  readonly tableLabel: string;
+  readonly severityLabel: string;
+  readonly descriptionLabel: string;
+  readonly firedLabel: string;
+  readonly acknowledgedLabel: string;
+  readonly acknowledgedYesLabel: string;
+  readonly acknowledgedNoLabel: string;
+  readonly emptyLabel: string;
+}): JSX.Element {
   return (
     <section
       className="mt-6 card border border-base-300 bg-base-100 shadow-sm"
-      aria-label={t("monitoring-alerts-region", { defaultValue: "Active alerts" })}
+      aria-label={regionLabel}
     >
       <div className="card-body p-5">
         <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-          {t("monitoring-alerts-heading", { defaultValue: "Active Alerts" })}
+          {headingLabel}
         </h2>
         {MONITORING_ALERTS.length > 0 ? (
           <div>
-            <table
-              className="table table-zebra w-full"
-              aria-label={t("monitoring-alerts-table", { defaultValue: "Alert list" })}
-            >
+            <table className="table table-zebra w-full" aria-label={tableLabel}>
               <thead>
                 <tr>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("alert-col-severity", { defaultValue: "Severity" })}
+                    {severityLabel}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("alert-col-description", { defaultValue: "Alert" })}
+                    {descriptionLabel}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("alert-col-fired", { defaultValue: "Fired" })}
+                    {firedLabel}
                   </th>
                   <th
                     scope="col"
                     className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
                   >
-                    {t("alert-col-ack", { defaultValue: "Acknowledged" })}
+                    {acknowledgedLabel}
                   </th>
                 </tr>
               </thead>
@@ -212,9 +233,7 @@ function AlertsSection({ locale }: { readonly locale: string }): JSX.Element {
                         </time>
                       </td>
                       <td className="text-[length:var(--font-size-sm)]">
-                        {alert.acknowledged
-                          ? t("alert-ack-yes", { defaultValue: "Yes" })
-                          : t("alert-ack-no", { defaultValue: "No" })}
+                        {alert.acknowledged ? acknowledgedYesLabel : acknowledgedNoLabel}
                       </td>
                     </tr>
                   );
@@ -223,24 +242,30 @@ function AlertsSection({ locale }: { readonly locale: string }): JSX.Element {
             </table>
           </div>
         ) : (
-          <p className="text-base-content/60">
-            {t("monitoring-no-alerts", { defaultValue: "No active alerts." })}
-          </p>
+          <p className="text-base-content/60">{emptyLabel}</p>
         )}
       </div>
     </section>
   );
 }
 
-function HealthChecksSection({ locale }: { readonly locale: string }): JSX.Element {
-  const { t } = useTranslation();
+function HealthChecksSection({
+  locale,
+  regionLabel,
+  headingLabel,
+  getHealthLabel,
+  formatDuration,
+}: {
+  readonly locale: string;
+  readonly regionLabel: string;
+  readonly headingLabel: string;
+  readonly getHealthLabel: (status: HealthStatus) => string;
+  readonly formatDuration: (value: number) => string;
+}): JSX.Element {
   return (
-    <section
-      className="mt-6"
-      aria-label={t("monitoring-health-region", { defaultValue: "Health checks" })}
-    >
+    <section className="mt-6" aria-label={regionLabel}>
       <h2 className="mb-3 font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold uppercase tracking-widest text-base-content/60">
-        {t("monitoring-health-heading", { defaultValue: "Health Check Endpoints" })}
+        {headingLabel}
       </h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {HEALTH_CHECKS.map((hc) => {
@@ -258,9 +283,9 @@ function HealthChecksSection({ locale }: { readonly locale: string }): JSX.Eleme
                 {hc.path}
               </p>
               <div className="mt-2 flex items-center justify-between">
-                <HealthBadge status={hc.status} />
+                <HealthBadge status={hc.status} label={getHealthLabel(hc.status)} />
                 <span className="tabular-nums font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-                  {t("unit-ms", { defaultValue: "{{value}}ms", value: hc.responseTimeMs })}
+                  {formatDuration(hc.responseTimeMs)}
                 </span>
               </div>
               {hcLoc.description ? (
@@ -279,6 +304,9 @@ function HealthChecksSection({ locale }: { readonly locale: string }): JSX.Eleme
 export function MonitoringScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const getHealthLabel = (status: HealthStatus): string =>
+    pickLocalization(healthStatusDescriptors[status].localizations, locale).name;
+
   return (
     <RegistryList
       heading={t("page-monitoring", { defaultValue: "Monitoring" })}
@@ -294,8 +322,28 @@ export function MonitoringScreen(): JSX.Element {
           <MetricPanel key={m.id} metric={m} locale={locale} />
         ))}
       </section>
-      <AlertsSection locale={locale} />
-      <HealthChecksSection locale={locale} />
+      <AlertsSection
+        locale={locale}
+        regionLabel={t("monitoring-alerts-region", { defaultValue: "Active alerts" })}
+        headingLabel={t("monitoring-alerts-heading", { defaultValue: "Active Alerts" })}
+        tableLabel={t("monitoring-alerts-table", { defaultValue: "Alert list" })}
+        severityLabel={t("alert-col-severity", { defaultValue: "Severity" })}
+        descriptionLabel={t("alert-col-description", { defaultValue: "Alert" })}
+        firedLabel={t("alert-col-fired", { defaultValue: "Fired" })}
+        acknowledgedLabel={t("alert-col-ack", { defaultValue: "Acknowledged" })}
+        acknowledgedYesLabel={t("alert-ack-yes", { defaultValue: "Yes" })}
+        acknowledgedNoLabel={t("alert-ack-no", { defaultValue: "No" })}
+        emptyLabel={t("monitoring-no-alerts", { defaultValue: "No active alerts." })}
+      />
+      <HealthChecksSection
+        locale={locale}
+        regionLabel={t("monitoring-health-region", { defaultValue: "Health checks" })}
+        headingLabel={t("monitoring-health-heading", {
+          defaultValue: "Health Check Endpoints",
+        })}
+        getHealthLabel={getHealthLabel}
+        formatDuration={(value) => t("unit-ms", { defaultValue: "{{value}}ms", value })}
+      />
     </RegistryList>
   );
 }

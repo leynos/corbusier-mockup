@@ -4,6 +4,7 @@
  * version, active/inactive status, and capability flags.
  */
 
+import * as v from "valibot";
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
 
@@ -13,8 +14,13 @@ export type AgentBackendStatus = "active" | "inactive";
 
 export type AgentBackendId = `AGT-${number}`;
 
+const agentBackendIdSchema = v.pipe(
+  v.string(),
+  v.regex(/^AGT-\d+$/, "Agent backend IDs must match AGT-{number}."),
+);
+
 export function agentBackendId(raw: string): AgentBackendId {
-  return raw as AgentBackendId;
+  return v.parse(agentBackendIdSchema, raw) as AgentBackendId;
 }
 
 export interface AgentCapabilities {

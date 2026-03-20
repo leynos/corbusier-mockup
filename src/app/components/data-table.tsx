@@ -9,10 +9,10 @@ import type { JSX, ReactNode } from "react";
 
 /* ── Public interface ─────────────────────────────────────────────── */
 
-export interface Column<T> {
-  readonly key: keyof T & string;
+export interface Column<T, K extends keyof T & string = keyof T & string> {
+  readonly key: K;
   readonly header: string;
-  readonly render?: (value: T[keyof T], row: T) => ReactNode;
+  readonly render?: (value: T[K], row: T) => ReactNode;
   readonly className?: string;
 }
 
@@ -56,7 +56,9 @@ export function DataTable<T>({
             return (
               <tr
                 key={key}
-                className={`min-h-9 ${interactive ? "cursor-pointer hover:bg-base-200/60" : "hover:bg-base-200/40"}`}
+                className={
+                  interactive ? "cursor-pointer hover:bg-base-200/60" : "hover:bg-base-200/40"
+                }
                 onClick={interactive ? () => onRowClick(row) : undefined}
               >
                 {columns.map((col, index) => {
@@ -67,7 +69,7 @@ export function DataTable<T>({
                   return (
                     <td
                       key={col.key}
-                      className={`text-[length:var(--font-size-sm)] ${col.className ?? ""}`}
+                      className={`min-h-9 text-[length:var(--font-size-sm)] ${col.className ?? ""}`}
                     >
                       {isPrimaryInteractiveCell ? (
                         <button

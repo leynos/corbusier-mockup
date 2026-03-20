@@ -6,12 +6,14 @@
 
 import type { JSX, ReactNode } from "react";
 
+/** Props for the shared registry list layout. */
 export interface RegistryListProps {
   readonly heading: string;
   readonly subtitle?: string;
   readonly children: ReactNode;
 }
 
+/** Render the standard heading, subtitle, and content wrapper for system registry pages. */
 export function RegistryList({ heading, subtitle, children }: RegistryListProps): JSX.Element {
   return (
     <div>

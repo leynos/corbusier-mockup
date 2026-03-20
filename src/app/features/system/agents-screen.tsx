@@ -4,11 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  AGENT_BACKENDS,
-  type AgentBackendEntry,
-  type AgentBackendStatus,
-} from "../../../data/agents";
+import { AGENT_BACKENDS, type AgentBackendEntry } from "../../../data/agents";
 import { agentStatusDescriptors } from "../../../data/registries/agent-status-descriptors";
 import { type Column, DataTable } from "../../components/data-table";
 import { pickLocalization } from "../../domain/entities/localization";
@@ -20,28 +16,17 @@ import { StatusBadge } from "./components/status-badge";
 
 function AgentStatusBadge({
   status,
-  locale,
+  activeLabel,
+  inactiveLabel,
 }: {
-  readonly status: AgentBackendStatus;
-  readonly locale: string;
+  readonly status: AgentBackendEntry["status"];
+  readonly activeLabel: string;
+  readonly inactiveLabel: string;
 }): JSX.Element {
-  const { t } = useTranslation();
-  const isActive = status === "active";
-  const localizedLabel = pickLocalization(
-    isActive
-      ? agentStatusDescriptors.active.localizations
-      : agentStatusDescriptors.inactive.localizations,
-    locale,
-  ).name;
-
   return (
     <StatusBadge
-      label={
-        isActive
-          ? t("agent-status-active", { defaultValue: localizedLabel })
-          : t("agent-status-inactive", { defaultValue: localizedLabel })
-      }
-      tone={isActive ? "success" : "neutral"}
+      label={status === "active" ? activeLabel : inactiveLabel}
+      tone={status === "active" ? "success" : "neutral"}
     />
   );
 }
@@ -52,6 +37,12 @@ export function AgentsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const navigate = useNavigate();
+  const activeLabel = t("agent-status-active", {
+    defaultValue: pickLocalization(agentStatusDescriptors.active.localizations, locale).name,
+  });
+  const inactiveLabel = t("agent-status-inactive", {
+    defaultValue: pickLocalization(agentStatusDescriptors.inactive.localizations, locale).name,
+  });
 
   const columns: readonly Column<AgentBackendEntry>[] = [
     {
@@ -83,7 +74,13 @@ export function AgentsScreen(): JSX.Element {
     {
       key: "status",
       header: t("agents-col-status", { defaultValue: "Status" }),
-      render: (_v, row) => <AgentStatusBadge status={row.status} locale={locale} />,
+      render: (_v, row) => (
+        <AgentStatusBadge
+          status={row.status}
+          activeLabel={activeLabel}
+          inactiveLabel={inactiveLabel}
+        />
+      ),
     },
     {
       key: "turnCount",

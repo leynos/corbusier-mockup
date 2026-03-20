@@ -203,7 +203,7 @@ export function AgentDetailScreen(): JSX.Element {
         <button
           type="button"
           className={`btn btn-sm ${isActive ? "btn-error btn-outline" : "btn-success"}`}
-          aria-disabled="true"
+          disabled
         >
           {isActive
             ? t("agent-action-deactivate", { defaultValue: "Deactivate" })

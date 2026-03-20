@@ -4,6 +4,7 @@
  * lifecycle state, health status, a tool catalog, and health history.
  */
 
+import * as v from "valibot";
 import type { EntityLocalizations } from "../app/domain/entities/localization";
 import type { HealthStatus } from "./dashboard";
 import { loc } from "./localization-helpers";
@@ -14,8 +15,13 @@ export type McpLifecycleState = "registered" | "running" | "stopped";
 
 export type McpServerId = `MCP-${number}`;
 
+const mcpServerIdSchema = v.pipe(
+  v.string(),
+  v.regex(/^MCP-\d+$/, "MCP server IDs must match MCP-{number}."),
+);
+
 export function mcpServerId(raw: string): McpServerId {
-  return raw as McpServerId;
+  return v.parse(mcpServerIdSchema, raw) as McpServerId;
 }
 
 export interface McpTool {
@@ -180,6 +186,6 @@ export const MCP_SERVERS: readonly McpServer[] = [
 
 /* ── Lookup helpers ───────────────────────────────────────────────── */
 
-export function findMcpServerById(id: string): McpServer | undefined {
+export function findMcpServerById(id: McpServerId): McpServer | undefined {
   return MCP_SERVERS.find((s) => s.id === id);
 }

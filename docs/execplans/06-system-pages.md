@@ -103,7 +103,8 @@ surfaces that make governance and observability tangible.
   Resolution: removed `overflow-x-auto` from the alerts table wrapper
   since the table layout doesn't overflow in practice.
 - Biome's `useSemanticElements` rejects `role="region"` on `<div>` —
-  must use `<section>` instead. Similarly `role="group"` → `<fieldset>`.
+  must use `<section>` instead. Similarly, `role="group"` →
+  `<fieldset>`.
 - The `check-hardcoded-strings` semantic lint catches unit suffixes
   like `{value}ms` as hard-coded JSX text — must use `t("unit-ms")`
   with interpolation.
@@ -118,20 +119,21 @@ surfaces that make governance and observability tangible.
   data points, threshold lines, and axis labels — more informative
   than plain coloured rectangles but still within mockup scope (no
   charting library).
-- `DataTable` interactive rows use `role="link"` with `tabIndex={0}`
-  and keyboard handlers (`Enter`/`Space` → navigate) rather than
-  wrapping in `<a>` tags, to maintain clean table semantics.
+- `DataTable` interactive rows use a dedicated button in the primary
+  cell rather than overriding `<tr>` semantics, keeping table markup
+  valid whilst preserving row click navigation.
 - Health status badges extracted as shared component
   (`src/app/features/system/components/health-badge.tsx`) using
   `healthStatusDescriptors` from the existing registries.
 - Reports page uses proper `role="tablist"` / `role="tab"` /
   `role="tabpanel"` Accessible Rich Internet Applications (ARIA)
-  pattern for the three report views.
+  pattern with roving `tabIndex`, keyboard navigation, and all panels
+  mounted in the DOM.
 
 ## Outcomes & retrospective
 
 All 10 milestones delivered. Created 6 fixture data files, 3 shared
-components, and 11 page screens replacing all system placeholders.
+components, and 11-page screens replacing all system placeholders.
 The implementation stays within tolerances: 20 new files, well under
 3,500 net lines.
 

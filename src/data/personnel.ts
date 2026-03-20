@@ -5,6 +5,7 @@
  * entries reusable with the `ActivityTimeline` component.
  */
 
+import * as v from "valibot";
 import type { EntityLocalizations, ImageAsset } from "../app/domain/entities/localization";
 import { loc } from "./localization-helpers";
 
@@ -14,8 +15,13 @@ export type PersonnelRole = "viewer" | "developer" | "team_lead" | "admin";
 
 export type PersonnelId = `USR-${number}`;
 
+const personnelIdSchema = v.pipe(
+  v.string(),
+  v.regex(/^USR-\d+$/, "Personnel IDs must match USR-{number}."),
+);
+
 export function personnelId(raw: string): PersonnelId {
-  return raw as PersonnelId;
+  return v.parse(personnelIdSchema, raw) as PersonnelId;
 }
 
 /** Activity event kinds specific to personnel history. */

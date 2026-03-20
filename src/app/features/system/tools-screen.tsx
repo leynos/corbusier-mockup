@@ -4,7 +4,9 @@ import { useNavigate } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { HealthStatus } from "../../../data/dashboard";
 import { MCP_SERVERS, type McpLifecycleState, type McpServer } from "../../../data/mcp-servers";
+import { healthStatusDescriptors } from "../../../data/registries";
 import { type Column, DataTable } from "../../components/data-table";
 import { pickLocalization } from "../../domain/entities/localization";
 import { HealthBadge } from "./components/health-badge";
@@ -35,6 +37,8 @@ export function ToolsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const navigate = useNavigate();
+  const getHealthLabel = (status: HealthStatus): string =>
+    pickLocalization(healthStatusDescriptors[status].localizations, locale).name;
 
   const columns: readonly Column<McpServer>[] = [
     {
@@ -67,7 +71,9 @@ export function ToolsScreen(): JSX.Element {
     {
       key: "healthStatus",
       header: t("tools-col-health", { defaultValue: "Health" }),
-      render: (_v, row) => <HealthBadge status={row.healthStatus} />,
+      render: (_v, row) => (
+        <HealthBadge status={row.healthStatus} label={getHealthLabel(row.healthStatus)} />
+      ),
     },
     {
       key: "toolCatalog",

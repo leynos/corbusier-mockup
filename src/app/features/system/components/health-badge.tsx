@@ -1,11 +1,8 @@
 /** @file Health status badge for system pages (healthy/degraded/critical). */
 
 import type { JSX } from "react";
-import { useTranslation } from "react-i18next";
 
 import type { HealthStatus } from "../../../../data/dashboard";
-import { healthStatusDescriptors } from "../../../../data/registries";
-import { pickLocalization } from "../../../domain/entities/localization";
 
 const STYLE_MAP: Record<HealthStatus, { readonly bg: string; readonly text: string }> = {
   healthy: { bg: "bg-success/15", text: "text-success" },
@@ -15,13 +12,12 @@ const STYLE_MAP: Record<HealthStatus, { readonly bg: string; readonly text: stri
 
 interface HealthBadgeProps {
   readonly status: HealthStatus;
+  readonly label: string;
   readonly className?: string;
 }
 
-export function HealthBadge({ status, className = "" }: HealthBadgeProps): JSX.Element {
-  const { i18n } = useTranslation();
+export function HealthBadge({ status, label, className = "" }: HealthBadgeProps): JSX.Element {
   const style = STYLE_MAP[status];
-  const label = pickLocalization(healthStatusDescriptors[status].localizations, i18n.language).name;
 
   return (
     <span
