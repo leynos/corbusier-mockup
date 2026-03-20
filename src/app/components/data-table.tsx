@@ -16,8 +16,11 @@ export interface Column<T, K extends keyof T & string = keyof T & string> {
   readonly className?: string;
 }
 
-export interface DataTableProps<T> {
-  readonly columns: readonly Column<T>[];
+export interface DataTableProps<
+  T,
+  C extends readonly Column<T, keyof T & string>[] = readonly Column<T, keyof T & string>[],
+> {
+  readonly columns: C;
   readonly data: readonly T[];
   readonly rowKey: (row: T) => string;
   readonly onRowClick?: (row: T) => void;
@@ -26,13 +29,13 @@ export interface DataTableProps<T> {
 
 /* ── Component ────────────────────────────────────────────────────── */
 
-export function DataTable<T>({
+export function DataTable<T, const C extends readonly Column<T, keyof T & string>[]>({
   columns,
   data,
   rowKey,
   onRowClick,
   label,
-}: DataTableProps<T>): JSX.Element {
+}: DataTableProps<T, C>): JSX.Element {
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra w-full" aria-label={label}>

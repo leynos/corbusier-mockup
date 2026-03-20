@@ -115,10 +115,10 @@ surfaces that make governance and observability tangible.
 
 ## Decision log
 
-- Monitoring metric panels use skeletal SVG polyline charts with
-  data points, threshold lines, and axis labels — more informative
-  than plain coloured rectangles but still within mockup scope (no
-  charting library).
+- Monitoring metric panels use skeletal SVG charts with a
+  background rect, threshold line, polyline, and point markers —
+  more informative than plain coloured rectangles but still within
+  mockup scope (no charting library).
 - `DataTable` interactive rows use a dedicated button in the primary
   cell rather than overriding `<tr>` semantics, keeping table markup
   valid whilst preserving row click navigation.

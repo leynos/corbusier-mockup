@@ -44,7 +44,7 @@ export function AgentsScreen(): JSX.Element {
     defaultValue: pickLocalization(agentStatusDescriptors.inactive.localizations, locale).name,
   });
 
-  const columns: readonly Column<AgentBackendEntry>[] = [
+  const columns = [
     {
       key: "localizations",
       header: t("agents-col-name", { defaultValue: "Name" }),
@@ -99,7 +99,7 @@ export function AgentsScreen(): JSX.Element {
         </time>
       ),
     },
-  ];
+  ] satisfies readonly Column<AgentBackendEntry, keyof AgentBackendEntry & string>[];
 
   return (
     <RegistryList

@@ -155,7 +155,6 @@ function AgentCapabilitiesCard({
                 checked={cap.enabled}
                 readOnly
                 className="checkbox checkbox-sm checkbox-primary"
-                aria-label={cap.label}
               />
               <span className={cap.enabled ? "text-base-content" : "text-base-content/50"}>
                 {cap.label}

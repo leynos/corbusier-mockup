@@ -11,8 +11,10 @@ import { loc } from "./localization-helpers";
 
 /* ── Types ────────────────────────────────────────────────────────── */
 
+/** Supported personnel roles shown in the system directory. */
 export type PersonnelRole = "viewer" | "developer" | "team_lead" | "admin";
 
+/** Branded identifier for personnel records using the `USR-{number}` format. */
 export type PersonnelId = `USR-${number}`;
 
 const personnelIdSchema = v.pipe(
@@ -20,8 +22,25 @@ const personnelIdSchema = v.pipe(
   v.regex(/^USR-\d+$/, "Personnel IDs must match USR-{number}."),
 );
 
+/**
+ * Parse a raw personnel identifier into a validated `PersonnelId`.
+ *
+ * @param raw Raw identifier from fixtures or external input.
+ * @returns The validated branded personnel identifier.
+ */
 export function personnelId(raw: string): PersonnelId {
   return v.parse(personnelIdSchema, raw) as PersonnelId;
+}
+
+/**
+ * Attempt to parse a raw personnel identifier without throwing.
+ *
+ * @param raw Raw identifier from an I/O boundary.
+ * @returns The branded personnel identifier, or `undefined` when invalid.
+ */
+export function parsePersonnelId(raw: string): PersonnelId | undefined {
+  const result = v.safeParse(personnelIdSchema, raw);
+  return result.success ? (result.output as PersonnelId) : undefined;
 }
 
 /** Activity event kinds specific to personnel history. */
@@ -32,6 +51,7 @@ export type PersonnelEventKind =
   | "comment"
   | "review_approved";
 
+/** Activity entry describing one personnel event on the user timeline. */
 export interface PersonnelActivityEntry {
   readonly id: string;
   readonly kind: PersonnelEventKind;
@@ -39,6 +59,7 @@ export interface PersonnelActivityEntry {
   readonly localizations: EntityLocalizations;
 }
 
+/** Personnel directory record used by the system administration screens. */
 export interface Personnel {
   readonly id: PersonnelId;
   readonly localizations: EntityLocalizations;
@@ -51,6 +72,7 @@ export interface Personnel {
 
 /* ── Role descriptor registry ─────────────────────────────────────── */
 
+/** Localized display labels for each supported personnel role. */
 export const personnelRoleDescriptors: Record<
   PersonnelRole,
   { readonly localizations: EntityLocalizations }
@@ -63,6 +85,7 @@ export const personnelRoleDescriptors: Record<
 
 /* ── Fixture data ─────────────────────────────────────────────────── */
 
+/** Fixture personnel records for the system directory and detail pages. */
 export const PERSONNEL: readonly Personnel[] = [
   {
     id: personnelId("USR-1001"),
@@ -257,6 +280,12 @@ export const PERSONNEL: readonly Personnel[] = [
 
 /* ── Lookup helpers ───────────────────────────────────────────────── */
 
-export function findPersonnelById(id: string): Personnel | undefined {
+/**
+ * Find one personnel record by its validated identifier.
+ *
+ * @param id Validated personnel identifier.
+ * @returns The matching personnel record, or `undefined` when absent.
+ */
+export function findPersonnelById(id: PersonnelId): Personnel | undefined {
   return PERSONNEL.find((p) => p.id === id);
 }

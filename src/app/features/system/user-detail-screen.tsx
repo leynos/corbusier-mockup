@@ -9,6 +9,7 @@ import {
   findPersonnelById,
   type PersonnelActivityEntry,
   type PersonnelEventKind,
+  parsePersonnelId,
   personnelRoleDescriptors,
 } from "../../../data/personnel";
 import type { ActivityEventKind } from "../../../data/tasks";
@@ -49,7 +50,8 @@ export function UserDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const user = findPersonnelById(id);
+  const personnelId = parsePersonnelId(id);
+  const user = personnelId ? findPersonnelById(personnelId) : undefined;
 
   if (!user) {
     return (

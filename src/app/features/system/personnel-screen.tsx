@@ -15,7 +15,7 @@ export function PersonnelScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const navigate = useNavigate();
 
-  const columns: readonly Column<Personnel>[] = [
+  const columns = [
     {
       key: "localizations",
       header: t("personnel-col-name", { defaultValue: "Name" }),
@@ -53,7 +53,7 @@ export function PersonnelScreen(): JSX.Element {
         </time>
       ),
     },
-  ];
+  ] satisfies readonly Column<Personnel, keyof Personnel & string>[];
 
   return (
     <RegistryList

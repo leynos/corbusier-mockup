@@ -149,6 +149,7 @@ function AlertsSection({
   acknowledgedYesLabel,
   acknowledgedNoLabel,
   emptyLabel,
+  severityLookup,
 }: {
   readonly locale: string;
   readonly regionLabel: string;
@@ -161,6 +162,7 @@ function AlertsSection({
   readonly acknowledgedYesLabel: string;
   readonly acknowledgedNoLabel: string;
   readonly emptyLabel: string;
+  readonly severityLookup: Record<AlertSeverity, string>;
 }): JSX.Element {
   return (
     <section
@@ -213,7 +215,7 @@ function AlertsSection({
                         <span className={`inline-flex items-center gap-1 ${style.colour}`}>
                           <Icon size={16} stroke={1.5} aria-hidden="true" />
                           <span className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase">
-                            {alert.severity}
+                            {severityLookup[alert.severity]}
                           </span>
                         </span>
                       </td>
@@ -306,6 +308,10 @@ export function MonitoringScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const getHealthLabel = (status: HealthStatus): string =>
     pickLocalization(healthStatusDescriptors[status].localizations, locale).name;
+  const severityLookup: Record<AlertSeverity, string> = {
+    critical: t("insight-severity-critical", { defaultValue: "Critical" }),
+    warning: t("insight-severity-warning", { defaultValue: "Warning" }),
+  };
 
   return (
     <RegistryList
@@ -334,6 +340,7 @@ export function MonitoringScreen(): JSX.Element {
         acknowledgedYesLabel={t("alert-ack-yes", { defaultValue: "Yes" })}
         acknowledgedNoLabel={t("alert-ack-no", { defaultValue: "No" })}
         emptyLabel={t("monitoring-no-alerts", { defaultValue: "No active alerts." })}
+        severityLookup={severityLookup}
       />
       <HealthChecksSection
         locale={locale}

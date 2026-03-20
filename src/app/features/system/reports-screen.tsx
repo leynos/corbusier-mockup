@@ -84,7 +84,6 @@ const AUDIT_EVENTS: readonly AuditEvent[] = [
 
 interface PerformanceMetric {
   readonly id: string;
-  readonly label: string;
   readonly value: number;
   readonly unit: string;
   readonly colour: string;
@@ -94,7 +93,6 @@ interface PerformanceMetric {
 const PERF_METRICS: readonly PerformanceMetric[] = [
   {
     id: "perf-1",
-    label: "P50 Latency",
     value: 420,
     unit: "ms",
     colour: "bg-success",
@@ -102,7 +100,6 @@ const PERF_METRICS: readonly PerformanceMetric[] = [
   },
   {
     id: "perf-2",
-    label: "P95 Latency",
     value: 820,
     unit: "ms",
     colour: "bg-warning",
@@ -110,7 +107,6 @@ const PERF_METRICS: readonly PerformanceMetric[] = [
   },
   {
     id: "perf-3",
-    label: "P99 Latency",
     value: 1150,
     unit: "ms",
     colour: "bg-error",
@@ -118,7 +114,6 @@ const PERF_METRICS: readonly PerformanceMetric[] = [
   },
   {
     id: "perf-4",
-    label: "Throughput",
     value: 345,
     unit: "req/s",
     colour: "bg-primary",
@@ -130,65 +125,78 @@ const PERF_METRICS: readonly PerformanceMetric[] = [
 
 interface ComplianceCheck {
   readonly id: string;
-  readonly label: string;
   readonly passed: boolean;
-  readonly detail: string;
 }
 
 const COMPLIANCE_CHECKS: readonly ComplianceCheck[] = [
-  { id: "comp-1", label: "RBAC enforcement", passed: true, detail: "All routes gated" },
+  { id: "comp-1", passed: true },
   {
     id: "comp-2",
-    label: "Audit trail completeness",
     passed: true,
-    detail: "100% of state changes logged",
   },
-  { id: "comp-3", label: "Data retention policy", passed: true, detail: "90-day retention active" },
-  { id: "comp-4", label: "Encryption at rest", passed: true, detail: "AES-256 verified" },
+  { id: "comp-3", passed: true },
+  { id: "comp-4", passed: true },
   {
     id: "comp-5",
-    label: "Token budget limits",
     passed: false,
-    detail: "2 overruns in last 7 days",
   },
-  { id: "comp-6", label: "Branch protection rules", passed: true, detail: "All repos compliant" },
+  { id: "comp-6", passed: true },
 ];
+
+interface LocalizedPerformanceMetric extends PerformanceMetric {
+  readonly label: string;
+}
+
+interface LocalizedComplianceCheck extends ComplianceCheck {
+  readonly label: string;
+  readonly detail: string;
+}
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
-function AuditTrailPanel({ locale }: { readonly locale: string }): JSX.Element {
-  const { t } = useTranslation();
+function AuditTrailPanel({
+  locale,
+  tableLabel,
+  timeLabel,
+  actorLabel,
+  actionLabel,
+  targetLabel,
+}: {
+  readonly locale: string;
+  readonly tableLabel: string;
+  readonly timeLabel: string;
+  readonly actorLabel: string;
+  readonly actionLabel: string;
+  readonly targetLabel: string;
+}): JSX.Element {
   return (
     <div className="overflow-x-auto">
-      <table
-        className="table table-zebra w-full"
-        aria-label={t("reports-audit-table", { defaultValue: "Audit trail events" })}
-      >
+      <table className="table table-zebra w-full" aria-label={tableLabel}>
         <thead>
           <tr>
             <th
               scope="col"
               className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
             >
-              {t("reports-col-time", { defaultValue: "Time" })}
+              {timeLabel}
             </th>
             <th
               scope="col"
               className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
             >
-              {t("reports-col-actor", { defaultValue: "Actor" })}
+              {actorLabel}
             </th>
             <th
               scope="col"
               className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
             >
-              {t("reports-col-action", { defaultValue: "Action" })}
+              {actionLabel}
             </th>
             <th
               scope="col"
               className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
             >
-              {t("reports-col-target", { defaultValue: "Target" })}
+              {targetLabel}
             </th>
           </tr>
         </thead>
@@ -213,14 +221,16 @@ function AuditTrailPanel({ locale }: { readonly locale: string }): JSX.Element {
   );
 }
 
-function PerformancePanel(): JSX.Element {
-  const { t } = useTranslation();
+function PerformancePanel({
+  regionLabel,
+  metrics,
+}: {
+  readonly regionLabel: string;
+  readonly metrics: readonly LocalizedPerformanceMetric[];
+}): JSX.Element {
   return (
-    <section
-      className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-      aria-label={t("reports-perf-region", { defaultValue: "Performance metrics" })}
-    >
-      {PERF_METRICS.map((m) => {
+    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label={regionLabel}>
+      {metrics.map((m) => {
         const pct = Math.min((m.value / m.maxValue) * 100, 100);
         return (
           <div key={m.id} className="rounded-lg border border-base-300 bg-base-100 p-4">
@@ -244,25 +254,26 @@ function PerformancePanel(): JSX.Element {
   );
 }
 
-function CompliancePanel(): JSX.Element {
-  const { t } = useTranslation();
-  const passCount = COMPLIANCE_CHECKS.filter((c) => c.passed).length;
-  const totalCount = COMPLIANCE_CHECKS.length;
-
+function CompliancePanel({
+  checks,
+  summaryLabel,
+  listLabel,
+}: {
+  readonly checks: readonly LocalizedComplianceCheck[];
+  readonly summaryLabel: string;
+  readonly listLabel: string;
+}): JSX.Element {
+  const passCount = checks.filter((c) => c.passed).length;
+  const totalCount = checks.length;
   return (
     <div>
       <p className="mb-4 tabular-nums text-[length:var(--font-size-sm)] text-base-content/70">
-        {t("reports-compliance-summary", {
-          defaultValue: "{{pass}} of {{total}} checks passing",
-          pass: passCount,
-          total: totalCount,
-        })}
+        {summaryLabel
+          .replace("{{pass}}", String(passCount))
+          .replace("{{total}}", String(totalCount))}
       </p>
-      <ul
-        className="space-y-2"
-        aria-label={t("reports-compliance-list", { defaultValue: "Compliance checks" })}
-      >
-        {COMPLIANCE_CHECKS.map((c) => (
+      <ul className="space-y-2" aria-label={listLabel}>
+        {checks.map((c) => (
           <li
             key={c.id}
             className="flex items-center gap-3 rounded-lg border border-base-300 bg-base-100 px-4 py-3"
@@ -305,6 +316,64 @@ export function ReportsScreen(): JSX.Element {
     compliance: null,
   });
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
+  const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((metric) => ({
+    ...metric,
+    label: t(`reports-performance-${metric.id}`, {
+      defaultValue:
+        metric.id === "perf-1"
+          ? "P50 Latency"
+          : metric.id === "perf-2"
+            ? "P95 Latency"
+            : metric.id === "perf-3"
+              ? "P99 Latency"
+              : "Throughput",
+    }),
+  }));
+  const complianceChecks: readonly LocalizedComplianceCheck[] = COMPLIANCE_CHECKS.map((check) => ({
+    ...check,
+    label: t(`reports-compliance-${check.id}-label`, {
+      defaultValue:
+        check.id === "comp-1"
+          ? "RBAC enforcement"
+          : check.id === "comp-2"
+            ? "Audit trail completeness"
+            : check.id === "comp-3"
+              ? "Data retention policy"
+              : check.id === "comp-4"
+                ? "Encryption at rest"
+                : check.id === "comp-5"
+                  ? "Token budget limits"
+                  : "Branch protection rules",
+    }),
+    detail: t(`reports-compliance-${check.id}-detail`, {
+      defaultValue:
+        check.id === "comp-1"
+          ? "All routes gated"
+          : check.id === "comp-2"
+            ? "100% of state changes logged"
+            : check.id === "comp-3"
+              ? "90-day retention active"
+              : check.id === "comp-4"
+                ? "AES-256 verified"
+                : check.id === "comp-5"
+                  ? "2 overruns in last 7 days"
+                  : "All repos compliant",
+    }),
+  }));
+  const auditTableLabel = t("reports-audit-table", { defaultValue: "Audit trail events" });
+  const timeLabel = t("reports-col-time", { defaultValue: "Time" });
+  const actorLabel = t("reports-col-actor", { defaultValue: "Actor" });
+  const actionLabel = t("reports-col-action", { defaultValue: "Action" });
+  const targetLabel = t("reports-col-target", { defaultValue: "Target" });
+  const performanceRegionLabel = t("reports-perf-region", { defaultValue: "Performance metrics" });
+  const complianceSummaryLabel = t("reports-compliance-summary", {
+    defaultValue: "{{pass}} of {{total}} checks passing",
+    pass: "{{pass}}",
+    total: "{{total}}",
+  });
+  const complianceListLabel = t("reports-compliance-list", {
+    defaultValue: "Compliance checks",
+  });
 
   const focusTabAtIndex = (index: number): void => {
     const nextTab = TAB_IDS[index];
@@ -383,9 +452,26 @@ export function ReportsScreen(): JSX.Element {
             hidden={!isActive}
             aria-hidden={!isActive}
           >
-            {tab === "audit" ? <AuditTrailPanel locale={locale} /> : null}
-            {tab === "performance" ? <PerformancePanel /> : null}
-            {tab === "compliance" ? <CompliancePanel /> : null}
+            {tab === "audit" ? (
+              <AuditTrailPanel
+                locale={locale}
+                tableLabel={auditTableLabel}
+                timeLabel={timeLabel}
+                actorLabel={actorLabel}
+                actionLabel={actionLabel}
+                targetLabel={targetLabel}
+              />
+            ) : null}
+            {tab === "performance" ? (
+              <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
+            ) : null}
+            {tab === "compliance" ? (
+              <CompliancePanel
+                checks={complianceChecks}
+                summaryLabel={complianceSummaryLabel}
+                listLabel={complianceListLabel}
+              />
+            ) : null}
           </div>
         );
       })}

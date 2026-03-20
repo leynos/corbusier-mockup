@@ -18,10 +18,10 @@ const TEST_DATA: readonly TestRow[] = [
   { id: "r-3", name: "Gamma", count: 30 },
 ];
 
-const TEST_COLUMNS: readonly Column<TestRow>[] = [
+const TEST_COLUMNS = [
   { key: "name", header: "Name" },
   { key: "count", header: "Count" },
-];
+] satisfies readonly Column<TestRow, keyof TestRow & string>[];
 
 describe("DataTable", () => {
   afterEach(() => {
@@ -57,14 +57,14 @@ describe("DataTable", () => {
   });
 
   it("renders custom cell content via render prop", () => {
-    const columns: readonly Column<TestRow>[] = [
+    const columns = [
       {
         key: "name",
         header: "Name",
         render: (_v, row) => <strong>{String(row.name)}</strong>,
       },
       { key: "count", header: "Count" },
-    ];
+    ] satisfies readonly Column<TestRow, keyof TestRow & string>[];
 
     renderWithProviders(
       <DataTable columns={columns} data={TEST_DATA} rowKey={(r) => r.id} label="Test table" />,

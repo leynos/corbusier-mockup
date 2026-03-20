@@ -40,7 +40,7 @@ export function ToolsScreen(): JSX.Element {
   const getHealthLabel = (status: HealthStatus): string =>
     pickLocalization(healthStatusDescriptors[status].localizations, locale).name;
 
-  const columns: readonly Column<McpServer>[] = [
+  const columns = [
     {
       key: "localizations",
       header: t("tools-col-name", { defaultValue: "Name" }),
@@ -88,7 +88,7 @@ export function ToolsScreen(): JSX.Element {
       className: "text-right tabular-nums",
       render: (_v, row) => String(row.toolCatalog.length),
     },
-  ];
+  ] satisfies readonly Column<McpServer, keyof McpServer & string>[];
 
   return (
     <RegistryList

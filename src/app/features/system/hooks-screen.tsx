@@ -17,7 +17,7 @@ export function HooksScreen(): JSX.Element {
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const navigate = useNavigate();
 
-  const columns: readonly Column<HookDefinition>[] = [
+  const columns = [
     {
       key: "localizations",
       header: t("hooks-col-name", { defaultValue: "Name" }),
@@ -59,7 +59,7 @@ export function HooksScreen(): JSX.Element {
         />
       ),
     },
-  ];
+  ] satisfies readonly Column<HookDefinition, keyof HookDefinition & string>[];
 
   return (
     <RegistryList
