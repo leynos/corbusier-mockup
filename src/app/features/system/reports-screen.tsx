@@ -223,6 +223,10 @@ interface LocalizedReportTab {
   readonly label: string;
 }
 
+interface TabButtonRefs {
+  current: Record<ReportTab, HTMLButtonElement | null>;
+}
+
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
 /**
@@ -539,20 +543,12 @@ function TabStrip({
 }: {
   readonly activeTab: ReportTab;
   readonly onActivate: (tab: ReportTab) => void;
-  readonly refs: ReturnType<typeof useRef<Record<ReportTab, HTMLButtonElement | null>>>;
+  readonly refs: TabButtonRefs;
   readonly tabListLabel: string;
   readonly tabs: readonly LocalizedReportTab[];
 }): JSX.Element {
-  const tabRefs = refs.current ?? {
-    audit: null,
-    performance: null,
-    compliance: null,
-  };
+  const tabRefs = refs.current;
   const tabOrder = tabs.map(({ id }) => id);
-
-  if (!refs.current) {
-    refs.current = tabRefs;
-  }
 
   return (
     <div role="tablist" aria-label={tabListLabel} className="tabs tabs-bordered mb-6">
@@ -604,7 +600,7 @@ export function ReportsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const [activeTab, setActiveTab] = useState<ReportTab>("audit");
-  const tabButtonRefs = useRef<Record<ReportTab, HTMLButtonElement | null>>({
+  const tabButtonRefs: TabButtonRefs = useRef<Record<ReportTab, HTMLButtonElement | null>>({
     audit: null,
     performance: null,
     compliance: null,

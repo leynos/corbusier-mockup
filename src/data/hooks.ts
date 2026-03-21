@@ -14,10 +14,20 @@ export type HookId = `HK-${number}`;
 
 const hookIdSchema = v.pipe(v.string(), v.regex(/^HK-\d+$/, "Hook IDs must match HK-{number}."));
 
+/**
+ * Construct a validated `HookId` from raw input.
+ *
+ * Throws a `ValiError` when `raw` does not match the expected `HK-{number}` pattern.
+ */
 export function hookId(raw: string): HookId {
   return v.parse(hookIdSchema, raw) as HookId;
 }
 
+/**
+ * Safely parse raw input into a `HookId`.
+ *
+ * Returns the branded hook id on success, or `undefined` when the input is invalid.
+ */
 export function parseHookId(raw: string): HookId | undefined {
   const result = v.safeParse(hookIdSchema, raw);
   return result.success ? (result.output as HookId) : undefined;
