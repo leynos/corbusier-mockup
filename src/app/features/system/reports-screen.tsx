@@ -310,7 +310,7 @@ function PerformancePanel({
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label={regionLabel}>
       {metrics.map((m) => {
-        const pct = Math.min((m.value / m.maxValue) * 100, 100);
+        const pct = m.maxValue <= 0 ? 0 : Math.min((m.value / m.maxValue) * 100, 100);
         return (
           <div key={m.id} className="rounded-lg border border-base-300 bg-base-100 p-4">
             <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
@@ -523,6 +523,7 @@ export function ReportsScreen(): JSX.Element {
     performance: null,
     compliance: null,
   });
+  const reportStrings = useMemo(() => buildReportStrings(t, locale), [t, locale]);
   const {
     tabListLabel,
     performanceMetrics,
@@ -535,13 +536,17 @@ export function ReportsScreen(): JSX.Element {
     performanceRegionLabel,
     complianceSummary,
     complianceListLabel,
-  } = buildReportStrings(t, locale);
-  const translatedAuditRows: readonly DisplayAuditEvent[] = AUDIT_EVENTS.map((event) => ({
-    ...event,
-    action: t(`reports-audit-action-${event.action}`, {
-      defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
-    }),
-  }));
+  } = reportStrings;
+  const translatedAuditRows: readonly DisplayAuditEvent[] = useMemo(
+    () =>
+      AUDIT_EVENTS.map((event) => ({
+        ...event,
+        action: t(`reports-audit-action-${event.action}`, {
+          defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
+        }),
+      })),
+    [t],
+  );
   const panels: Record<ReportTab, () => JSX.Element> = useMemo(
     () => ({
       audit: () => (
