@@ -215,6 +215,11 @@ interface TabNavContext {
   readonly focusAt: (i: number) => void;
 }
 
+interface LocalizedReportTab {
+  readonly id: ReportTab;
+  readonly label: string;
+}
+
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
 /**
@@ -418,6 +423,7 @@ function buildReportStrings(
   locale: string,
 ): {
   readonly tabListLabel: string;
+  readonly tabs: readonly LocalizedReportTab[];
   readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
   readonly complianceChecks: readonly LocalizedComplianceCheck[];
   readonly auditTableLabel: string;
@@ -431,6 +437,13 @@ function buildReportStrings(
 } {
   const numberFormatter = new Intl.NumberFormat(locale);
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
+  const tabs: readonly LocalizedReportTab[] = TAB_IDS.map((tab) => {
+    const label = TAB_LABELS[tab];
+    return {
+      id: tab,
+      label: t(label.key, { defaultValue: label.defaultValue }),
+    };
+  });
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
@@ -450,6 +463,7 @@ function buildReportStrings(
   }));
   return {
     tabListLabel,
+    tabs,
     performanceMetrics,
     complianceChecks,
     auditTableLabel: t("reports-audit-table", { defaultValue: "Audit trail events" }),
@@ -519,13 +533,13 @@ function TabStrip({
   onActivate,
   refs,
   tabListLabel,
-  t,
+  tabs,
 }: {
   readonly activeTab: ReportTab;
   readonly onActivate: (tab: ReportTab) => void;
   readonly refs: ReturnType<typeof useRef<Record<ReportTab, HTMLButtonElement | null>>>;
   readonly tabListLabel: string;
-  readonly t: TFunction;
+  readonly tabs: readonly LocalizedReportTab[];
 }): JSX.Element {
   const tabRefs = refs.current ?? {
     audit: null,
@@ -539,8 +553,7 @@ function TabStrip({
 
   return (
     <div role="tablist" aria-label={tabListLabel} className="tabs tabs-bordered mb-6">
-      {TAB_IDS.map((tab, index) => {
-        const label = TAB_LABELS[tab];
+      {tabs.map(({ id: tab, label }, index) => {
         const isActive = tab === activeTab;
         return (
           <button
@@ -567,7 +580,7 @@ function TabStrip({
               });
             }}
           >
-            {t(label.key, { defaultValue: label.defaultValue })}
+            {label}
           </button>
         );
       })}
@@ -595,6 +608,7 @@ export function ReportsScreen(): JSX.Element {
   const reportStrings = useMemo(() => buildReportStrings(t, locale), [t, locale]);
   const {
     tabListLabel,
+    tabs,
     performanceMetrics,
     complianceChecks,
     auditTableLabel,
@@ -668,7 +682,7 @@ export function ReportsScreen(): JSX.Element {
         onActivate={setActiveTab}
         refs={tabButtonRefs}
         tabListLabel={tabListLabel}
-        t={t}
+        tabs={tabs}
       />
 
       {/* Tab panels */}
