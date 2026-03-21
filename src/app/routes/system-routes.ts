@@ -2,6 +2,9 @@
 
 import { createRoute, lazyRouteComponent, notFound } from "@tanstack/react-router";
 
+import { findAgentBackendById, parseAgentBackendId } from "../../data/agents";
+import { findHookById, parseHookId } from "../../data/hooks";
+import { findMcpServerById, parseMcpServerId } from "../../data/mcp-servers";
 import { findPersonnelById, parsePersonnelId } from "../../data/personnel";
 
 import { rootRoute } from "./root-route";
@@ -52,6 +55,19 @@ export const agentsRoute = createRoute({
 export const agentDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/agents/$id",
+  loader: ({ params }) => {
+    const agentBackendId = parseAgentBackendId(params.id);
+    if (agentBackendId === undefined) {
+      throw notFound();
+    }
+
+    const agent = findAgentBackendById(agentBackendId);
+    if (agent === undefined) {
+      throw notFound();
+    }
+
+    return { agent };
+  },
   component: lazyRouteComponent(
     () => import("../features/system/agent-detail-screen"),
     "AgentDetailScreen",
@@ -67,6 +83,19 @@ export const toolsRoute = createRoute({
 export const toolDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/tools/$id",
+  loader: ({ params }) => {
+    const serverId = parseMcpServerId(params.id);
+    if (serverId === undefined) {
+      throw notFound();
+    }
+
+    const server = findMcpServerById(serverId);
+    if (server === undefined) {
+      throw notFound();
+    }
+
+    return { server };
+  },
   component: lazyRouteComponent(
     () => import("../features/system/tool-detail-screen"),
     "ToolDetailScreen",
@@ -82,6 +111,19 @@ export const hooksRoute = createRoute({
 export const hookDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/hooks/$id",
+  loader: ({ params }) => {
+    const hookId = parseHookId(params.id);
+    if (hookId === undefined) {
+      throw notFound();
+    }
+
+    const hook = findHookById(hookId);
+    if (hook === undefined) {
+      throw notFound();
+    }
+
+    return { hook };
+  },
   component: lazyRouteComponent(
     () => import("../features/system/hook-detail-screen"),
     "HookDetailScreen",

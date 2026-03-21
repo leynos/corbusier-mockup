@@ -24,6 +24,11 @@ export function mcpServerId(raw: string): McpServerId {
   return v.parse(mcpServerIdSchema, raw) as McpServerId;
 }
 
+export function parseMcpServerId(raw: string): McpServerId | undefined {
+  const result = v.safeParse(mcpServerIdSchema, raw);
+  return result.success ? (result.output as McpServerId) : undefined;
+}
+
 export interface McpTool {
   readonly name: string;
   readonly localizations: EntityLocalizations;

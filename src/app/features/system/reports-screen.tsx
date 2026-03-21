@@ -211,6 +211,7 @@ interface LocalizedComplianceCheck extends ComplianceCheck {
 interface TabNavContext {
   readonly index: number;
   readonly tab: ReportTab;
+  readonly tabs: readonly ReportTab[];
   readonly setActiveTab: (t: ReportTab) => void;
   readonly focusAt: (i: number) => void;
 }
@@ -403,9 +404,10 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
  */
 function focusTabAtIndex(
   refs: Readonly<Record<ReportTab, HTMLButtonElement | null>>,
+  tabs: readonly ReportTab[],
   index: number,
 ): void {
-  const next = TAB_IDS[index];
+  const next = tabs[index];
   if (!next) return;
   refs[next]?.focus();
 }
@@ -491,16 +493,16 @@ function buildReportStrings(
  */
 function handleTabKeyDown(
   event: KeyboardEvent<HTMLButtonElement>,
-  { index, tab, setActiveTab, focusAt }: TabNavContext,
+  { index, tab, tabs, setActiveTab, focusAt }: TabNavContext,
 ): void {
   switch (event.key) {
     case "ArrowRight":
       event.preventDefault();
-      focusAt((index + 1) % TAB_IDS.length);
+      focusAt((index + 1) % tabs.length);
       break;
     case "ArrowLeft":
       event.preventDefault();
-      focusAt((index - 1 + TAB_IDS.length) % TAB_IDS.length);
+      focusAt((index - 1 + tabs.length) % tabs.length);
       break;
     case "Home":
       event.preventDefault();
@@ -508,7 +510,7 @@ function handleTabKeyDown(
       break;
     case "End":
       event.preventDefault();
-      focusAt(TAB_IDS.length - 1);
+      focusAt(tabs.length - 1);
       break;
     case "Enter":
     case " ":
@@ -546,6 +548,7 @@ function TabStrip({
     performance: null,
     compliance: null,
   };
+  const tabOrder = tabs.map(({ id }) => id);
 
   if (!refs.current) {
     refs.current = tabRefs;
@@ -573,9 +576,10 @@ function TabStrip({
               handleTabKeyDown(event, {
                 index,
                 tab,
+                tabs: tabOrder,
                 setActiveTab: onActivate,
                 focusAt: (nextIndex) => {
-                  focusTabAtIndex(tabRefs, nextIndex);
+                  focusTabAtIndex(tabRefs, tabOrder, nextIndex);
                 },
               });
             }}

@@ -11,7 +11,7 @@
 
 import { IconArrowLeft } from "@tabler/icons-react";
 import { getRouteApi, Link } from "@tanstack/react-router";
-import type { JSX } from "react";
+import { type JSX, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -86,7 +86,7 @@ function BackToPersonnelLink({ label }: { readonly label: string }): JSX.Element
 export function PersonnelDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
-  const numberFormatter = new Intl.NumberFormat(locale);
+  const numberFormatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
   const { personnel } = routeApi.useLoaderData();
   const backToPersonnelLabel = t("back-to-personnel", { defaultValue: "Back to Personnel" });
 
