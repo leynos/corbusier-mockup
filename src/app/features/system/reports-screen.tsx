@@ -507,6 +507,75 @@ function handleTabKeyDown(
 }
 
 /**
+ * Render the roving-focus tab bar for the reports screen.
+ *
+ * Tab-navigation contract: arrow keys move focus only; click or Enter/Space
+ * activates the tab via the provided `onActivate` callback.
+ *
+ * `@internal`
+ */
+function TabStrip({
+  activeTab,
+  onActivate,
+  refs,
+  tabListLabel,
+  t,
+}: {
+  readonly activeTab: ReportTab;
+  readonly onActivate: (tab: ReportTab) => void;
+  readonly refs: ReturnType<typeof useRef<Record<ReportTab, HTMLButtonElement | null>>>;
+  readonly tabListLabel: string;
+  readonly t: TFunction;
+}): JSX.Element {
+  const tabRefs = refs.current ?? {
+    audit: null,
+    performance: null,
+    compliance: null,
+  };
+
+  if (!refs.current) {
+    refs.current = tabRefs;
+  }
+
+  return (
+    <div role="tablist" aria-label={tabListLabel} className="tabs tabs-bordered mb-6">
+      {TAB_IDS.map((tab, index) => {
+        const label = TAB_LABELS[tab];
+        const isActive = tab === activeTab;
+        return (
+          <button
+            key={tab}
+            ref={(el) => {
+              tabRefs[tab] = el;
+            }}
+            type="button"
+            role="tab"
+            tabIndex={isActive ? 0 : -1}
+            aria-selected={isActive}
+            aria-controls={`panel-${tab}`}
+            id={`tab-${tab}`}
+            className={`tab ${isActive ? "tab-active" : ""}`}
+            onClick={() => onActivate(tab)}
+            onKeyDown={(event) => {
+              handleTabKeyDown(event, {
+                index,
+                tab,
+                setActiveTab: onActivate,
+                focusAt: (nextIndex) => {
+                  focusTabAtIndex(tabRefs, nextIndex);
+                },
+              });
+            }}
+          >
+            {t(label.key, { defaultValue: label.defaultValue })}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
  * Render the reports registry screen with localised tab labels and mounted panels.
  *
  * Tab-navigation contract: only one tab is active at a time, whilst focus can move
@@ -594,41 +663,13 @@ export function ReportsScreen(): JSX.Element {
         defaultValue: "Analytics and performance dashboards.",
       })}
     >
-      {/* Tab bar */}
-      <div role="tablist" aria-label={tabListLabel} className="tabs tabs-bordered mb-6">
-        {TAB_IDS.map((tab, index) => {
-          const label = TAB_LABELS[tab];
-          const isActive = tab === activeTab;
-          return (
-            <button
-              key={tab}
-              ref={(element) => {
-                tabButtonRefs.current[tab] = element;
-              }}
-              type="button"
-              role="tab"
-              tabIndex={isActive ? 0 : -1}
-              aria-selected={isActive}
-              aria-controls={`panel-${tab}`}
-              id={`tab-${tab}`}
-              className={`tab ${isActive ? "tab-active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-              onKeyDown={(event) => {
-                handleTabKeyDown(event, {
-                  index,
-                  tab,
-                  setActiveTab,
-                  focusAt: (nextIndex) => {
-                    focusTabAtIndex(tabButtonRefs.current, nextIndex);
-                  },
-                });
-              }}
-            >
-              {t(label.key, { defaultValue: label.defaultValue })}
-            </button>
-          );
-        })}
-      </div>
+      <TabStrip
+        activeTab={activeTab}
+        onActivate={setActiveTab}
+        refs={tabButtonRefs}
+        tabListLabel={tabListLabel}
+        t={t}
+      />
 
       {/* Tab panels */}
       {TAB_IDS.map((tab) => {
