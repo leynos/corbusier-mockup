@@ -79,12 +79,13 @@ function BackToPersonnelLink({ label }: { readonly label: string }): JSX.Element
 export function PersonnelDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
+  const numberFormatter = new Intl.NumberFormat(locale);
   const { id } = routeApi.useParams();
   const personnelId = parsePersonnelId(id);
-  const user = personnelId ? findPersonnelById(personnelId) : undefined;
+  const personnel = personnelId ? findPersonnelById(personnelId) : undefined;
   const backToPersonnelLabel = t("back-to-personnel", { defaultValue: "Back to Personnel" });
 
-  if (!user) {
+  if (!personnel) {
     return (
       <div>
         <BackToPersonnelLink label={backToPersonnelLabel} />
@@ -95,9 +96,9 @@ export function PersonnelDetailScreen(): JSX.Element {
     );
   }
 
-  const loc = pickLocalization(user.localizations, locale);
-  const roleLoc = pickLocalization(personnelRoleDescriptors[user.role].localizations, locale);
-  const timelineEntries = toTimelineEntries(user.activityHistory, loc.name);
+  const loc = pickLocalization(personnel.localizations, locale);
+  const roleLoc = pickLocalization(personnelRoleDescriptors[personnel.role].localizations, locale);
+  const timelineEntries = toTimelineEntries(personnel.activityHistory, loc.name);
 
   return (
     <div>
@@ -123,7 +124,7 @@ export function PersonnelDetailScreen(): JSX.Element {
             {t("personnel-detail-id", { defaultValue: "Personnel ID" })}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)]">
-            {user.id}
+            {personnel.id}
           </dd>
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
@@ -131,7 +132,7 @@ export function PersonnelDetailScreen(): JSX.Element {
             {t("personnel-detail-tasks", { defaultValue: "Assigned Tasks" })}
           </dt>
           <dd className="mt-1 tabular-nums text-[length:var(--font-size-sm)]">
-            {user.assignedTaskCount}
+            {numberFormatter.format(personnel.assignedTaskCount)}
           </dd>
         </div>
         <div className="rounded-lg border border-base-300 bg-base-100 p-4">
@@ -139,8 +140,8 @@ export function PersonnelDetailScreen(): JSX.Element {
             {t("personnel-detail-last-active", { defaultValue: "Last Active" })}
           </dt>
           <dd className="mt-1 font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)]">
-            <time dateTime={user.lastActive}>
-              {formatTimelineTimestamp(user.lastActive, locale)}
+            <time dateTime={personnel.lastActive}>
+              {formatTimelineTimestamp(personnel.lastActive, locale)}
             </time>
           </dd>
         </div>
