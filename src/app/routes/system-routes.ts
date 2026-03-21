@@ -9,6 +9,29 @@ import { findPersonnelById, parsePersonnelId } from "../../data/personnel";
 
 import { rootRoute } from "./root-route";
 
+/* ── Detail-route loader factory ─────────────────────────────────── */
+
+/**
+ * Create a TanStack Router `loader` that parses a route id param, validates it,
+ * fetches the matching entity, and throws `notFound()` for any failure.
+ *
+ * The `const TKey` modifier preserves the literal key type so that
+ * `routeApi.useLoaderData()` resolves to `{ [key]: TEntity }` exactly.
+ */
+function makeDetailLoader<TId, TEntity, const TKey extends string>(
+  parse: (raw: string) => TId | undefined,
+  find: (id: TId) => TEntity | undefined,
+  key: TKey,
+): (ctx: { params: { id: string } }) => Record<TKey, TEntity> {
+  return ({ params }) => {
+    const id = parse(params.id);
+    if (id === undefined) throw notFound();
+    const entity = find(id);
+    if (entity === undefined) throw notFound();
+    return { [key]: entity } as Record<TKey, TEntity>;
+  };
+}
+
 export const personnelRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/personnel",
@@ -21,19 +44,7 @@ export const personnelRoute = createRoute({
 export const personnelDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/personnel/$id",
-  loader: ({ params }) => {
-    const personnelId = parsePersonnelId(params.id);
-    if (personnelId === undefined) {
-      throw notFound();
-    }
-
-    const personnel = findPersonnelById(personnelId);
-    if (personnel === undefined) {
-      throw notFound();
-    }
-
-    return { personnel };
-  },
+  loader: makeDetailLoader(parsePersonnelId, findPersonnelById, "personnel"),
   component: lazyRouteComponent(
     () => import("../features/system/personnel-detail-screen"),
     "PersonnelDetailScreen",
@@ -55,19 +66,7 @@ export const agentsRoute = createRoute({
 export const agentDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/agents/$id",
-  loader: ({ params }) => {
-    const agentBackendId = parseAgentBackendId(params.id);
-    if (agentBackendId === undefined) {
-      throw notFound();
-    }
-
-    const agent = findAgentBackendById(agentBackendId);
-    if (agent === undefined) {
-      throw notFound();
-    }
-
-    return { agent };
-  },
+  loader: makeDetailLoader(parseAgentBackendId, findAgentBackendById, "agent"),
   component: lazyRouteComponent(
     () => import("../features/system/agent-detail-screen"),
     "AgentDetailScreen",
@@ -83,19 +82,7 @@ export const toolsRoute = createRoute({
 export const toolDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/tools/$id",
-  loader: ({ params }) => {
-    const serverId = parseMcpServerId(params.id);
-    if (serverId === undefined) {
-      throw notFound();
-    }
-
-    const server = findMcpServerById(serverId);
-    if (server === undefined) {
-      throw notFound();
-    }
-
-    return { server };
-  },
+  loader: makeDetailLoader(parseMcpServerId, findMcpServerById, "server"),
   component: lazyRouteComponent(
     () => import("../features/system/tool-detail-screen"),
     "ToolDetailScreen",
@@ -111,19 +98,7 @@ export const hooksRoute = createRoute({
 export const hookDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/hooks/$id",
-  loader: ({ params }) => {
-    const hookId = parseHookId(params.id);
-    if (hookId === undefined) {
-      throw notFound();
-    }
-
-    const hook = findHookById(hookId);
-    if (hook === undefined) {
-      throw notFound();
-    }
-
-    return { hook };
-  },
+  loader: makeDetailLoader(parseHookId, findHookById, "hook"),
   component: lazyRouteComponent(
     () => import("../features/system/hook-detail-screen"),
     "HookDetailScreen",
