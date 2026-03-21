@@ -32,7 +32,7 @@ export const personnelDetailRoute = createRoute({
     return { personnel };
   },
   component: lazyRouteComponent(
-    () => import("../features/system/user-detail-screen"),
+    () => import("../features/system/personnel-detail-screen"),
     "PersonnelDetailScreen",
   ),
 });
