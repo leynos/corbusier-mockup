@@ -1,4 +1,13 @@
-/** @file Personnel detail screen — profile with metadata and activity history. */
+/** @file Render the personnel detail screen for profile, metadata, and activity history.
+ *
+ * Route contract: mounted at `/system/personnel/$id`, where `id` must be a validated
+ * `personnelId` resolved by `src/app/routes/system-routes.ts`.
+ *
+ * Related modules:
+ * - `src/app/routes/system-routes.ts` mounts the route and loads the personnel record.
+ * - `src/app/components/activity-timeline.tsx` and `src/app/utils/date-formatting.ts`
+ *   render the shared activity history timeline.
+ */
 
 import { IconArrowLeft } from "@tabler/icons-react";
 import { getRouteApi, Link } from "@tanstack/react-router";
@@ -6,10 +15,8 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
-  findPersonnelById,
   type PersonnelActivityEntry,
   type PersonnelEventKind,
-  parsePersonnelId,
   personnelRoleDescriptors,
 } from "../../../data/personnel";
 import type { ActivityEventKind } from "../../../data/tasks";
@@ -28,7 +35,7 @@ const EVENT_KIND_MAP: Record<PersonnelEventKind, ActivityEventKind> = {
   role_change: "state_change",
   task_completed: "subtask_completed",
   comment: "comment",
-  review_approved: "pr_opened",
+  review_approved: "approval",
 };
 
 /**
@@ -80,21 +87,8 @@ export function PersonnelDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const numberFormatter = new Intl.NumberFormat(locale);
-  const { id } = routeApi.useParams();
-  const personnelId = parsePersonnelId(id);
-  const personnel = personnelId ? findPersonnelById(personnelId) : undefined;
+  const { personnel } = routeApi.useLoaderData();
   const backToPersonnelLabel = t("back-to-personnel", { defaultValue: "Back to Personnel" });
-
-  if (!personnel) {
-    return (
-      <div>
-        <BackToPersonnelLink label={backToPersonnelLabel} />
-        <p className="mt-4 text-base-content/60">
-          {t("personnel-not-found", { defaultValue: "Personnel not found." })}
-        </p>
-      </div>
-    );
-  }
 
   const loc = pickLocalization(personnel.localizations, locale);
   const roleLoc = pickLocalization(personnelRoleDescriptors[personnel.role].localizations, locale);

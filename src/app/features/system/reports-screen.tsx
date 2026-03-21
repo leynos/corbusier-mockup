@@ -310,7 +310,7 @@ function PerformancePanel({
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label={regionLabel}>
       {metrics.map((m) => {
-        const pct = m.maxValue <= 0 ? 0 : Math.min((m.value / m.maxValue) * 100, 100);
+        const pct = m.maxValue <= 0 ? 0 : Math.max(0, Math.min((m.value / m.maxValue) * 100, 100));
         return (
           <div key={m.id} className="rounded-lg border border-base-300 bg-base-100 p-4">
             <p className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">

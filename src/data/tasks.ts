@@ -67,7 +67,8 @@ export type ActivityEventKind =
   | "comment"
   | "agent_action"
   | "branch_associated"
-  | "pr_opened";
+  | "pr_opened"
+  | "approval";
 
 export interface ActivityEvent {
   readonly id: string;

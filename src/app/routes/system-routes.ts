@@ -1,6 +1,8 @@
 /** @file Route definitions for the SYSTEM zone. */
 
-import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { createRoute, lazyRouteComponent, notFound } from "@tanstack/react-router";
+
+import { findPersonnelById, parsePersonnelId } from "../../data/personnel";
 
 import { rootRoute } from "./root-route";
 
@@ -16,6 +18,19 @@ export const personnelRoute = createRoute({
 export const personnelDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/system/personnel/$id",
+  loader: ({ params }) => {
+    const personnelId = parsePersonnelId(params.id);
+    if (personnelId === undefined) {
+      throw notFound();
+    }
+
+    const personnel = findPersonnelById(personnelId);
+    if (personnel === undefined) {
+      throw notFound();
+    }
+
+    return { personnel };
+  },
   component: lazyRouteComponent(
     () => import("../features/system/user-detail-screen"),
     "PersonnelDetailScreen",
