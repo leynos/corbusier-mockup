@@ -22,7 +22,9 @@ import { RegistryList } from "./components/registry-list";
 
 /* ── Tab types ────────────────────────────────────────────────────── */
 
-type ReportTab = "audit" | "performance" | "compliance";
+const TAB_IDS = ["audit", "performance", "compliance"] as const;
+
+type ReportTab = (typeof TAB_IDS)[number];
 type AuditEventId = "aud-1" | "aud-2" | "aud-3" | "aud-4" | "aud-5" | "aud-6" | "aud-7" | "aud-8";
 type AuditAction = "state_change" | "pr_merge" | "tool_call" | "comment" | "agent_turn";
 type PerformanceMetricId = "perf-1" | "perf-2" | "perf-3" | "perf-4";
@@ -386,8 +388,6 @@ function CompliancePanel({
 }
 
 /* ── Screen ───────────────────────────────────────────────────────── */
-
-const TAB_IDS: readonly ReportTab[] = ["audit", "performance", "compliance"];
 
 const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValue: string }> = {
   audit: { key: "reports-tab-audit", defaultValue: "Audit Trail" },

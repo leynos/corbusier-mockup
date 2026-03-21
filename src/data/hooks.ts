@@ -191,6 +191,6 @@ export const HOOKS: readonly HookDefinition[] = [
 
 /* ── Lookup helpers ───────────────────────────────────────────────── */
 
-export function findHookById(id: string): HookDefinition | undefined {
+export function findHookById(id: HookId): HookDefinition | undefined {
   return HOOKS.find((h) => h.id === id);
 }
