@@ -14,7 +14,7 @@
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 import type { TFunction } from "i18next";
-import { type JSX, type KeyboardEvent, useRef, useState } from "react";
+import { type JSX, type KeyboardEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
@@ -27,14 +27,6 @@ type ReportTab = "audit" | "performance" | "compliance";
 /* ── Audit trail fixture ──────────────────────────────────────────── */
 
 interface AuditEvent {
-  readonly id: string;
-  readonly timestamp: string;
-  readonly actor: string;
-  readonly action: string;
-  readonly target: string;
-}
-
-interface LocalizedAuditEvent {
   readonly id: string;
   readonly timestamp: string;
   readonly actor: string;
@@ -225,7 +217,7 @@ function AuditTrailPanel({
   actionLabel,
   targetLabel,
 }: {
-  readonly rows: readonly LocalizedAuditEvent[];
+  readonly rows: readonly AuditEvent[];
   readonly locale: string;
   readonly tableLabel: string;
   readonly timeLabel: string;
@@ -376,10 +368,7 @@ function focusTabAtIndex(
   refs[next]?.focus();
 }
 
-function buildReportStrings(
-  t: TFunction,
-  locale: string,
-): {
+function buildReportStrings(t: TFunction): {
   readonly tabListLabel: string;
   readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
   readonly complianceChecks: readonly LocalizedComplianceCheck[];
@@ -392,7 +381,6 @@ function buildReportStrings(
   readonly complianceSummary: string;
   readonly complianceListLabel: string;
 } {
-  void locale;
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
@@ -481,36 +469,52 @@ export function ReportsScreen(): JSX.Element {
     performanceRegionLabel,
     complianceSummary,
     complianceListLabel,
-  } = buildReportStrings(t, locale);
-  const translatedAuditRows: readonly LocalizedAuditEvent[] = AUDIT_EVENTS.map((event) => ({
+  } = buildReportStrings(t);
+  const translatedAuditRows: readonly AuditEvent[] = AUDIT_EVENTS.map((event) => ({
     ...event,
     action: t(`reports-audit-action-${event.action}`, {
-      defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] || event.action,
+      defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
     }),
   }));
-  const panels: Record<ReportTab, () => JSX.Element> = {
-    audit: () => (
-      <AuditTrailPanel
-        rows={translatedAuditRows}
-        locale={locale}
-        tableLabel={auditTableLabel}
-        timeLabel={timeLabel}
-        actorLabel={actorLabel}
-        actionLabel={actionLabel}
-        targetLabel={targetLabel}
-      />
-    ),
-    performance: () => (
-      <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
-    ),
-    compliance: () => (
-      <CompliancePanel
-        checks={complianceChecks}
-        summaryLabel={complianceSummary}
-        listLabel={complianceListLabel}
-      />
-    ),
-  };
+  const panels: Record<ReportTab, () => JSX.Element> = useMemo(
+    () => ({
+      audit: () => (
+        <AuditTrailPanel
+          rows={translatedAuditRows}
+          locale={locale}
+          tableLabel={auditTableLabel}
+          timeLabel={timeLabel}
+          actorLabel={actorLabel}
+          actionLabel={actionLabel}
+          targetLabel={targetLabel}
+        />
+      ),
+      performance: () => (
+        <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
+      ),
+      compliance: () => (
+        <CompliancePanel
+          checks={complianceChecks}
+          summaryLabel={complianceSummary}
+          listLabel={complianceListLabel}
+        />
+      ),
+    }),
+    [
+      translatedAuditRows,
+      locale,
+      auditTableLabel,
+      timeLabel,
+      actorLabel,
+      actionLabel,
+      targetLabel,
+      performanceRegionLabel,
+      performanceMetrics,
+      complianceChecks,
+      complianceSummary,
+      complianceListLabel,
+    ],
+  );
 
   return (
     <RegistryList
