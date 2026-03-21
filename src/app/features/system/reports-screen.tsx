@@ -23,15 +23,23 @@ import { RegistryList } from "./components/registry-list";
 /* ── Tab types ────────────────────────────────────────────────────── */
 
 type ReportTab = "audit" | "performance" | "compliance";
+type AuditEventId = "aud-1" | "aud-2" | "aud-3" | "aud-4" | "aud-5" | "aud-6" | "aud-7" | "aud-8";
+type AuditAction = "state_change" | "pr_merge" | "tool_call" | "comment" | "agent_turn";
+type PerformanceMetricId = "perf-1" | "perf-2" | "perf-3" | "perf-4";
+type ComplianceCheckId = "comp-1" | "comp-2" | "comp-3" | "comp-4" | "comp-5" | "comp-6";
 
 /* ── Audit trail fixture ──────────────────────────────────────────── */
 
 interface AuditEvent {
-  readonly id: string;
+  readonly id: AuditEventId;
   readonly timestamp: string;
   readonly actor: string;
-  readonly action: string;
+  readonly action: AuditAction;
   readonly target: string;
+}
+
+interface DisplayAuditEvent extends Omit<AuditEvent, "action"> {
+  readonly action: string;
 }
 
 const AUDIT_EVENTS: readonly AuditEvent[] = [
@@ -96,7 +104,7 @@ const AUDIT_EVENTS: readonly AuditEvent[] = [
 /* ── Performance fixture ──────────────────────────────────────────── */
 
 interface PerformanceMetric {
-  readonly id: string;
+  readonly id: PerformanceMetricId;
   readonly value: number;
   readonly unit: string;
   readonly colour: string;
@@ -137,7 +145,7 @@ const PERF_METRICS: readonly PerformanceMetric[] = [
 /* ── Compliance fixture ───────────────────────────────────────────── */
 
 interface ComplianceCheck {
-  readonly id: string;
+  readonly id: ComplianceCheckId;
   readonly passed: boolean;
 }
 
@@ -156,14 +164,14 @@ const COMPLIANCE_CHECKS: readonly ComplianceCheck[] = [
   { id: "comp-6", passed: true },
 ];
 
-const PERF_DEFAULT_LABELS: Record<string, string> = {
+const PERF_DEFAULT_LABELS: Record<PerformanceMetricId, string> = {
   "perf-1": "P50 Latency",
   "perf-2": "P95 Latency",
   "perf-3": "P99 Latency",
   "perf-4": "Throughput",
 };
 
-const COMPLIANCE_DEFAULT_LABELS: Record<string, string> = {
+const COMPLIANCE_DEFAULT_LABELS: Record<ComplianceCheckId, string> = {
   "comp-1": "RBAC enforcement",
   "comp-2": "Audit trail completeness",
   "comp-3": "Data retention policy",
@@ -172,7 +180,7 @@ const COMPLIANCE_DEFAULT_LABELS: Record<string, string> = {
   "comp-6": "Branch protection rules",
 };
 
-const COMPLIANCE_DEFAULT_DETAILS: Record<string, string> = {
+const COMPLIANCE_DEFAULT_DETAILS: Record<ComplianceCheckId, string> = {
   "comp-1": "All routes gated",
   "comp-2": "100% of state changes logged",
   "comp-3": "90-day retention active",
@@ -181,7 +189,7 @@ const COMPLIANCE_DEFAULT_DETAILS: Record<string, string> = {
   "comp-6": "All repos compliant",
 };
 
-const AUDIT_ACTION_DEFAULT_LABELS: Record<string, string> = {
+const AUDIT_ACTION_DEFAULT_LABELS: Record<AuditAction, string> = {
   state_change: "State change",
   pr_merge: "PR merge",
   tool_call: "Tool call",
@@ -191,6 +199,7 @@ const AUDIT_ACTION_DEFAULT_LABELS: Record<string, string> = {
 
 interface LocalizedPerformanceMetric extends PerformanceMetric {
   readonly label: string;
+  readonly valueLabel: string;
 }
 
 interface LocalizedComplianceCheck extends ComplianceCheck {
@@ -208,6 +217,13 @@ interface TabNavContext {
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
 
+/**
+ * Render the localised audit-table view for report activity rows.
+ *
+ * Localisation contract: callers must pass display-ready labels and action text.
+ *
+ * @internal
+ */
 function AuditTrailPanel({
   rows,
   locale,
@@ -217,7 +233,7 @@ function AuditTrailPanel({
   actionLabel,
   targetLabel,
 }: {
-  readonly rows: readonly AuditEvent[];
+  readonly rows: readonly DisplayAuditEvent[];
   readonly locale: string;
   readonly tableLabel: string;
   readonly timeLabel: string;
@@ -277,6 +293,13 @@ function AuditTrailPanel({
   );
 }
 
+/**
+ * Render the performance metric cards with localised labels and values.
+ *
+ * Localisation contract: callers must provide display-ready strings for every metric.
+ *
+ * @internal
+ */
 function PerformancePanel({
   regionLabel,
   metrics,
@@ -294,7 +317,7 @@ function PerformancePanel({
               {m.label}
             </p>
             <p className="mt-1 tabular-nums text-[length:var(--font-size-2xl)] font-bold text-base-content">
-              {m.value}
+              {m.valueLabel}
               <span className="ml-1 text-[length:var(--font-size-sm)] font-normal text-base-content/60">
                 {m.unit}
               </span>
@@ -310,6 +333,13 @@ function PerformancePanel({
   );
 }
 
+/**
+ * Render the compliance checklist and summary using localised display strings.
+ *
+ * Localisation contract: callers must provide translated summary, labels, and details.
+ *
+ * @internal
+ */
 function CompliancePanel({
   checks,
   summaryLabel,
@@ -359,6 +389,13 @@ const TAB_LABELS: Record<ReportTab, { readonly key: string; readonly defaultValu
   compliance: { key: "reports-tab-compliance", defaultValue: "Compliance" },
 };
 
+/**
+ * Move focus to the tab button at the requested index when it exists.
+ *
+ * Tab-navigation contract: this only shifts focus; selection remains caller-controlled.
+ *
+ * @internal
+ */
 function focusTabAtIndex(
   refs: Readonly<Record<ReportTab, HTMLButtonElement | null>>,
   index: number,
@@ -368,7 +405,18 @@ function focusTabAtIndex(
   refs[next]?.focus();
 }
 
-function buildReportStrings(t: TFunction): {
+/**
+ * Build the localised string model consumed by the reports screen and panels.
+ *
+ * Localisation contract: the provided locale is used for number formatting, and all
+ * returned strings are ready for direct rendering.
+ *
+ * @internal
+ */
+function buildReportStrings(
+  t: TFunction,
+  locale: string,
+): {
   readonly tabListLabel: string;
   readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
   readonly complianceChecks: readonly LocalizedComplianceCheck[];
@@ -381,10 +429,12 @@ function buildReportStrings(t: TFunction): {
   readonly complianceSummary: string;
   readonly complianceListLabel: string;
 } {
+  const numberFormatter = new Intl.NumberFormat(locale);
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
+    valueLabel: numberFormatter.format(m.value),
   }));
   const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
   const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
@@ -410,13 +460,21 @@ function buildReportStrings(t: TFunction): {
     performanceRegionLabel: t("reports-perf-region", { defaultValue: "Performance metrics" }),
     complianceSummary: t("reports-compliance-summary", {
       defaultValue: "{{pass}} of {{total}} checks passing",
-      pass: complianceChecks.filter((check) => check.passed).length,
-      total: complianceChecks.length,
+      pass: numberFormatter.format(complianceChecks.filter((check) => check.passed).length),
+      total: numberFormatter.format(complianceChecks.length),
     }),
     complianceListLabel: t("reports-compliance-list", { defaultValue: "Compliance checks" }),
   };
 }
 
+/**
+ * Handle keyboard navigation and activation for the reports tab strip.
+ *
+ * Tab-navigation contract: arrow keys move focus only, whilst Enter or Space activates
+ * the current tab via the provided setter.
+ *
+ * @internal
+ */
 function handleTabKeyDown(
   event: KeyboardEvent<HTMLButtonElement>,
   { index, tab, setActiveTab, focusAt }: TabNavContext,
@@ -448,6 +506,14 @@ function handleTabKeyDown(
   }
 }
 
+/**
+ * Render the reports registry screen with localised tab labels and mounted panels.
+ *
+ * Tab-navigation contract: only one tab is active at a time, whilst focus can move
+ * independently across the mounted tab buttons and panels.
+ *
+ * @returns A `JSX.Element` for the reports screen.
+ */
 export function ReportsScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
@@ -469,8 +535,8 @@ export function ReportsScreen(): JSX.Element {
     performanceRegionLabel,
     complianceSummary,
     complianceListLabel,
-  } = buildReportStrings(t);
-  const translatedAuditRows: readonly AuditEvent[] = AUDIT_EVENTS.map((event) => ({
+  } = buildReportStrings(t, locale);
+  const translatedAuditRows: readonly DisplayAuditEvent[] = AUDIT_EVENTS.map((event) => ({
     ...event,
     action: t(`reports-audit-action-${event.action}`, {
       defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,

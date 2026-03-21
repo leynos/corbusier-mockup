@@ -9,7 +9,7 @@ import {
   type ExecutionOutcome,
   findHookById,
   type HookDefinition,
-  hookId,
+  parseHookId,
 } from "../../../data/hooks";
 import { type LocalizedStringSet, pickLocalization } from "../../domain/entities/localization";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
@@ -47,6 +47,11 @@ interface HookExecutionLogLabels {
   readonly empty: string;
 }
 
+/**
+ * Render the visual outcome pill for a hook execution entry.
+ *
+ * @internal
+ */
 function OutcomeBadge({
   outcome,
   label,
@@ -63,6 +68,11 @@ function OutcomeBadge({
   );
 }
 
+/**
+ * Render the missing-hook fallback for an unknown route id.
+ *
+ * @internal
+ */
 function HookNotFound({
   heading,
   backToHooksLabel,
@@ -89,6 +99,11 @@ function HookNotFound({
   );
 }
 
+/**
+ * Render the hook title block with description and enabled status.
+ *
+ * @internal
+ */
 function HookDetailHeader({
   hook,
   loc,
@@ -117,6 +132,11 @@ function HookDetailHeader({
   );
 }
 
+/**
+ * Render the hook configuration summary card.
+ *
+ * @internal
+ */
 function HookConfigSection({
   hook,
   configLabels,
@@ -187,6 +207,11 @@ function HookConfigSection({
   );
 }
 
+/**
+ * Render the hook execution history table or empty state.
+ *
+ * @internal
+ */
 function HookExecutionLog({
   hook,
   locale,
@@ -278,13 +303,7 @@ export function HookDetailScreen(): JSX.Element {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? i18n.language;
   const { id } = routeApi.useParams();
-  const validatedHookId = (() => {
-    try {
-      return hookId(id);
-    } catch {
-      return undefined;
-    }
-  })();
+  const validatedHookId = parseHookId(id);
   const hook = validatedHookId ? findHookById(validatedHookId) : undefined;
   const backToHooksLabel = t("back-to-hooks", { defaultValue: "Back to Hooks & Policies" });
   const outcomeLabels: Record<ExecutionOutcome, string> = {

@@ -51,6 +51,12 @@ function toTimelineEntries(
   }));
 }
 
+/**
+ * Render the shared back link used by the personnel detail route.
+ *
+ * @param label - Localised link label for the personnel index route.
+ * @returns A `JSX.Element` linking back to the personnel list.
+ */
 function BackToPersonnelLink({ label }: { readonly label: string }): JSX.Element {
   return (
     <Link

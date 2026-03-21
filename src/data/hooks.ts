@@ -18,6 +18,11 @@ export function hookId(raw: string): HookId {
   return v.parse(hookIdSchema, raw) as HookId;
 }
 
+export function parseHookId(raw: string): HookId | undefined {
+  const result = v.safeParse(hookIdSchema, raw);
+  return result.success ? (result.output as HookId) : undefined;
+}
+
 export type ExecutionOutcome = "pass" | "fail" | "skip";
 
 export interface ExecutionLogEntry {
