@@ -253,35 +253,22 @@ function AuditTrailPanel({
   readonly actionLabel: string;
   readonly targetLabel: string;
 }): JSX.Element {
+  const columnHeaders = [timeLabel, actorLabel, actionLabel, targetLabel];
+
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra w-full" aria-label={tableLabel}>
         <thead>
           <tr>
-            <th
-              scope="col"
-              className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-            >
-              {timeLabel}
-            </th>
-            <th
-              scope="col"
-              className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-            >
-              {actorLabel}
-            </th>
-            <th
-              scope="col"
-              className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-            >
-              {actionLabel}
-            </th>
-            <th
-              scope="col"
-              className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
-            >
-              {targetLabel}
-            </th>
+            {columnHeaders.map((header) => (
+              <th
+                key={header}
+                scope="col"
+                className="font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+              >
+                {header}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -588,6 +575,50 @@ function TabStrip({
   );
 }
 
+interface PanelProps {
+  readonly auditRows: readonly DisplayAuditEvent[];
+  readonly locale: string;
+  readonly auditTableLabel: string;
+  readonly timeLabel: string;
+  readonly actorLabel: string;
+  readonly actionLabel: string;
+  readonly targetLabel: string;
+  readonly performanceRegionLabel: string;
+  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
+  readonly complianceChecks: readonly LocalizedComplianceCheck[];
+  readonly complianceSummary: string;
+  readonly complianceListLabel: string;
+}
+
+function buildPanels(props: PanelProps): Record<ReportTab, () => JSX.Element> {
+  return {
+    audit: () => (
+      <AuditTrailPanel
+        rows={props.auditRows}
+        locale={props.locale}
+        tableLabel={props.auditTableLabel}
+        timeLabel={props.timeLabel}
+        actorLabel={props.actorLabel}
+        actionLabel={props.actionLabel}
+        targetLabel={props.targetLabel}
+      />
+    ),
+    performance: () => (
+      <PerformancePanel
+        regionLabel={props.performanceRegionLabel}
+        metrics={props.performanceMetrics}
+      />
+    ),
+    compliance: () => (
+      <CompliancePanel
+        checks={props.complianceChecks}
+        summaryLabel={props.complianceSummary}
+        listLabel={props.complianceListLabel}
+      />
+    ),
+  };
+}
+
 /**
  * Render the reports registry screen with localised tab labels and mounted panels.
  *
@@ -631,29 +662,21 @@ export function ReportsScreen(): JSX.Element {
     [t],
   );
   const panels: Record<ReportTab, () => JSX.Element> = useMemo(
-    () => ({
-      audit: () => (
-        <AuditTrailPanel
-          rows={translatedAuditRows}
-          locale={locale}
-          tableLabel={auditTableLabel}
-          timeLabel={timeLabel}
-          actorLabel={actorLabel}
-          actionLabel={actionLabel}
-          targetLabel={targetLabel}
-        />
-      ),
-      performance: () => (
-        <PerformancePanel regionLabel={performanceRegionLabel} metrics={performanceMetrics} />
-      ),
-      compliance: () => (
-        <CompliancePanel
-          checks={complianceChecks}
-          summaryLabel={complianceSummary}
-          listLabel={complianceListLabel}
-        />
-      ),
-    }),
+    () =>
+      buildPanels({
+        auditRows: translatedAuditRows,
+        locale,
+        auditTableLabel,
+        timeLabel,
+        actorLabel,
+        actionLabel,
+        targetLabel,
+        performanceRegionLabel,
+        performanceMetrics,
+        complianceChecks,
+        complianceSummary,
+        complianceListLabel,
+      }),
     [
       translatedAuditRows,
       locale,
