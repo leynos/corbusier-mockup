@@ -43,6 +43,7 @@ interface AuditEvent {
 
 interface DisplayAuditEvent extends Omit<AuditEvent, "action"> {
   readonly action: string;
+  readonly timestampLabel: string;
 }
 
 const AUDIT_EVENTS: readonly AuditEvent[] = [
@@ -203,6 +204,7 @@ const AUDIT_ACTION_DEFAULT_LABELS: Record<AuditAction, string> = {
 interface LocalizedPerformanceMetric extends PerformanceMetric {
   readonly label: string;
   readonly valueLabel: string;
+  readonly unitLabel: string;
 }
 
 interface LocalizedComplianceCheck extends ComplianceCheck {
@@ -225,7 +227,6 @@ interface LocalizedReportTab {
 }
 
 interface AuditReportModel {
-  readonly locale: string;
   readonly rows: readonly DisplayAuditEvent[];
   readonly tableLabel: string;
   readonly timeLabel: string;
@@ -279,7 +280,7 @@ function resolveReportFormattingLocale(locale: string | undefined): string {
  * @internal
  */
 function AuditTrailPanel({ audit }: { readonly audit: AuditReportModel }): JSX.Element {
-  const { rows, locale, tableLabel, timeLabel, actorLabel, actionLabel, targetLabel } = audit;
+  const { rows, tableLabel, timeLabel, actorLabel, actionLabel, targetLabel } = audit;
   const columnHeaders = [timeLabel, actorLabel, actionLabel, targetLabel];
 
   return (
@@ -302,7 +303,7 @@ function AuditTrailPanel({ audit }: { readonly audit: AuditReportModel }): JSX.E
           {rows.map((e) => (
             <tr key={e.id} className="min-h-9 hover:bg-base-200/40">
               <td className="whitespace-nowrap font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] text-base-content/60">
-                <time dateTime={e.timestamp}>{formatTimelineTimestamp(e.timestamp, locale)}</time>
+                <time dateTime={e.timestamp}>{e.timestampLabel}</time>
               </td>
               <td className="text-[length:var(--font-size-sm)]">{e.actor}</td>
               <td className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)]">
@@ -345,7 +346,7 @@ function PerformancePanel({
             <p className="mt-1 tabular-nums text-[length:var(--font-size-2xl)] font-bold text-base-content">
               {m.valueLabel}
               <span className="ml-1 text-[length:var(--font-size-sm)] font-normal text-base-content/60">
-                {m.unit}
+                {m.unitLabel}
               </span>
             </p>
             {/* Skeletal bar chart */}
@@ -453,11 +454,16 @@ function buildReportStrings(t: TFunction, locale: string): ReportsViewModel {
     action: t(`reports-audit-action-${event.action}`, {
       defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
     }),
+    timestampLabel: formatTimelineTimestamp(event.timestamp, locale),
   }));
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
     valueLabel: numberFormatter.format(m.value),
+    unitLabel:
+      m.unit === "ms"
+        ? t("unit-ms", { defaultValue: "{{value}}ms", value: "" }).trim()
+        : t("reports-unit-req-per-second", { defaultValue: "req/s" }),
   }));
   const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
   const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
@@ -475,7 +481,6 @@ function buildReportStrings(t: TFunction, locale: string): ReportsViewModel {
     tabListLabel,
     tabs,
     audit: {
-      locale,
       rows: auditRows,
       tableLabel: t("reports-audit-table", { defaultValue: "Audit trail events" }),
       timeLabel: t("reports-col-time", { defaultValue: "Time" }),
