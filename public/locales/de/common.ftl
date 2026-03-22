@@ -116,6 +116,13 @@ page-tenant-management = Mandantenverwaltung
 page-tenant-management-sub = Mandantenkonfigurationen und Isolationsgrenzen verwalten.
 page-user-detail = Benutzerprofil
 page-user-detail-sub = Benutzerdetails und Berechtigungen anzeigen und bearbeiten.
+personnel-not-found = Personal nicht gefunden.
+personnel-detail-id = Personal‑ID
+personnel-detail-tasks = Zugewiesene Aufgaben
+personnel-detail-last-active = Zuletzt aktiv
+personnel-activity-region = Aktivitätsverlauf
+personnel-activity-heading = Aktivitätsverlauf des Personals
+personnel-activity-empty = Keine Aktivitäten aufgezeichnet.
 
 ## Task actions (state machine)
 

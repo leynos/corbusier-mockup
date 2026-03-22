@@ -17,14 +17,14 @@ test.describe("AI Suggestions", () => {
     await expect(summary.getByText("Items Analysed")).toBeVisible();
   });
 
-  test("suggestions page shows filter tabs and cards", async ({ page }) => {
+  test("suggestions page shows filter buttons and cards", async ({ page }) => {
     await page.goto("/suggestions");
 
-    const tablist = page.getByRole("tablist", { name: /project filter/i });
-    await expect(tablist).toBeVisible();
+    const filterGroup = page.getByRole("group", { name: /project filter/i });
+    await expect(filterGroup).toBeVisible();
 
-    const allTab = tablist.getByRole("tab", { name: "All Projects" });
-    await expect(allTab).toHaveAttribute("aria-selected", "true");
+    const allBtn = filterGroup.getByRole("button", { name: "All Projects" });
+    await expect(allBtn).toHaveAttribute("aria-pressed", "true");
 
     /* At least one suggestion card title should be visible. */
     await expect(page.getByText("Add circuit breaker to agent backend calls")).toBeVisible();
@@ -42,14 +42,14 @@ test.describe("AI Suggestions", () => {
     await expect(cardTitle).not.toBeVisible();
   });
 
-  test("project filter tab narrows displayed suggestions", async ({ page }) => {
+  test("project filter button narrows displayed suggestions", async ({ page }) => {
     await page.goto("/suggestions");
 
-    const tablist = page.getByRole("tablist", { name: /project filter/i });
-    const skunkworksTab = tablist.getByRole("tab", {
+    const filterGroup = page.getByRole("group", { name: /project filter/i });
+    const skunkworksBtn = filterGroup.getByRole("button", {
       name: "Skunkworks-Alpha",
     });
-    await skunkworksTab.click();
+    await skunkworksBtn.click();
 
     await expect(
       page.getByText("Automate tenant namespace cleanup on deprovisioning"),

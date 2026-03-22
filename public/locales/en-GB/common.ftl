@@ -117,6 +117,13 @@ page-tenant-management = Tenant Management
 page-tenant-management-sub = Manage tenant configurations and isolation boundaries.
 page-user-detail = User Profile
 page-user-detail-sub = View and edit user details and permissions.
+personnel-not-found = Personnel not found.
+personnel-detail-id = Personnel ID
+personnel-detail-tasks = Assigned Tasks
+personnel-detail-last-active = Last Active
+personnel-activity-region = Activity history
+personnel-activity-heading = Personnel Activity History
+personnel-activity-empty = No activity recorded.
 
 ## Task actions (state machine)
 

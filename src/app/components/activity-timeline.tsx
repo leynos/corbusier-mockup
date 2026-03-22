@@ -16,8 +16,8 @@ export interface TimelineEntry {
 }
 
 /* Dot colour follows design language:
-   teal for structural (branch, PR), terracotta for state changes,
-   olive for completions, base for comments/agent. */
+   teal for structural branch and PR events, terracotta for state changes,
+   olive for completions and approvals, base for comments/agent. */
 const DOT_COLOUR: Record<ActivityEventKind, string> = {
   state_change: "bg-warning",
   subtask_completed: "bg-success",
@@ -25,6 +25,7 @@ const DOT_COLOUR: Record<ActivityEventKind, string> = {
   agent_action: "bg-info",
   branch_associated: "bg-primary",
   pr_opened: "bg-primary",
+  approval: "bg-success",
 };
 
 interface ActivityTimelineProps {

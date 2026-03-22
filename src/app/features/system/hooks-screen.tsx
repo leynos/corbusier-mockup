@@ -1,18 +1,80 @@
-/** @file Placeholder for the Hooks & Policies screen. */
+/** @file Hooks and policies list screen — hook definitions with trigger and status. */
 
+import { useNavigate } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
-import { PlaceholderScreen } from "../placeholder-screen";
+import { HOOKS, type HookDefinition } from "../../../data/hooks";
+import { type Column, DataTable } from "../../components/data-table";
+import { pickLocalization } from "../../domain/entities/localization";
+import { RegistryList } from "./components/registry-list";
+import { StatusBadge } from "./components/status-badge";
+
+/* ── Screen ───────────────────────────────────────────────────────── */
 
 export function HooksScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? i18n.language;
+  const navigate = useNavigate();
+
+  const columns = [
+    {
+      key: "localizations",
+      header: t("hooks-col-name", { defaultValue: "Name" }),
+      render: (_v, row) => {
+        const loc = pickLocalization(row.localizations, locale);
+        return (
+          <div className="min-w-0">
+            <p className="font-semibold text-base-content">{loc.name}</p>
+            {loc.description ? (
+              <p className="mt-0.5 truncate text-[length:var(--font-size-xs)] text-base-content/60">
+                {loc.description}
+              </p>
+            ) : null}
+          </div>
+        );
+      },
+    },
+    {
+      key: "triggerType",
+      header: t("hooks-col-trigger", { defaultValue: "Trigger" }),
+      className: "font-[family-name:var(--font-mono)]",
+    },
+    {
+      key: "priority",
+      header: t("hooks-col-priority", { defaultValue: "Priority" }),
+      className: "text-right tabular-nums",
+    },
+    {
+      key: "enabled",
+      header: t("hooks-col-status", { defaultValue: "Status" }),
+      render: (_v, row) => (
+        <StatusBadge
+          label={
+            row.enabled
+              ? t("hook-enabled", { defaultValue: "Enabled" })
+              : t("hook-disabled", { defaultValue: "Disabled" })
+          }
+          tone={row.enabled ? "success" : "neutral"}
+        />
+      ),
+    },
+  ] satisfies readonly Column<HookDefinition, keyof HookDefinition & string>[];
+
   return (
-    <PlaceholderScreen
-      title={t("page-hooks-policies", { defaultValue: "Hooks & Policies" })}
+    <RegistryList
+      heading={t("page-hooks-policies", { defaultValue: "Hooks & Policies" })}
       subtitle={t("page-hooks-policies-sub", {
         defaultValue: "Automation hooks and governance policies.",
       })}
-    />
+    >
+      <DataTable
+        columns={columns}
+        data={HOOKS}
+        rowKey={(r) => r.id}
+        onRowClick={(r) => navigate({ to: "/system/hooks/$id", params: { id: r.id } })}
+        label={t("hooks-table-label", { defaultValue: "Hook definitions" })}
+      />
+    </RegistryList>
   );
 }

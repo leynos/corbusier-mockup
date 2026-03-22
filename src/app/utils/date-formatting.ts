@@ -13,7 +13,7 @@ const ISO_DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/u;
 /**
  * Resolve the locale used for date/time formatting.
  */
-function resolveFormattingLocale(locale: string | undefined): string {
+export function resolveFormattingLocale(locale: string | undefined): string {
   if (locale) {
     return locale;
   }

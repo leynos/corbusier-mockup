@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -84,28 +84,67 @@ surfaces that make governance and observability tangible.
 
 ## Progress
 
-- [ ] Milestone 1: Fixture data for all system entities
-- [ ] Milestone 2: Shared system page components
-- [ ] Milestone 3: Personnel pages
-- [ ] Milestone 4: Reports page
-- [ ] Milestone 5: Agent Backends pages
-- [ ] Milestone 6: Tool Registry pages
-- [ ] Milestone 7: Hooks & Policies pages
-- [ ] Milestone 8: Monitoring page
-- [ ] Milestone 9: Tenant Management page
-- [ ] Milestone 10: Tests and validation
+- [x] Milestone 1: Fixture data for all system entities
+- [x] Milestone 2: Shared system page components
+- [x] Milestone 3: Personnel pages
+- [x] Milestone 4: Reports page
+- [x] Milestone 5: Agent Backends pages
+- [x] Milestone 6: Tool Registry pages
+- [x] Milestone 7: Hooks & Policies pages
+- [x] Milestone 8: Monitoring page
+- [x] Milestone 9: Tenant Management page
+- [x] Milestone 10: Tests and validation
 
 ## Surprises & discoveries
 
-(None yet.)
+- Biome's `noNoninteractiveTabindex` rejects `tabIndex={0}` on
+  `<section>` elements, conflicting with axe's
+  `scrollable-region-focusable` rule for `overflow-x-auto` containers.
+  Resolution: removed `overflow-x-auto` from the alerts table wrapper
+  since the table layout doesn't overflow in practice.
+- Biome's `useSemanticElements` rejects `role="region"` on `<div>` —
+  must use `<section>` instead. Similarly, `role="group"` →
+  `<fieldset>`.
+- The `check-hardcoded-strings` semantic lint catches unit suffixes
+  like `{value}ms` as hard-coded JSX text — must use `t("unit-ms")`
+  with interpolation.
+- Pre-existing end-to-end (E2E) test failures in suggestions tests: the tests
+  expected `role="tablist"` / `role="tab"` but the implementation uses
+  `<fieldset>` with `<button aria-pressed>`. Fixed to match the
+  actual implementation.
 
 ## Decision log
 
-(None yet.)
+- Monitoring metric panels use skeletal SVG charts with a
+  background rect, threshold line, polyline, and point markers —
+  more informative than plain coloured rectangles but still within
+  mockup scope (no charting library).
+- `DataTable` interactive rows use a dedicated button in the primary
+  cell rather than overriding `<tr>` semantics, keeping table markup
+  valid whilst preserving row click navigation.
+- Health status badges extracted as shared component
+  (`src/app/features/system/components/health-badge.tsx`) using
+  `healthStatusDescriptors` from the existing registries.
+- Reports page uses proper `role="tablist"` / `role="tab"` /
+  `role="tabpanel"` Accessible Rich Internet Applications (ARIA)
+  pattern with roving `tabIndex`, keyboard navigation, and all panels
+  mounted in the DOM.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 10 milestones delivered. Created 6 fixture data files, 3 shared
+components, and 11-page screens replacing all system placeholders.
+The implementation stays within tolerances: 20 new files, well under
+3,500 net lines.
+
+`bun run ff` passes fully: 147 unit tests, 1 accessibility (a11y)
+test, 43 end-to-end (E2E) tests (12 system-pages-specific, including
+3 axe a11y sweeps). All semantic lints, Biome continuous integration
+(CI) checks, TypeScript checks, Fluent var checks, and Stylelint pass.
+
+Also fixed 2 pre-existing E2E test failures in the suggestions suite
+where test selectors did not match the actual implementation (tablist
+vs fieldset pattern).
 
 ## Context and orientation
 

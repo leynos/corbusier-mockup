@@ -116,6 +116,13 @@ page-tenant-management = テナント管理
 page-tenant-management-sub = テナント設定と分離境界を管理します。
 page-user-detail = ユーザープロファイル
 page-user-detail-sub = ユーザー詳細と権限を表示して編集します。
+personnel-not-found = 職員が見つかりません。
+personnel-detail-id = 職員ID
+personnel-detail-tasks = 割り当てられたタスク
+personnel-detail-last-active = 最終活動日時
+personnel-activity-region = 活動履歴
+personnel-activity-heading = 職員の活動履歴
+personnel-activity-empty = 活動が記録されていません。
 
 ## Task actions (state machine)
 
