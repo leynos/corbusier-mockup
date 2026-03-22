@@ -17,8 +17,7 @@ import type { TFunction } from "i18next";
 import { type JSX, type KeyboardEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { DEFAULT_LOCALE } from "../../i18n/supported-locales";
-import { formatTimelineTimestamp } from "../../utils/date-formatting";
+import { formatTimelineTimestamp, resolveFormattingLocale } from "../../utils/date-formatting";
 import { RegistryList } from "./components/registry-list";
 
 /* ── Tab types ────────────────────────────────────────────────────── */
@@ -29,6 +28,7 @@ type ReportTab = (typeof TAB_IDS)[number];
 type AuditEventId = "aud-1" | "aud-2" | "aud-3" | "aud-4" | "aud-5" | "aud-6" | "aud-7" | "aud-8";
 type AuditAction = "state_change" | "pr_merge" | "tool_call" | "comment" | "agent_turn";
 type PerformanceMetricId = "perf-1" | "perf-2" | "perf-3" | "perf-4";
+type PerformanceUnit = "ms" | "req/s";
 type ComplianceCheckId = "comp-1" | "comp-2" | "comp-3" | "comp-4" | "comp-5" | "comp-6";
 
 /* ── Audit trail fixture ──────────────────────────────────────────── */
@@ -110,7 +110,7 @@ const AUDIT_EVENTS: readonly AuditEvent[] = [
 interface PerformanceMetric {
   readonly id: PerformanceMetricId;
   readonly value: number;
-  readonly unit: string;
+  readonly unit: PerformanceUnit;
   readonly colour: string;
   readonly maxValue: number;
 }
@@ -256,18 +256,6 @@ interface ReportsViewModel {
 
 interface TabButtonRefs {
   current: Record<ReportTab, HTMLButtonElement | null>;
-}
-
-function resolveReportFormattingLocale(locale: string | undefined): string {
-  if (locale) {
-    return locale;
-  }
-
-  if (typeof navigator !== "undefined" && navigator.language) {
-    return navigator.language;
-  }
-
-  return DEFAULT_LOCALE;
 }
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
@@ -440,7 +428,7 @@ function focusTabAtIndex(
  * @internal
  */
 function buildReportStrings(t: TFunction, locale: string): ReportsViewModel {
-  const numberFormatter = new Intl.NumberFormat(resolveReportFormattingLocale(locale));
+  const numberFormatter = new Intl.NumberFormat(resolveFormattingLocale(locale));
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
   const tabs: readonly LocalizedReportTab[] = TAB_IDS.map((tab) => {
     const label = TAB_LABELS[tab];
@@ -456,14 +444,15 @@ function buildReportStrings(t: TFunction, locale: string): ReportsViewModel {
     }),
     timestampLabel: formatTimelineTimestamp(event.timestamp, locale),
   }));
+  const unitLabels: Record<PerformanceUnit, string> = {
+    ms: t("unit-ms", { defaultValue: "ms" }),
+    "req/s": t("reports-unit-req-per-second", { defaultValue: "req/s" }),
+  };
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
     valueLabel: numberFormatter.format(m.value),
-    unitLabel:
-      m.unit === "ms"
-        ? t("unit-ms", { defaultValue: "{{value}}ms", value: "" }).trim()
-        : t("reports-unit-req-per-second", { defaultValue: "req/s" }),
+    unitLabel: unitLabels[m.unit],
   }));
   const passLabel = t("reports-check-pass", { defaultValue: "Passed" });
   const failLabel = t("reports-check-fail", { defaultValue: "Failed" });
