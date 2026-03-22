@@ -1,8 +1,25 @@
-type AuditEventId = "aud-1" | "aud-2" | "aud-3" | "aud-4" | "aud-5" | "aud-6" | "aud-7" | "aud-8";
-type AuditAction = "state_change" | "pr_merge" | "tool_call" | "comment" | "agent_turn";
-type PerformanceMetricId = "perf-1" | "perf-2" | "perf-3" | "perf-4";
-type PerformanceUnit = "ms" | "req/s";
-type ComplianceCheckId = "comp-1" | "comp-2" | "comp-3" | "comp-4" | "comp-5" | "comp-6";
+/** @file Fixture data and default-label lookups for the reports screen.
+ *
+ * Exports `AuditEventId`, `AuditAction`, `PerformanceMetricId`,
+ * `PerformanceUnit`, and `ComplianceCheckId` alongside the fixture
+ * arrays and label maps consumed by `reports-screen.tsx`.
+ *
+ * @see `src/app/features/system/reports-screen.tsx`
+ */
+
+export type AuditEventId =
+  | "aud-1"
+  | "aud-2"
+  | "aud-3"
+  | "aud-4"
+  | "aud-5"
+  | "aud-6"
+  | "aud-7"
+  | "aud-8";
+export type AuditAction = "state_change" | "pr_merge" | "tool_call" | "comment" | "agent_turn";
+export type PerformanceMetricId = "perf-1" | "perf-2" | "perf-3" | "perf-4";
+export type PerformanceUnit = "ms" | "req/s";
+export type ComplianceCheckId = "comp-1" | "comp-2" | "comp-3" | "comp-4" | "comp-5" | "comp-6";
 
 export interface AuditEvent {
   readonly id: AuditEventId;
