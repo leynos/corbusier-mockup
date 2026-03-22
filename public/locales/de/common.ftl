@@ -38,6 +38,7 @@ nav-tenant-management = Mandantenverwaltung
 nav-settings = Einstellungen
 nav-feedback = Feedback
 
+header-brand = Corbusier
 header-search-label = Direktiven durchsuchen
 header-search-placeholder = Direktiven durchsuchen
 header-notifications-label = Benachrichtigungen

@@ -38,6 +38,7 @@ nav-tenant-management = 租户管理
 nav-settings = 设置
 nav-feedback = 反馈
 
+header-brand = Corbusier
 header-search-label = 搜索指令
 header-search-placeholder = 搜索指令
 header-notifications-label = 通知

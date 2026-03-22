@@ -38,6 +38,7 @@ nav-tenant-management = टेनेंट प्रबंधन
 nav-settings = सेटिंग्स
 nav-feedback = प्रतिक्रिया
 
+header-brand = Corbusier
 header-search-label = निर्देश खोजें
 header-search-placeholder = निर्देश खोजें
 header-notifications-label = सूचनाएँ

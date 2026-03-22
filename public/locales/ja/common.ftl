@@ -38,6 +38,7 @@ nav-tenant-management = テナント管理
 nav-settings = 設定
 nav-feedback = フィードバック
 
+header-brand = Corbusier
 header-search-label = ディレクティブを検索
 header-search-placeholder = ディレクティブを検索
 header-notifications-label = 通知

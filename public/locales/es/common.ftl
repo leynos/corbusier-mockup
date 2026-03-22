@@ -38,6 +38,7 @@ nav-tenant-management = Gestión de inquilinos
 nav-settings = Ajustes
 nav-feedback = Comentarios
 
+header-brand = Corbusier
 header-search-label = Buscar directivas
 header-search-placeholder = Buscar directivas
 header-notifications-label = Notificaciones
