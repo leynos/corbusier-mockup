@@ -600,16 +600,16 @@ interface PanelProps {
   readonly compliance: ComplianceReportModel;
 }
 
-function buildPanels(props: PanelProps): Record<ReportTab, () => JSX.Element> {
+function buildPanels(props: PanelProps): Record<ReportTab, JSX.Element> {
   return {
-    audit: () => <AuditTrailPanel audit={props.audit} />,
-    performance: () => (
+    audit: <AuditTrailPanel audit={props.audit} />,
+    performance: (
       <PerformancePanel
         regionLabel={props.performance.regionLabel}
         metrics={props.performance.metrics}
       />
     ),
-    compliance: () => (
+    compliance: (
       <CompliancePanel
         checks={props.compliance.checks}
         summaryLabel={props.compliance.summaryLabel}
@@ -638,7 +638,7 @@ export function ReportsScreen(): JSX.Element {
   });
   const reportStrings = useMemo(() => buildReportStrings(t, locale), [t, locale]);
   const { tabListLabel, tabs, audit, performance, compliance } = reportStrings;
-  const panels: Record<ReportTab, () => JSX.Element> = useMemo(
+  const panels: Record<ReportTab, JSX.Element> = useMemo(
     () =>
       buildPanels({
         audit,
@@ -676,7 +676,7 @@ export function ReportsScreen(): JSX.Element {
             hidden={!isActive}
             aria-hidden={!isActive}
           >
-            {panels[tab]()}
+            {panels[tab]}
           </div>
         );
       })}
