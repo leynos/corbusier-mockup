@@ -1,118 +1,34 @@
 /** @file Command palette overlay with search, keyboard navigation, and category groups. */
 
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  IconArrowRight,
-  IconCommand,
-  IconFolder,
-  IconMessage,
-  IconSearch,
-  IconSubtask,
-} from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-router";
-import { type JSX, useCallback, useMemo, useRef, useState } from "react";
+import { IconSearch } from "@tabler/icons-react";
+import { type JSX, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { pickLocalization } from "../../domain/entities/localization";
-import {
-  kindLabels,
-  type PaletteItem,
-  type PaletteItemKind,
-  paletteItems,
-} from "./command-palette-items";
-import { useCommandPalette } from "./command-palette-provider";
-
-/* ── Icon map ──────────────────────────────────────────────────────── */
-
-const kindIcons: Record<PaletteItemKind, typeof IconSubtask> = {
-  task: IconSubtask,
-  conversation: IconMessage,
-  command: IconCommand,
-  project: IconFolder,
-};
-
-/* ── Component ─────────────────────────────────────────────────────── */
+import { kindLabels } from "./command-palette-items";
+import { PaletteResultItem } from "./palette-result-item";
+import { useCommandPaletteSearch } from "./use-command-palette-search";
 
 export function CommandPalette(): JSX.Element {
-  const { isOpen, close } = useCommandPalette();
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [query, setQuery] = useState("");
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  /* ── Filtering ─────────────────────────────────────────────────── */
-
-  const filtered = useMemo(() => {
-    if (!query.trim()) return paletteItems;
-    const q = query.toLowerCase();
-    return paletteItems.filter((item) => {
-      const loc = pickLocalization(item.localizations, i18n.language);
-      return loc.name.toLowerCase().includes(q) || (item.meta?.toLowerCase().includes(q) ?? false);
-    });
-  }, [query, i18n.language]);
-
-  /* Group filtered items by kind, preserving declaration order */
-  const groups = useMemo(() => {
-    const orderedKinds: PaletteItemKind[] = ["task", "conversation", "command", "project"];
-    const map = new Map<PaletteItemKind, PaletteItem[]>();
-    for (const item of filtered) {
-      const arr = map.get(item.kind) ?? [];
-      arr.push(item);
-      map.set(item.kind, arr);
-    }
-    return orderedKinds
-      .filter((k) => map.has(k))
-      .map((k) => ({ kind: k, items: map.get(k) ?? [] }));
-  }, [filtered]);
-
-  /* ── Navigation ────────────────────────────────────────────────── */
-
-  const selectItem = useCallback(
-    (item: PaletteItem) => {
-      close();
-      setQuery("");
-      setActiveIndex(0);
-      void navigate({ to: item.route });
-    },
-    [close, navigate],
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((prev) => Math.max(prev - 1, 0));
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        const item = filtered[activeIndex];
-        if (item) selectItem(item);
-      }
-    },
-    [filtered, activeIndex, selectItem],
-  );
-
-  /* Reset state when opening */
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        close();
-        setQuery("");
-        setActiveIndex(0);
-      }
-    },
-    [close],
-  );
+  const {
+    isOpen,
+    query,
+    activeIndex,
+    filtered,
+    groups,
+    activeDescendant,
+    selectItem,
+    handleKeyDown,
+    handleOpenChange,
+    handleQueryChange,
+    setActiveIndex,
+  } = useCommandPaletteSearch();
 
   /* ── Flat-index tracker for keyboard navigation across groups ─── */
   let flatIndex = -1;
-
-  const activeItem = filtered[activeIndex];
-  const activeDescendant = activeItem ? `palette-item-${activeItem.id}` : undefined;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
@@ -143,10 +59,7 @@ export function CommandPalette(): JSX.Element {
                 defaultValue: "Search tasks, conversations, commands…",
               })}
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setActiveIndex(0);
-              }}
+              onChange={(e) => handleQueryChange(e.target.value)}
               aria-label={t("palette-input-label", { defaultValue: "Search commands" })}
               role="combobox"
               aria-expanded="true"
@@ -171,43 +84,14 @@ export function CommandPalette(): JSX.Element {
                   {group.items.map((item) => {
                     flatIndex += 1;
                     const idx = flatIndex;
-                    const isActive = idx === activeIndex;
-                    const Icon = kindIcons[item.kind];
-                    const loc = pickLocalization(item.localizations, i18n.language);
                     return (
-                      <div
+                      <PaletteResultItem
                         key={item.id}
-                        id={`palette-item-${item.id}`}
-                        role="option"
-                        tabIndex={-1}
-                        aria-selected={isActive}
-                        className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-[length:var(--font-size-sm)] ${
-                          isActive
-                            ? "bg-primary text-primary-content"
-                            : "text-base-content hover:bg-base-200"
-                        }`}
-                        onClick={() => selectItem(item)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            selectItem(item);
-                          }
-                        }}
+                        item={item}
+                        isActive={idx === activeIndex}
+                        onSelect={selectItem}
                         onMouseEnter={() => setActiveIndex(idx)}
-                      >
-                        <Icon size={16} stroke={1.5} aria-hidden="true" />
-                        <span className="flex-1 truncate">{loc.name}</span>
-                        {item.meta ? (
-                          <span
-                            className={`font-[family-name:var(--font-mono)] text-[length:var(--font-size-xs)] ${isActive ? "text-primary-content" : "text-base-content/60"}`}
-                          >
-                            {item.meta}
-                          </span>
-                        ) : null}
-                        {isActive ? (
-                          <IconArrowRight size={14} stroke={1.5} aria-hidden="true" />
-                        ) : null}
-                      </div>
+                      />
                     );
                   })}
                 </div>

@@ -1,5 +1,7 @@
 /** @file Fixture data for command palette search items, grouped by category. */
 
+import { IconCommand, IconFolder, IconMessage, IconSubtask } from "@tabler/icons-react";
+
 import type { EntityLocalizations } from "../../domain/entities/localization";
 
 export type PaletteItemKind = "task" | "conversation" | "command" | "project";
@@ -164,6 +166,14 @@ export const paletteItems: readonly PaletteItem[] = [
     route: "/projects/manhattan-logistics",
   },
 ];
+
+/** Icon per palette item kind. */
+export const kindIcons: Record<PaletteItemKind, typeof IconSubtask> = {
+  task: IconSubtask,
+  conversation: IconMessage,
+  command: IconCommand,
+  project: IconFolder,
+};
 
 /** Group labels keyed by PaletteItemKind. */
 export const kindLabels: Record<PaletteItemKind, string> = {
