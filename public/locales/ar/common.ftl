@@ -417,3 +417,133 @@ suggestion-insights-heading = رؤى الذكاء الاصطناعي
 insight-severity-critical = حرج
 insight-severity-warning = تحذير
 insight-severity-info = معلومات
+
+## Command palette
+
+palette-label = لوحة الأوامر
+palette-placeholder = بحث في المهام والمحادثات والأوامر…
+palette-input-label = بحث الأوامر
+palette-results-label = نتائج البحث
+palette-no-results = لم يتم العثور على نتائج.
+palette-hint-navigate = تنقل
+palette-hint-open = فتح
+palette-hint-close = إغلاق
+palette-group-tasks = المهام
+palette-group-conversations = المحادثات
+palette-group-commands = الأوامر
+palette-group-projects = المشاريع
+
+## Notifications
+
+notifications-heading = الإشعارات
+notifications-list-label = الإشعارات الأخيرة
+notifications-unread = غير مقروء
+
+## User menu
+
+user-menu-profile = الملف الشخصي
+user-menu-settings = الإعدادات
+user-menu-tenant = المستأجر
+user-menu-sign-out = تسجيل الخروج
+
+## Settings — Profile
+
+settings-profile-heading = الملف الشخصي
+settings-display-name = اسم العرض
+settings-email = البريد الإلكتروني
+settings-avatar = الصورة الرمزية
+settings-avatar-upload = رفع صورة
+settings-notifications-heading = تفضيلات الإشعارات
+settings-notif-email = إشعارات البريد الإلكتروني
+settings-notif-email-desc = تلقي تعيينات المهام والمراجعات عبر البريد الإلكتروني.
+settings-notif-hooks = تنبيهات فشل الخطافات
+settings-notif-hooks-desc = الحصول على إشعار عند فشل خطاف أو بوابة سياسة.
+
+## Settings — Authentication
+
+auth-api-keys-heading = مفاتيح API
+auth-col-name = الاسم
+auth-col-key = المفتاح
+auth-col-created = تاريخ الإنشاء
+auth-col-last-used = آخر استخدام
+auth-generate-key = إنشاء مفتاح
+auth-api-keys-table-label = مفاتيح API
+auth-sessions-heading = الجلسات النشطة
+auth-col-device = الجهاز
+auth-col-ip = عنوان IP
+auth-col-last-active = آخر نشاط
+auth-sessions-table-label = الجلسات النشطة
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = مزود التغليف
+workspace-provider-label = المزود
+workspace-resources-heading = حدود الموارد
+workspace-cpu-label = أنوية المعالج
+workspace-memory-label = الذاكرة (جيجابايت)
+workspace-disk-label = القرص (جيجابايت)
+workspace-timeout-label = مهلة المهمة (دقائق)
+workspace-unit-gb = جيجابايت
+workspace-unit-min = دقيقة
+workspace-tool-policy-heading = سياسة الأدوات
+workspace-file-edit-policy = سياسة تحرير الملفات
+workspace-policy-ask = السؤال قبل كل تعديل
+workspace-policy-allow = السماح بجميع التعديلات
+workspace-policy-deny = رفض جميع التعديلات
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = معرف العميل
+integrations-client-secret = سر العميل
+integrations-webhook-url = عنوان Webhook
+integrations-frankie-heading = محول مراجعة Frankie
+integrations-frankie-endpoint = عنوان نقطة النهاية
+integrations-frankie-token = رمز API
+integrations-test-connection = اختبار الاتصال
+
+## Settings — Appearance
+
+appearance-theme-heading = السمة
+appearance-density-heading = كثافة التخطيط
+appearance-density-label = كثافة التخطيط
+appearance-density-compact = مضغوط
+appearance-density-comfortable = مريح
+appearance-density-spacious = واسع
+appearance-sse-heading = التحديثات الفورية
+appearance-sse-auto-reconnect = إعادة الاتصال التلقائي عند فقدان الاتصال
+appearance-sse-desc = إعادة إنشاء اتصالات SSE تلقائيًا عندما يصبح الخادم متاحًا.
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = منصة تنسيق الهندسة
+sign-in-heading = مرحبًا بعودتك
+sign-in-subtitle = سجّل الدخول إلى مساحة العمل الخاصة بك للمتابعة
+sign-in-email-label = عنوان البريد الإلكتروني
+sign-in-password-label = كلمة المرور
+sign-in-password-placeholder = أدخل كلمة المرور
+sign-in-remember = تذكر هذا الجهاز
+sign-in-forgot = نسيت كلمة المرور؟
+sign-in-submit = تسجيل الدخول إلى مساحة العمل
+sign-in-no-account = ليس لديك حساب؟
+sign-in-request-access = طلب الوصول
+sign-in-feature-orchestration = تنسيق المهام في الوقت الفعلي
+sign-in-feature-orchestration-desc = تدفقات عمل ذكية مدعومة بالوكلاء مع تحديثات حالة مباشرة
+sign-in-feature-security = أمان على مستوى المؤسسات
+sign-in-feature-security-desc = RBAC وسجلات التدقيق وإنفاذ السياسات
+sign-in-feature-insights = رؤى مدعومة بالذكاء الاصطناعي
+sign-in-feature-insights-desc = اقتراحات استباقية وتوصيات ذكية
+
+## Hardcoded string fixes
+
+sign-in-email-placeholder = you@company.com
+palette-kbd-esc = esc
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
+settings-avatar-initials = AC
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor

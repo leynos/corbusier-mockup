@@ -360,3 +360,133 @@ suggestion-insights-heading = AI अंतर्दृष्टि
 insight-severity-critical = गंभीर
 insight-severity-warning = चेतावनी
 insight-severity-info = जानकारी
+
+## Command palette
+
+palette-label = कमांड पैलेट
+palette-placeholder = कार्य, वार्तालाप, कमांड खोजें…
+palette-input-label = कमांड खोजें
+palette-results-label = खोज परिणाम
+palette-no-results = कोई परिणाम नहीं मिला।
+palette-hint-navigate = नेविगेट
+palette-hint-open = खोलें
+palette-hint-close = बंद करें
+palette-group-tasks = कार्य
+palette-group-conversations = वार्तालाप
+palette-group-commands = कमांड
+palette-group-projects = प्रोजेक्ट
+
+## Notifications
+
+notifications-heading = सूचनाएँ
+notifications-list-label = हालिया सूचनाएँ
+notifications-unread = अपठित
+
+## User menu
+
+user-menu-profile = प्रोफ़ाइल
+user-menu-settings = सेटिंग्स
+user-menu-tenant = टेनेंट
+user-menu-sign-out = साइन आउट
+
+## Settings — Profile
+
+settings-profile-heading = प्रोफ़ाइल
+settings-display-name = प्रदर्शन नाम
+settings-email = ईमेल
+settings-avatar = अवतार
+settings-avatar-upload = फ़ोटो अपलोड करें
+settings-notifications-heading = अधिसूचना प्राथमिकताएँ
+settings-notif-email = ईमेल सूचनाएँ
+settings-notif-email-desc = ईमेल द्वारा कार्य असाइनमेंट और समीक्षाएँ प्राप्त करें।
+settings-notif-hooks = हुक विफलता अलर्ट
+settings-notif-hooks-desc = हुक या नीति गेट विफल होने पर सूचना प्राप्त करें।
+
+## Settings — Authentication
+
+auth-api-keys-heading = API कुंजियाँ
+auth-col-name = नाम
+auth-col-key = कुंजी
+auth-col-created = बनाई गई
+auth-col-last-used = अंतिम उपयोग
+auth-generate-key = कुंजी बनाएँ
+auth-api-keys-table-label = API कुंजियाँ
+auth-sessions-heading = सक्रिय सत्र
+auth-col-device = डिवाइस
+auth-col-ip = IP पता
+auth-col-last-active = अंतिम सक्रिय
+auth-sessions-table-label = सक्रिय सत्र
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = एन्कैप्सुलेशन प्रदाता
+workspace-provider-label = प्रदाता
+workspace-resources-heading = संसाधन सीमाएँ
+workspace-cpu-label = CPU कोर
+workspace-memory-label = मेमोरी (GB)
+workspace-disk-label = डिस्क (GB)
+workspace-timeout-label = कार्य टाइमआउट (मिनट)
+workspace-unit-gb = GB
+workspace-unit-min = मिनट
+workspace-tool-policy-heading = उपकरण नीति
+workspace-file-edit-policy = फ़ाइल संपादन नीति
+workspace-policy-ask = प्रत्येक संपादन से पहले पूछें
+workspace-policy-allow = सभी संपादन अनुमत
+workspace-policy-deny = सभी संपादन अस्वीकृत
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = क्लाइंट ID
+integrations-client-secret = क्लाइंट सीक्रेट
+integrations-webhook-url = Webhook URL
+integrations-frankie-heading = Frankie समीक्षा एडेप्टर
+integrations-frankie-endpoint = एंडपॉइंट URL
+integrations-frankie-token = API टोकन
+integrations-test-connection = कनेक्शन परीक्षण
+
+## Settings — Appearance
+
+appearance-theme-heading = थीम
+appearance-density-heading = लेआउट घनत्व
+appearance-density-label = लेआउट घनत्व
+appearance-density-compact = कॉम्पैक्ट
+appearance-density-comfortable = आरामदायक
+appearance-density-spacious = विस्तृत
+appearance-sse-heading = रियल-टाइम अपडेट
+appearance-sse-auto-reconnect = कनेक्शन खोने पर ऑटो-रीकनेक्ट
+appearance-sse-desc = सर्वर उपलब्ध होने पर SSE कनेक्शन स्वचालित रूप से पुनर्स्थापित करें।
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = इंजीनियरिंग ऑर्केस्ट्रेशन प्लेटफ़ॉर्म
+sign-in-heading = वापसी पर स्वागत है
+sign-in-subtitle = जारी रखने के लिए अपने कार्यक्षेत्र में साइन इन करें
+sign-in-email-label = ईमेल पता
+sign-in-password-label = पासवर्ड
+sign-in-password-placeholder = अपना पासवर्ड दर्ज करें
+sign-in-remember = इस डिवाइस को याद रखें
+sign-in-forgot = पासवर्ड भूल गए?
+sign-in-submit = कार्यक्षेत्र में साइन इन करें
+sign-in-no-account = खाता नहीं है?
+sign-in-request-access = एक्सेस का अनुरोध करें
+sign-in-feature-orchestration = रियल-टाइम कार्य ऑर्केस्ट्रेशन
+sign-in-feature-orchestration-desc = लाइव स्टेटस अपडेट के साथ बुद्धिमान एजेंट-संचालित कार्यप्रवाह
+sign-in-feature-security = एंटरप्राइज़-ग्रेड सुरक्षा
+sign-in-feature-security-desc = RBAC, ऑडिट ट्रेल्स, और नीति प्रवर्तन
+sign-in-feature-insights = AI-संचालित अंतर्दृष्टि
+sign-in-feature-insights-desc = सक्रिय सुझाव और बुद्धिमान सिफ़ारिशें
+
+## Hardcoded string fixes
+
+sign-in-email-placeholder = you@company.com
+palette-kbd-esc = esc
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
+settings-avatar-initials = AC
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor

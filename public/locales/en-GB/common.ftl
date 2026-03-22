@@ -368,3 +368,133 @@ suggestion-insights-heading = AI Insights
 insight-severity-critical = Critical
 insight-severity-warning = Warning
 insight-severity-info = Info
+
+## Command palette
+
+palette-label = Command palette
+palette-placeholder = Search tasks, conversations, commands…
+palette-input-label = Search commands
+palette-results-label = Search results
+palette-no-results = No results found.
+palette-hint-navigate = Navigate
+palette-hint-open = Open
+palette-hint-close = Close
+palette-group-tasks = Tasks
+palette-group-conversations = Conversations
+palette-group-commands = Commands
+palette-group-projects = Projects
+
+## Notifications
+
+notifications-heading = Notifications
+notifications-list-label = Recent notifications
+notifications-unread = Unread
+
+## User menu
+
+user-menu-profile = Profile
+user-menu-settings = Settings
+user-menu-tenant = Tenant
+user-menu-sign-out = Sign out
+
+## Settings — Profile
+
+settings-profile-heading = Profile
+settings-display-name = Display name
+settings-email = Email
+settings-avatar = Avatar
+settings-avatar-upload = Upload photo
+settings-notifications-heading = Notification preferences
+settings-notif-email = Email notifications
+settings-notif-email-desc = Receive task assignments and reviews via email.
+settings-notif-hooks = Hook failure alerts
+settings-notif-hooks-desc = Get notified when a hook or policy gate fails.
+
+## Settings — Authentication
+
+auth-api-keys-heading = API Keys
+auth-col-name = Name
+auth-col-key = Key
+auth-col-created = Created
+auth-col-last-used = Last used
+auth-generate-key = Generate key
+auth-api-keys-table-label = API keys
+auth-sessions-heading = Active Sessions
+auth-col-device = Device
+auth-col-ip = IP Address
+auth-col-last-active = Last active
+auth-sessions-table-label = Active sessions
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = Encapsulation Provider
+workspace-provider-label = Provider
+workspace-resources-heading = Resource Limits
+workspace-cpu-label = CPU cores
+workspace-memory-label = Memory (GB)
+workspace-disk-label = Disk (GB)
+workspace-timeout-label = Task timeout (minutes)
+workspace-unit-gb = GB
+workspace-unit-min = min
+workspace-tool-policy-heading = Tool Policy
+workspace-file-edit-policy = File edit policy
+workspace-policy-ask = Ask before each edit
+workspace-policy-allow = Allow all edits
+workspace-policy-deny = Deny all edits
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = Client ID
+integrations-client-secret = Client secret
+integrations-webhook-url = Webhook URL
+integrations-frankie-heading = Frankie Review Adapter
+integrations-frankie-endpoint = Endpoint URL
+integrations-frankie-token = API Token
+integrations-test-connection = Test connection
+
+## Settings — Appearance
+
+appearance-theme-heading = Theme
+appearance-density-heading = Layout Density
+appearance-density-label = Layout density
+appearance-density-compact = Compact
+appearance-density-comfortable = Comfortable
+appearance-density-spacious = Spacious
+appearance-sse-heading = Real-time Updates
+appearance-sse-auto-reconnect = Auto-reconnect on connection loss
+appearance-sse-desc = Automatically re-establish SSE connections when the server becomes available.
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = Engineering Orchestration Platform
+sign-in-heading = Welcome back
+sign-in-subtitle = Sign in to your workspace to continue
+sign-in-email-label = Email address
+sign-in-password-label = Password
+sign-in-password-placeholder = Enter your password
+sign-in-remember = Remember this device
+sign-in-forgot = Forgot password?
+sign-in-submit = Sign in to workspace
+sign-in-no-account = Don't have an account?
+sign-in-request-access = Request access
+sign-in-feature-orchestration = Real-time Task Orchestration
+sign-in-feature-orchestration-desc = Intelligent agent-driven workflows with live status updates
+sign-in-feature-security = Enterprise-Grade Security
+sign-in-feature-security-desc = RBAC, audit trails, and policy enforcement
+sign-in-feature-insights = AI-Powered Insights
+sign-in-feature-insights-desc = Proactive suggestions and intelligent recommendations
+
+## Hardcoded string fixes
+
+sign-in-email-placeholder = you@company.com
+palette-kbd-esc = esc
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
+settings-avatar-initials = AC
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor

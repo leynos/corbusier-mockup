@@ -37,7 +37,7 @@ export function DataTable<T, const C extends readonly Column<T, keyof T & string
   label,
 }: DataTableProps<T, C>): JSX.Element {
   return (
-    <div className="overflow-x-auto">
+    <div>
       <table className="table table-zebra w-full" aria-label={label}>
         <thead>
           <tr>

@@ -375,3 +375,133 @@ suggestion-insights-heading = Perspectivas de IA
 insight-severity-critical = Crítico
 insight-severity-warning = Advertencia
 insight-severity-info = Info
+
+## Command palette
+
+palette-label = Paleta de comandos
+palette-placeholder = Buscar tareas, conversaciones, comandos…
+palette-input-label = Buscar comandos
+palette-results-label = Resultados de búsqueda
+palette-no-results = No se encontraron resultados.
+palette-hint-navigate = Navegar
+palette-hint-open = Abrir
+palette-hint-close = Cerrar
+palette-group-tasks = Tareas
+palette-group-conversations = Conversaciones
+palette-group-commands = Comandos
+palette-group-projects = Proyectos
+
+## Notifications
+
+notifications-heading = Notificaciones
+notifications-list-label = Notificaciones recientes
+notifications-unread = No leída
+
+## User menu
+
+user-menu-profile = Perfil
+user-menu-settings = Ajustes
+user-menu-tenant = Inquilino
+user-menu-sign-out = Cerrar sesión
+
+## Settings — Profile
+
+settings-profile-heading = Perfil
+settings-display-name = Nombre para mostrar
+settings-email = Correo electrónico
+settings-avatar = Avatar
+settings-avatar-upload = Subir foto
+settings-notifications-heading = Preferencias de notificación
+settings-notif-email = Notificaciones por correo
+settings-notif-email-desc = Recibir asignaciones de tareas y revisiones por correo.
+settings-notif-hooks = Alertas de fallo de hooks
+settings-notif-hooks-desc = Recibir notificación cuando falle un hook o puerta de política.
+
+## Settings — Authentication
+
+auth-api-keys-heading = Claves API
+auth-col-name = Nombre
+auth-col-key = Clave
+auth-col-created = Creada
+auth-col-last-used = Último uso
+auth-generate-key = Generar clave
+auth-api-keys-table-label = Claves API
+auth-sessions-heading = Sesiones activas
+auth-col-device = Dispositivo
+auth-col-ip = Dirección IP
+auth-col-last-active = Última actividad
+auth-sessions-table-label = Sesiones activas
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = Proveedor de encapsulación
+workspace-provider-label = Proveedor
+workspace-resources-heading = Límites de recursos
+workspace-cpu-label = Núcleos de CPU
+workspace-memory-label = Memoria (GB)
+workspace-disk-label = Disco (GB)
+workspace-timeout-label = Tiempo de espera de tarea (minutos)
+workspace-unit-gb = GB
+workspace-unit-min = min
+workspace-tool-policy-heading = Política de herramientas
+workspace-file-edit-policy = Política de edición de archivos
+workspace-policy-ask = Preguntar antes de cada edición
+workspace-policy-allow = Permitir todas las ediciones
+workspace-policy-deny = Denegar todas las ediciones
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = ID de cliente
+integrations-client-secret = Secreto de cliente
+integrations-webhook-url = URL de webhook
+integrations-frankie-heading = Adaptador de revisión Frankie
+integrations-frankie-endpoint = URL del endpoint
+integrations-frankie-token = Token de API
+integrations-test-connection = Probar conexión
+
+## Settings — Appearance
+
+appearance-theme-heading = Tema
+appearance-density-heading = Densidad del diseño
+appearance-density-label = Densidad del diseño
+appearance-density-compact = Compacto
+appearance-density-comfortable = Cómodo
+appearance-density-spacious = Espacioso
+appearance-sse-heading = Actualizaciones en tiempo real
+appearance-sse-auto-reconnect = Reconexión automática al perder conexión
+appearance-sse-desc = Restablecer automáticamente conexiones SSE cuando el servidor esté disponible.
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = Plataforma de Orquestación de Ingeniería
+sign-in-heading = Bienvenido de vuelta
+sign-in-subtitle = Inicia sesión en tu espacio de trabajo para continuar
+sign-in-email-label = Dirección de correo electrónico
+sign-in-password-label = Contraseña
+sign-in-password-placeholder = Ingresa tu contraseña
+sign-in-remember = Recordar este dispositivo
+sign-in-forgot = ¿Olvidaste tu contraseña?
+sign-in-submit = Iniciar sesión en el espacio de trabajo
+sign-in-no-account = ¿No tienes una cuenta?
+sign-in-request-access = Solicitar acceso
+sign-in-feature-orchestration = Orquestación de tareas en tiempo real
+sign-in-feature-orchestration-desc = Flujos de trabajo inteligentes con agentes y actualizaciones en vivo
+sign-in-feature-security = Seguridad de nivel empresarial
+sign-in-feature-security-desc = RBAC, registros de auditoría y aplicación de políticas
+sign-in-feature-insights = Información impulsada por IA
+sign-in-feature-insights-desc = Sugerencias proactivas y recomendaciones inteligentes
+
+## Hardcoded string fixes
+
+sign-in-email-placeholder = you@company.com
+palette-kbd-esc = esc
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
+settings-avatar-initials = AC
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor

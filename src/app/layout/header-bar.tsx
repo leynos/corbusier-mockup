@@ -1,13 +1,17 @@
-/** @file Top header bar with page title, search trigger, notifications, and user menu. */
+/** @file Top header bar with search trigger, notifications dropdown, and user menu. */
 
-import { IconBell, IconSearch, IconUserCircle } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useCommandPalette } from "../features/command-palette/command-palette-provider";
 import { HeaderControls } from "./header-controls";
+import { NotificationsDropdown } from "./notifications-dropdown";
+import { UserMenu } from "./user-menu";
 
 export function HeaderBar(): JSX.Element {
   const { t } = useTranslation();
+  const { open } = useCommandPalette();
 
   return (
     <header className="flex h-14 shrink-0 items-center gap-4 border-b border-base-300 bg-base-100 px-6">
@@ -17,6 +21,7 @@ export function HeaderBar(): JSX.Element {
         type="button"
         className="flex items-center gap-2 rounded-md border border-base-300 px-3 py-1.5 text-[length:var(--font-size-sm)] text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:border-base-content/30 hover:text-base-content"
         aria-label={t("header-search-label", { defaultValue: "Search Directives" })}
+        onClick={open}
       >
         <IconSearch size={16} stroke={1.5} aria-hidden="true" />
         <span className="hidden sm:inline">
@@ -29,25 +34,9 @@ export function HeaderBar(): JSX.Element {
 
       <HeaderControls />
 
-      <button
-        type="button"
-        className="relative rounded-md p-2 text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:bg-base-300/50 hover:text-base-content"
-        aria-label={t("header-notifications-label", { defaultValue: "Notifications" })}
-      >
-        <IconBell size={20} stroke={1.5} aria-hidden="true" />
-        <span
-          className="absolute end-1.5 top-1.5 h-2 w-2 rounded-full bg-error"
-          aria-hidden="true"
-        />
-      </button>
+      <NotificationsDropdown />
 
-      <button
-        type="button"
-        className="rounded-md p-1 text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:bg-base-300/50 hover:text-base-content"
-        aria-label={t("header-user-menu-label", { defaultValue: "User menu" })}
-      >
-        <IconUserCircle size={28} stroke={1.2} aria-hidden="true" />
-      </button>
+      <UserMenu />
     </header>
   );
 }

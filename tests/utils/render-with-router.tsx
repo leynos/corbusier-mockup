@@ -11,6 +11,7 @@ import {
 import { type RenderOptions, type RenderResult, render } from "@testing-library/react";
 import type { ReactElement } from "react";
 
+import { CommandPaletteProvider } from "../../src/app/features/command-palette/command-palette-provider";
 import { ThemeProvider } from "../../src/app/providers/theme-provider";
 
 interface RenderWithRouterOptions extends Omit<RenderOptions, "wrapper"> {
@@ -30,8 +31,10 @@ export function renderWithRouter(
   const rootRoute = createRootRoute({
     component: () => (
       <ThemeProvider>
-        {ui}
-        <Outlet />
+        <CommandPaletteProvider>
+          {ui}
+          <Outlet />
+        </CommandPaletteProvider>
       </ThemeProvider>
     ),
   });

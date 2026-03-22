@@ -1,12 +1,17 @@
 import { type RenderOptions, type RenderResult, render } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 
+import { CommandPaletteProvider } from "../../src/app/features/command-palette/command-palette-provider";
 import { ThemeProvider } from "../../src/app/providers/theme-provider";
 
 interface RenderWithProvidersOptions extends Omit<RenderOptions, "wrapper"> {}
 
 function ProviderStack({ children }: { children: ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      <CommandPaletteProvider>{children}</CommandPaletteProvider>
+    </ThemeProvider>
+  );
 }
 
 export function renderWithProviders(
