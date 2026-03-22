@@ -17,6 +17,7 @@ import type { TFunction } from "i18next";
 import { type JSX, type KeyboardEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { DEFAULT_LOCALE } from "../../i18n/supported-locales";
 import { formatTimelineTimestamp } from "../../utils/date-formatting";
 import { RegistryList } from "./components/registry-list";
 
@@ -223,8 +224,49 @@ interface LocalizedReportTab {
   readonly label: string;
 }
 
+interface AuditReportModel {
+  readonly locale: string;
+  readonly rows: readonly DisplayAuditEvent[];
+  readonly tableLabel: string;
+  readonly timeLabel: string;
+  readonly actorLabel: string;
+  readonly actionLabel: string;
+  readonly targetLabel: string;
+}
+
+interface PerformanceReportModel {
+  readonly regionLabel: string;
+  readonly metrics: readonly LocalizedPerformanceMetric[];
+}
+
+interface ComplianceReportModel {
+  readonly checks: readonly LocalizedComplianceCheck[];
+  readonly summaryLabel: string;
+  readonly listLabel: string;
+}
+
+interface ReportsViewModel {
+  readonly tabListLabel: string;
+  readonly tabs: readonly LocalizedReportTab[];
+  readonly audit: AuditReportModel;
+  readonly performance: PerformanceReportModel;
+  readonly compliance: ComplianceReportModel;
+}
+
 interface TabButtonRefs {
   current: Record<ReportTab, HTMLButtonElement | null>;
+}
+
+function resolveReportFormattingLocale(locale: string | undefined): string {
+  if (locale) {
+    return locale;
+  }
+
+  if (typeof navigator !== "undefined" && navigator.language) {
+    return navigator.language;
+  }
+
+  return DEFAULT_LOCALE;
 }
 
 /* ── Sub-panels ───────────────────────────────────────────────────── */
@@ -236,23 +278,8 @@ interface TabButtonRefs {
  *
  * @internal
  */
-function AuditTrailPanel({
-  rows,
-  locale,
-  tableLabel,
-  timeLabel,
-  actorLabel,
-  actionLabel,
-  targetLabel,
-}: {
-  readonly rows: readonly DisplayAuditEvent[];
-  readonly locale: string;
-  readonly tableLabel: string;
-  readonly timeLabel: string;
-  readonly actorLabel: string;
-  readonly actionLabel: string;
-  readonly targetLabel: string;
-}): JSX.Element {
+function AuditTrailPanel({ audit }: { readonly audit: AuditReportModel }): JSX.Element {
+  const { rows, locale, tableLabel, timeLabel, actorLabel, actionLabel, targetLabel } = audit;
   const columnHeaders = [timeLabel, actorLabel, actionLabel, targetLabel];
 
   return (
@@ -411,24 +438,8 @@ function focusTabAtIndex(
  *
  * @internal
  */
-function buildReportStrings(
-  t: TFunction,
-  locale: string,
-): {
-  readonly tabListLabel: string;
-  readonly tabs: readonly LocalizedReportTab[];
-  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
-  readonly complianceChecks: readonly LocalizedComplianceCheck[];
-  readonly auditTableLabel: string;
-  readonly timeLabel: string;
-  readonly actorLabel: string;
-  readonly actionLabel: string;
-  readonly targetLabel: string;
-  readonly performanceRegionLabel: string;
-  readonly complianceSummary: string;
-  readonly complianceListLabel: string;
-} {
-  const numberFormatter = new Intl.NumberFormat(locale);
+function buildReportStrings(t: TFunction, locale: string): ReportsViewModel {
+  const numberFormatter = new Intl.NumberFormat(resolveReportFormattingLocale(locale));
   const tabListLabel = t("reports-tab-list", { defaultValue: "Report tabs" });
   const tabs: readonly LocalizedReportTab[] = TAB_IDS.map((tab) => {
     const label = TAB_LABELS[tab];
@@ -437,6 +448,12 @@ function buildReportStrings(
       label: t(label.key, { defaultValue: label.defaultValue }),
     };
   });
+  const auditRows: readonly DisplayAuditEvent[] = AUDIT_EVENTS.map((event) => ({
+    ...event,
+    action: t(`reports-audit-action-${event.action}`, {
+      defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
+    }),
+  }));
   const performanceMetrics: readonly LocalizedPerformanceMetric[] = PERF_METRICS.map((m) => ({
     ...m,
     label: t(`reports-performance-${m.id}`, { defaultValue: PERF_DEFAULT_LABELS[m.id] ?? m.id }),
@@ -457,20 +474,28 @@ function buildReportStrings(
   return {
     tabListLabel,
     tabs,
-    performanceMetrics,
-    complianceChecks,
-    auditTableLabel: t("reports-audit-table", { defaultValue: "Audit trail events" }),
-    timeLabel: t("reports-col-time", { defaultValue: "Time" }),
-    actorLabel: t("reports-col-actor", { defaultValue: "Actor" }),
-    actionLabel: t("reports-col-action", { defaultValue: "Action" }),
-    targetLabel: t("reports-col-target", { defaultValue: "Target" }),
-    performanceRegionLabel: t("reports-perf-region", { defaultValue: "Performance metrics" }),
-    complianceSummary: t("reports-compliance-summary", {
-      defaultValue: "{{pass}} of {{total}} checks passing",
-      pass: numberFormatter.format(complianceChecks.filter((check) => check.passed).length),
-      total: numberFormatter.format(complianceChecks.length),
-    }),
-    complianceListLabel: t("reports-compliance-list", { defaultValue: "Compliance checks" }),
+    audit: {
+      locale,
+      rows: auditRows,
+      tableLabel: t("reports-audit-table", { defaultValue: "Audit trail events" }),
+      timeLabel: t("reports-col-time", { defaultValue: "Time" }),
+      actorLabel: t("reports-col-actor", { defaultValue: "Actor" }),
+      actionLabel: t("reports-col-action", { defaultValue: "Action" }),
+      targetLabel: t("reports-col-target", { defaultValue: "Target" }),
+    },
+    performance: {
+      regionLabel: t("reports-perf-region", { defaultValue: "Performance metrics" }),
+      metrics: performanceMetrics,
+    },
+    compliance: {
+      checks: complianceChecks,
+      summaryLabel: t("reports-compliance-summary", {
+        defaultValue: "{{pass}} of {{total}} checks passing",
+        pass: numberFormatter.format(complianceChecks.filter((check) => check.passed).length),
+        total: numberFormatter.format(complianceChecks.length),
+      }),
+      listLabel: t("reports-compliance-list", { defaultValue: "Compliance checks" }),
+    },
   };
 }
 
@@ -576,44 +601,25 @@ function TabStrip({
 }
 
 interface PanelProps {
-  readonly auditRows: readonly DisplayAuditEvent[];
-  readonly locale: string;
-  readonly auditTableLabel: string;
-  readonly timeLabel: string;
-  readonly actorLabel: string;
-  readonly actionLabel: string;
-  readonly targetLabel: string;
-  readonly performanceRegionLabel: string;
-  readonly performanceMetrics: readonly LocalizedPerformanceMetric[];
-  readonly complianceChecks: readonly LocalizedComplianceCheck[];
-  readonly complianceSummary: string;
-  readonly complianceListLabel: string;
+  readonly audit: AuditReportModel;
+  readonly performance: PerformanceReportModel;
+  readonly compliance: ComplianceReportModel;
 }
 
 function buildPanels(props: PanelProps): Record<ReportTab, () => JSX.Element> {
   return {
-    audit: () => (
-      <AuditTrailPanel
-        rows={props.auditRows}
-        locale={props.locale}
-        tableLabel={props.auditTableLabel}
-        timeLabel={props.timeLabel}
-        actorLabel={props.actorLabel}
-        actionLabel={props.actionLabel}
-        targetLabel={props.targetLabel}
-      />
-    ),
+    audit: () => <AuditTrailPanel audit={props.audit} />,
     performance: () => (
       <PerformancePanel
-        regionLabel={props.performanceRegionLabel}
-        metrics={props.performanceMetrics}
+        regionLabel={props.performance.regionLabel}
+        metrics={props.performance.metrics}
       />
     ),
     compliance: () => (
       <CompliancePanel
-        checks={props.complianceChecks}
-        summaryLabel={props.complianceSummary}
-        listLabel={props.complianceListLabel}
+        checks={props.compliance.checks}
+        summaryLabel={props.compliance.summaryLabel}
+        listLabel={props.compliance.listLabel}
       />
     ),
   };
@@ -637,60 +643,15 @@ export function ReportsScreen(): JSX.Element {
     compliance: null,
   });
   const reportStrings = useMemo(() => buildReportStrings(t, locale), [t, locale]);
-  const {
-    tabListLabel,
-    tabs,
-    performanceMetrics,
-    complianceChecks,
-    auditTableLabel,
-    timeLabel,
-    actorLabel,
-    actionLabel,
-    targetLabel,
-    performanceRegionLabel,
-    complianceSummary,
-    complianceListLabel,
-  } = reportStrings;
-  const translatedAuditRows: readonly DisplayAuditEvent[] = useMemo(
-    () =>
-      AUDIT_EVENTS.map((event) => ({
-        ...event,
-        action: t(`reports-audit-action-${event.action}`, {
-          defaultValue: AUDIT_ACTION_DEFAULT_LABELS[event.action] ?? event.action,
-        }),
-      })),
-    [t],
-  );
+  const { tabListLabel, tabs, audit, performance, compliance } = reportStrings;
   const panels: Record<ReportTab, () => JSX.Element> = useMemo(
     () =>
       buildPanels({
-        auditRows: translatedAuditRows,
-        locale,
-        auditTableLabel,
-        timeLabel,
-        actorLabel,
-        actionLabel,
-        targetLabel,
-        performanceRegionLabel,
-        performanceMetrics,
-        complianceChecks,
-        complianceSummary,
-        complianceListLabel,
+        audit,
+        performance,
+        compliance,
       }),
-    [
-      translatedAuditRows,
-      locale,
-      auditTableLabel,
-      timeLabel,
-      actorLabel,
-      actionLabel,
-      targetLabel,
-      performanceRegionLabel,
-      performanceMetrics,
-      complianceChecks,
-      complianceSummary,
-      complianceListLabel,
-    ],
+    [audit, performance, compliance],
   );
 
   return (
