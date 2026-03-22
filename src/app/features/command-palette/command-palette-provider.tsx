@@ -20,6 +20,12 @@ interface CommandPaletteContextValue {
 
 const CommandPaletteContext = createContext<CommandPaletteContextValue | undefined>(undefined);
 
+/** Returns true when the keyboard event matches the ⌘K / Ctrl+K shortcut. */
+function isCommandPaletteShortcut(e: KeyboardEvent): boolean {
+  const hasModifier = e.metaKey || e.ctrlKey;
+  return hasModifier && e.key === "k";
+}
+
 export function CommandPaletteProvider({ children }: { children: ReactNode }): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +35,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }): J
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if (isCommandPaletteShortcut(e)) {
         e.preventDefault();
         toggle();
       }
