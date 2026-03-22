@@ -4,6 +4,7 @@ import { IconSearch } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import corbusierMark from "../../assets/corbusier-mark.svg";
 import { useCommandPalette } from "../features/command-palette/command-palette-provider";
 import { HeaderControls } from "./header-controls";
 import { NotificationsDropdown } from "./notifications-dropdown";
@@ -15,6 +16,12 @@ export function HeaderBar(): JSX.Element {
 
   return (
     <header className="flex h-14 shrink-0 items-center gap-4 border-b border-base-300 bg-base-100 px-6">
+      <div className="flex items-center gap-2.5">
+        <img src={corbusierMark} alt="" aria-hidden="true" className="h-7 w-auto" />
+        <span className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-bold uppercase tracking-widest text-base-content">
+          {t("header-brand", { defaultValue: "Corbusier" })}
+        </span>
+      </div>
       <div className="flex-1" />
 
       <button
