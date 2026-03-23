@@ -8,10 +8,24 @@ import { useTranslation } from "react-i18next";
 import { SectionCard } from "../../components/section-card";
 
 export function WorkspaceScreen(): JSX.Element {
-  const { t } = useTranslation();
-
   return (
     <div>
+      <WorkspaceScreenHeader />
+      <div className="mt-6 space-y-6">
+        <EncapsulationProviderCard />
+        <ResourceLimitsCard />
+        <ToolPolicyCard />
+      </div>
+    </div>
+  );
+}
+
+/* ── Workspace screen header ───────────────────────────────────────── */
+
+function WorkspaceScreenHeader(): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <>
       <h1 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-2xl)] font-bold text-base-content">
         {t("page-workspace-settings", { defaultValue: "Workspace" })}
       </h1>
@@ -20,148 +34,164 @@ export function WorkspaceScreen(): JSX.Element {
           defaultValue: "Workspace name, defaults, and team preferences.",
         })}
       </p>
+    </>
+  );
+}
 
-      <div className="mt-6 space-y-6">
-        {/* Encapsulation provider */}
-        <SectionCard
-          icon={IconBox}
-          title={t("workspace-encapsulation-heading", { defaultValue: "Encapsulation Provider" })}
+/* ── Encapsulation provider card ───────────────────────────────────── */
+
+function EncapsulationProviderCard(): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <SectionCard
+      icon={IconBox}
+      title={t("workspace-encapsulation-heading", { defaultValue: "Encapsulation Provider" })}
+    >
+      <fieldset className="border-none p-0">
+        <label
+          htmlFor="encapsulation-select"
+          className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
         >
-          <fieldset className="border-none p-0">
-            <label
-              htmlFor="encapsulation-select"
-              className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
-            >
-              {t("workspace-provider-label", { defaultValue: "Provider" })}
-            </label>
-            <select id="encapsulation-select" className="select select-bordered w-full max-w-md">
-              <option value="docker">
-                {t("workspace-provider-docker", { defaultValue: "Docker" })}
-              </option>
-              <option value="podman">
-                {t("workspace-provider-podman", { defaultValue: "Podman" })}
-              </option>
-              <option value="firecracker">
-                {t("workspace-provider-firecracker", { defaultValue: "Firecracker" })}
-              </option>
-              <option value="gvisor">
-                {t("workspace-provider-gvisor", { defaultValue: "gVisor" })}
-              </option>
-            </select>
-          </fieldset>
-        </SectionCard>
+          {t("workspace-provider-label", { defaultValue: "Provider" })}
+        </label>
+        <select id="encapsulation-select" className="select select-bordered w-full max-w-md">
+          <option value="docker">
+            {t("workspace-provider-docker", { defaultValue: "Docker" })}
+          </option>
+          <option value="podman">
+            {t("workspace-provider-podman", { defaultValue: "Podman" })}
+          </option>
+          <option value="firecracker">
+            {t("workspace-provider-firecracker", { defaultValue: "Firecracker" })}
+          </option>
+          <option value="gvisor">
+            {t("workspace-provider-gvisor", { defaultValue: "gVisor" })}
+          </option>
+        </select>
+      </fieldset>
+    </SectionCard>
+  );
+}
 
-        {/* Resource limits */}
-        <SectionCard
-          icon={IconCpu}
-          title={t("workspace-resources-heading", { defaultValue: "Resource Limits" })}
-        >
-          <div className="space-y-6">
-            <ResourceSlider
-              id="cpu-limit"
-              label={t("workspace-cpu-label", { defaultValue: "CPU cores" })}
-              min={1}
-              max={16}
-              step={1}
-              defaultValue={4}
-              unit=""
-            />
-            <ResourceSlider
-              id="memory-limit"
-              label={t("workspace-memory-label", { defaultValue: "Memory (GB)" })}
-              min={1}
-              max={64}
-              step={1}
-              defaultValue={8}
-              unit={t("workspace-unit-gb", { defaultValue: "GB" })}
-            />
-            <ResourceSlider
-              id="disk-limit"
-              label={t("workspace-disk-label", { defaultValue: "Disk (GB)" })}
-              min={10}
-              max={500}
-              step={10}
-              defaultValue={100}
-              unit={t("workspace-unit-gb", { defaultValue: "GB" })}
-            />
-            <ResourceSlider
-              id="timeout-limit"
-              label={t("workspace-timeout-label", { defaultValue: "Task timeout (minutes)" })}
-              min={5}
-              max={120}
-              step={5}
-              defaultValue={30}
-              unit={t("workspace-unit-min", { defaultValue: "min" })}
-            />
-          </div>
-        </SectionCard>
+/* ── Resource limits card ──────────────────────────────────────────── */
 
-        {/* Tool policy */}
-        <SectionCard
-          icon={IconShieldCheck}
-          title={t("workspace-tool-policy-heading", { defaultValue: "Tool Policy" })}
-        >
-          <fieldset className="border-none p-0">
-            <legend className="mb-2 text-[length:var(--font-size-sm)] font-medium text-base-content">
-              {t("workspace-file-edit-policy", { defaultValue: "File edit policy" })}
-            </legend>
-            <div className="space-y-2">
-              {(
-                [
-                  ["ask", "workspace-policy-ask", "Ask before each edit"],
-                  ["allow", "workspace-policy-allow", "Allow all edits"],
-                  ["deny", "workspace-policy-deny", "Deny all edits"],
-                ] as const
-              ).map(([value, key, fallback]) => (
-                <label key={value} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="file-edit-policy"
-                    value={value}
-                    defaultChecked={value === "ask"}
-                    className="radio radio-sm radio-primary"
-                  />
-                  <span className="text-[length:var(--font-size-sm)] text-base-content">
-                    {t(key, { defaultValue: fallback })}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset className="mt-4 border-none p-0">
-            <legend className="mb-2 text-[length:var(--font-size-sm)] font-medium text-base-content">
-              {t("workspace-allowed-tools-heading", { defaultValue: "Allowed tools" })}
-            </legend>
-            <div className="space-y-2">
-              {(
-                [
-                  ["bash", "workspace-tool-bash", "Bash"],
-                  ["file-read", "workspace-tool-file-read", "File read"],
-                  ["file-edit", "workspace-tool-file-edit", "File edit"],
-                  ["web-fetch", "workspace-tool-web-fetch", "Web fetch"],
-                  ["web-search", "workspace-tool-web-search", "Web search"],
-                ] as const
-              ).map(([value, key, fallback]) => (
-                <label key={value} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`allowed-tool-${value}`}
-                    name="allowed-tools"
-                    value={value}
-                    defaultChecked
-                    className="checkbox checkbox-sm checkbox-primary"
-                  />
-                  <span className="text-[length:var(--font-size-sm)] text-base-content">
-                    {t(key, { defaultValue: fallback })}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        </SectionCard>
+function ResourceLimitsCard(): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <SectionCard
+      icon={IconCpu}
+      title={t("workspace-resources-heading", { defaultValue: "Resource Limits" })}
+    >
+      <div className="space-y-6">
+        <ResourceSlider
+          id="cpu-limit"
+          label={t("workspace-cpu-label", { defaultValue: "CPU cores" })}
+          min={1}
+          max={16}
+          step={1}
+          defaultValue={4}
+          unit=""
+        />
+        <ResourceSlider
+          id="memory-limit"
+          label={t("workspace-memory-label", { defaultValue: "Memory (GB)" })}
+          min={1}
+          max={64}
+          step={1}
+          defaultValue={8}
+          unit={t("workspace-unit-gb", { defaultValue: "GB" })}
+        />
+        <ResourceSlider
+          id="disk-limit"
+          label={t("workspace-disk-label", { defaultValue: "Disk (GB)" })}
+          min={10}
+          max={500}
+          step={10}
+          defaultValue={100}
+          unit={t("workspace-unit-gb", { defaultValue: "GB" })}
+        />
+        <ResourceSlider
+          id="timeout-limit"
+          label={t("workspace-timeout-label", { defaultValue: "Task timeout (minutes)" })}
+          min={5}
+          max={120}
+          step={5}
+          defaultValue={30}
+          unit={t("workspace-unit-min", { defaultValue: "min" })}
+        />
       </div>
-    </div>
+    </SectionCard>
+  );
+}
+
+/* ── Tool policy card ──────────────────────────────────────────────── */
+
+function ToolPolicyCard(): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <SectionCard
+      icon={IconShieldCheck}
+      title={t("workspace-tool-policy-heading", { defaultValue: "Tool Policy" })}
+    >
+      <fieldset className="border-none p-0">
+        <legend className="mb-2 text-[length:var(--font-size-sm)] font-medium text-base-content">
+          {t("workspace-file-edit-policy", { defaultValue: "File edit policy" })}
+        </legend>
+        <div className="space-y-2">
+          {(
+            [
+              ["ask", "workspace-policy-ask", "Ask before each edit"],
+              ["allow", "workspace-policy-allow", "Allow all edits"],
+              ["deny", "workspace-policy-deny", "Deny all edits"],
+            ] as const
+          ).map(([value, key, fallback]) => (
+            <label key={value} className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="file-edit-policy"
+                value={value}
+                defaultChecked={value === "ask"}
+                className="radio radio-sm radio-primary"
+              />
+              <span className="text-[length:var(--font-size-sm)] text-base-content">
+                {t(key, { defaultValue: fallback })}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="mt-4 border-none p-0">
+        <legend className="mb-2 text-[length:var(--font-size-sm)] font-medium text-base-content">
+          {t("workspace-allowed-tools-heading", { defaultValue: "Allowed tools" })}
+        </legend>
+        <div className="space-y-2">
+          {(
+            [
+              ["bash", "workspace-tool-bash", "Bash"],
+              ["file-read", "workspace-tool-file-read", "File read"],
+              ["file-edit", "workspace-tool-file-edit", "File edit"],
+              ["web-fetch", "workspace-tool-web-fetch", "Web fetch"],
+              ["web-search", "workspace-tool-web-search", "Web search"],
+            ] as const
+          ).map(([value, key, fallback]) => (
+            <label key={value} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id={`allowed-tool-${value}`}
+                name="allowed-tools"
+                value={value}
+                defaultChecked
+                className="checkbox checkbox-sm checkbox-primary"
+              />
+              <span className="text-[length:var(--font-size-sm)] text-base-content">
+                {t(key, { defaultValue: fallback })}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    </SectionCard>
   );
 }
 
