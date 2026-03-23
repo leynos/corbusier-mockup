@@ -80,16 +80,16 @@ export function CommandPalette(): JSX.Element {
                 </div>
               );
             })}
-            {filtered.length === 0 ? (
-              // biome-ignore lint/a11y/useSemanticElements: output element is not valid inside listbox; status role announces no-results to AT without implying interactivity
-              <div
-                role="status"
-                className="px-3 py-4 text-center text-[length:var(--font-size-sm)] text-base-content/60"
-              >
-                {t("palette-no-results", { defaultValue: "No results found." })}
-              </div>
-            ) : null}
           </div>
+          {filtered.length === 0 ? (
+            // biome-ignore lint/a11y/useSemanticElements: <output> is form-associated and inappropriate for a live-region no-results notice
+            <div
+              role="status"
+              className="px-3 py-4 text-center text-[length:var(--font-size-sm)] text-base-content/60"
+            >
+              {t("palette-no-results", { defaultValue: "No results found." })}
+            </div>
+          ) : null}
 
           <PaletteFooterHints />
         </Dialog.Content>

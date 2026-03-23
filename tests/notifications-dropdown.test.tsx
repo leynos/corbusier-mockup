@@ -1,7 +1,7 @@
 /** @file Tests for the notifications dropdown. */
 
 import { afterEach, describe, expect, it } from "bun:test";
-import { cleanup, fireEvent, screen } from "@testing-library/react";
+import { cleanup, fireEvent, screen, within } from "@testing-library/react";
 
 import { NotificationsDropdown } from "../src/app/layout/notifications-dropdown";
 import { renderWithProviders } from "./utils/render-with-providers";
@@ -25,7 +25,7 @@ describe("NotificationsDropdown", () => {
       name: /recent notifications/i,
     });
     expect(list).toBeTruthy();
-    const items = screen.getAllByRole("listitem");
+    const items = within(list).getAllByRole("listitem");
     expect(items.length).toBeGreaterThan(0);
   });
 });

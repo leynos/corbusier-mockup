@@ -35,12 +35,18 @@ export function WorkspaceScreen(): JSX.Element {
               {t("workspace-provider-label", { defaultValue: "Provider" })}
             </label>
             <select id="encapsulation-select" className="select select-bordered w-full max-w-md">
-              <option>{t("workspace-provider-docker", { defaultValue: "Docker" })}</option>
-              <option>{t("workspace-provider-podman", { defaultValue: "Podman" })}</option>
-              <option>
+              <option value="docker">
+                {t("workspace-provider-docker", { defaultValue: "Docker" })}
+              </option>
+              <option value="podman">
+                {t("workspace-provider-podman", { defaultValue: "Podman" })}
+              </option>
+              <option value="firecracker">
                 {t("workspace-provider-firecracker", { defaultValue: "Firecracker" })}
               </option>
-              <option>{t("workspace-provider-gvisor", { defaultValue: "gVisor" })}</option>
+              <option value="gvisor">
+                {t("workspace-provider-gvisor", { defaultValue: "gVisor" })}
+              </option>
             </select>
           </fieldset>
         </SectionCard>

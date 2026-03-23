@@ -10,6 +10,7 @@ import { SectionCard } from "../../components/section-card";
 /* ── Fixture data ──────────────────────────────────────────────────── */
 
 interface ApiKey {
+  readonly id: string;
   readonly name: string;
   readonly prefix: string;
   readonly created: string;
@@ -25,18 +26,21 @@ interface Session {
 
 const apiKeys: readonly ApiKey[] = [
   {
+    id: "key-001",
     name: "CI Pipeline Token",
     prefix: "ck_live_7f2a…",
     created: "2026-01-15",
     lastUsed: "2026-03-22",
   },
   {
+    id: "key-002",
     name: "Personal Dev Token",
     prefix: "ck_dev_9b3e…",
     created: "2025-11-03",
     lastUsed: "2026-03-21",
   },
   {
+    id: "key-003",
     name: "Monitoring Hook",
     prefix: "ck_hook_4d1c…",
     created: "2026-02-28",
@@ -63,7 +67,7 @@ const sessions: readonly Session[] = [
 /* ── Component ─────────────────────────────────────────────────────── */
 
 export function AuthScreen(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   function handleGenerateKey(): void {
     /* Placeholder: open the key-generation modal or trigger the generate flow. */
@@ -91,7 +95,7 @@ export function AuthScreen(): JSX.Element {
     {
       key: "lastActive",
       header: t("auth-col-last-active", { defaultValue: "Last active" }),
-      render: (val) => new Date(val).toLocaleDateString(),
+      render: (val) => new Intl.DateTimeFormat(i18n.language).format(new Date(val)),
     },
   ];
 
@@ -119,7 +123,7 @@ export function AuthScreen(): JSX.Element {
           <DataTable
             columns={keyColumns}
             data={apiKeys}
-            rowKey={(row) => row.prefix}
+            rowKey={(row) => row.id}
             label={t("auth-api-keys-table-label", { defaultValue: "API keys" })}
           />
         </SectionCard>

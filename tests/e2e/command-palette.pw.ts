@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 test.describe("Command palette", () => {
   test("opens on Ctrl+K, filters results, and closes on Escape", async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.getByRole("banner").waitFor();
 
     /* Open with Ctrl+K */
     await page.keyboard.press("Control+k");
@@ -25,7 +25,7 @@ test.describe("Command palette", () => {
 
   test("keyboard shortcuts and navigation work end-to-end", async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.getByRole("banner").waitFor();
 
     const input = page.getByRole("combobox", { name: /search commands/i });
 

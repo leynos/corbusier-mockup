@@ -44,10 +44,14 @@ function groupPaletteItems(
   items: readonly PaletteItem[],
 ): readonly { readonly kind: PaletteItemKind; readonly items: readonly PaletteItem[] }[] {
   const orderedKinds: readonly PaletteItemKind[] = ["task", "conversation", "command", "project"];
-  const map = new Map<PaletteItemKind, readonly PaletteItem[]>();
+  const map = new Map<PaletteItemKind, PaletteItem[]>();
   for (const item of items) {
-    const arr = map.get(item.kind) ?? [];
-    map.set(item.kind, [...arr, item]);
+    const arr = map.get(item.kind);
+    if (arr) {
+      arr.push(item);
+    } else {
+      map.set(item.kind, [item]);
+    }
   }
   return orderedKinds.filter((k) => map.has(k)).map((k) => ({ kind: k, items: map.get(k) ?? [] }));
 }
