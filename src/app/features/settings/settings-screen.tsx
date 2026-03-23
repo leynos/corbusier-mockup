@@ -7,6 +7,32 @@ import { useTranslation } from "react-i18next";
 
 import { SectionCard } from "../../components/section-card";
 
+/* ── Module-scope helpers ──────────────────────────────────────────── */
+
+/**
+ * Derive avatar initials from a display name.
+ *
+ * Returns the first character of each word (up to 2 characters) for multi-word
+ * names, or the first character for single-word names. Handles Unicode
+ * characters correctly and falls back to "?" when the name is empty.
+ *
+ * @param displayName - The user's display name.
+ * @returns Initials string (1–2 characters) or "?" if input is empty.
+ */
+function getInitials(displayName: string | undefined): string {
+  if (!displayName || displayName.trim().length === 0) return "?";
+  const words = displayName.trim().split(/\s+/u);
+  if (words.length === 1) {
+    // For single-word names, return the first grapheme cluster
+    const first = Array.from(words[0] ?? "")[0];
+    return first ?? "?";
+  }
+  // For multi-word names, return first letter of first two words
+  const first = Array.from(words[0] ?? "")[0] ?? "";
+  const second = Array.from(words[1] ?? "")[0] ?? "";
+  return `${first}${second}` || "?";
+}
+
 export function SettingsScreen(): JSX.Element {
   const { t } = useTranslation();
 
@@ -64,7 +90,7 @@ export function SettingsScreen(): JSX.Element {
               </legend>
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-lg)] font-bold text-primary-content">
-                  {t("settings-avatar-initials", { defaultValue: "AC" })}
+                  {getInitials("Ava Chen")}
                 </div>
                 <button type="button" className="btn btn-outline btn-sm">
                   <IconPhoto size={16} stroke={1.5} aria-hidden="true" />

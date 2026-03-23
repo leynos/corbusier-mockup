@@ -397,7 +397,6 @@ settings-display-name = 表示名
 settings-email = メールアドレス
 settings-avatar = アバター
 settings-avatar-upload = 写真をアップロード
-settings-avatar-initials = AC
 settings-notifications-heading = 通知設定
 settings-notif-email = メール通知
 settings-notif-email-desc = メールでタスクの割り当てとレビューを受信します。

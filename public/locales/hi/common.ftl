@@ -403,7 +403,6 @@ settings-display-name = प्रदर्शन नाम
 settings-email = ईमेल
 settings-avatar = अवतार
 settings-avatar-upload = फ़ोटो अपलोड करें
-settings-avatar-initials = AC
 settings-notifications-heading = अधिसूचना प्राथमिकताएँ
 settings-notif-email = ईमेल सूचनाएँ
 settings-notif-email-desc = ईमेल द्वारा कार्य असाइनमेंट और समीक्षाएँ प्राप्त करें।

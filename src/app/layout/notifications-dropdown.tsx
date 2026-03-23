@@ -158,10 +158,28 @@ function NotificationItem({
 
 /* ── Helpers ────────────────────────────────────────────────────────── */
 
+/** Cache of Intl.RelativeTimeFormat instances keyed by locale. */
+const relativeTimeFormatCache = new Map<string, Intl.RelativeTimeFormat>();
+
+/**
+ * Retrieve or create a cached Intl.RelativeTimeFormat for the given locale.
+ *
+ * @param locale - The BCP-47 locale tag.
+ * @returns A cached or newly created RelativeTimeFormat instance.
+ */
+function getRelativeTimeFormat(locale: string): Intl.RelativeTimeFormat {
+  let rtf = relativeTimeFormatCache.get(locale);
+  if (!rtf) {
+    rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
+    relativeTimeFormatCache.set(locale, rtf);
+  }
+  return rtf;
+}
+
 /** Formats a date as a locale-aware relative time string (e.g. "2 hr. ago"). */
 function formatRelativeTime(date: Date, locale: string): string {
   const diffMs = date.getTime() - now().getTime();
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
+  const rtf = getRelativeTimeFormat(locale);
 
   const diffMins = Math.round(diffMs / 60_000);
   if (Math.abs(diffMins) < 1) return rtf.format(0, "minute");

@@ -411,7 +411,6 @@ settings-display-name = Display name
 settings-email = Email
 settings-avatar = Avatar
 settings-avatar-upload = Upload photo
-settings-avatar-initials = AC
 settings-notifications-heading = Notification preferences
 settings-notif-email = Email notifications
 settings-notif-email-desc = Receive task assignments and reviews via email.

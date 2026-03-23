@@ -418,7 +418,6 @@ settings-display-name = Nombre para mostrar
 settings-email = Correo electrónico
 settings-avatar = Avatar
 settings-avatar-upload = Subir foto
-settings-avatar-initials = AC
 settings-notifications-heading = Preferencias de notificación
 settings-notif-email = Notificaciones por correo
 settings-notif-email-desc = Recibir asignaciones de tareas y revisiones por correo.

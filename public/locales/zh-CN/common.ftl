@@ -397,7 +397,6 @@ settings-display-name = 显示名称
 settings-email = 电子邮件
 settings-avatar = 头像
 settings-avatar-upload = 上传照片
-settings-avatar-initials = AC
 settings-notifications-heading = 通知偏好
 settings-notif-email = 邮件通知
 settings-notif-email-desc = 通过电子邮件接收任务分配和审查。

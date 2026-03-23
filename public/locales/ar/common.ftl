@@ -463,7 +463,6 @@ settings-display-name = اسم العرض
 settings-email = البريد الإلكتروني
 settings-avatar = الصورة الرمزية
 settings-avatar-upload = رفع صورة
-settings-avatar-initials = AC
 settings-notifications-heading = تفضيلات الإشعارات
 settings-notif-email = إشعارات البريد الإلكتروني
 settings-notif-email-desc = تلقي تعيينات المهام والمراجعات عبر البريد الإلكتروني.
