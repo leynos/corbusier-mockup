@@ -32,6 +32,13 @@ interface UseCommandPaletteActionsResult {
 
 /* ── Module-scope key-handler helpers ── */
 
+/**
+ * Move the active selection down by one position.
+ *
+ * @param filtered - The filtered list of palette items.
+ * @param setActiveIndex - State setter for the active index.
+ * @returns void
+ */
 function applyArrowDown(
   filtered: readonly PaletteItem[],
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>,
@@ -40,6 +47,13 @@ function applyArrowDown(
   setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
 }
 
+/**
+ * Move the active selection up by one position.
+ *
+ * @param filtered - The filtered list of palette items.
+ * @param setActiveIndex - State setter for the active index.
+ * @returns void
+ */
 function applyArrowUp(
   filtered: readonly PaletteItem[],
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>,
@@ -48,6 +62,18 @@ function applyArrowUp(
   setActiveIndex((prev) => Math.max(prev - 1, 0));
 }
 
+/**
+ * Select the active item when Enter is pressed.
+ *
+ * Guards against IME composition events to avoid triggering selection
+ * while the user is composing input (e.g., CJK characters).
+ *
+ * @param e - The keyboard event.
+ * @param filtered - The filtered list of palette items.
+ * @param activeIndex - The index of the currently active item.
+ * @param selectItem - Callback to select the given item.
+ * @returns void
+ */
 function applyEnter(
   e: React.KeyboardEvent,
   filtered: readonly PaletteItem[],
