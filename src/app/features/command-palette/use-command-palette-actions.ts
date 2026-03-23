@@ -30,6 +30,36 @@ interface UseCommandPaletteActionsResult {
   readonly handleOpenChange: (open: boolean) => void;
 }
 
+/* ── Module-scope key-handler helpers ── */
+
+function applyArrowDown(
+  filtered: readonly PaletteItem[],
+  setActiveIndex: React.Dispatch<React.SetStateAction<number>>,
+): void {
+  if (filtered.length === 0) return;
+  setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+}
+
+function applyArrowUp(
+  filtered: readonly PaletteItem[],
+  setActiveIndex: React.Dispatch<React.SetStateAction<number>>,
+): void {
+  if (filtered.length === 0) return;
+  setActiveIndex((prev) => Math.max(prev - 1, 0));
+}
+
+function applyEnter(
+  e: React.KeyboardEvent,
+  filtered: readonly PaletteItem[],
+  activeIndex: number,
+  selectItem: (item: PaletteItem) => void,
+): void {
+  if (e.nativeEvent.isComposing) return;
+  e.preventDefault();
+  const item = filtered[activeIndex];
+  if (item) selectItem(item);
+}
+
 /**
  * Build memoised command-palette callbacks for item selection,
  * keyboard control, and open/close lifecycle.
@@ -61,22 +91,17 @@ export function useCommandPaletteActions({
     (e: React.KeyboardEvent) => {
       switch (e.key) {
         case "ArrowDown": {
-          if (filtered.length === 0) break;
           e.preventDefault();
-          setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+          applyArrowDown(filtered, setActiveIndex);
           break;
         }
         case "ArrowUp": {
-          if (filtered.length === 0) break;
           e.preventDefault();
-          setActiveIndex((prev) => Math.max(prev - 1, 0));
+          applyArrowUp(filtered, setActiveIndex);
           break;
         }
         case "Enter": {
-          if (e.nativeEvent.isComposing) break;
-          e.preventDefault();
-          const item = filtered[activeIndex];
-          if (item) selectItem(item);
+          applyEnter(e, filtered, activeIndex, selectItem);
           break;
         }
         default:
