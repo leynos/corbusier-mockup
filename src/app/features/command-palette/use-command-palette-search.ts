@@ -62,11 +62,29 @@ function groupPaletteItems(
 
 /* ── Hook ──────────────────────────────────────────────────────────── */
 
+/**
+ * A palette item wrapped with its display-order index for keyboard navigation.
+ *
+ * The index is assigned monotonically during the flattening of grouped items
+ * and is used to resolve the active item and compute `aria-activedescendant`.
+ *
+ * @property item - The underlying palette item data.
+ * @property index - The zero-based position in the flattened display order.
+ */
 interface IndexedPaletteItem {
   readonly item: PaletteItem;
   readonly index: number;
 }
 
+/**
+ * A group of indexed palette items sharing the same kind/category.
+ *
+ * Used to render sectioned results in the command palette while preserving
+ * the flat indices required for keyboard navigation accessibility.
+ *
+ * @property kind - The category discriminator (task, conversation, command, project).
+ * @property items - The indexed items belonging to this group, in display order.
+ */
 interface IndexedPaletteGroup {
   readonly kind: PaletteItemKind;
   readonly items: readonly IndexedPaletteItem[];
@@ -117,19 +135,32 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
     [query, i18n.language],
   );
 
-  const indexedGroups = useMemo<readonly IndexedPaletteGroup[]>(() => {
-    let idx = 0;
-    return groupPaletteItems(filtered).map((group) => ({
-      kind: group.kind,
-      items: group.items.map((item) => ({ item, index: idx++ })),
-    }));
-  }, [filtered]);
-
   /* ── Flattened display-ordered items (single source of truth) ───── */
 
+  const flattenedIndexedItems = useMemo<readonly IndexedPaletteItem[]>(() => {
+    let idx = 0;
+    return groupPaletteItems(filtered).flatMap((group) =>
+      group.items.map((item) => ({ item, index: idx++ })),
+    );
+  }, [filtered]);
+
+  const indexedGroups = useMemo<readonly IndexedPaletteGroup[]>(() => {
+    const groups: { kind: PaletteItemKind; items: IndexedPaletteItem[] }[] = [];
+    let currentGroup: { kind: PaletteItemKind; items: IndexedPaletteItem[] } | undefined;
+    for (const indexed of flattenedIndexedItems) {
+      const kind = indexed.item.kind;
+      if (!currentGroup || currentGroup.kind !== kind) {
+        currentGroup = { kind, items: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.items.push(indexed);
+    }
+    return groups;
+  }, [flattenedIndexedItems]);
+
   const flattenedItems = useMemo<readonly PaletteItem[]>(
-    () => indexedGroups.flatMap((group) => group.items.map(({ item }) => item)),
-    [indexedGroups],
+    () => flattenedIndexedItems.map(({ item }) => item),
+    [flattenedIndexedItems],
   );
 
   /* ── Internal reset ────────────────────────────────────────────── */

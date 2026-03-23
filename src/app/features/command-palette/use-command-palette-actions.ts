@@ -55,9 +55,10 @@ function applyEnter(
   selectItem: (item: PaletteItem) => void,
 ): void {
   if (e.nativeEvent.isComposing) return;
-  e.preventDefault();
   const item = filtered[activeIndex];
-  if (item) selectItem(item);
+  if (!item) return;
+  e.preventDefault();
+  selectItem(item);
 }
 
 /**
