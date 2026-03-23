@@ -27,6 +27,7 @@ const kindIcons: Record<NotificationKind, typeof IconSubtask> = {
 /* ── View Model Hook ──────────────────────────────────────────────── */
 
 interface NotificationViewModel {
+  readonly unreadCount: number;
   readonly triggerLabel: string;
   readonly heading: string;
   readonly listLabel: string;
@@ -40,6 +41,7 @@ function useNotificationsViewModel(): NotificationViewModel {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return {
+    unreadCount,
     triggerLabel: t("header-notifications-label", {
       count: unreadCount,
       defaultValue: unreadCount > 0 ? "Unread notifications" : "Notifications",
@@ -55,8 +57,8 @@ function useNotificationsViewModel(): NotificationViewModel {
 
 /** Bell icon button that opens a popover listing recent notifications. */
 export function NotificationsDropdown(): JSX.Element {
-  const { triggerLabel, heading, listLabel, unreadLabel, locale } = useNotificationsViewModel();
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const { unreadCount, triggerLabel, heading, listLabel, unreadLabel, locale } =
+    useNotificationsViewModel();
 
   return (
     <Popover.Root>

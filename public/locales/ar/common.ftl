@@ -441,6 +441,7 @@ palette-group-tasks = المهام
 palette-group-conversations = المحادثات
 palette-group-commands = الأوامر
 palette-group-projects = المشاريع
+palette-kbd-esc = esc
 
 ## Notifications
 
@@ -462,6 +463,7 @@ settings-display-name = اسم العرض
 settings-email = البريد الإلكتروني
 settings-avatar = الصورة الرمزية
 settings-avatar-upload = رفع صورة
+settings-avatar-initials = AC
 settings-notifications-heading = تفضيلات الإشعارات
 settings-notif-email = إشعارات البريد الإلكتروني
 settings-notif-email-desc = تلقي تعيينات المهام والمراجعات عبر البريد الإلكتروني.
@@ -487,6 +489,10 @@ auth-sessions-table-label = الجلسات النشطة
 
 workspace-encapsulation-heading = مزود التغليف
 workspace-provider-label = المزود
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
 workspace-resources-heading = حدود الموارد
 workspace-cpu-label = أنوية المعالج
 workspace-memory-label = الذاكرة (جيجابايت)
@@ -516,6 +522,8 @@ integrations-webhook-url = عنوان Webhook
 integrations-frankie-heading = محول مراجعة Frankie
 integrations-frankie-endpoint = عنوان نقطة النهاية
 integrations-frankie-token = رمز API
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
 integrations-test-connection = اختبار الاتصال
 
 ## Settings — Appearance
@@ -537,6 +545,7 @@ sign-in-tagline = منصة تنسيق الهندسة
 sign-in-heading = مرحبًا بعودتك
 sign-in-subtitle = سجّل الدخول إلى مساحة العمل الخاصة بك للمتابعة
 sign-in-email-label = عنوان البريد الإلكتروني
+sign-in-email-placeholder = you@company.com
 sign-in-password-label = كلمة المرور
 sign-in-password-placeholder = أدخل كلمة المرور
 sign-in-remember = تذكر هذا الجهاز
@@ -551,14 +560,3 @@ sign-in-feature-security-desc = RBAC وسجلات التدقيق وإنفاذ ا
 sign-in-feature-insights = رؤى مدعومة بالذكاء الاصطناعي
 sign-in-feature-insights-desc = اقتراحات استباقية وتوصيات ذكية
 
-## Hardcoded string fixes
-
-sign-in-email-placeholder = you@company.com
-palette-kbd-esc = esc
-integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
-integrations-frankie-token-placeholder = frk_••••••••
-settings-avatar-initials = AC
-workspace-provider-docker = Docker
-workspace-provider-podman = Podman
-workspace-provider-firecracker = Firecracker
-workspace-provider-gvisor = gVisor
