@@ -10,12 +10,13 @@ import {
 } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
-import { type NotificationKind, notifications } from "../../data/notifications";
+import { type Notification, type NotificationKind, notifications } from "../../data/notifications";
 import { pickLocalization } from "../domain/entities/localization";
 import { now } from "../hooks/use-now";
 
 /* ── Icon per notification kind ───────────────────────────────────── */
 
+/** Maps each notification kind to its corresponding icon component. */
 const kindIcons: Record<NotificationKind, typeof IconSubtask> = {
   task_assigned: IconSubtask,
   hook_failure: IconTerminal,
@@ -25,8 +26,9 @@ const kindIcons: Record<NotificationKind, typeof IconSubtask> = {
 
 /* ── Component ─────────────────────────────────────────────────────── */
 
+/** Bell icon button that opens a popover listing recent notifications. */
 export function NotificationsDropdown(): JSX.Element {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
@@ -64,46 +66,9 @@ export function NotificationsDropdown(): JSX.Element {
               defaultValue: "Recent notifications",
             })}
           >
-            {notifications.map((notification) => {
-              const Icon = kindIcons[notification.kind];
-              const loc = pickLocalization(notification.localizations, i18n.language);
-              const ts = new Date(notification.timestamp);
-              const relative = formatRelativeTime(ts, i18n.language);
-
-              return (
-                <li
-                  key={notification.id}
-                  className={`flex gap-3 border-b border-base-300 px-4 py-3 last:border-b-0 ${
-                    notification.read ? "opacity-60" : ""
-                  }`}
-                >
-                  <Icon
-                    size={16}
-                    stroke={1.5}
-                    className="mt-0.5 shrink-0 text-base-content/50"
-                    aria-hidden="true"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[length:var(--font-size-sm)] text-base-content">
-                      {loc.name}
-                    </p>
-                    <time
-                      dateTime={notification.timestamp}
-                      className="text-[length:var(--font-size-xs)] text-base-content/40"
-                    >
-                      {relative}
-                    </time>
-                  </div>
-                  {!notification.read ? (
-                    <span
-                      className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"
-                      aria-label={t("notifications-unread", { defaultValue: "Unread" })}
-                      role="img"
-                    />
-                  ) : null}
-                </li>
-              );
-            })}
+            {notifications.map((n) => (
+              <NotificationItem key={n.id} notification={n} />
+            ))}
           </ul>
         </Popover.Content>
       </Popover.Portal>
@@ -111,8 +76,55 @@ export function NotificationsDropdown(): JSX.Element {
   );
 }
 
+/* ── Notification item ──────────────────────────────────────────────── */
+
+interface NotificationItemProps {
+  readonly notification: Notification;
+}
+
+/** Single notification row rendered inside the notifications popover. */
+function NotificationItem({ notification }: NotificationItemProps): JSX.Element {
+  const { t, i18n } = useTranslation();
+  const Icon = kindIcons[notification.kind];
+  const loc = pickLocalization(notification.localizations, i18n.language);
+  const ts = new Date(notification.timestamp);
+  const relative = formatRelativeTime(ts, i18n.language);
+
+  return (
+    <li
+      className={`flex gap-3 border-b border-base-300 px-4 py-3 last:border-b-0 ${
+        notification.read ? "opacity-60" : ""
+      }`}
+    >
+      <Icon
+        size={16}
+        stroke={1.5}
+        className="mt-0.5 shrink-0 text-base-content/50"
+        aria-hidden="true"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-[length:var(--font-size-sm)] text-base-content">{loc.name}</p>
+        <time
+          dateTime={notification.timestamp}
+          className="text-[length:var(--font-size-xs)] text-base-content/40"
+        >
+          {relative}
+        </time>
+      </div>
+      {!notification.read ? (
+        <span
+          className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"
+          aria-label={t("notifications-unread", { defaultValue: "Unread" })}
+          role="img"
+        />
+      ) : null}
+    </li>
+  );
+}
+
 /* ── Helpers ────────────────────────────────────────────────────────── */
 
+/** Formats a date as a locale-aware relative time string (e.g. "2 hr. ago"). */
 function formatRelativeTime(date: Date, locale: string): string {
   const diffMs = date.getTime() - now().getTime();
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
