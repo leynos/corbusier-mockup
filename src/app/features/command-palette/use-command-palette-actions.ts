@@ -6,20 +6,34 @@ import { useCallback } from "react";
 import { router } from "../../routes/app-routes";
 import type { PaletteItem } from "./command-palette-items";
 
+/** Input contract for {@link useCommandPaletteActions}. */
 interface UseCommandPaletteActionsInput {
+  /** Current filtered list of palette items used for navigation and selection. */
   readonly filtered: readonly PaletteItem[];
+  /** Index of the currently highlighted item. */
   readonly activeIndex: number;
+  /** Setter for `activeIndex`, forwarded to the keyboard handler. */
   readonly setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
+  /** Closes the palette overlay. */
   readonly close: () => void;
+  /** Resets query text and active index to their initial values. */
   readonly reset: () => void;
 }
 
+/** Public callbacks returned by {@link useCommandPaletteActions}. */
 interface UseCommandPaletteActionsResult {
+  /** Navigates to the selected item's route and dismisses the palette. */
   readonly selectItem: (item: PaletteItem) => void;
+  /** Keyboard event handler for ArrowUp, ArrowDown, and Enter. */
   readonly handleKeyDown: (e: React.KeyboardEvent) => void;
+  /** Radix Dialog `onOpenChange` handler; resets state when the palette closes. */
   readonly handleOpenChange: (open: boolean) => void;
 }
 
+/**
+ * Build memoised command-palette callbacks for item selection,
+ * keyboard control, and open/close lifecycle.
+ */
 export function useCommandPaletteActions({
   filtered,
   activeIndex,
@@ -59,6 +73,7 @@ export function useCommandPaletteActions({
           break;
         }
         case "Enter": {
+          if (e.nativeEvent.isComposing) break;
           e.preventDefault();
           const item = filtered[activeIndex];
           if (item) selectItem(item);
