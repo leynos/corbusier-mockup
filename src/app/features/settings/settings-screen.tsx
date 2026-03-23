@@ -3,6 +3,7 @@
 import * as Switch from "@radix-ui/react-switch";
 import { IconBell, IconMail, IconPhoto, IconUser } from "@tabler/icons-react";
 import type { JSX } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SectionCard } from "../../components/section-card";
@@ -33,8 +34,14 @@ function getInitials(displayName: string | undefined): string {
   return `${first}${second}` || "?";
 }
 
+/**
+ * Settings screen for profile and notification preferences.
+ *
+ * @returns The settings page JSX.Element.
+ */
 export function SettingsScreen(): JSX.Element {
   const { t } = useTranslation();
+  const [displayName, setDisplayName] = useState("Ava Chen");
 
   return (
     <div>
@@ -65,7 +72,8 @@ export function SettingsScreen(): JSX.Element {
                 id="settings-display-name"
                 type="text"
                 className="input input-bordered w-full max-w-md"
-                defaultValue="Ava Chen"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
               />
             </fieldset>
 
@@ -90,7 +98,7 @@ export function SettingsScreen(): JSX.Element {
               </legend>
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-lg)] font-bold text-primary-content">
-                  {getInitials("Ava Chen")}
+                  {getInitials(displayName)}
                 </div>
                 <button type="button" className="btn btn-outline btn-sm">
                   <IconPhoto size={16} stroke={1.5} aria-hidden="true" />
@@ -141,6 +149,12 @@ interface NotificationToggleProps {
   readonly defaultChecked?: boolean;
 }
 
+/**
+ * A toggle row for notification preferences.
+ *
+ * @param props - The component props.
+ * @returns The toggle row JSX.Element.
+ */
 function NotificationToggle({
   id,
   icon: Icon,
