@@ -4,7 +4,8 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { pickLocalization } from "../../domain/entities/localization";
-import { type PaletteItem, type PaletteItemKind, paletteItems } from "./command-palette-items";
+import type { PaletteItem, PaletteItemKind } from "./command-palette-items";
+import { paletteItems } from "./command-palette-items";
 import { useCommandPalette } from "./command-palette-provider";
 import { useCommandPaletteActions } from "./use-command-palette-actions";
 
