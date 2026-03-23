@@ -47,11 +47,13 @@ export function useCommandPaletteActions({
     (e: React.KeyboardEvent) => {
       switch (e.key) {
         case "ArrowDown": {
+          if (filtered.length === 0) break;
           e.preventDefault();
           setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
           break;
         }
         case "ArrowUp": {
+          if (filtered.length === 0) break;
           e.preventDefault();
           setActiveIndex((prev) => Math.max(prev - 1, 0));
           break;

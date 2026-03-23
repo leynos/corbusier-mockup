@@ -12,6 +12,7 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 import { type NotificationKind, notifications } from "../../data/notifications";
 import { pickLocalization } from "../domain/entities/localization";
+import { now } from "../hooks/use-now";
 
 /* ── Icon per notification kind ───────────────────────────────────── */
 
@@ -113,16 +114,16 @@ export function NotificationsDropdown(): JSX.Element {
 /* ── Helpers ────────────────────────────────────────────────────────── */
 
 function formatRelativeTime(date: Date, locale: string): string {
-  const diffMs = date.getTime() - Date.now();
+  const diffMs = date.getTime() - now().getTime();
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
 
-  const absDiffMins = Math.round(Math.abs(diffMs) / 60_000);
-  if (absDiffMins < 1) return rtf.format(0, "minute");
-  if (absDiffMins < 60) return rtf.format(-absDiffMins, "minute");
+  const diffMins = Math.round(diffMs / 60_000);
+  if (Math.abs(diffMins) < 1) return rtf.format(0, "minute");
+  if (Math.abs(diffMins) < 60) return rtf.format(diffMins, "minute");
 
-  const absDiffHours = Math.round(absDiffMins / 60);
-  if (absDiffHours < 24) return rtf.format(-absDiffHours, "hour");
+  const diffHours = Math.round(diffMins / 60);
+  if (Math.abs(diffHours) < 24) return rtf.format(diffHours, "hour");
 
-  const absDiffDays = Math.round(absDiffHours / 24);
-  return rtf.format(-absDiffDays, "day");
+  const diffDays = Math.round(diffHours / 24);
+  return rtf.format(diffDays, "day");
 }
