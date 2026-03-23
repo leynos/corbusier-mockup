@@ -38,12 +38,22 @@ function groupPaletteItems(
 
 /* ── Hook ──────────────────────────────────────────────────────────── */
 
+interface IndexedPaletteItem {
+  readonly item: PaletteItem;
+  readonly index: number;
+}
+
+interface IndexedPaletteGroup {
+  readonly kind: PaletteItemKind;
+  readonly items: readonly IndexedPaletteItem[];
+}
+
 interface CommandPaletteSearchResult {
   readonly isOpen: boolean;
   readonly query: string;
   readonly activeIndex: number;
   readonly filtered: readonly PaletteItem[];
-  readonly groups: readonly { readonly kind: PaletteItemKind; readonly items: PaletteItem[] }[];
+  readonly indexedGroups: readonly IndexedPaletteGroup[];
   readonly activeDescendant: string | undefined;
   readonly selectItem: (item: PaletteItem) => void;
   readonly handleKeyDown: (e: React.KeyboardEvent) => void;
@@ -66,7 +76,13 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
     [query, i18n.language],
   );
 
-  const groups = useMemo(() => groupPaletteItems(filtered), [filtered]);
+  const indexedGroups = useMemo<readonly IndexedPaletteGroup[]>(() => {
+    let idx = 0;
+    return groupPaletteItems(filtered).map((group) => ({
+      kind: group.kind,
+      items: group.items.map((item) => ({ item, index: idx++ })),
+    }));
+  }, [filtered]);
 
   /* ── Internal reset ────────────────────────────────────────────── */
 
@@ -100,7 +116,7 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
     query,
     activeIndex,
     filtered,
-    groups,
+    indexedGroups,
     activeDescendant,
     selectItem,
     handleKeyDown,

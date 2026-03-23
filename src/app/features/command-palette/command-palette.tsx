@@ -17,7 +17,7 @@ export function CommandPalette(): JSX.Element {
     query,
     activeIndex,
     filtered,
-    groups,
+    indexedGroups,
     activeDescendant,
     selectItem,
     handleKeyDown,
@@ -27,9 +27,6 @@ export function CommandPalette(): JSX.Element {
   } = useCommandPaletteSearch();
 
   const { t } = useTranslation();
-
-  /* ── Flat-index tracker for keyboard navigation across groups ─── */
-  let flatIndex = -1;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
@@ -58,25 +55,21 @@ export function CommandPalette(): JSX.Element {
             className="max-h-72 overflow-y-auto p-2"
             aria-label={t("palette-results-label", { defaultValue: "Search results" })}
           >
-            {groups.map((group) => (
+            {indexedGroups.map((group) => (
               <div key={group.kind} role="presentation">
                 <span className="block px-3 pb-1 pt-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
                   {t(kindLabels[group.kind])}
                 </span>
                 <div>
-                  {group.items.map((item) => {
-                    flatIndex += 1;
-                    const idx = flatIndex;
-                    return (
-                      <PaletteResultItem
-                        key={item.id}
-                        item={item}
-                        isActive={idx === activeIndex}
-                        onSelect={selectItem}
-                        onMouseEnter={() => setActiveIndex(idx)}
-                      />
-                    );
-                  })}
+                  {group.items.map(({ item, index }) => (
+                    <PaletteResultItem
+                      key={item.id}
+                      item={item}
+                      isActive={index === activeIndex}
+                      onSelect={selectItem}
+                      onMouseEnter={() => setActiveIndex(index)}
+                    />
+                  ))}
                 </div>
               </div>
             ))}

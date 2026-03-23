@@ -67,7 +67,7 @@ export function NotificationsDropdown(): JSX.Element {
               const Icon = kindIcons[notification.kind];
               const loc = pickLocalization(notification.localizations, i18n.language);
               const ts = new Date(notification.timestamp);
-              const relative = formatRelativeTime(ts);
+              const relative = formatRelativeTime(ts, i18n.language);
 
               return (
                 <li
@@ -112,15 +112,17 @@ export function NotificationsDropdown(): JSX.Element {
 
 /* ── Helpers ────────────────────────────────────────────────────────── */
 
-function formatRelativeTime(date: Date): string {
-  const now = Date.now();
-  const diffMs = now - date.getTime();
-  const diffMins = Math.floor(diffMs / 60_000);
+function formatRelativeTime(date: Date, locale: string): string {
+  const diffMs = date.getTime() - Date.now();
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays}d ago`;
+  const absDiffMins = Math.round(Math.abs(diffMs) / 60_000);
+  if (absDiffMins < 1) return rtf.format(0, "minute");
+  if (absDiffMins < 60) return rtf.format(-absDiffMins, "minute");
+
+  const absDiffHours = Math.round(absDiffMins / 60);
+  if (absDiffHours < 24) return rtf.format(-absDiffHours, "hour");
+
+  const absDiffDays = Math.round(absDiffHours / 24);
+  return rtf.format(-absDiffDays, "day");
 }

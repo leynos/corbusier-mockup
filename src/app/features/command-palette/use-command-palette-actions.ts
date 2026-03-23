@@ -1,9 +1,9 @@
 /** @file Action callbacks for the command palette (keyboard, selection, open/close). */
 
-import { useNavigate } from "@tanstack/react-router";
 import type React from "react";
 import { useCallback } from "react";
 
+import { router } from "../../routes/app-routes";
 import type { PaletteItem } from "./command-palette-items";
 
 interface UseCommandPaletteActionsInput {
@@ -27,31 +27,43 @@ export function useCommandPaletteActions({
   close,
   reset,
 }: UseCommandPaletteActionsInput): UseCommandPaletteActionsResult {
-  const navigate = useNavigate();
-
   const selectItem = useCallback(
     (item: PaletteItem) => {
+      const route = item.route;
       close();
       reset();
-      void navigate({ to: item.route });
+      // CommandPalette renders outside RouterProvider (sibling in app.tsx), so
+      // useNavigate() has no router context.  Use the router singleton directly
+      // and defer until after Radix Dialog's unmount to avoid a React null-ref
+      // error when the dialog and router commit DOM mutations in the same tick.
+      requestAnimationFrame(() => {
+        void router.navigate({ to: route });
+      });
     },
-    [close, reset, navigate],
+    [close, reset],
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      const actions: Partial<Record<string, () => void>> = {
-        ArrowDown: () => setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1)),
-        ArrowUp: () => setActiveIndex((prev) => Math.max(prev - 1, 0)),
-        Enter: () => {
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          setActiveIndex((prev) => Math.max(prev - 1, 0));
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
           const item = filtered[activeIndex];
           if (item) selectItem(item);
-        },
-      };
-      const action = actions[e.key];
-      if (action) {
-        e.preventDefault();
-        action();
+          break;
+        }
+        default:
+          break;
       }
     },
     [filtered, activeIndex, selectItem, setActiveIndex],

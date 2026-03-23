@@ -98,9 +98,9 @@ outside the authenticated shell, matching
 
 ## Surprises & discoveries
 
-- Biome rejects ARIA widget roles (`role="option"`) on `<li>`
-  elements — used `<div>` elements for the command palette listbox
-  items.
+- Biome rejects Accessible Rich Internet Applications (ARIA) widget
+  roles (`role="option"`) on `<li>` elements — used `<div>` elements
+  for the command palette listbox items.
 - `renderWithProviders` and `renderWithRouter` test utilities needed
   updating to include `CommandPaletteProvider` in the wrapper stack.
 - `@floating-ui/dom` (used by Radix Popover) requires `Element` on
@@ -120,9 +120,9 @@ outside the authenticated shell, matching
 ## Outcomes & retrospective
 
 All 6 milestones delivered. `bun run ff` passes fully: 158 unit
-tests, 51 E2E tests (including axe sweeps on all new routes), zero
-lint/type/a11y violations. The mockup is now feature-complete against
-the sitemap.
+tests, 51 end-to-end (E2E) tests (including axe sweeps on all new
+routes), zero lint/type/accessibility (a11y) violations. The mockup
+is now feature-complete against the sitemap.
 
 ## Context and orientation
 

@@ -20,8 +20,18 @@ interface CommandPaletteContextValue {
 
 const CommandPaletteContext = createContext<CommandPaletteContextValue | undefined>(undefined);
 
+/** Returns true when the event target is a text-entry element. */
+function isEditableTarget(e: KeyboardEvent): boolean {
+  const target = e.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+    return true;
+  }
+  return target instanceof HTMLElement && target.isContentEditable;
+}
+
 /** Returns true when the keyboard event matches the ⌘K / Ctrl+K shortcut. */
 function isCommandPaletteShortcut(e: KeyboardEvent): boolean {
+  if (isEditableTarget(e)) return false;
   const hasModifier = e.metaKey || e.ctrlKey;
   return hasModifier && e.key === "k";
 }
