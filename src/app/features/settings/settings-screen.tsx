@@ -177,11 +177,17 @@ function NotificationToggle({
         >
           {label}
         </label>
-        <p className="text-[length:var(--font-size-xs)] text-base-content/50">{description}</p>
+        <p
+          id={`${id}-description`}
+          className="text-[length:var(--font-size-xs)] text-base-content/50"
+        >
+          {description}
+        </p>
       </div>
       <Switch.Root
         id={id}
         defaultChecked={defaultChecked}
+        aria-describedby={`${id}-description`}
         className="relative h-6 w-11 shrink-0 cursor-pointer rounded-full bg-base-300 transition-colors data-[state=checked]:bg-primary"
       >
         <Switch.Thumb className="block h-5 w-5 translate-x-0.5 rounded-full bg-base-100 shadow-sm transition-transform data-[state=checked]:translate-x-[22px]" />
