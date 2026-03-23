@@ -17,7 +17,7 @@ export interface PaletteItem {
 export const paletteItems: readonly PaletteItem[] = [
   /* ── Tasks ───────────────────────────────────────────────────────── */
   {
-    id: "TSK-001",
+    id: "TASK-1001",
     kind: "task",
     localizations: {
       "en-GB": { name: "Implement MCP tool registry" },
@@ -28,11 +28,11 @@ export const paletteItems: readonly PaletteItem[] = [
       ja: { name: "MCPツールレジストリを実装する" },
       "zh-CN": { name: "实现 MCP 工具注册表" },
     },
-    route: "/tasks/TSK-001",
-    meta: "TSK-001",
+    route: "/tasks/TASK-1001",
+    meta: "TASK-1001",
   },
   {
-    id: "TSK-003",
+    id: "TASK-1003",
     kind: "task",
     localizations: {
       "en-GB": { name: "Design hook policy engine" },
@@ -43,11 +43,11 @@ export const paletteItems: readonly PaletteItem[] = [
       ja: { name: "フックポリシーエンジンを設計する" },
       "zh-CN": { name: "设计钩子策略引擎" },
     },
-    route: "/tasks/TSK-003",
-    meta: "TSK-003",
+    route: "/tasks/TASK-1003",
+    meta: "TASK-1003",
   },
   {
-    id: "TSK-005",
+    id: "TASK-1005",
     kind: "task",
     localizations: {
       "en-GB": { name: "Audit RBAC permission matrix" },
@@ -58,8 +58,8 @@ export const paletteItems: readonly PaletteItem[] = [
       ja: { name: "RBAC 権限マトリクスを監査する" },
       "zh-CN": { name: "审计 RBAC 权限矩阵" },
     },
-    route: "/tasks/TSK-005",
-    meta: "TSK-005",
+    route: "/tasks/TASK-1005",
+    meta: "TASK-1005",
   },
 
   /* ── Conversations ───────────────────────────────────────────────── */
