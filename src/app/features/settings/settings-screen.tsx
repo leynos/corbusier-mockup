@@ -61,7 +61,7 @@ export function SettingsScreen(): JSX.Element {
           title={t("settings-profile-heading", { defaultValue: "Profile" })}
         >
           <div className="space-y-4">
-            <fieldset className="border-none p-0">
+            <div>
               <label
                 htmlFor="settings-display-name"
                 className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
@@ -75,9 +75,9 @@ export function SettingsScreen(): JSX.Element {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
               />
-            </fieldset>
+            </div>
 
-            <fieldset className="border-none p-0">
+            <div>
               <label
                 htmlFor="settings-email"
                 className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
@@ -90,7 +90,7 @@ export function SettingsScreen(): JSX.Element {
                 className="input input-bordered w-full max-w-md"
                 defaultValue="ava.chen@corbusier.io"
               />
-            </fieldset>
+            </div>
 
             <fieldset className="border-none p-0">
               <legend className="mb-1 text-[length:var(--font-size-sm)] font-medium text-base-content">
