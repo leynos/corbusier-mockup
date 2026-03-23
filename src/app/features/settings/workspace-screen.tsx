@@ -2,7 +2,8 @@
 
 import * as Slider from "@radix-ui/react-slider";
 import { IconBox, IconCpu, IconShieldCheck } from "@tabler/icons-react";
-import { type JSX, useState } from "react";
+import type { JSX } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SectionCard } from "../../components/section-card";

@@ -364,7 +364,7 @@ insight-severity-info = 信息
 ## Command palette
 
 palette-label = 命令面板
-palette-placeholder = 搜索任务、对话、命令…
+palette-placeholder = 搜索任务、会话、命令…
 palette-input-label = 搜索命令
 palette-results-label = 搜索结果
 palette-no-results = 未找到结果。
@@ -373,7 +373,7 @@ palette-hint-open = 打开
 palette-hint-close = 关闭
 palette-kbd-esc = esc
 palette-group-tasks = 任务
-palette-group-conversations = 对话
+palette-group-conversations = 会话
 palette-group-commands = 命令
 palette-group-projects = 项目
 

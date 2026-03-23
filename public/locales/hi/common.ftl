@@ -44,6 +44,7 @@ header-search-placeholder = निर्देश खोजें
 header-notifications-label =
     { $count ->
         [0] सूचनाएँ
+        [one] { $count } अपठित सूचना
        *[other] { $count } अपठित सूचनाएँ
     }
 header-user-menu-label = उपयोगकर्ता मेनू
@@ -380,6 +381,7 @@ palette-group-tasks = कार्य
 palette-group-conversations = वार्तालाप
 palette-group-commands = कमांड
 palette-group-projects = प्रोजेक्ट
+palette-kbd-esc = esc
 
 ## Notifications
 
@@ -401,6 +403,7 @@ settings-display-name = प्रदर्शन नाम
 settings-email = ईमेल
 settings-avatar = अवतार
 settings-avatar-upload = फ़ोटो अपलोड करें
+settings-avatar-initials = AC
 settings-notifications-heading = अधिसूचना प्राथमिकताएँ
 settings-notif-email = ईमेल सूचनाएँ
 settings-notif-email-desc = ईमेल द्वारा कार्य असाइनमेंट और समीक्षाएँ प्राप्त करें।
@@ -426,6 +429,10 @@ auth-sessions-table-label = सक्रिय सत्र
 
 workspace-encapsulation-heading = एन्कैप्सुलेशन प्रदाता
 workspace-provider-label = प्रदाता
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
 workspace-resources-heading = संसाधन सीमाएँ
 workspace-cpu-label = CPU कोर
 workspace-memory-label = मेमोरी (GB)
@@ -455,6 +462,8 @@ integrations-webhook-url = Webhook URL
 integrations-frankie-heading = Frankie समीक्षा एडेप्टर
 integrations-frankie-endpoint = एंडपॉइंट URL
 integrations-frankie-token = API टोकन
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
 integrations-test-connection = कनेक्शन परीक्षण
 
 ## Settings — Appearance
@@ -476,6 +485,7 @@ sign-in-tagline = इंजीनियरिंग ऑर्केस्ट्�
 sign-in-heading = वापसी पर स्वागत है
 sign-in-subtitle = जारी रखने के लिए अपने कार्यक्षेत्र में साइन इन करें
 sign-in-email-label = ईमेल पता
+sign-in-email-placeholder = you@company.com
 sign-in-password-label = पासवर्ड
 sign-in-password-placeholder = अपना पासवर्ड दर्ज करें
 sign-in-remember = इस डिवाइस को याद रखें
@@ -490,14 +500,3 @@ sign-in-feature-security-desc = RBAC, ऑडिट ट्रेल्स, और
 sign-in-feature-insights = AI-संचालित अंतर्दृष्टि
 sign-in-feature-insights-desc = सक्रिय सुझाव और बुद्धिमान सिफ़ारिशें
 
-## Hardcoded string fixes
-
-sign-in-email-placeholder = you@company.com
-palette-kbd-esc = esc
-integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
-integrations-frankie-token-placeholder = frk_••••••••
-settings-avatar-initials = AC
-workspace-provider-docker = Docker
-workspace-provider-podman = Podman
-workspace-provider-firecracker = Firecracker
-workspace-provider-gvisor = gVisor

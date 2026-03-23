@@ -91,7 +91,7 @@ export function UserMenu(): JSX.Element {
           <DropdownMenu.Item
             className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[length:var(--font-size-sm)] text-error outline-none transition-colors data-[highlighted]:bg-error/10"
             onSelect={() => {
-              void navigate({ to: "/sign-in" });
+              void navigate({ to: "/sign-in", replace: true });
             }}
           >
             <IconLogout size={16} stroke={1.5} aria-hidden="true" />

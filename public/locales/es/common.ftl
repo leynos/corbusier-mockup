@@ -396,6 +396,7 @@ palette-group-tasks = Tareas
 palette-group-conversations = Conversaciones
 palette-group-commands = Comandos
 palette-group-projects = Proyectos
+palette-kbd-esc = esc
 
 ## Notifications
 
@@ -417,6 +418,7 @@ settings-display-name = Nombre para mostrar
 settings-email = Correo electrónico
 settings-avatar = Avatar
 settings-avatar-upload = Subir foto
+settings-avatar-initials = AC
 settings-notifications-heading = Preferencias de notificación
 settings-notif-email = Notificaciones por correo
 settings-notif-email-desc = Recibir asignaciones de tareas y revisiones por correo.
@@ -442,6 +444,10 @@ auth-sessions-table-label = Sesiones activas
 
 workspace-encapsulation-heading = Proveedor de encapsulación
 workspace-provider-label = Proveedor
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
 workspace-resources-heading = Límites de recursos
 workspace-cpu-label = Núcleos de CPU
 workspace-memory-label = Memoria (GB)
@@ -471,6 +477,8 @@ integrations-webhook-url = URL de webhook
 integrations-frankie-heading = Adaptador de revisión Frankie
 integrations-frankie-endpoint = URL del endpoint
 integrations-frankie-token = Token de API
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
 integrations-test-connection = Probar conexión
 
 ## Settings — Appearance
@@ -492,6 +500,7 @@ sign-in-tagline = Plataforma de Orquestación de Ingeniería
 sign-in-heading = Bienvenido de vuelta
 sign-in-subtitle = Inicia sesión en tu espacio de trabajo para continuar
 sign-in-email-label = Dirección de correo electrónico
+sign-in-email-placeholder = you@company.com
 sign-in-password-label = Contraseña
 sign-in-password-placeholder = Ingresa tu contraseña
 sign-in-remember = Recordar este dispositivo
@@ -506,14 +515,3 @@ sign-in-feature-security-desc = RBAC, registros de auditoría y aplicación de p
 sign-in-feature-insights = Información impulsada por IA
 sign-in-feature-insights-desc = Sugerencias proactivas y recomendaciones inteligentes
 
-## Hardcoded string fixes
-
-sign-in-email-placeholder = you@company.com
-palette-kbd-esc = esc
-integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
-integrations-frankie-token-placeholder = frk_••••••••
-settings-avatar-initials = AC
-workspace-provider-docker = Docker
-workspace-provider-podman = Podman
-workspace-provider-firecracker = Firecracker
-workspace-provider-gvisor = gVisor

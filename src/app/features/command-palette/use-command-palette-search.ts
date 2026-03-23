@@ -125,6 +125,13 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
     }));
   }, [filtered]);
 
+  /* ── Flattened display-ordered items (single source of truth) ───── */
+
+  const flattenedItems = useMemo<readonly PaletteItem[]>(
+    () => indexedGroups.flatMap((group) => group.items.map(({ item }) => item)),
+    [indexedGroups],
+  );
+
   /* ── Internal reset ────────────────────────────────────────────── */
 
   const reset = useCallback(() => {
@@ -135,7 +142,7 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
   /* ── Actions ───────────────────────────────────────────────────── */
 
   const { selectItem, handleKeyDown, handleOpenChange } = useCommandPaletteActions({
-    filtered,
+    filtered: flattenedItems,
     activeIndex,
     setActiveIndex,
     close,
@@ -149,7 +156,7 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
 
   /* ── Derived ───────────────────────────────────────────────────── */
 
-  const activeItem = filtered[activeIndex];
+  const activeItem = flattenedItems[activeIndex];
   const activeDescendant = activeItem ? `palette-item-${activeItem.id}` : undefined;
 
   return {

@@ -24,11 +24,38 @@ const kindIcons: Record<NotificationKind, typeof IconSubtask> = {
   system_alert: IconAlertTriangle,
 };
 
+/* ── View Model Hook ──────────────────────────────────────────────── */
+
+interface NotificationViewModel {
+  readonly triggerLabel: string;
+  readonly heading: string;
+  readonly listLabel: string;
+  readonly unreadLabel: string;
+  readonly locale: string;
+}
+
+/** Resolves all translated strings for the notifications dropdown. */
+function useNotificationsViewModel(): NotificationViewModel {
+  const { t, i18n } = useTranslation();
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  return {
+    triggerLabel: t("header-notifications-label", {
+      count: unreadCount,
+      defaultValue: unreadCount > 0 ? "Unread notifications" : "Notifications",
+    }),
+    heading: t("notifications-heading", { defaultValue: "Notifications" }),
+    listLabel: t("notifications-list-label", { defaultValue: "Recent notifications" }),
+    unreadLabel: t("notifications-unread", { defaultValue: "Unread" }),
+    locale: i18n.language,
+  };
+}
+
 /* ── Component ─────────────────────────────────────────────────────── */
 
 /** Bell icon button that opens a popover listing recent notifications. */
 export function NotificationsDropdown(): JSX.Element {
-  const { t } = useTranslation();
+  const { triggerLabel, heading, listLabel, unreadLabel, locale } = useNotificationsViewModel();
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
@@ -37,10 +64,7 @@ export function NotificationsDropdown(): JSX.Element {
         <button
           type="button"
           className="relative rounded-md p-2 text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:bg-base-300/50 hover:text-base-content"
-          aria-label={t("header-notifications-label", {
-            count: unreadCount,
-            defaultValue: unreadCount > 0 ? "Unread notifications" : "Notifications",
-          })}
+          aria-label={triggerLabel}
         >
           <IconBell size={20} stroke={1.5} aria-hidden="true" />
           {unreadCount > 0 ? (
@@ -59,18 +83,18 @@ export function NotificationsDropdown(): JSX.Element {
         >
           <div className="border-b border-base-300 px-4 py-3">
             <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold text-base-content">
-              {t("notifications-heading", { defaultValue: "Notifications" })}
+              {heading}
             </h2>
           </div>
 
-          <ul
-            className="max-h-72 overflow-y-auto"
-            aria-label={t("notifications-list-label", {
-              defaultValue: "Recent notifications",
-            })}
-          >
+          <ul className="max-h-72 overflow-y-auto" aria-label={listLabel}>
             {notifications.map((n) => (
-              <NotificationItem key={n.id} notification={n} />
+              <NotificationItem
+                key={n.id}
+                notification={n}
+                locale={locale}
+                unreadLabel={unreadLabel}
+              />
             ))}
           </ul>
         </Popover.Content>
@@ -83,15 +107,20 @@ export function NotificationsDropdown(): JSX.Element {
 
 interface NotificationItemProps {
   readonly notification: Notification;
+  readonly locale: string;
+  readonly unreadLabel: string;
 }
 
 /** Single notification row rendered inside the notifications popover. */
-function NotificationItem({ notification }: NotificationItemProps): JSX.Element {
-  const { t, i18n } = useTranslation();
+function NotificationItem({
+  notification,
+  locale,
+  unreadLabel,
+}: NotificationItemProps): JSX.Element {
   const Icon = kindIcons[notification.kind];
-  const loc = pickLocalization(notification.localizations, i18n.language);
+  const loc = pickLocalization(notification.localizations, locale);
   const ts = new Date(notification.timestamp);
-  const relative = formatRelativeTime(ts, i18n.language);
+  const relative = formatRelativeTime(ts, locale);
 
   return (
     <li
@@ -117,7 +146,7 @@ function NotificationItem({ notification }: NotificationItemProps): JSX.Element 
       {!notification.read ? (
         <span
           className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"
-          aria-label={t("notifications-unread", { defaultValue: "Unread" })}
+          aria-label={unreadLabel}
           role="img"
         />
       ) : null}

@@ -45,7 +45,10 @@ header-notifications-label =
     { $count ->
         [0] الإشعارات
         [one] { $count } إشعار غير مقروء
-       *[other] { $count } إشعارات غير مقروءة
+        [two] { $count } إشعاران غير مقروءين
+        [few] { $count } إشعارات غير مقروءة
+        [many] { $count } إشعارًا غير مقروء
+       *[other] { $count } إشعار غير مقروء
     }
 header-user-menu-label = قائمة المستخدم
 

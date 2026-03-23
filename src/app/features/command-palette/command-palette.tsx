@@ -38,13 +38,29 @@ export function CommandPalette(): JSX.Element {
 
   const { t } = useTranslation();
 
+  /* ── Resolved translations (lifted from child components) ──────────── */
+
+  const searchPlaceholder = t("palette-placeholder", {
+    defaultValue: "Search tasks, conversations, commands…",
+  });
+  const searchInputLabel = t("palette-input-label", { defaultValue: "Search commands" });
+  const paletteLabel = t("palette-label", { defaultValue: "Command palette" });
+  const resultsLabel = t("palette-results-label", { defaultValue: "Search results" });
+  const noResultsText = t("palette-no-results", { defaultValue: "No results found." });
+
+  /* Footer hint translations */
+  const hintNavigate = t("palette-hint-navigate", { defaultValue: "Navigate" });
+  const hintOpen = t("palette-hint-open", { defaultValue: "Open" });
+  const hintClose = t("palette-hint-close", { defaultValue: "Close" });
+  const kbdEsc = t("palette-kbd-esc", { defaultValue: "esc" });
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <Dialog.Content
           className="fixed inset-x-4 top-[15vh] z-50 mx-auto max-w-lg rounded-xl border border-base-300 bg-base-100 shadow-xl sm:inset-x-auto"
-          aria-label={t("palette-label", { defaultValue: "Command palette" })}
+          aria-label={paletteLabel}
           onKeyDown={handleKeyDown}
           onOpenAutoFocus={(e) => {
             e.preventDefault();
@@ -56,6 +72,8 @@ export function CommandPalette(): JSX.Element {
             query={query}
             activeDescendant={activeDescendant}
             onQueryChange={handleQueryChange}
+            placeholder={searchPlaceholder}
+            ariaLabel={searchInputLabel}
           />
 
           {/* Results — divs used instead of ul/li to satisfy Biome a11y rules */}
@@ -63,7 +81,7 @@ export function CommandPalette(): JSX.Element {
             id="palette-results"
             role="listbox"
             className="max-h-72 overflow-y-auto p-2"
-            aria-label={t("palette-results-label", { defaultValue: "Search results" })}
+            aria-label={resultsLabel}
           >
             {indexedGroups.map((group) => {
               const headingId = `palette-group-${group.kind}`;
@@ -97,11 +115,16 @@ export function CommandPalette(): JSX.Element {
               role="status"
               className="px-3 py-4 text-center text-[length:var(--font-size-sm)] text-base-content/60"
             >
-              {t("palette-no-results", { defaultValue: "No results found." })}
+              {noResultsText}
             </div>
           ) : null}
 
-          <PaletteFooterHints />
+          <PaletteFooterHints
+            hintNavigate={hintNavigate}
+            hintOpen={hintOpen}
+            hintClose={hintClose}
+            kbdEsc={kbdEsc}
+          />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -115,6 +138,8 @@ interface PaletteSearchInputProps {
   readonly query: string;
   readonly activeDescendant: string | undefined;
   readonly onQueryChange: (value: string) => void;
+  readonly placeholder: string;
+  readonly ariaLabel: string;
 }
 
 /**
@@ -129,9 +154,9 @@ function PaletteSearchInput({
   query,
   activeDescendant,
   onQueryChange,
+  placeholder,
+  ariaLabel,
 }: PaletteSearchInputProps): JSX.Element {
-  const { t } = useTranslation();
-
   return (
     <div className="flex items-center gap-3 border-b border-base-300 px-4 py-3">
       <IconSearch size={18} stroke={1.5} className="text-base-content/60" aria-hidden="true" />
@@ -139,13 +164,12 @@ function PaletteSearchInput({
         ref={inputRef}
         type="text"
         className="flex-1 bg-transparent text-[length:var(--font-size-sm)] text-base-content placeholder:text-base-content/60 focus:outline-none"
-        placeholder={t("palette-placeholder", {
-          defaultValue: "Search tasks, conversations, commands…",
-        })}
+        placeholder={placeholder}
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
-        aria-label={t("palette-input-label", { defaultValue: "Search commands" })}
+        aria-label={ariaLabel}
         role="combobox"
+        aria-autocomplete="list"
         aria-expanded="true"
         aria-controls="palette-results"
         aria-activedescendant={activeDescendant}
@@ -156,29 +180,39 @@ function PaletteSearchInput({
 
 /* ── Footer hints ──────────────────────────────────────────────────── */
 
-/** Keyboard-shortcut hint bar rendered at the bottom of the command palette. */
-function PaletteFooterHints(): JSX.Element {
-  const { t } = useTranslation();
+interface PaletteFooterHintsProps {
+  readonly hintNavigate: string;
+  readonly hintOpen: string;
+  readonly hintClose: string;
+  readonly kbdEsc: string;
+}
 
+/** Keyboard-shortcut hint bar rendered at the bottom of the command palette. */
+function PaletteFooterHints({
+  hintNavigate,
+  hintOpen,
+  hintClose,
+  kbdEsc,
+}: PaletteFooterHintsProps): JSX.Element {
   return (
     <div className="flex items-center gap-4 border-t border-base-300 px-4 py-2 text-[length:var(--font-size-xs)] text-base-content/60">
       <span className="flex items-center gap-1">
         <kbd className="rounded border border-base-300 px-1 font-[family-name:var(--font-mono)]">
           ↑↓
         </kbd>
-        {t("palette-hint-navigate", { defaultValue: "Navigate" })}
+        {hintNavigate}
       </span>
       <span className="flex items-center gap-1">
         <kbd className="rounded border border-base-300 px-1 font-[family-name:var(--font-mono)]">
           ↵
         </kbd>
-        {t("palette-hint-open", { defaultValue: "Open" })}
+        {hintOpen}
       </span>
       <span className="flex items-center gap-1">
         <kbd className="rounded border border-base-300 px-1 font-[family-name:var(--font-mono)]">
-          {t("palette-kbd-esc", { defaultValue: "esc" })}
+          {kbdEsc}
         </kbd>
-        {t("palette-hint-close", { defaultValue: "Close" })}
+        {hintClose}
       </span>
     </div>
   );
