@@ -1,12 +1,12 @@
 /** @file Custom hook encapsulating command palette search, filtering, and keyboard navigation. */
 
-import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { pickLocalization } from "../../domain/entities/localization";
 import { type PaletteItem, type PaletteItemKind, paletteItems } from "./command-palette-items";
 import { useCommandPalette } from "./command-palette-provider";
+import { useCommandPaletteActions } from "./use-command-palette-actions";
 
 /* ── Module-scope pure helpers ─────────────────────────────────────── */
 
@@ -55,7 +55,6 @@ interface CommandPaletteSearchResult {
 export function useCommandPaletteSearch(): CommandPaletteSearchResult {
   const { isOpen, close } = useCommandPalette();
   const { i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -78,43 +77,13 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
 
   /* ── Actions ───────────────────────────────────────────────────── */
 
-  const selectItem = useCallback(
-    (item: PaletteItem) => {
-      close();
-      reset();
-      void navigate({ to: item.route });
-    },
-    [close, reset, navigate],
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      const actions: Partial<Record<string, () => void>> = {
-        ArrowDown: () => setActiveIndex((prev) => Math.min(prev + 1, filtered.length - 1)),
-        ArrowUp: () => setActiveIndex((prev) => Math.max(prev - 1, 0)),
-        Enter: () => {
-          const item = filtered[activeIndex];
-          if (item) selectItem(item);
-        },
-      };
-      const action = actions[e.key];
-      if (action) {
-        e.preventDefault();
-        action();
-      }
-    },
-    [filtered, activeIndex, selectItem],
-  );
-
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        close();
-        reset();
-      }
-    },
-    [close, reset],
-  );
+  const { selectItem, handleKeyDown, handleOpenChange } = useCommandPaletteActions({
+    filtered,
+    activeIndex,
+    setActiveIndex,
+    close,
+    reset,
+  });
 
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
