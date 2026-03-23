@@ -41,7 +41,12 @@ nav-feedback = Comentarios
 header-brand = Corbusier
 header-search-label = Buscar directivas
 header-search-placeholder = Buscar directivas
-header-notifications-label = Notificaciones
+header-notifications-label =
+    { $count ->
+        [0] Notificaciones
+        [one] { $count } notificación no leída
+       *[other] { $count } notificaciones no leídas
+    }
 header-user-menu-label = Menú de usuario
 
 dashboard-demo-region-label = Demostración de chaflán

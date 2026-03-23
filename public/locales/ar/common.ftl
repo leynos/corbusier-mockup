@@ -41,7 +41,12 @@ nav-feedback = الملاحظات
 header-brand = Corbusier
 header-search-label = البحث في التوجيهات
 header-search-placeholder = البحث في التوجيهات
-header-notifications-label = الإشعارات
+header-notifications-label =
+    { $count ->
+        [0] الإشعارات
+        [one] { $count } إشعار غير مقروء
+       *[other] { $count } إشعارات غير مقروءة
+    }
 header-user-menu-label = قائمة المستخدم
 
 dashboard-demo-region-label = عرض الشطفة

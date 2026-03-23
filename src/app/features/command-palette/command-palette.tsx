@@ -9,6 +9,16 @@ import { kindLabels } from "./command-palette-items";
 import { PaletteResultItem } from "./palette-result-item";
 import { useCommandPaletteSearch } from "./use-command-palette-search";
 
+/**
+ * Full-screen command palette overlay.
+ *
+ * Renders a Radix Dialog containing a search input, grouped result items, a
+ * no-results live region, and keyboard-hint footer. Open/close state and all
+ * interaction callbacks are delegated to {@link useCommandPaletteSearch}.
+ *
+ * Accessibility: the Dialog content carries `aria-label` (not `aria-labelledby`)
+ * so the label is read on focus entry even though no visible heading is rendered.
+ */
 export function CommandPalette(): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -107,6 +117,13 @@ interface PaletteSearchInputProps {
   readonly onQueryChange: (value: string) => void;
 }
 
+/**
+ * Search input row at the top of the command palette.
+ *
+ * Renders a magnifier icon and a `role="combobox"` text input wired to the
+ * result listbox via `aria-controls` and `aria-activedescendant`. The ref
+ * is used by the parent to steal focus on Dialog open.
+ */
 function PaletteSearchInput({
   inputRef,
   query,
@@ -139,6 +156,7 @@ function PaletteSearchInput({
 
 /* ── Footer hints ──────────────────────────────────────────────────── */
 
+/** Keyboard-shortcut hint bar rendered at the bottom of the command palette. */
 function PaletteFooterHints(): JSX.Element {
   const { t } = useTranslation();
 

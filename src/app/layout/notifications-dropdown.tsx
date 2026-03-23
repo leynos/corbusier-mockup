@@ -37,7 +37,10 @@ export function NotificationsDropdown(): JSX.Element {
         <button
           type="button"
           className="relative rounded-md p-2 text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:bg-base-300/50 hover:text-base-content"
-          aria-label={t("header-notifications-label", { defaultValue: "Notifications" })}
+          aria-label={t("header-notifications-label", {
+            count: unreadCount,
+            defaultValue: unreadCount > 0 ? "Unread notifications" : "Notifications",
+          })}
         >
           <IconBell size={20} stroke={1.5} aria-hidden="true" />
           {unreadCount > 0 ? (

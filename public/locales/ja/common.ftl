@@ -41,7 +41,11 @@ nav-feedback = フィードバック
 header-brand = Corbusier
 header-search-label = ディレクティブを検索
 header-search-placeholder = ディレクティブを検索
-header-notifications-label = 通知
+header-notifications-label =
+    { $count ->
+        [0] 通知
+       *[other] 未読 { $count } 件
+    }
 header-user-menu-label = ユーザーメニュー
 
 dashboard-demo-region-label = 面取りデモ

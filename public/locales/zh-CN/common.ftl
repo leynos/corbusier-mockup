@@ -41,7 +41,11 @@ nav-feedback = 反馈
 header-brand = Corbusier
 header-search-label = 搜索指令
 header-search-placeholder = 搜索指令
-header-notifications-label = 通知
+header-notifications-label =
+    { $count ->
+        [0] 通知
+       *[other] { $count } 条未读通知
+    }
 header-user-menu-label = 用户菜单
 
 dashboard-demo-region-label = 切角演示

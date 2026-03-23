@@ -17,6 +17,13 @@ const currentUser = {
 
 /* ── Component ─────────────────────────────────────────────────────── */
 
+/**
+ * Avatar button that opens a dropdown menu for the signed-in user.
+ *
+ * Trigger: a circular avatar button showing the user's initials.
+ * Items: Profile (→ `/settings`), Settings (→ `/settings/appearance`).
+ * Sign-out: navigates to `/sign-in` via the TanStack Router `useNavigate` hook.
+ */
 export function UserMenu(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();

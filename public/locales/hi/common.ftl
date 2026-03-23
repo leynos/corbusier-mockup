@@ -41,7 +41,11 @@ nav-feedback = प्रतिक्रिया
 header-brand = Corbusier
 header-search-label = निर्देश खोजें
 header-search-placeholder = निर्देश खोजें
-header-notifications-label = सूचनाएँ
+header-notifications-label =
+    { $count ->
+        [0] सूचनाएँ
+       *[other] { $count } अपठित सूचनाएँ
+    }
 header-user-menu-label = उपयोगकर्ता मेनू
 
 dashboard-demo-region-label = चैम्फर डेमो

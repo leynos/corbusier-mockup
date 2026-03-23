@@ -24,11 +24,14 @@ function filterPaletteItems(
   query: string,
   language: string,
 ): readonly PaletteItem[] {
-  if (!query.trim()) return items;
-  const q = query.toLowerCase();
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return items;
   return items.filter((item) => {
     const loc = pickLocalization(item.localizations, language);
-    return loc.name.toLowerCase().includes(q) || (item.meta?.toLowerCase().includes(q) ?? false);
+    return (
+      loc.name.toLowerCase().includes(normalized) ||
+      (item.meta?.toLowerCase().includes(normalized) ?? false)
+    );
   });
 }
 

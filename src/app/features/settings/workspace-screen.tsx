@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { SectionCard } from "../../components/section-card";
 
+/** Settings page for workspace defaults: encapsulation provider, resource limits, and tool policy. */
 export function WorkspaceScreen(): JSX.Element {
   return (
     <div>
@@ -22,6 +23,7 @@ export function WorkspaceScreen(): JSX.Element {
 
 /* ── Workspace screen header ───────────────────────────────────────── */
 
+/** Page heading and subtitle for the Workspace settings screen. */
 function WorkspaceScreenHeader(): JSX.Element {
   const { t } = useTranslation();
   return (
@@ -40,6 +42,7 @@ function WorkspaceScreenHeader(): JSX.Element {
 
 /* ── Encapsulation provider card ───────────────────────────────────── */
 
+/** SectionCard for choosing the workspace container/encapsulation provider. */
 function EncapsulationProviderCard(): JSX.Element {
   const { t } = useTranslation();
   return (
@@ -75,6 +78,7 @@ function EncapsulationProviderCard(): JSX.Element {
 
 /* ── Resource limits card ──────────────────────────────────────────── */
 
+/** SectionCard with sliders for CPU, memory, disk, and task-timeout limits. */
 function ResourceLimitsCard(): JSX.Element {
   const { t } = useTranslation();
   return (
@@ -126,6 +130,7 @@ function ResourceLimitsCard(): JSX.Element {
 
 /* ── Tool policy card ──────────────────────────────────────────────── */
 
+/** SectionCard for configuring file-edit policy and the allowed-tools checklist. */
 function ToolPolicyCard(): JSX.Element {
   const { t } = useTranslation();
   return (
@@ -207,6 +212,19 @@ interface ResourceSliderProps {
   readonly unit: string;
 }
 
+/**
+ * Labelled range slider backed by Radix Slider primitives.
+ *
+ * @param id - HTML id applied to the Slider root; used as a prefix for the
+ *   label (`{id}-label`) and output (`{id}-output`) ARIA ids.
+ * @param label - Visible label text rendered as a `<span>` above the track.
+ * @param min - Minimum slider value.
+ * @param max - Maximum slider value.
+ * @param step - Step increment between selectable values.
+ * @param defaultValue - Initial value shown on first render.
+ * @param unit - Optional unit suffix (e.g. `"GB"` or `"min"`) appended to the
+ *   live `<output>` element; omitted when empty string.
+ */
 function ResourceSlider({
   id,
   label,

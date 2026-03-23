@@ -42,7 +42,12 @@ nav-feedback = Feedback
 header-brand = Corbusier
 header-search-label = Search Directives
 header-search-placeholder = Search Directives
-header-notifications-label = Notifications
+header-notifications-label =
+    { $count ->
+        [0] Notifications
+        [one] { $count } unread notification
+       *[other] { $count } unread notifications
+    }
 header-user-menu-label = User menu
 
 dashboard-demo-region-label = Chamfer demo

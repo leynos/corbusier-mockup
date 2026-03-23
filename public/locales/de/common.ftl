@@ -41,7 +41,12 @@ nav-feedback = Feedback
 header-brand = Corbusier
 header-search-label = Direktiven durchsuchen
 header-search-placeholder = Direktiven durchsuchen
-header-notifications-label = Benachrichtigungen
+header-notifications-label =
+    { $count ->
+        [0] Benachrichtigungen
+        [one] { $count } ungelesene Benachrichtigung
+       *[other] { $count } ungelesene Benachrichtigungen
+    }
 header-user-menu-label = Benutzermenü
 
 dashboard-demo-region-label = Fasen-Demo
@@ -378,7 +383,7 @@ insight-severity-info = Info
 ## Command palette
 
 palette-label = Befehlspalette
-palette-placeholder = Aufgaben, Unterhaltungen, Befehle suchen…
+palette-placeholder = Aufgaben, Konversationen, Befehle suchen…
 palette-input-label = Befehle suchen
 palette-results-label = Suchergebnisse
 palette-no-results = Keine Ergebnisse gefunden.
@@ -387,7 +392,7 @@ palette-hint-open = Öffnen
 palette-hint-close = Schließen
 palette-kbd-esc = esc
 palette-group-tasks = Aufgaben
-palette-group-conversations = Unterhaltungen
+palette-group-conversations = Konversationen
 palette-group-commands = Befehle
 palette-group-projects = Projekte
 
