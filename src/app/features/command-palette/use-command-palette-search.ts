@@ -8,6 +8,36 @@ import { pickLocalization } from "../../domain/entities/localization";
 import { type PaletteItem, type PaletteItemKind, paletteItems } from "./command-palette-items";
 import { useCommandPalette } from "./command-palette-provider";
 
+/* ── Module-scope pure helpers ─────────────────────────────────────── */
+
+function filterPaletteItems(
+  items: readonly PaletteItem[],
+  query: string,
+  language: string,
+): readonly PaletteItem[] {
+  if (!query.trim()) return items;
+  const q = query.toLowerCase();
+  return items.filter((item) => {
+    const loc = pickLocalization(item.localizations, language);
+    return loc.name.toLowerCase().includes(q) || (item.meta?.toLowerCase().includes(q) ?? false);
+  });
+}
+
+function groupPaletteItems(
+  items: readonly PaletteItem[],
+): readonly { readonly kind: PaletteItemKind; readonly items: PaletteItem[] }[] {
+  const orderedKinds: PaletteItemKind[] = ["task", "conversation", "command", "project"];
+  const map = new Map<PaletteItemKind, PaletteItem[]>();
+  for (const item of items) {
+    const arr = map.get(item.kind) ?? [];
+    arr.push(item);
+    map.set(item.kind, arr);
+  }
+  return orderedKinds.filter((k) => map.has(k)).map((k) => ({ kind: k, items: map.get(k) ?? [] }));
+}
+
+/* ── Hook ──────────────────────────────────────────────────────────── */
+
 interface CommandPaletteSearchResult {
   readonly isOpen: boolean;
   readonly query: string;
@@ -32,27 +62,12 @@ export function useCommandPaletteSearch(): CommandPaletteSearchResult {
 
   /* ── Filtering ─────────────────────────────────────────────────── */
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return paletteItems;
-    const q = query.toLowerCase();
-    return paletteItems.filter((item) => {
-      const loc = pickLocalization(item.localizations, i18n.language);
-      return loc.name.toLowerCase().includes(q) || (item.meta?.toLowerCase().includes(q) ?? false);
-    });
-  }, [query, i18n.language]);
+  const filtered = useMemo(
+    () => filterPaletteItems(paletteItems, query, i18n.language),
+    [query, i18n.language],
+  );
 
-  const groups = useMemo(() => {
-    const orderedKinds: PaletteItemKind[] = ["task", "conversation", "command", "project"];
-    const map = new Map<PaletteItemKind, PaletteItem[]>();
-    for (const item of filtered) {
-      const arr = map.get(item.kind) ?? [];
-      arr.push(item);
-      map.set(item.kind, arr);
-    }
-    return orderedKinds
-      .filter((k) => map.has(k))
-      .map((k) => ({ kind: k, items: map.get(k) ?? [] }));
-  }, [filtered]);
+  const groups = useMemo(() => groupPaletteItems(filtered), [filtered]);
 
   /* ── Internal reset ────────────────────────────────────────────── */
 
