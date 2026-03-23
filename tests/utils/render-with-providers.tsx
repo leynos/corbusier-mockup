@@ -1,3 +1,10 @@
+/** @file Test utility that wraps `render` from `@testing-library/react` with
+ * `ThemeProvider` and `CommandPaletteProvider`, providing the common context
+ * required by most component tests.
+ *
+ * Usage: call `renderWithProviders(<MyComponent />)` instead of `render(…)`.
+ */
+
 import { type RenderOptions, type RenderResult, render } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 

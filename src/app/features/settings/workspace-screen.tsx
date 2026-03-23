@@ -122,6 +122,37 @@ export function WorkspaceScreen(): JSX.Element {
               ))}
             </div>
           </fieldset>
+
+          <fieldset className="mt-4 border-none p-0">
+            <legend className="mb-2 text-[length:var(--font-size-sm)] font-medium text-base-content">
+              {t("workspace-allowed-tools-heading", { defaultValue: "Allowed tools" })}
+            </legend>
+            <div className="space-y-2">
+              {(
+                [
+                  ["bash", "workspace-tool-bash", "Bash"],
+                  ["file-read", "workspace-tool-file-read", "File read"],
+                  ["file-edit", "workspace-tool-file-edit", "File edit"],
+                  ["web-fetch", "workspace-tool-web-fetch", "Web fetch"],
+                  ["web-search", "workspace-tool-web-search", "Web search"],
+                ] as const
+              ).map(([value, key, fallback]) => (
+                <label key={value} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`allowed-tool-${value}`}
+                    name="allowed-tools"
+                    value={value}
+                    defaultChecked
+                    className="checkbox checkbox-sm checkbox-primary"
+                  />
+                  <span className="text-[length:var(--font-size-sm)] text-base-content">
+                    {t(key, { defaultValue: fallback })}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </SectionCard>
       </div>
     </div>
@@ -151,17 +182,20 @@ function ResourceSlider({
 }: ResourceSliderProps): JSX.Element {
   const [value, setValue] = useState(defaultValue);
 
+  const labelId = `${id}-label`;
+  const outputId = `${id}-output`;
+
   return (
     <div>
       <div className="mb-2 flex items-center justify-between">
-        <label
-          htmlFor={id}
+        <span
+          id={labelId}
           className="text-[length:var(--font-size-sm)] font-medium text-base-content"
         >
           {label}
-        </label>
+        </span>
         <output
-          htmlFor={id}
+          id={outputId}
           className="font-[family-name:var(--font-mono)] text-[length:var(--font-size-sm)] text-base-content/70"
         >
           {value}
@@ -183,7 +217,8 @@ function ResourceSlider({
           <Slider.Range className="absolute h-full rounded-full bg-primary" />
         </Slider.Track>
         <Slider.Thumb
-          aria-label={label}
+          aria-labelledby={labelId}
+          aria-describedby={outputId}
           className="block h-5 w-5 rounded-full border-2 border-primary bg-base-100 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         />
       </Slider.Root>

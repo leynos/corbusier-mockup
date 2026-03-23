@@ -55,29 +55,35 @@ export function CommandPalette(): JSX.Element {
             className="max-h-72 overflow-y-auto p-2"
             aria-label={t("palette-results-label", { defaultValue: "Search results" })}
           >
-            {indexedGroups.map((group) => (
-              <div key={group.kind} role="presentation">
-                <span className="block px-3 pb-1 pt-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60">
-                  {t(kindLabels[group.kind])}
-                </span>
-                <div>
-                  {group.items.map(({ item, index }) => (
-                    <PaletteResultItem
-                      key={item.id}
-                      item={item}
-                      isActive={index === activeIndex}
-                      onSelect={selectItem}
-                      onMouseEnter={() => setActiveIndex(index)}
-                    />
-                  ))}
+            {indexedGroups.map((group) => {
+              const headingId = `palette-group-${group.kind}`;
+              return (
+                // biome-ignore lint/a11y/useSemanticElements: group role required inside listbox; fieldset is not permitted as a listbox child per ARIA spec
+                <div key={group.kind} role="group" aria-labelledby={headingId}>
+                  <span
+                    id={headingId}
+                    className="block px-3 pb-1 pt-2 font-[family-name:var(--font-display)] text-[length:var(--font-size-xs)] font-semibold uppercase tracking-widest text-base-content/60"
+                  >
+                    {t(kindLabels[group.kind])}
+                  </span>
+                  <div>
+                    {group.items.map(({ item, index }) => (
+                      <PaletteResultItem
+                        key={item.id}
+                        item={item}
+                        isActive={index === activeIndex}
+                        onSelect={selectItem}
+                        onMouseEnter={() => setActiveIndex(index)}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {filtered.length === 0 ? (
+              // biome-ignore lint/a11y/useSemanticElements: output element is not valid inside listbox; status role announces no-results to AT without implying interactivity
               <div
-                role="option"
-                tabIndex={-1}
-                aria-selected={false}
+                role="status"
                 className="px-3 py-4 text-center text-[length:var(--font-size-sm)] text-base-content/60"
               >
                 {t("palette-no-results", { defaultValue: "No results found." })}

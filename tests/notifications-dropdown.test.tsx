@@ -1,16 +1,12 @@
 /** @file Tests for the notifications dropdown. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, fireEvent, screen } from "@testing-library/react";
 
 import { NotificationsDropdown } from "../src/app/layout/notifications-dropdown";
 import { renderWithProviders } from "./utils/render-with-providers";
 
 describe("NotificationsDropdown", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });

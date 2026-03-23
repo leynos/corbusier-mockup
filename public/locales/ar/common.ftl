@@ -491,6 +491,12 @@ workspace-file-edit-policy = سياسة تحرير الملفات
 workspace-policy-ask = السؤال قبل كل تعديل
 workspace-policy-allow = السماح بجميع التعديلات
 workspace-policy-deny = رفض جميع التعديلات
+workspace-allowed-tools-heading = الأدوات المسموح بها
+workspace-tool-bash = Bash
+workspace-tool-file-read = قراءة الملفات
+workspace-tool-file-edit = تعديل الملفات
+workspace-tool-web-fetch = جلب الويب
+workspace-tool-web-search = بحث الويب
 
 ## Settings — Integrations
 

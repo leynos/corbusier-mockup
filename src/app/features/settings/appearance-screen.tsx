@@ -3,7 +3,7 @@
 import * as Switch from "@radix-ui/react-switch";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { IconLayout, IconMoon, IconPalette, IconSun, IconWifi } from "@tabler/icons-react";
-import type { JSX } from "react";
+import { type JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SectionCard } from "../../components/section-card";
@@ -12,6 +12,8 @@ import { useTheme } from "../../providers/theme-provider";
 export function AppearanceScreen(): JSX.Element {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
+  const [density, setDensity] = useState<string>("comfortable");
+  const [sseReconnect, setSseReconnect] = useState(true);
 
   return (
     <div>
@@ -63,7 +65,10 @@ export function AppearanceScreen(): JSX.Element {
         >
           <ToggleGroup.Root
             type="single"
-            defaultValue="comfortable"
+            value={density}
+            onValueChange={(val) => {
+              if (val) setDensity(val);
+            }}
             className="inline-flex gap-2"
             aria-label={t("appearance-density-label", { defaultValue: "Layout density" })}
           >
@@ -106,7 +111,8 @@ export function AppearanceScreen(): JSX.Element {
             </div>
             <Switch.Root
               id="sse-reconnect"
-              defaultChecked
+              checked={sseReconnect}
+              onCheckedChange={setSseReconnect}
               className="relative h-6 w-11 shrink-0 cursor-pointer rounded-full bg-base-300 transition-colors data-[state=checked]:bg-primary"
               aria-label={t("appearance-sse-auto-reconnect", {
                 defaultValue: "Auto-reconnect on connection loss",

@@ -14,7 +14,7 @@ test.describe("Command palette", () => {
     await expect(input).toBeVisible();
 
     /* Type a query and verify results filter */
-    await input.fill("deploy");
+    await input.fill("settings");
     const options = page.getByRole("option");
     await expect(options.first()).toBeVisible();
 

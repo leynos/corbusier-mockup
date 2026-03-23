@@ -1,6 +1,6 @@
 /** @file Tests for the command palette overlay. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, fireEvent, screen } from "@testing-library/react";
 import type { JSX } from "react";
 
@@ -22,10 +22,6 @@ function OpenPalette(): JSX.Element {
 }
 
 describe("CommandPalette", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });
@@ -47,8 +43,8 @@ describe("CommandPalette", () => {
     const input = await screen.findByRole("combobox", {
       name: /search commands/i,
     });
-    fireEvent.change(input, { target: { value: "deploy" } });
-    const options = screen.getAllByRole("option");
+    fireEvent.change(input, { target: { value: "settings" } });
+    const options = await screen.findAllByRole("option");
     expect(options.length).toBeGreaterThan(0);
   });
 

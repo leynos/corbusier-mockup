@@ -81,7 +81,12 @@ export function UserMenu(): JSX.Element {
 
           <DropdownMenu.Separator className="my-1 h-px bg-base-300" />
 
-          <DropdownMenu.Item className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[length:var(--font-size-sm)] text-error outline-none transition-colors data-[highlighted]:bg-error/10">
+          <DropdownMenu.Item
+            className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[length:var(--font-size-sm)] text-error outline-none transition-colors data-[highlighted]:bg-error/10"
+            onSelect={() => {
+              console.log("sign out");
+            }}
+          >
             <IconLogout size={16} stroke={1.5} aria-hidden="true" />
             {t("user-menu-sign-out", { defaultValue: "Sign out" })}
           </DropdownMenu.Item>

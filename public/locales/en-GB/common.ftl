@@ -442,6 +442,12 @@ workspace-file-edit-policy = File edit policy
 workspace-policy-ask = Ask before each edit
 workspace-policy-allow = Allow all edits
 workspace-policy-deny = Deny all edits
+workspace-allowed-tools-heading = Allowed tools
+workspace-tool-bash = Bash
+workspace-tool-file-read = File read
+workspace-tool-file-edit = File edit
+workspace-tool-web-fetch = Web fetch
+workspace-tool-web-search = Web search
 
 ## Settings — Integrations
 

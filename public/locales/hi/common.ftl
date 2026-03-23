@@ -434,6 +434,12 @@ workspace-file-edit-policy = फ़ाइल संपादन नीति
 workspace-policy-ask = प्रत्येक संपादन से पहले पूछें
 workspace-policy-allow = सभी संपादन अनुमत
 workspace-policy-deny = सभी संपादन अस्वीकृत
+workspace-allowed-tools-heading = अनुमत उपकरण
+workspace-tool-bash = Bash
+workspace-tool-file-read = फ़ाइल पठन
+workspace-tool-file-edit = फ़ाइल संपादन
+workspace-tool-web-fetch = वेब फेच
+workspace-tool-web-search = वेब खोज
 
 ## Settings — Integrations
 

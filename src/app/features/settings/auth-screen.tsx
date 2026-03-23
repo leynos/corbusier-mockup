@@ -17,6 +17,7 @@ interface ApiKey {
 }
 
 interface Session {
+  readonly id: string;
   readonly device: string;
   readonly ip: string;
   readonly lastActive: string;
@@ -44,15 +45,30 @@ const apiKeys: readonly ApiKey[] = [
 ];
 
 const sessions: readonly Session[] = [
-  { device: "Chrome on macOS", ip: "192.168.1.42", lastActive: "2026-03-22T09:30:00Z" },
-  { device: "Firefox on Ubuntu", ip: "10.0.0.17", lastActive: "2026-03-21T14:15:00Z" },
-  { device: "Safari on iOS", ip: "172.16.0.8", lastActive: "2026-03-19T11:00:00Z" },
+  {
+    id: "sess-001",
+    device: "Chrome on macOS",
+    ip: "192.168.1.42",
+    lastActive: "2026-03-22T09:30:00Z",
+  },
+  {
+    id: "sess-002",
+    device: "Firefox on Ubuntu",
+    ip: "10.0.0.17",
+    lastActive: "2026-03-21T14:15:00Z",
+  },
+  { id: "sess-003", device: "Safari on iOS", ip: "172.16.0.8", lastActive: "2026-03-19T11:00:00Z" },
 ];
 
 /* ── Component ─────────────────────────────────────────────────────── */
 
 export function AuthScreen(): JSX.Element {
   const { t } = useTranslation();
+
+  function handleGenerateKey(): void {
+    /* Placeholder: open the key-generation modal or trigger the generate flow. */
+    console.log("generate key");
+  }
 
   const keyColumns: readonly Column<ApiKey, keyof ApiKey & string>[] = [
     { key: "name", header: t("auth-col-name", { defaultValue: "Name" }) },
@@ -96,7 +112,7 @@ export function AuthScreen(): JSX.Element {
           title={t("auth-api-keys-heading", { defaultValue: "API Keys" })}
         >
           <div className="mb-3 flex justify-end">
-            <button type="button" className="btn btn-primary btn-sm">
+            <button type="button" className="btn btn-primary btn-sm" onClick={handleGenerateKey}>
               {t("auth-generate-key", { defaultValue: "Generate key" })}
             </button>
           </div>
@@ -115,7 +131,7 @@ export function AuthScreen(): JSX.Element {
           <DataTable
             columns={sessionColumns}
             data={sessions}
-            rowKey={(row) => row.ip}
+            rowKey={(row) => row.id}
             label={t("auth-sessions-table-label", { defaultValue: "Active sessions" })}
           />
         </SectionCard>

@@ -1,16 +1,12 @@
 /** @file Tests for the sign-in screen. */
 
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, describe, expect, it } from "bun:test";
 import { cleanup, screen } from "@testing-library/react";
 
 import { SignInScreen } from "../src/app/features/auth/sign-in-screen";
 import { renderWithProviders } from "./utils/render-with-providers";
 
 describe("SignInScreen", () => {
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
   });

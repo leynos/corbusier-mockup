@@ -429,6 +429,12 @@ workspace-file-edit-policy = ファイル編集ポリシー
 workspace-policy-ask = 編集ごとに確認
 workspace-policy-allow = すべての編集を許可
 workspace-policy-deny = すべての編集を拒否
+workspace-allowed-tools-heading = 許可ツール
+workspace-tool-bash = Bash
+workspace-tool-file-read = ファイル読み取り
+workspace-tool-file-edit = ファイル編集
+workspace-tool-web-fetch = Webフェッチ
+workspace-tool-web-search = Web検索
 
 ## Settings — Integrations
 

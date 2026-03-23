@@ -367,6 +367,7 @@ palette-no-results = 未找到结果。
 palette-hint-navigate = 导航
 palette-hint-open = 打开
 palette-hint-close = 关闭
+palette-kbd-esc = esc
 palette-group-tasks = 任务
 palette-group-conversations = 对话
 palette-group-commands = 命令
@@ -392,6 +393,7 @@ settings-display-name = 显示名称
 settings-email = 电子邮件
 settings-avatar = 头像
 settings-avatar-upload = 上传照片
+settings-avatar-initials = AC
 settings-notifications-heading = 通知偏好
 settings-notif-email = 邮件通知
 settings-notif-email-desc = 通过电子邮件接收任务分配和审查。
@@ -417,6 +419,10 @@ auth-sessions-table-label = 活跃会话
 
 workspace-encapsulation-heading = 封装提供程序
 workspace-provider-label = 提供程序
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
 workspace-resources-heading = 资源限制
 workspace-cpu-label = CPU 核心数
 workspace-memory-label = 内存 (GB)
@@ -429,6 +435,12 @@ workspace-file-edit-policy = 文件编辑策略
 workspace-policy-ask = 每次编辑前询问
 workspace-policy-allow = 允许所有编辑
 workspace-policy-deny = 拒绝所有编辑
+workspace-allowed-tools-heading = 允许的工具
+workspace-tool-bash = Bash
+workspace-tool-file-read = 文件读取
+workspace-tool-file-edit = 文件编辑
+workspace-tool-web-fetch = Web 抓取
+workspace-tool-web-search = Web 搜索
 
 ## Settings — Integrations
 
@@ -439,7 +451,9 @@ integrations-client-secret = 客户端密钥
 integrations-webhook-url = Webhook URL
 integrations-frankie-heading = Frankie 审查适配器
 integrations-frankie-endpoint = 端点 URL
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
 integrations-frankie-token = API 令牌
+integrations-frankie-token-placeholder = frk_••••••••
 integrations-test-connection = 测试连接
 
 ## Settings — Appearance
@@ -472,17 +486,6 @@ sign-in-feature-orchestration = 实时任务编排
 sign-in-feature-orchestration-desc = 具有实时状态更新的智能代理驱动工作流
 sign-in-feature-security = 企业级安全
 sign-in-feature-security-desc = RBAC、审计跟踪和策略实施
+sign-in-email-placeholder = you@company.com
 sign-in-feature-insights = AI 驱动的洞察
 sign-in-feature-insights-desc = 主动建议和智能推荐
-
-## Hardcoded string fixes
-
-sign-in-email-placeholder = you@company.com
-palette-kbd-esc = esc
-integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
-integrations-frankie-token-placeholder = frk_••••••••
-settings-avatar-initials = AC
-workspace-provider-docker = Docker
-workspace-provider-podman = Podman
-workspace-provider-firecracker = Firecracker
-workspace-provider-gvisor = gVisor

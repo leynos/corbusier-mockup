@@ -114,6 +114,7 @@ function SignInCard(): JSX.Element {
                   })}
                   className="input input-bordered w-full ps-10"
                   autoComplete="email"
+                  required
                 />
               </div>
             </fieldset>
@@ -140,6 +141,7 @@ function SignInCard(): JSX.Element {
                   })}
                   className="input input-bordered w-full ps-10"
                   autoComplete="current-password"
+                  required
                 />
               </div>
             </fieldset>
