@@ -37,7 +37,8 @@ export function DataTable<T, const C extends readonly Column<T, keyof T & string
   label,
 }: DataTableProps<T, C>): JSX.Element {
   return (
-    <div className="overflow-x-auto">
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: scrollable table region requires keyboard focus per WCAG 2.1 SC 2.1.1
+    <div className="overflow-x-auto" tabIndex={0}>
       <table className="table table-zebra w-full" aria-label={label}>
         <thead>
           <tr>

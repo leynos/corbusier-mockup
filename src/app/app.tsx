@@ -1,6 +1,8 @@
 /** @file Application root wiring shared providers and the initial route shell. */
 
 import type { JSX } from "react";
+import { CommandPalette } from "./features/command-palette/command-palette";
+import { CommandPaletteProvider } from "./features/command-palette/command-palette-provider";
 import { ThemeProvider } from "./providers/theme-provider";
 import { AppRoutes } from "./routes/app-routes";
 
@@ -19,7 +21,10 @@ import { AppRoutes } from "./routes/app-routes";
 export default function App(): JSX.Element {
   return (
     <ThemeProvider>
-      <AppRoutes />
+      <CommandPaletteProvider>
+        <AppRoutes />
+        <CommandPalette />
+      </CommandPaletteProvider>
     </ThemeProvider>
   );
 }

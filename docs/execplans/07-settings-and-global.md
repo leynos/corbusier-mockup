@@ -5,7 +5,7 @@ This ExecPlan (execution plan) is a living document. The sections
 Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be
 kept up to date as work proceeds.
 
-Status: DRAFT
+Status: COMPLETE
 
 ## Purpose / big picture
 
@@ -89,24 +89,40 @@ outside the authenticated shell, matching
 
 ## Progress
 
-- [ ] Milestone 1: Command palette
-- [ ] Milestone 2: Notifications dropdown
-- [ ] Milestone 3: User menu dropdown
-- [ ] Milestone 4: Settings pages
-- [ ] Milestone 5: Sign In page
-- [ ] Milestone 6: Tests and validation
+- [x] Milestone 1: Command palette
+- [x] Milestone 2: Notifications dropdown
+- [x] Milestone 3: User menu dropdown
+- [x] Milestone 4: Settings pages
+- [x] Milestone 5: Sign In page
+- [x] Milestone 6: Tests and validation
 
 ## Surprises & discoveries
 
-(None yet.)
+- Biome rejects Accessible Rich Internet Applications (ARIA) widget
+  roles (`role="option"`) on `<li>` elements — used `<div>` elements
+  for the command palette listbox items.
+- `renderWithProviders` and `renderWithRouter` test utilities needed
+  updating to include `CommandPaletteProvider` in the wrapper stack.
+- `@floating-ui/dom` (used by Radix Popover) requires `Element` on
+  the global object in Happy DOM — added to `setup-happy-dom.ts`.
+- Hardcoded strings checker caught placeholder values (`you@company.com`,
+  container runtime names) — all wrapped in `t()`.
 
 ## Decision log
 
-(None yet.)
+- Used Radix Dialog for command palette (focus trap + overlay) rather
+  than a custom implementation.
+- Kept `GlobalControls` floating panel alongside the new Appearance
+  settings page — both wire into the same `ThemeProvider`.
+- Sign-in page rendered outside AppShell via pathname check in
+  `root-route.tsx` rather than a separate router tree.
 
 ## Outcomes & retrospective
 
-(To be completed when the plan is done.)
+All 6 milestones delivered. `bun run ff` passes fully: 158 unit
+tests, 51 end-to-end (E2E) tests (including axe sweeps on all new
+routes), zero lint/type/accessibility (a11y) violations. The mockup
+is now feature-complete against the sitemap.
 
 ## Context and orientation
 

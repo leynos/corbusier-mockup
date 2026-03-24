@@ -1,0 +1,193 @@
+/** @file Notifications bell dropdown showing recent notification entries. */
+
+import * as Popover from "@radix-ui/react-popover";
+import {
+  IconAlertTriangle,
+  IconBell,
+  IconGitPullRequest,
+  IconSubtask,
+  IconTerminal,
+} from "@tabler/icons-react";
+import type { JSX } from "react";
+import { useTranslation } from "react-i18next";
+import { type Notification, type NotificationKind, notifications } from "../../data/notifications";
+import { pickLocalization } from "../domain/entities/localization";
+import { now } from "../hooks/use-now";
+
+/* ── Icon per notification kind ───────────────────────────────────── */
+
+/** Maps each notification kind to its corresponding icon component. */
+const kindIcons: Record<NotificationKind, typeof IconSubtask> = {
+  task_assigned: IconSubtask,
+  hook_failure: IconTerminal,
+  pr_review: IconGitPullRequest,
+  system_alert: IconAlertTriangle,
+};
+
+/* ── View Model Hook ──────────────────────────────────────────────── */
+
+interface NotificationViewModel {
+  readonly unreadCount: number;
+  readonly triggerLabel: string;
+  readonly heading: string;
+  readonly listLabel: string;
+  readonly unreadLabel: string;
+  readonly locale: string;
+}
+
+/** Resolves all translated strings for the notifications dropdown. */
+function useNotificationsViewModel(): NotificationViewModel {
+  const { t, i18n } = useTranslation();
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  return {
+    unreadCount,
+    triggerLabel: t("header-notifications-label", {
+      count: unreadCount,
+      defaultValue: unreadCount > 0 ? "Unread notifications" : "Notifications",
+    }),
+    heading: t("notifications-heading", { defaultValue: "Notifications" }),
+    listLabel: t("notifications-list-label", { defaultValue: "Recent notifications" }),
+    unreadLabel: t("notifications-unread", { defaultValue: "Unread" }),
+    locale: i18n.language,
+  };
+}
+
+/* ── Component ─────────────────────────────────────────────────────── */
+
+/** Bell icon button that opens a popover listing recent notifications. */
+export function NotificationsDropdown(): JSX.Element {
+  const { unreadCount, triggerLabel, heading, listLabel, unreadLabel, locale } =
+    useNotificationsViewModel();
+
+  return (
+    <Popover.Root>
+      <Popover.Trigger asChild>
+        <button
+          type="button"
+          className="relative rounded-md p-2 text-base-content/60 transition-colors duration-[var(--transition-fast)] hover:bg-base-300/50 hover:text-base-content"
+          aria-label={triggerLabel}
+        >
+          <IconBell size={20} stroke={1.5} aria-hidden="true" />
+          {unreadCount > 0 ? (
+            <span className="absolute end-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[length:var(--font-size-xs)] font-bold text-error-content">
+              {unreadCount}
+            </span>
+          ) : null}
+        </button>
+      </Popover.Trigger>
+
+      <Popover.Portal>
+        <Popover.Content
+          className="z-50 w-80 rounded-xl border border-base-300 bg-base-100 shadow-xl"
+          sideOffset={8}
+          align="end"
+        >
+          <div className="border-b border-base-300 px-4 py-3">
+            <h2 className="font-[family-name:var(--font-display)] text-[length:var(--font-size-sm)] font-semibold text-base-content">
+              {heading}
+            </h2>
+          </div>
+
+          <ul className="max-h-72 overflow-y-auto" aria-label={listLabel}>
+            {notifications.map((n) => (
+              <NotificationItem
+                key={n.id}
+                notification={n}
+                locale={locale}
+                unreadLabel={unreadLabel}
+              />
+            ))}
+          </ul>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+}
+
+/* ── Notification item ──────────────────────────────────────────────── */
+
+interface NotificationItemProps {
+  readonly notification: Notification;
+  readonly locale: string;
+  readonly unreadLabel: string;
+}
+
+/** Single notification row rendered inside the notifications popover. */
+function NotificationItem({
+  notification,
+  locale,
+  unreadLabel,
+}: NotificationItemProps): JSX.Element {
+  const Icon = kindIcons[notification.kind];
+  const loc = pickLocalization(notification.localizations, locale);
+  const ts = new Date(notification.timestamp);
+  const relative = formatRelativeTime(ts, locale);
+
+  return (
+    <li
+      className={`flex gap-3 border-b border-base-300 px-4 py-3 last:border-b-0 ${
+        notification.read ? "opacity-60" : ""
+      }`}
+    >
+      <Icon
+        size={16}
+        stroke={1.5}
+        className="mt-0.5 shrink-0 text-base-content/50"
+        aria-hidden="true"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-[length:var(--font-size-sm)] text-base-content">{loc.name}</p>
+        <time
+          dateTime={notification.timestamp}
+          className="text-[length:var(--font-size-xs)] text-base-content/40"
+        >
+          {relative}
+        </time>
+      </div>
+      {!notification.read ? (
+        <span
+          className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary"
+          aria-label={unreadLabel}
+          role="img"
+        />
+      ) : null}
+    </li>
+  );
+}
+
+/* ── Helpers ────────────────────────────────────────────────────────── */
+
+/** Cache of Intl.RelativeTimeFormat instances keyed by locale. */
+const relativeTimeFormatCache = new Map<string, Intl.RelativeTimeFormat>();
+
+/**
+ * Retrieve or create a cached Intl.RelativeTimeFormat for the given locale.
+ *
+ * @param locale - The BCP-47 locale tag.
+ * @returns A cached or newly created RelativeTimeFormat instance.
+ */
+function getRelativeTimeFormat(locale: string): Intl.RelativeTimeFormat {
+  let rtf = relativeTimeFormatCache.get(locale);
+  if (!rtf) {
+    rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" });
+    relativeTimeFormatCache.set(locale, rtf);
+  }
+  return rtf;
+}
+
+/** Formats a date as a locale-aware relative time string (e.g. "2 hr. ago"). */
+function formatRelativeTime(date: Date, locale: string): string {
+  const diffMs = date.getTime() - now().getTime();
+  const rtf = getRelativeTimeFormat(locale);
+
+  const diffMins = Math.round(diffMs / 60_000);
+  if (Math.abs(diffMins) < 1) return rtf.format(0, "minute");
+  if (Math.abs(diffMins) < 60) return rtf.format(diffMins, "minute");
+
+  const diffHours = Math.round(diffMins / 60);
+  if (Math.abs(diffHours) < 24) return rtf.format(diffHours, "hour");
+
+  const diffDays = Math.round(diffHours / 24);
+  return rtf.format(diffDays, "day");
+}

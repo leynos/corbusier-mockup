@@ -38,9 +38,14 @@ nav-tenant-management = テナント管理
 nav-settings = 設定
 nav-feedback = フィードバック
 
+header-brand = Corbusier
 header-search-label = ディレクティブを検索
 header-search-placeholder = ディレクティブを検索
-header-notifications-label = 通知
+header-notifications-label =
+    { $count ->
+        [0] 通知
+       *[other] 未読 { $count } 件
+    }
 header-user-menu-label = ユーザーメニュー
 
 dashboard-demo-region-label = 面取りデモ
@@ -355,3 +360,136 @@ suggestion-insights-heading = AIインサイト
 insight-severity-critical = 重大
 insight-severity-warning = 警告
 insight-severity-info = 情報
+
+## Command palette
+
+palette-label = コマンドパレット
+palette-placeholder = タスク、会話、コマンドを検索…
+palette-input-label = コマンド検索
+palette-results-label = 検索結果
+palette-no-results = 結果が見つかりません。
+palette-hint-navigate = 移動
+palette-hint-open = 開く
+palette-hint-close = 閉じる
+palette-kbd-esc = esc
+palette-group-tasks = タスク
+palette-group-conversations = 会話
+palette-group-commands = コマンド
+palette-group-projects = プロジェクト
+
+## Notifications
+
+notifications-heading = 通知
+notifications-list-label = 最近の通知
+notifications-unread = 未読
+
+## User menu
+
+user-menu-profile = プロフィール
+user-menu-settings = 設定
+user-menu-tenant = テナント
+user-menu-sign-out = サインアウト
+
+## Settings — Profile
+
+settings-profile-heading = プロフィール
+settings-display-name = 表示名
+settings-email = メールアドレス
+settings-avatar = アバター
+settings-avatar-upload = 写真をアップロード
+settings-notifications-heading = 通知設定
+settings-notif-email = メール通知
+settings-notif-email-desc = メールでタスクの割り当てとレビューを受信します。
+settings-notif-hooks = フック失敗アラート
+settings-notif-hooks-desc = フックまたはポリシーゲートが失敗した際に通知を受け取ります。
+
+## Settings — Authentication
+
+auth-api-keys-heading = APIキー
+auth-col-name = 名前
+auth-col-key = キー
+auth-col-created = 作成日
+auth-col-last-used = 最終使用
+auth-generate-key = キーを生成
+auth-api-keys-table-label = APIキー
+auth-sessions-heading = アクティブセッション
+auth-col-device = デバイス
+auth-col-ip = IPアドレス
+auth-col-last-active = 最終アクティブ
+auth-sessions-table-label = アクティブセッション
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = カプセル化プロバイダー
+workspace-provider-label = プロバイダー
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
+workspace-resources-heading = リソース制限
+workspace-cpu-label = CPUコア数
+workspace-memory-label = メモリ（GB）
+workspace-disk-label = ディスク（GB）
+workspace-timeout-label = タスクタイムアウト（分）
+workspace-unit-gb = GB
+workspace-unit-min = 分
+workspace-tool-policy-heading = ツールポリシー
+workspace-file-edit-policy = ファイル編集ポリシー
+workspace-policy-ask = 編集ごとに確認
+workspace-policy-allow = すべての編集を許可
+workspace-policy-deny = すべての編集を拒否
+workspace-allowed-tools-heading = 許可ツール
+workspace-tool-bash = Bash
+workspace-tool-file-read = ファイル読み取り
+workspace-tool-file-edit = ファイル編集
+workspace-tool-web-fetch = Webフェッチ
+workspace-tool-web-search = Web検索
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = クライアントID
+integrations-client-secret = クライアントシークレット
+integrations-webhook-url = Webhook URL
+integrations-frankie-heading = Frankie レビューアダプター
+integrations-frankie-endpoint = エンドポイントURL
+integrations-frankie-token = APIトークン
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token-placeholder = frk_••••••••
+integrations-test-connection = 接続テスト
+
+## Settings — Appearance
+
+appearance-theme-heading = テーマ
+appearance-density-heading = レイアウト密度
+appearance-density-label = レイアウト密度
+appearance-density-compact = コンパクト
+appearance-density-comfortable = 標準
+appearance-density-spacious = ゆったり
+appearance-sse-heading = リアルタイム更新
+appearance-sse-auto-reconnect = 接続切断時の自動再接続
+appearance-sse-desc = サーバーが利用可能になった際にSSE接続を自動的に再確立します。
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = エンジニアリングオーケストレーションプラットフォーム
+sign-in-heading = おかえりなさい
+sign-in-subtitle = ワークスペースにサインインして続行してください
+sign-in-email-label = メールアドレス
+sign-in-password-label = パスワード
+sign-in-password-placeholder = パスワードを入力
+sign-in-email-placeholder = you@company.com
+sign-in-remember = このデバイスを記憶する
+sign-in-forgot = パスワードをお忘れですか？
+sign-in-submit = ワークスペースにサインイン
+sign-in-no-account = アカウントをお持ちでないですか？
+sign-in-request-access = アクセスをリクエスト
+sign-in-feature-orchestration = リアルタイムタスクオーケストレーション
+sign-in-feature-orchestration-desc = ライブステータス更新付きのインテリジェントなエージェント駆動ワークフロー
+sign-in-feature-security = エンタープライズグレードのセキュリティ
+sign-in-feature-security-desc = RBAC、監査証跡、ポリシー実施
+sign-in-feature-insights = AI駆動のインサイト
+sign-in-feature-insights-desc = プロアクティブな提案とインテリジェントな推奨
+

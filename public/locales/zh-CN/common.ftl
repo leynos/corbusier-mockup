@@ -38,9 +38,14 @@ nav-tenant-management = 租户管理
 nav-settings = 设置
 nav-feedback = 反馈
 
+header-brand = Corbusier
 header-search-label = 搜索指令
 header-search-placeholder = 搜索指令
-header-notifications-label = 通知
+header-notifications-label =
+    { $count ->
+        [0] 通知
+       *[other] { $count } 条未读通知
+    }
 header-user-menu-label = 用户菜单
 
 dashboard-demo-region-label = 切角演示
@@ -355,3 +360,135 @@ suggestion-insights-heading = AI 洞察
 insight-severity-critical = 严重
 insight-severity-warning = 警告
 insight-severity-info = 信息
+
+## Command palette
+
+palette-label = 命令面板
+palette-placeholder = 搜索任务、会话、命令…
+palette-input-label = 搜索命令
+palette-results-label = 搜索结果
+palette-no-results = 未找到结果。
+palette-hint-navigate = 导航
+palette-hint-open = 打开
+palette-hint-close = 关闭
+palette-kbd-esc = esc
+palette-group-tasks = 任务
+palette-group-conversations = 会话
+palette-group-commands = 命令
+palette-group-projects = 项目
+
+## Notifications
+
+notifications-heading = 通知
+notifications-list-label = 最近通知
+notifications-unread = 未读
+
+## User menu
+
+user-menu-profile = 个人资料
+user-menu-settings = 设置
+user-menu-tenant = 租户
+user-menu-sign-out = 退出登录
+
+## Settings — Profile
+
+settings-profile-heading = 个人资料
+settings-display-name = 显示名称
+settings-email = 电子邮件
+settings-avatar = 头像
+settings-avatar-upload = 上传照片
+settings-notifications-heading = 通知偏好
+settings-notif-email = 邮件通知
+settings-notif-email-desc = 通过电子邮件接收任务分配和审查。
+settings-notif-hooks = 钩子失败警报
+settings-notif-hooks-desc = 钩子或策略门控失败时获取通知。
+
+## Settings — Authentication
+
+auth-api-keys-heading = API 密钥
+auth-col-name = 名称
+auth-col-key = 密钥
+auth-col-created = 创建时间
+auth-col-last-used = 最后使用
+auth-generate-key = 生成密钥
+auth-api-keys-table-label = API 密钥
+auth-sessions-heading = 活跃会话
+auth-col-device = 设备
+auth-col-ip = IP 地址
+auth-col-last-active = 最后活跃
+auth-sessions-table-label = 活跃会话
+
+## Settings — Workspace
+
+workspace-encapsulation-heading = 封装提供程序
+workspace-provider-label = 提供程序
+workspace-provider-docker = Docker
+workspace-provider-podman = Podman
+workspace-provider-firecracker = Firecracker
+workspace-provider-gvisor = gVisor
+workspace-resources-heading = 资源限制
+workspace-cpu-label = CPU 核心数
+workspace-memory-label = 内存 (GB)
+workspace-disk-label = 磁盘 (GB)
+workspace-timeout-label = 任务超时（分钟）
+workspace-unit-gb = GB
+workspace-unit-min = 分钟
+workspace-tool-policy-heading = 工具策略
+workspace-file-edit-policy = 文件编辑策略
+workspace-policy-ask = 每次编辑前询问
+workspace-policy-allow = 允许所有编辑
+workspace-policy-deny = 拒绝所有编辑
+workspace-allowed-tools-heading = 允许的工具
+workspace-tool-bash = Bash
+workspace-tool-file-read = 文件读取
+workspace-tool-file-edit = 文件编辑
+workspace-tool-web-fetch = Web 抓取
+workspace-tool-web-search = Web 搜索
+
+## Settings — Integrations
+
+integrations-github-heading = GitHub
+integrations-gitlab-heading = GitLab
+integrations-client-id = 客户端 ID
+integrations-client-secret = 客户端密钥
+integrations-webhook-url = Webhook URL
+integrations-frankie-heading = Frankie 审查适配器
+integrations-frankie-endpoint = 端点 URL
+integrations-frankie-endpoint-placeholder = https://frankie.internal/api/v1
+integrations-frankie-token = API 令牌
+integrations-frankie-token-placeholder = frk_••••••••
+integrations-test-connection = 测试连接
+
+## Settings — Appearance
+
+appearance-theme-heading = 主题
+appearance-density-heading = 布局密度
+appearance-density-label = 布局密度
+appearance-density-compact = 紧凑
+appearance-density-comfortable = 舒适
+appearance-density-spacious = 宽敞
+appearance-sse-heading = 实时更新
+appearance-sse-auto-reconnect = 连接断开时自动重连
+appearance-sse-desc = 当服务器可用时自动重新建立 SSE 连接。
+
+## Sign In
+
+sign-in-brand = CORBUSIER
+sign-in-tagline = 工程编排平台
+sign-in-heading = 欢迎回来
+sign-in-subtitle = 登录您的工作区以继续
+sign-in-email-label = 电子邮件地址
+sign-in-password-label = 密码
+sign-in-password-placeholder = 输入您的密码
+sign-in-remember = 记住此设备
+sign-in-forgot = 忘记密码？
+sign-in-submit = 登录工作区
+sign-in-no-account = 没有账户？
+sign-in-request-access = 申请访问
+sign-in-feature-orchestration = 实时任务编排
+sign-in-feature-orchestration-desc = 具有实时状态更新的智能代理驱动工作流
+sign-in-feature-security = 企业级安全
+sign-in-feature-security-desc = RBAC、审计跟踪和策略实施
+sign-in-email-placeholder = you@company.com
+sign-in-feature-insights = AI 驱动的洞察
+sign-in-feature-insights-desc = 主动建议和智能推荐

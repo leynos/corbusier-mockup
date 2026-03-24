@@ -48,6 +48,7 @@ Object.assign(extendedGlobal, {
   HTMLInputElement:
     (happyWindow as unknown as { HTMLInputElement?: typeof HTMLInputElement }).HTMLInputElement ??
     happyWindow.HTMLElement,
+  Element: happyWindow.Element,
   CustomEvent: happyWindow.CustomEvent,
   Event: happyWindow.Event,
   Node: happyWindow.Node,
