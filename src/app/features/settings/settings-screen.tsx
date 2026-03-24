@@ -23,7 +23,7 @@
 
 import * as Switch from "@radix-ui/react-switch";
 import { IconBell, IconMail, IconPhoto, IconUser } from "@tabler/icons-react";
-import type { TFunction } from "i18next";
+
 import type { JSX } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -63,7 +63,6 @@ interface ProfileCardProps {
   readonly email: string;
   readonly setDisplayName: (value: string) => void;
   readonly setEmail: (value: string) => void;
-  readonly t: TFunction;
 }
 
 /**
@@ -77,8 +76,8 @@ function ProfileCard({
   email,
   setDisplayName,
   setEmail,
-  t,
 }: ProfileCardProps): JSX.Element {
+  const { t } = useTranslation();
   return (
     <SectionCard icon={IconUser} title={t("settings-profile-heading", { defaultValue: "Profile" })}>
       <div className="space-y-4">
@@ -94,7 +93,7 @@ function ProfileCard({
             type="text"
             className="input input-bordered w-full max-w-md"
             value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
+            onChange={(e) => setDisplayName(e.currentTarget.value)}
           />
         </div>
 
@@ -110,7 +109,7 @@ function ProfileCard({
             type="email"
             className="input input-bordered w-full max-w-md"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.currentTarget.value)}
           />
         </div>
 
@@ -135,17 +134,13 @@ function ProfileCard({
 
 /* ── Notifications section ─────────────────────────────────────────── */
 
-interface NotificationsCardProps {
-  readonly t: TFunction;
-}
-
 /**
  * Notification preferences section card.
  *
- * @param props - The component props.
  * @returns The notifications card JSX.Element.
  */
-function NotificationsCard({ t }: NotificationsCardProps): JSX.Element {
+function NotificationsCard(): JSX.Element {
+  const { t } = useTranslation();
   return (
     <SectionCard
       icon={IconBell}
@@ -203,9 +198,8 @@ export function SettingsScreen(): JSX.Element {
           email={email}
           setDisplayName={setDisplayName}
           setEmail={setEmail}
-          t={t}
         />
-        <NotificationsCard t={t} />
+        <NotificationsCard />
       </div>
     </div>
   );
