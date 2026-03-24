@@ -13,6 +13,8 @@
  *
  * Related modules:
  * - {@link SettingsScreen} – Main exported component.
+ * - {@link ProfileCard} – Profile section with display name, email, and avatar.
+ * - {@link NotificationsCard} – Notification preferences section.
  * - {@link NotificationToggle} – Internal toggle row for notification prefs.
  * - {@link SectionCard} – Reusable layout wrapper from components/section-card.
  * - Uses Radix UI Switch for accessible toggle controls.
@@ -21,6 +23,7 @@
 
 import * as Switch from "@radix-ui/react-switch";
 import { IconBell, IconMail, IconPhoto, IconUser } from "@tabler/icons-react";
+import type { TFunction } from "i18next";
 import type { JSX } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -53,6 +56,126 @@ function getInitials(displayName: string | undefined): string {
   return `${first}${second}` || "?";
 }
 
+/* ── Profile section ───────────────────────────────────────────────── */
+
+interface ProfileCardProps {
+  readonly displayName: string;
+  readonly email: string;
+  readonly setDisplayName: (value: string) => void;
+  readonly setEmail: (value: string) => void;
+  readonly t: TFunction;
+}
+
+/**
+ * Profile section card with display name, email, and avatar.
+ *
+ * @param props - The component props.
+ * @returns The profile card JSX.Element.
+ */
+function ProfileCard({
+  displayName,
+  email,
+  setDisplayName,
+  setEmail,
+  t,
+}: ProfileCardProps): JSX.Element {
+  return (
+    <SectionCard icon={IconUser} title={t("settings-profile-heading", { defaultValue: "Profile" })}>
+      <div className="space-y-4">
+        <div>
+          <label
+            htmlFor="settings-display-name"
+            className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
+          >
+            {t("settings-display-name", { defaultValue: "Display name" })}
+          </label>
+          <input
+            id="settings-display-name"
+            type="text"
+            className="input input-bordered w-full max-w-md"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="settings-email"
+            className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
+          >
+            {t("settings-email", { defaultValue: "Email" })}
+          </label>
+          <input
+            id="settings-email"
+            type="email"
+            className="input input-bordered w-full max-w-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <fieldset className="border-none p-0">
+          <legend className="mb-1 text-[length:var(--font-size-sm)] font-medium text-base-content">
+            {t("settings-avatar", { defaultValue: "Avatar" })}
+          </legend>
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-lg)] font-bold text-primary-content">
+              {getInitials(displayName)}
+            </div>
+            <button type="button" className="btn btn-outline btn-sm">
+              <IconPhoto size={16} stroke={1.5} aria-hidden="true" />
+              {t("settings-avatar-upload", { defaultValue: "Upload photo" })}
+            </button>
+          </div>
+        </fieldset>
+      </div>
+    </SectionCard>
+  );
+}
+
+/* ── Notifications section ─────────────────────────────────────────── */
+
+interface NotificationsCardProps {
+  readonly t: TFunction;
+}
+
+/**
+ * Notification preferences section card.
+ *
+ * @param props - The component props.
+ * @returns The notifications card JSX.Element.
+ */
+function NotificationsCard({ t }: NotificationsCardProps): JSX.Element {
+  return (
+    <SectionCard
+      icon={IconBell}
+      title={t("settings-notifications-heading", { defaultValue: "Notification preferences" })}
+    >
+      <div className="space-y-4">
+        <NotificationToggle
+          id="notif-email"
+          icon={IconMail}
+          label={t("settings-notif-email", { defaultValue: "Email notifications" })}
+          description={t("settings-notif-email-desc", {
+            defaultValue: "Receive task assignments and reviews via email.",
+          })}
+        />
+        <NotificationToggle
+          id="notif-hook"
+          icon={IconBell}
+          label={t("settings-notif-hooks", { defaultValue: "Hook failure alerts" })}
+          description={t("settings-notif-hooks-desc", {
+            defaultValue: "Get notified when a hook or policy gate fails.",
+          })}
+          defaultChecked
+        />
+      </div>
+    </SectionCard>
+  );
+}
+
+/* ── Main settings screen ──────────────────────────────────────────── */
+
 /**
  * Settings screen for profile and notification preferences.
  *
@@ -75,86 +198,14 @@ export function SettingsScreen(): JSX.Element {
       </p>
 
       <div className="mt-6 space-y-6">
-        {/* Profile section */}
-        <SectionCard
-          icon={IconUser}
-          title={t("settings-profile-heading", { defaultValue: "Profile" })}
-        >
-          <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="settings-display-name"
-                className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
-              >
-                {t("settings-display-name", { defaultValue: "Display name" })}
-              </label>
-              <input
-                id="settings-display-name"
-                type="text"
-                className="input input-bordered w-full max-w-md"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="settings-email"
-                className="mb-1 block text-[length:var(--font-size-sm)] font-medium text-base-content"
-              >
-                {t("settings-email", { defaultValue: "Email" })}
-              </label>
-              <input
-                id="settings-email"
-                type="email"
-                className="input input-bordered w-full max-w-md"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <fieldset className="border-none p-0">
-              <legend className="mb-1 text-[length:var(--font-size-sm)] font-medium text-base-content">
-                {t("settings-avatar", { defaultValue: "Avatar" })}
-              </legend>
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-lg)] font-bold text-primary-content">
-                  {getInitials(displayName)}
-                </div>
-                <button type="button" className="btn btn-outline btn-sm">
-                  <IconPhoto size={16} stroke={1.5} aria-hidden="true" />
-                  {t("settings-avatar-upload", { defaultValue: "Upload photo" })}
-                </button>
-              </div>
-            </fieldset>
-          </div>
-        </SectionCard>
-
-        {/* Notification preferences */}
-        <SectionCard
-          icon={IconBell}
-          title={t("settings-notifications-heading", { defaultValue: "Notification preferences" })}
-        >
-          <div className="space-y-4">
-            <NotificationToggle
-              id="notif-email"
-              icon={IconMail}
-              label={t("settings-notif-email", { defaultValue: "Email notifications" })}
-              description={t("settings-notif-email-desc", {
-                defaultValue: "Receive task assignments and reviews via email.",
-              })}
-            />
-            <NotificationToggle
-              id="notif-hook"
-              icon={IconBell}
-              label={t("settings-notif-hooks", { defaultValue: "Hook failure alerts" })}
-              description={t("settings-notif-hooks-desc", {
-                defaultValue: "Get notified when a hook or policy gate fails.",
-              })}
-              defaultChecked
-            />
-          </div>
-        </SectionCard>
+        <ProfileCard
+          displayName={displayName}
+          email={email}
+          setDisplayName={setDisplayName}
+          setEmail={setEmail}
+          t={t}
+        />
+        <NotificationsCard t={t} />
       </div>
     </div>
   );
