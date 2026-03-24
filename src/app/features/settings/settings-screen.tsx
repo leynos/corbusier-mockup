@@ -152,6 +152,63 @@ function ProfileCard({
   );
 }
 
+/* ── Notification toggle row ───────────────────────────────────────── */
+
+interface NotificationToggleProps {
+  readonly id: string;
+  readonly icon: typeof IconBell;
+  readonly label: string;
+  readonly description: string;
+  readonly defaultChecked?: boolean;
+}
+
+/**
+ * A toggle row for notification preferences.
+ *
+ * @param props - The component props.
+ * @returns The toggle row JSX.Element.
+ */
+function NotificationToggle({
+  id,
+  icon: Icon,
+  label,
+  description,
+  defaultChecked = false,
+}: NotificationToggleProps): JSX.Element {
+  return (
+    <div className="flex items-start gap-4">
+      <Icon
+        size={20}
+        stroke={1.5}
+        className="mt-0.5 shrink-0 text-base-content/50"
+        aria-hidden="true"
+      />
+      <div className="flex-1">
+        <label
+          htmlFor={id}
+          className="text-[length:var(--font-size-sm)] font-medium text-base-content"
+        >
+          {label}
+        </label>
+        <p
+          id={`${id}-description`}
+          className="text-[length:var(--font-size-xs)] text-base-content/50"
+        >
+          {description}
+        </p>
+      </div>
+      <Switch.Root
+        id={id}
+        defaultChecked={defaultChecked}
+        aria-describedby={`${id}-description`}
+        className="relative h-6 w-11 shrink-0 cursor-pointer rounded-full bg-base-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100 data-[state=checked]:bg-primary"
+      >
+        <Switch.Thumb className="block h-5 w-5 translate-x-0.5 rounded-full bg-base-100 shadow-sm transition-transform data-[state=checked]:translate-x-[22px]" />
+      </Switch.Root>
+    </div>
+  );
+}
+
 /* ── Notifications section ─────────────────────────────────────────── */
 
 /**
@@ -221,63 +278,6 @@ export function SettingsScreen(): JSX.Element {
         />
         <NotificationsCard />
       </div>
-    </div>
-  );
-}
-
-/* ── Notification toggle row ───────────────────────────────────────── */
-
-interface NotificationToggleProps {
-  readonly id: string;
-  readonly icon: typeof IconBell;
-  readonly label: string;
-  readonly description: string;
-  readonly defaultChecked?: boolean;
-}
-
-/**
- * A toggle row for notification preferences.
- *
- * @param props - The component props.
- * @returns The toggle row JSX.Element.
- */
-function NotificationToggle({
-  id,
-  icon: Icon,
-  label,
-  description,
-  defaultChecked = false,
-}: NotificationToggleProps): JSX.Element {
-  return (
-    <div className="flex items-start gap-4">
-      <Icon
-        size={20}
-        stroke={1.5}
-        className="mt-0.5 shrink-0 text-base-content/50"
-        aria-hidden="true"
-      />
-      <div className="flex-1">
-        <label
-          htmlFor={id}
-          className="text-[length:var(--font-size-sm)] font-medium text-base-content"
-        >
-          {label}
-        </label>
-        <p
-          id={`${id}-description`}
-          className="text-[length:var(--font-size-xs)] text-base-content/50"
-        >
-          {description}
-        </p>
-      </div>
-      <Switch.Root
-        id={id}
-        defaultChecked={defaultChecked}
-        aria-describedby={`${id}-description`}
-        className="relative h-6 w-11 shrink-0 cursor-pointer rounded-full bg-base-300 transition-colors data-[state=checked]:bg-primary"
-      >
-        <Switch.Thumb className="block h-5 w-5 translate-x-0.5 rounded-full bg-base-100 shadow-sm transition-transform data-[state=checked]:translate-x-[22px]" />
-      </Switch.Root>
     </div>
   );
 }
