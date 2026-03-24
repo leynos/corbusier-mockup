@@ -42,6 +42,7 @@ function getInitials(displayName: string | undefined): string {
 export function SettingsScreen(): JSX.Element {
   const { t } = useTranslation();
   const [displayName, setDisplayName] = useState("Ava Chen");
+  const [email, setEmail] = useState("ava.chen@corbusier.io");
 
   return (
     <div>
@@ -88,7 +89,8 @@ export function SettingsScreen(): JSX.Element {
                 id="settings-email"
                 type="email"
                 className="input input-bordered w-full max-w-md"
-                defaultValue="ava.chen@corbusier.io"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
