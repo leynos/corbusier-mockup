@@ -33,6 +33,26 @@ import { SectionCard } from "../../components/section-card";
 /* ── Module-scope helpers ──────────────────────────────────────────── */
 
 /**
+ * Extract the first grapheme cluster from a string.
+ *
+ * Uses Intl.Segmenter when available for proper grapheme cluster segmentation,
+ * falling back to Array.from for older browsers.
+ *
+ * @param str - The input string.
+ * @returns The first grapheme cluster, or undefined if empty.
+ */
+function firstGrapheme(str: string): string | undefined {
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
+    const segments = segmenter.segment(str);
+    const firstSegment = segments[Symbol.iterator]().next().value;
+    return firstSegment?.segment;
+  }
+  // Fallback for browsers without Intl.Segmenter support
+  return Array.from(str)[0];
+}
+
+/**
  * Derive avatar initials from a display name.
  *
  * Returns the first character of each word (up to 2 characters) for multi-word
@@ -47,12 +67,12 @@ function getInitials(displayName: string | undefined): string {
   const words = displayName.trim().split(/\s+/u);
   if (words.length === 1) {
     // For single-word names, return the first grapheme cluster
-    const first = Array.from(words[0] ?? "")[0];
+    const first = firstGrapheme(words[0] ?? "");
     return first ?? "?";
   }
   // For multi-word names, return first letter of first two words
-  const first = Array.from(words[0] ?? "")[0] ?? "";
-  const second = Array.from(words[1] ?? "")[0] ?? "";
+  const first = firstGrapheme(words[0] ?? "") ?? "";
+  const second = firstGrapheme(words[1] ?? "") ?? "";
   return `${first}${second}` || "?";
 }
 
