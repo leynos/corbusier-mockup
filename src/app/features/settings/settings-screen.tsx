@@ -1,4 +1,23 @@
-/** @file Profile & Preferences settings screen with form fields. */
+/**
+ * @file Settings screen for user profile and notification preferences.
+ *
+ * Renders a controlled form for display name, email, avatar initials, and
+ * notification toggles. Form state is managed locally via React useState; no
+ * persistence or API side effects are performed. Avatar initials are derived
+ * reactively from the display name input.
+ *
+ * Invariants:
+ * - All text inputs are controlled components (value + onChange).
+ * - No validation logic is enforced (free-form text entry).
+ * - No side effects (useEffect, fetch, etc.) are triggered by this module.
+ *
+ * Related modules:
+ * - {@link SettingsScreen} – Main exported component.
+ * - {@link NotificationToggle} – Internal toggle row for notification prefs.
+ * - {@link SectionCard} – Reusable layout wrapper from components/section-card.
+ * - Uses Radix UI Switch for accessible toggle controls.
+ * - Uses react-i18next for locale-aware labels.
+ */
 
 import * as Switch from "@radix-ui/react-switch";
 import { IconBell, IconMail, IconPhoto, IconUser } from "@tabler/icons-react";
