@@ -141,7 +141,12 @@ function ProfileCard({
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-[length:var(--font-size-lg)] font-bold text-primary-content">
               {getInitials(displayName)}
             </div>
-            <button type="button" className="btn btn-outline btn-sm">
+            <button
+              type="button"
+              className="btn btn-outline btn-sm btn-disabled"
+              disabled
+              aria-disabled="true"
+            >
               <IconPhoto size={16} stroke={1.5} aria-hidden="true" />
               {t("settings-avatar-upload", { defaultValue: "Upload photo" })}
             </button>
