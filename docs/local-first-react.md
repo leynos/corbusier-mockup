@@ -95,7 +95,7 @@ deliver.[^1]
 ### Acknowledging the Core Challenge: Eventual Consistency
 
 The profound benefits of the local-first paradigm come with a significant
-architectural trade-off: the abandonment of strong consistency in favor of
+architectural trade-off: the abandonment of strong consistency in favour of
 **eventual consistency**.[^2] In a traditional cloud-first model, the server
 acts as a single, authoritative source of truth, ensuring that all users see a
 consistent view of the data at all times. In a local-first system, however,
@@ -823,7 +823,7 @@ Tanstack Query has a built-in `onlineManager` that tracks the network status of
 the application. By default, it operates in an "online" mode. If the
 application goes offline, any attempt to execute a mutation will be paused. The
 mutation will be held in a pending state and will automatically be fired as
-soon as network connectivity is restored.[^16] This default behavior works
+soon as network connectivity is restored.[^16] This default behaviour works
 seamlessly with the persistence layer. A user can perform multiple actions
 while offline; these actions are queued up as paused mutations, and the UI can
 be updated optimistically (as described in the next section). When the user
@@ -1056,7 +1056,7 @@ function TodoSocketBridge() {
 
 While Zustand excels at managing simple, discrete pieces of client state, some
 application features involve complex, multi-step processes, intricate user
-flows, or behaviors with a finite number of well-defined states. For these
+flows, or behaviours with a finite number of well-defined states. For these
 scenarios, a more robust solution is needed to prevent bugs and manage
 complexity. This is where XState, a library for creating and managing state
 machines and statecharts, becomes an invaluable addition to the
@@ -1090,7 +1090,7 @@ By modelling logic this way, XState makes complex flows visualizable, easier to
 reason about, and more robust, especially for features like multi-step forms,
 onboarding flows, or intricate UI interactions.[^26]
 
-### The Division of Labor: XState vs. Zustand
+### The Division of Labour: XState vs. Zustand
 
 At first glance, XState and Zustand seem to overlap as they both manage client
 state. However, they are designed to solve different classes of problems, and
@@ -1115,7 +1115,7 @@ unnecessary complexity.[^29]
 
 The best practice is to use them together, not as mutually exclusive options.
 Use Zustand for simple, global UI state, and introduce XState for specific,
-complex components or features that benefit from the rigor of a state machine.
+complex components or features that benefit from the rigour of a state machine.
 
 ### Best Practices for Seamless Integration with Tanstack Query
 

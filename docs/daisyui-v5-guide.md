@@ -104,45 +104,45 @@ root scrollbar gutter is excluded. `daisy-` prefix is used for all daisyUI class
 }
 ```
 
-## daisyUI 5 colors
+## daisyUI 5 colours
 
-### daisyUI color names
+### daisyUI colour names
 
-- `primary`: Primary brand color, The main color of the brand
-- `primary-content`: Foreground content color to use on primary color
-- `secondary`: Secondary brand color, The optional, secondary color of the brand
-- `secondary-content`: Foreground content color to use on secondary color
-- `accent`: Accent brand color, The optional, accent color of the brand
-- `accent-content`: Foreground content color to use on accent color
-- `neutral`: Neutral dark color, For not-saturated parts of UI
-- `neutral-content`: Foreground content color to use on neutral color
-- `base-100` Base surface color of page, used for blank backgrounds
-- `base-200` Base color, darker shade, to create elevations
-- `base-300` Base color, even darker shade, to create elevations
-- `base-content`: Foreground content color to use on base color
-- `info`: Info color, For informative/helpful messages
-- `info-content`: Foreground content color to use on info color
-- `success`: Success color, For success/safe messages
-- `success-content`: Foreground content color to use on success color
-- `warning`: Warning color, For warning/caution messages
-- `warning-content`: Foreground content color to use on warning color
-- `error`: Error color, For error/danger/destructive messages
-- `error-content`: Foreground content color to use on error color
+- `primary`: Primary brand colour, The main colour of the brand
+- `primary-content`: Foreground content colour to use on primary colour
+- `secondary`: Secondary brand colour, The optional, secondary colour of the brand
+- `secondary-content`: Foreground content colour to use on secondary colour
+- `accent`: Accent brand colour, The optional, accent colour of the brand
+- `accent-content`: Foreground content colour to use on accent colour
+- `neutral`: Neutral dark colour, For not-saturated parts of UI
+- `neutral-content`: Foreground content colour to use on neutral colour
+- `base-100` Base surface colour of page, used for blank backgrounds
+- `base-200` Base colour, darker shade, to create elevations
+- `base-300` Base colour, even darker shade, to create elevations
+- `base-content`: Foreground content colour to use on base colour
+- `info`: Info colour, For informative/helpful messages
+- `info-content`: Foreground content colour to use on info colour
+- `success`: Success colour, For success/safe messages
+- `success-content`: Foreground content colour to use on success colour
+- `warning`: Warning colour, For warning/caution messages
+- `warning-content`: Foreground content colour to use on warning colour
+- `error`: Error colour, For error/danger/destructive messages
+- `error-content`: Foreground content colour to use on error colour
 
-### daisyUI color rules
+### daisyUI colour rules
 
-1. daisyUI adds semantic color names to Tailwind CSS colors
-2. daisyUI color names can be used in utility classes, like other Tailwind CSS color names. for example, `bg-primary` will use the primary color for the background
-3. daisyUI color names include variables as value so they can change based the theme
-4. There's no need to use `dark:` for daisyUI color names
-5. Ideally only daisyUI color names should be used for colors so the colors can change automatically based on the theme
-6. If a Tailwind CSS color name (like `red-500`) is used, it will be same red color on all themes
-7. If a daisyUI color name (like `primary`) is used, it will change color based on the theme
-8. Using Tailwind CSS color names for text colors should be avoided because Tailwind CSS color `text-gray-800` on `bg-base-100` would be unreadable on a dark theme - because on dark theme, `bg-base-100` is a dark color
-9. `*-content` colors should have a good contrast compared to their associated colors
-10. suggestion - when designing a page use `base-*` colors for majority of the page. use `primary` color for important elements
+1. daisyUI adds semantic colour names to Tailwind CSS colours
+2. daisyUI colour names can be used in utility classes, like other Tailwind CSS colour names. for example, `bg-primary` will use the primary colour for the background
+3. daisyUI colour names include variables as value so they can change based the theme
+4. There's no need to use `dark:` for daisyUI colour names
+5. Ideally only daisyUI colour names should be used for colours so the colours can change automatically based on the theme
+6. If a Tailwind CSS colour name (like `red-500`) is used, it will be same red colour on all themes
+7. If a daisyUI colour name (like `primary`) is used, it will change colour based on the theme
+8. Using Tailwind CSS colour names for text colours should be avoided because Tailwind CSS colour `text-gray-800` on `bg-base-100` would be unreadable on a dark theme - because on dark theme, `bg-base-100` is a dark colour
+9. `*-content` colours should have a good contrast compared to their associated colours
+10. suggestion - when designing a page use `base-*` colours for majority of the page. use `primary` colour for important elements
 
-### daisyUI custom theme with custom colors
+### daisyUI custom theme with custom colours
 
 A CSS file with Tailwind CSS, daisyUI and a custom daisyUI theme looks like this:
 
@@ -194,7 +194,7 @@ A CSS file with Tailwind CSS, daisyUI and a custom daisyUI theme looks like this
 #### Rules
 
 - All CSS variables above are required
-- Colors can be OKLCH or hex or other formats
+- Colours can be OKLCH or hex or other formats
 - When generating a custom theme, omit the comments from the example above. Just provide the code.
 
 The <https://daisyui.com/theme-generator/> visual tool enables custom theme creation.
@@ -245,7 +245,7 @@ Alert informs users about important events
 
 - component: `alert`
 - style: `alert-outline`, `alert-dash`, `alert-soft`
-- color: `alert-info`, `alert-success`, `alert-warning`, `alert-error`
+- colour: `alert-info`, `alert-success`, `alert-warning`, `alert-error`
 - direction: `alert-vertical`, `alert-horizontal`
 
 #### Syntax
@@ -298,7 +298,7 @@ Badges are used to inform the user of the status of specific data
 
 - component: `badge`
 - style: `badge-outline`, `badge-dash`, `badge-soft`, `badge-ghost`
-- color: `badge-neutral`, `badge-primary`, `badge-secondary`, `badge-accent`, `badge-info`, `badge-success`, `badge-warning`, `badge-error`
+- colour: `badge-neutral`, `badge-primary`, `badge-secondary`, `badge-accent`, `badge-info`, `badge-success`, `badge-warning`, `badge-error`
 - size: `badge-xs`, `badge-sm`, `badge-md`, `badge-lg`, `badge-xl`
 
 #### Syntax
@@ -346,9 +346,9 @@ Buttons allow the user to take actions
 #### Class names
 
 - component: `btn`
-- color: `btn-neutral`, `btn-primary`, `btn-secondary`, `btn-accent`, `btn-info`, `btn-success`, `btn-warning`, `btn-error`
+- colour: `btn-neutral`, `btn-primary`, `btn-secondary`, `btn-accent`, `btn-info`, `btn-success`, `btn-warning`, `btn-error`
 - style: `btn-outline`, `btn-dash`, `btn-soft`, `btn-ghost`, `btn-link`
-- behavior: `btn-active`, `btn-disabled`
+- behaviour: `btn-active`, `btn-disabled`
 - size: `btn-xs`, `btn-sm`, `btn-md`, `btn-lg`, `btn-xl`
 - modifier: `btn-wide`, `btn-block`, `btn-square`, `btn-circle`
 
@@ -472,7 +472,7 @@ Chat bubbles are used to show one line of conversation and all its data, includi
 - component: `chat`
 - part: `chat-image`, `chat-header`, `chat-footer`, `chat-bubble`
 - placement: `chat-start`, `chat-end`
-- color: `chat-bubble-neutral`, `chat-bubble-primary`, `chat-bubble-secondary`, `chat-bubble-accent`, `chat-bubble-info`, `chat-bubble-success`, `chat-bubble-warning`, `chat-bubble-error`
+- colour: `chat-bubble-neutral`, `chat-bubble-primary`, `chat-bubble-secondary`, `chat-bubble-accent`, `chat-bubble-info`, `chat-bubble-success`, `chat-bubble-warning`, `chat-bubble-error`
 
 #### Syntax
 
@@ -488,7 +488,7 @@ Chat bubbles are used to show one line of conversation and all its data, includi
 #### Rules
 
 - {PLACEMENT} is required and must be either `chat-start` or `chat-end`
-- {COLOR} is optional and can have one of the color class names
+- {COLOUR} is optional and can have one of the colour class names
 - To add an avatar, use `<div class="chat-image avatar">` and nest the avatar content inside
 
 ### checkbox
@@ -500,7 +500,7 @@ Checkboxes are used to select or deselect a value
 #### Class names
 
 - component: `checkbox`
-- color: `checkbox-primary`, `checkbox-secondary`, `checkbox-accent`, `checkbox-neutral`, `checkbox-success`, `checkbox-warning`, `checkbox-info`, `checkbox-error`
+- colour: `checkbox-primary`, `checkbox-secondary`, `checkbox-accent`, `checkbox-neutral`, `checkbox-success`, `checkbox-warning`, `checkbox-info`, `checkbox-error`
 - size: `checkbox-xs`, `checkbox-sm`, `checkbox-md`, `checkbox-lg`, `checkbox-xl`
 
 #### Syntax
@@ -598,7 +598,7 @@ Divider will be used to separate content vertically or horizontally
 #### Class names
 
 - component: `divider`
-- color: `divider-neutral`, `divider-primary`, `divider-secondary`, `divider-accent`, `divider-success`, `divider-warning`, `divider-info`, `divider-error`
+- colour: `divider-neutral`, `divider-primary`, `divider-secondary`, `divider-accent`, `divider-success`, `divider-warning`, `divider-info`, `divider-error`
 - direction: `divider-vertical`, `divider-horizontal`
 - placement: `divider-start`, `divider-end`
 
@@ -961,7 +961,7 @@ File Input is an input field for uploading files
 
 - Component: `file-input`
 - Style: `file-input-ghost`
-- Color: `file-input-neutral`, `file-input-primary`, `file-input-secondary`, `file-input-accent`, `file-input-info`, `file-input-success`, `file-input-warning`, `file-input-error`
+- Colour: `file-input-neutral`, `file-input-primary`, `file-input-secondary`, `file-input-accent`, `file-input-info`, `file-input-success`, `file-input-warning`, `file-input-error`
 - Size: `file-input-xs`, `file-input-sm`, `file-input-md`, `file-input-lg`, `file-input-xl`
 
 #### Syntax
@@ -1039,7 +1039,7 @@ where content can contain several `<nav>` tags with `footer-title` and links ins
 
 - {MODIFIER} is optional and can have one of each placement/direction class names
 - try to use `sm:footer-horizontal` to make footer responsive
-- suggestion - use `base-200` for background color
+- suggestion - use `base-200` for background colour
 
 ### hero
 
@@ -1062,7 +1062,7 @@ Hero is a component for displaying a large box or image with a title and descrip
 
 - {MODIFIER} is optional
 - Use `hero-content` for the text content
-- Use `hero-overlay` inside the hero to overlay the background image with a color
+- Use `hero-overlay` inside the hero to overlay the background image with a colour
 - Content can contain a figure
 
 ### hover-gallery
@@ -1130,7 +1130,7 @@ Text Input is a simple input field
 
 - component: `input`
 - style: `input-ghost`
-- color: `input-neutral`, `input-primary`, `input-secondary`, `input-accent`, `input-info`, `input-success`, `input-warning`, `input-error`
+- colour: `input-neutral`, `input-primary`, `input-secondary`, `input-accent`, `input-info`, `input-success`, `input-warning`, `input-error`
 - size: `input-xs`, `input-sm`, `input-md`, `input-lg`, `input-xl`
 
 #### Syntax
@@ -1235,7 +1235,7 @@ Link adds the missing underline style to links
 
 - component: `link`
 - style: `link-hover`
-- color: `link-neutral`, `link-primary`, `link-secondary`, `link-accent`, `link-success`, `link-info`, `link-warning`, `link-error`
+- colour: `link-neutral`, `link-primary`, `link-secondary`, `link-accent`, `link-success`, `link-info`, `link-warning`, `link-error`
 
 #### Syntax
 
@@ -1408,7 +1408,7 @@ Code mockup is used to show a block of code in a box that looks like a code edit
 
 - Use `<pre data-prefix="{prefix}">` to show a prefix before each line
 - Use `<code>` tag to add code syntax highlighting (requires additional library)
-- To highlight a line, add background/text color
+- To highlight a line, add background/text colour
 
 ### mockup-phone
 
@@ -1525,7 +1525,7 @@ Navbar is used to show a navigation bar on the top of the page
 
 - use `navbar-start`, `navbar-center`, `navbar-end` to position content horizontally
 - put anything inside each section
-- suggestion - use `base-200` for background color
+- suggestion - use `base-200` for background colour
 
 ### pagination
 
@@ -1559,7 +1559,7 @@ Progress bar can be used to show the progress of a task or to show the passing o
 #### Class names
 
 - component: `progress`
-- color: `progress-neutral`, `progress-primary`, `progress-secondary`, `progress-accent`, `progress-info`, `progress-success`, `progress-warning`, `progress-error`
+- colour: `progress-neutral`, `progress-primary`, `progress-secondary`, `progress-accent`, `progress-info`, `progress-success`, `progress-warning`, `progress-error`
 
 #### Syntax
 
@@ -1569,7 +1569,7 @@ Progress bar can be used to show the progress of a task or to show the passing o
 
 #### Rules
 
-- {MODIFIER} is optional and can have one of the color class names
+- {MODIFIER} is optional and can have one of the colour class names
 - Specify value and max attributes
 
 ### radial-progress
@@ -1604,7 +1604,7 @@ Radio buttons allow the user to select one option
 #### Class names
 
 - component: `radio`
-- color: `radio-neutral`, `radio-primary`, `radio-secondary`, `radio-accent`, `radio-success`, `radio-warning`, `radio-info`, `radio-error`
+- colour: `radio-neutral`, `radio-primary`, `radio-secondary`, `radio-accent`, `radio-success`, `radio-warning`, `radio-info`, `radio-error`
 - size: `radio-xs`, `radio-sm`, `radio-md`, `radio-lg`, `radio-xl`
 
 #### Syntax
@@ -1628,7 +1628,7 @@ Range slider is used to select a value by sliding a handle
 #### Class names
 
 - component: `range`
-- color: `range-neutral`, `range-primary`, `range-secondary`, `range-accent`, `range-success`, `range-warning`, `range-info`, `range-error`
+- colour: `range-neutral`, `range-primary`, `range-secondary`, `range-accent`, `range-success`, `range-warning`, `range-info`, `range-error`
 - size: `range-xs`, `range-sm`, `range-md`, `range-lg`, `range-xl`
 
 #### Syntax
@@ -1678,7 +1678,7 @@ Select is used to pick a value from a list of options
 
 - component: `select`
 - style: `select-ghost`
-- color: `select-neutral`, `select-primary`, `select-secondary`, `select-accent`, `select-info`, `select-success`, `select-warning`, `select-error`
+- colour: `select-neutral`, `select-primary`, `select-secondary`, `select-accent`, `select-info`, `select-success`, `select-warning`, `select-error`
 - size: `select-xs`, `select-sm`, `select-md`, `select-lg`, `select-xl`
 
 #### Syntax
@@ -1770,7 +1770,7 @@ Status is a really small icon to visually show the current status of an element,
 #### Class Names
 
 - Component: `status`
-- Color: `status-neutral`, `status-primary`, `status-secondary`, `status-accent`, `status-info`, `status-success`, `status-warning`, `status-error`
+- Colour: `status-neutral`, `status-primary`, `status-secondary`, `status-accent`, `status-info`, `status-success`, `status-warning`, `status-error`
 - Size: `status-xs`, `status-sm`, `status-md`, `status-lg`, `status-xl`
 
 #### Syntax
@@ -1794,7 +1794,7 @@ Steps can be used to show a list of steps in a process
 
 - Component: `steps`
 - Part: `step`, `step-icon`
-- Color: `step-neutral`, `step-primary`, `step-secondary`, `step-accent`, `step-info`, `step-success`, `step-warning`, `step-error`
+- Colour: `step-neutral`, `step-primary`, `step-secondary`, `step-accent`, `step-info`, `step-success`, `step-warning`, `step-error`
 - Direction: `steps-vertical`, `steps-horizontal`
 
 #### Syntax
@@ -1936,7 +1936,7 @@ Textarea allows users to enter text in multiple lines
 
 - Component: `textarea`
 - Style: `textarea-ghost`
-- Color: `textarea-neutral`, `textarea-primary`, `textarea-secondary`, `textarea-accent`, `textarea-info`, `textarea-success`, `textarea-warning`, `textarea-error`
+- Colour: `textarea-neutral`, `textarea-primary`, `textarea-secondary`, `textarea-accent`, `textarea-info`, `textarea-success`, `textarea-warning`, `textarea-error`
 - Size: `textarea-xs`, `textarea-sm`, `textarea-md`, `textarea-lg`, `textarea-xl`
 
 #### Syntax
@@ -2031,7 +2031,7 @@ Toggle is a checkbox that is styled to look like a switch button
 #### Class Names
 
 - Component: `toggle`
-- Color: `toggle-primary`, `toggle-secondary`, `toggle-accent`, `toggle-neutral`, `toggle-success`, `toggle-warning`, `toggle-info`, `toggle-error`
+- Colour: `toggle-primary`, `toggle-secondary`, `toggle-accent`, `toggle-neutral`, `toggle-success`, `toggle-warning`, `toggle-info`, `toggle-error`
 - Size: `toggle-xs`, `toggle-sm`, `toggle-md`, `toggle-lg`, `toggle-xl`
 
 #### Syntax
@@ -2046,7 +2046,7 @@ Toggle is a checkbox that is styled to look like a switch button
 
 ### validator
 
-Validator class changes the color of form elements to error or success based on input's validation rules
+Validator class changes the colour of form elements to error or success based on input's validation rules
 
 [validator docs](https://daisyui.com/components/validator/)
 

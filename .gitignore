@@ -14,6 +14,10 @@ tokens/dist/
 .bun-install/
 .bun-cache/
 .npm-cache/
+.typos-oxendict-base.json
+.typos-oxendict-base.toml
+__pycache__/
+*.pyc
 
 # Temp
 tmp/
