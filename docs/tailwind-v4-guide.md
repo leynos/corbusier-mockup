@@ -107,7 +107,7 @@ npm install tailwindcss @tailwindcss/vite
 - `blur-sm` → `blur-xs`
 - `bg-gradient-*` → `bg-linear-*`
 
-### Default Behavior Changes
+### Default Behaviour Changes
 
 - **Border**: No longer defaults to gray-200, uses `currentColor`
 - **Ring**: Changed from 3px blue to 1px `currentColor`
@@ -373,7 +373,7 @@ src/
 
 1. **Use browser dev tools** to inspect CSS variables
 2. **Check cascade layers** in dev tools
-3. **Verify modern browser support** for OKLCH colors
+3. **Verify modern browser support** for OKLCH colours
 4. **Use @reference** for CSS modules/component styles
 5. **Restart dev server** after major theme changes
 
@@ -633,7 +633,7 @@ list-none, list-disc, list-decimal, list-inside, list-outside
 text-left, text-center, text-right, text-justify, text-start, text-end
 ```
 
-#### Text Color
+#### Text Colour
 
 ```text
 text-inherit, text-current, text-transparent, text-black, text-white
@@ -738,7 +738,7 @@ bg-fixed, bg-local, bg-scroll
 bg-clip-border, bg-clip-padding, bg-clip-content, bg-clip-text
 ```
 
-#### Background Color
+#### Background Colour
 
 All colour utilities work with `bg-` prefix (same as text colours above)
 
@@ -781,7 +781,7 @@ bg-radial, bg-radial-at-t, bg-radial-at-tr, bg-radial-at-r, bg-radial-at-br, bg-
 bg-conic, bg-conic-at-t, bg-conic-at-tr, bg-conic-at-r, bg-conic-at-br, bg-conic-at-b, bg-conic-at-bl, bg-conic-at-l, bg-conic-at-tl, bg-conic-at-c
 ```
 
-#### Gradient Color Stops
+#### Gradient Colour Stops
 
 ```text
 from-inherit, from-current, from-transparent, from-black, from-white, from-{color}
@@ -817,7 +817,7 @@ rounded-bl-none, rounded-bl-xs, rounded-bl-sm, rounded-bl, rounded-bl-md, rounde
 border-0, border-2, border-4, border-8, border, border-x, border-y, border-s, border-e, border-t, border-r, border-b, border-l
 ```
 
-#### Border Color
+#### Border Colour
 
 All colour utilities work with `border-` prefix (same as text/bg colours)
 
@@ -833,7 +833,7 @@ border-solid, border-dashed, border-dotted, border-double, border-hidden, border
 divide-x-0, divide-x-2, divide-x-4, divide-x-8, divide-x, divide-y-0, divide-y-2, divide-y-4, divide-y-8, divide-y, divide-x-reverse, divide-y-reverse
 ```
 
-#### Divide Color
+#### Divide Colour
 
 All colour utilities work with `divide-` prefix
 
@@ -849,7 +849,7 @@ divide-solid, divide-dashed, divide-dotted, divide-double, divide-none
 outline-0, outline-1, outline-2, outline-4, outline-8
 ```
 
-#### Outline Color
+#### Outline Colour
 
 All colour utilities work with `outline-` prefix
 
@@ -871,7 +871,7 @@ outline-offset-0, outline-offset-1, outline-offset-2, outline-offset-4, outline-
 ring-0, ring-1, ring-2, ring, ring-4, ring-8, ring-inset
 ```
 
-#### Ring Color
+#### Ring Colour
 
 All colour utilities work with `ring-` prefix
 
@@ -881,7 +881,7 @@ All colour utilities work with `ring-` prefix
 ring-offset-0, ring-offset-1, ring-offset-2, ring-offset-4, ring-offset-8
 ```
 
-#### Ring Offset Color
+#### Ring Offset Colour
 
 All colour utilities work with `ring-offset-` prefix
 
@@ -893,11 +893,11 @@ All colour utilities work with `ring-offset-` prefix
 shadow-xs, shadow-sm, shadow, shadow-md, shadow-lg, shadow-xl, shadow-2xl, shadow-inner, shadow-none
 ```
 
-#### Box Shadow Color
+#### Box Shadow Colour
 
 All colour utilities work with `shadow-` prefix
 
-#### Drop Shadow (NEW colored support in v4)
+#### Drop Shadow (NEW coloured support in v4)
 
 ```text
 drop-shadow-sm, drop-shadow, drop-shadow-md, drop-shadow-lg, drop-shadow-xl, drop-shadow-2xl, drop-shadow-none
@@ -1177,7 +1177,7 @@ perspective-origin-center, perspective-origin-top, perspective-origin-top-right,
 
 ### Interactivity
 
-#### Accent Color
+#### Accent Colour
 
 ```text
 accent-auto, accent-inherit, accent-current, accent-transparent, accent-black, accent-white
@@ -1196,7 +1196,7 @@ appearance-none, appearance-auto
 cursor-auto, cursor-default, cursor-pointer, cursor-wait, cursor-text, cursor-move, cursor-help, cursor-not-allowed, cursor-none, cursor-context-menu, cursor-progress, cursor-cell, cursor-crosshair, cursor-vertical-text, cursor-alias, cursor-copy, cursor-no-drop, cursor-grab, cursor-grabbing, cursor-all-scroll, cursor-col-resize, cursor-row-resize, cursor-n-resize, cursor-e-resize, cursor-s-resize, cursor-w-resize, cursor-ne-resize, cursor-nw-resize, cursor-se-resize, cursor-sw-resize, cursor-ew-resize, cursor-ns-resize, cursor-nesw-resize, cursor-nwse-resize, cursor-zoom-in, cursor-zoom-out
 ```
 
-#### Caret Color
+#### Caret Colour
 
 All colour utilities work with `caret-` prefix
 
@@ -1212,7 +1212,7 @@ pointer-events-none, pointer-events-auto
 resize-none, resize, resize-y, resize-x
 ```
 
-#### Scroll Behavior
+#### Scroll Behaviour
 
 ```text
 scroll-auto, scroll-smooth
@@ -1298,7 +1298,7 @@ stroke-0, stroke-1, stroke-2
 sr-only, not-sr-only
 ```
 
-#### Forced Color Adjust
+#### Forced Colour Adjust
 
 ```text
 forced-color-adjust-auto, forced-color-adjust-none
@@ -1422,7 +1422,7 @@ m-[12px], p-[24px], grid-cols-[200px_minmax(900px,_1fr)_100px]
 - ❌ `@tailwind base; @tailwind components; @tailwind utilities;`
 - ❌ `text-opacity-50` → Use `text-white/50` instead
 - ❌ `bg-opacity-25` → Use `bg-blue-500/25` instead
-- ❌ `border` without color (now uses currentColor, not gray-200)
+- ❌ `border` without colour (now uses currentColour, not gray-200)
 - ❌ `ring` without explicit width (now 1px, was 3px)
 - ❌ `@layer utilities` → Use `@utility` instead
 - ❌ JavaScript config for new projects → Use CSS `@theme`
@@ -1432,7 +1432,7 @@ m-[12px], p-[24px], grid-cols-[200px_minmax(900px,_1fr)_100px]
 - ✅ `@import "tailwindcss";`
 - ✅ `text-white/50` for semi-transparent text
 - ✅ `bg-blue-500/25` for semi-transparent backgrounds
-- ✅ `border border-gray-200` for explicit border color
+- ✅ `border border-gray-200` for explicit border colour
 - ✅ `ring-3` for 3px ring width
 - ✅ `@utility` for custom utilities
 - ✅ `@theme` for configuration
@@ -1501,7 +1501,7 @@ m-[12px], p-[24px], grid-cols-[200px_minmax(900px,_1fr)_100px]
 
 1. **Inspect CSS Variables**: Check `:root` in DevTools to see all theme variables
 2. **Check Cascade Layers**: Use the Layers panel to understand style precedence
-3. **Verify OKLCH Support**: Test colors in modern browsers vs fallbacks
+3. **Verify OKLCH Support**: Test colours in modern browsers vs fallbacks
 4. **Container Query Debugging**: Use the @container panel in DevTools
 
 ### Common Debug Commands

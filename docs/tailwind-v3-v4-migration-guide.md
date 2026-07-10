@@ -91,7 +91,7 @@
 ### V. Workflow Adjustments & Deprecations
 
 1.  **Preprocessors (Sass/Less/Stylus):**
-    *   Not designed for use with Tailwind v4. Tailwind itself, with its CSS-native features and internal processing via Lightning CSS, fulfills most preprocessor roles.
+    *   Not designed for use with Tailwind v4. Tailwind itself, with its CSS-native features and internal processing via Lightning CSS, fulfils most preprocessor roles.
 2.  **`theme()` Function in CSS:**
     *   Deprecated. Use `var(--css-variable-name)` instead. For media queries where `var()` isn't supported, `theme(--breakpoint-xl)` (using the CSS variable name) can be used.
 3.  **`corePlugins` in JS Config:**

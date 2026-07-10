@@ -168,7 +168,7 @@ constraints; the following apply everywhere.
   Evidence: DaisyUI theme registration is handled entirely by the token
   pipeline (`style-dictionary.js`), which generates `@plugin "daisyui/theme"`
   blocks in `tokens/dist/tokens.css`. No `tailwind.config.cjs` changes needed.
-  Impact: One fewer commit; no risk of mis-wiring themes.
+  Impact: One fewer commit; no risk of wiring themes incorrectly.
 
 - Observation: Biome wants `lazyRouteComponent` calls collapsed to single lines.
   Evidence: Biome formatting rules collapse the multi-line `component:

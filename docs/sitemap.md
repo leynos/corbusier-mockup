@@ -250,7 +250,7 @@ Registry of agent backends (from `BackendRegistryService`). Each entry shows nam
 
 #### 5.4 Tool Registry (`/system/tools`)
 
-MCP server management (from `McpServerLifecycleService`). Lists registered servers with name, transport type (stdio/HTTP+SSE), lifecycle state (`registered`/`running`/`stopped`), health status (`healthy`/`unhealthy`/`unknown`), and last health check timestamp. Server detail provides start/stop controls, the tool catalog (output of `tools/list`), and health history. Each tool definition shows name, description, input JSON Schema, and access policy.
+MCP server management (from `McpServerLifecycleService`). Lists registered servers with name, transport type (stdio/HTTP+SSE), lifecycle state (`registered`/`running`/`stopped`), health status (`healthy`/`unhealthy`/`unknown`), and last health check timestamp. Server detail provides start/stop controls, the tool catalogue (output of `tools/list`), and health history. Each tool definition shows name, description, input JSON Schema, and access policy.
 
 #### 5.5 Hooks & Policies (`/system/hooks`)
 

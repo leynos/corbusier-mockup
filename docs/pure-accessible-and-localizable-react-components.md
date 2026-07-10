@@ -45,7 +45,7 @@ reusable, independently testable, and exceptionally maintainable within the
 context of a large-scale application that communicates with a high-performance
 backend, such as one built with Rust and Actix-web. The principles and patterns
 detailed in this report are designed to produce a front-end architecture of the
-highest caliber, capable of meeting the rigorous demands of modern web
+highest calibre, capable of meeting the rigorous demands of modern web
 development.
 
 ## Part I: The Philosophy of Component Purity and Reactivity
@@ -134,7 +134,7 @@ and executed outside of the component's main body. React provides two primary
    dependency array of
 
 `useEffect` provides fine-grained control over when the effect re-runs, and the
-returned cleanup function prevents memory leaks by unsubscribing or canceling
+returned cleanup function prevents memory leaks by unsubscribing or cancelling
 operations when the component unmounts or the effect re-runs.[^8]
 
 By strictly confining side effects to event handlers and `useEffect`, the
@@ -642,10 +642,10 @@ for powerful combinations like
 DaisyUI's theming system is built on CSS variables, which makes it highly
 customizable and efficient. Themes, including dark mode, can be applied by
 adding a single `data-theme` attribute to a parent element, typically the root
-HTML tag.[^19] The components, using semantic color names like
+HTML tag.[^19] The components, using semantic colour names like
 
-`primary` and `secondary`, will automatically adapt to the active theme's color
-palette.[^19] This decouples the component's structure from its specific color
+`primary` and `secondary`, will automatically adapt to the active theme's colour
+palette.[^19] This decouples the component's structure from its specific colour
 implementation, allowing for global visual changes without altering any
 component code.
 
@@ -851,7 +851,7 @@ user settings.
 - **Functionality:** A modal dialog that fetches current user data, allows the
   user to edit their name and email, validates the input, and submits the
   changes to the server.
-- **Behavior:** Must be fully accessible via keyboard, trap focus, and be
+- **Behaviour:** Must be fully accessible via keyboard, trap focus, and be
   dismissible.
 - **Presentation:** Must be responsive, adapting its layout for mobile and
   desktop screens, and support theming (e.g., dark mode).

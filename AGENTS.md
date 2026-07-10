@@ -119,6 +119,10 @@
 ## Markdown Guidance
 
 - Validate Markdown files using `bunx markdownlint-cli "*.md" "docs/**/*.md"`.
+- Run `make spelling` to refresh the shared en-GB-oxendict base, regenerate
+  `typos.toml`, and check maintained Markdown with the pinned `typos` release.
+  Put narrow repository-only exceptions in `typos.local.toml`; never edit the
+  generated configuration by hand.
 - Run `bun fmt` after any documentation changes to format all Markdown
   files and fix table markup.
 - Validate Mermaid diagrams in Markdown files by running `bunx nixie`.
@@ -293,7 +297,7 @@ Keep docs close to code.
   Avoid `refetchOnWindowFocus` unless the data truly needs it.
 - **Async**: Avoid `await` inside loops; batch with `Promise.allSettled`. Use
   `async` iterables/streams for large data.
-- **Rendering**: Enable React StrictMode in dev; memoise expensive components;
+- **Rendering**: Enable React StrictMode in dev; memoize expensive components;
   prefer derived data via selectors.
 - **Stability**: Keep JSON stable (deterministic key order) for snapshots and
   client‑side caches.
@@ -343,7 +347,7 @@ Keep docs close to code.
 - **Router** (if used): Code‑split per route; prefetch data on navigation where
   it improves perceived performance. Handle not‑found/unauthorized with typed
   loaders.
-- **Table** (if used): Keep row models pure; virtualize for large sets; memoise
+- **Table** (if used): Keep row models pure; virtualize for large sets; memoize
   column defs.
 - **State**: Encapsulate server state with TanStack Query and model complex
   local state with reducers or state machines inside custom hooks.

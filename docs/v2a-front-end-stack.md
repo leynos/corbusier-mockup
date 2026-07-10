@@ -291,7 +291,7 @@ The strict TypeScript settings in `tsconfig.json` include:
 
 All v2a front ends — Wildside and Corbusier alike — share a common pattern
 for presenting domain entities on cards, lists, and detail screens. Entity
-models carry their own localised strings rather than delegating display-text
+models carry their own localized strings rather than delegating display-text
 responsibility to the Fluent translation bundles. This keeps Fluent bundles
 focused on UI chrome (button labels, ARIA labels, section headings, format
 strings) while letting each entity own its names, descriptions, and badge
@@ -325,7 +325,7 @@ rendering code free of null checks or conditional chains.
 ### Descriptor registries
 
 Stable internal identifiers (e.g. `task-status:in-progress`,
-`priority:high`) are resolved to localised display strings through
+`priority:high`) are resolved to localized display strings through
 descriptor registries. Each registry maps an identifier to a descriptor
 object whose labels are `LocalizedStringSet` values. This means that
 badge colours, icons, and display names for status values, priority
@@ -341,7 +341,7 @@ The conventional folder layout is:
 - `src/data/entities/` — fixture data used during the mockup phase,
   structured to match the entity interfaces exactly.
 - `src/data/registries/` — descriptor registry modules that map stable
-  identifiers to localised descriptors.
+  identifiers to localized descriptors.
 
 ### Application-specific schemas
 

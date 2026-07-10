@@ -22,7 +22,7 @@ under `/system/` and see functional administrative views:
   activate/deactivate controls.
 - **Tool Registry** (`/system/tools`) — MCP server list with name,
   transport, lifecycle state, health. Detail view with start/stop
-  controls and tool catalog.
+  controls and tool catalogue.
 - **Hooks & Policies** (`/system/hooks`) — Hook definitions with
   trigger, predicate, actions, priority. Detail view with editor and
   execution log.
@@ -72,7 +72,7 @@ surfaces that make governance and observability tangible.
   Likelihood: certain
   Mitigation: Use static SVG or CSS shapes to suggest chart panels.
   A coloured rectangle with labelled axes and a few plotted points is
-  sufficient for the mockup. No actual data visualisation library.
+  sufficient for the mockup. No actual data visualization library.
 
 - Risk: Seven page families is a large scope for a single plan.
   Severity: medium
@@ -203,7 +203,7 @@ Create fixture files for each entity:
 - **MCP servers**: 3 servers (workspace_tools, weaver_mcp,
   podbot_runtime) with `localizations: EntityLocalizations` (name,
   description), transport, lifecycle state, health status, tool
-  catalog, and health history.
+  catalogue, and health history.
 - **Hooks**: 4–5 hook definitions with
   `localizations: EntityLocalizations` (name, description), trigger
   type, predicate, action chain, priority, enabled status, and
@@ -238,7 +238,7 @@ consistent:
 - **List view**: A heading, optional filters, and a data table or
   card grid.
 - **Detail view** (where applicable): A header with entity name and
-  status, metadata panel, and entity-specific content (tool catalog,
+  status, metadata panel, and entity-specific content (tool catalogue,
   hook editor, execution log).
 
 Specific notes:
@@ -250,7 +250,7 @@ Specific notes:
   panels (skeletal charts). Compliance shows a pass/fail summary.
 - **Agent detail**: Activate/deactivate toggle button, capability
   flag checkboxes (read-only in mockup).
-- **Tool detail**: Start/stop control buttons, tool catalog list
+- **Tool detail**: Start/stop control buttons, tool catalogue list
   (each tool shows name, description, input schema in a code block
   with chamfer), health history timeline.
 - **Hook detail**: A read-only editor area showing trigger config,
@@ -279,7 +279,7 @@ Specific notes:
 - All seven system page families render with fixture data.
 - Data tables use proper semantics and meet target size requirements.
 - Registry cards use standard rounded corners (no chamfer).
-- Tool catalog code blocks use chamfered containers.
+- Tool catalogue code blocks use chamfered containers.
 - Monitoring shows skeletal chart panels.
 - All `bun run ff` checks pass.
 

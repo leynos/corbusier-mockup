@@ -561,7 +561,7 @@ semantic fixes over ad hoc opt-outs.
 
 - Mirror DaisyUI where it fits: `.btn`, `.btn-primary`, `.card`, `.card-title`.
 - For bespoke patterns: BEM‑ish and role‑based, e.g. `.walk-card`, `.walk-card__title`; or `.nav__link--active`.
-- Prefer **role tokens** (`primary`, `secondary`, `accent`, `success`, `error`) to color words.
+- Prefer **role tokens** (`primary`, `secondary`, `accent`, `success`, `error`) to colour words.
 
 ---
 
@@ -577,8 +577,8 @@ semantic fixes over ad hoc opt-outs.
   - `input`/`select`/`textarea` use matching DaisyUI classes.
 
 - **Design tokens**
-  - No hex/named colors in CSS.
-  - Prefer role utilities (`bg-primary`, `text-base-content`) over raw Tailwind color scales.
+  - No hex/named colours in CSS.
+  - Prefer role utilities (`bg-primary`, `text-base-content`) over raw Tailwind colour scales.
 
 - **Repetition & readability**
   - Warn on long/repeated class chunks → extract with `@apply` into `semantic.css`.
