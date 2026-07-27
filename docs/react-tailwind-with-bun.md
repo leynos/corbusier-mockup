@@ -4,9 +4,11 @@
 > Pages, but this guide remains as a reference for Bun-centric experiments and
 > the optional `server.ts` preview helper.
 
-This is a pragmatic walkthrough for building and serving a tiny React + Tailwind app using **Bun 1.3.0**. It leans on Bun’s built‑in dev server (HMR, React Fast Refresh) and production bundler.
+This is a pragmatic walkthrough for building and serving a tiny React +
+Tailwind app using **Bun 1.3.0**. It leans on Bun’s built‑in dev server (HMR,
+React Fast Refresh) and production bundler.
 
----
+______________________________________________________________________
 
 ## 0) Prerequisites
 
@@ -34,7 +36,7 @@ Verify:
 bun --version  # expect 1.3.0
 ```
 
----
+______________________________________________________________________
 
 ## 1) Scaffold a React + Tailwind project
 
@@ -52,11 +54,12 @@ The scaffold provides:
 - Tailwind preconfigured with the v4 CSS-first entry and automatic source
   detection.
 
----
+______________________________________________________________________
 
 ## 2) Run the dev server (with HMR)
 
-Bun 1.3 can serve HTML entry points directly and handle bundling/transpilation under the hood.
+Bun 1.3 can serve HTML entry points directly and handle bundling/transpilation
+under the hood.
 
 ```bash
 bun './**/*.html'
@@ -71,11 +74,12 @@ Fast Refresh).
 > Tip: Bun pipes browser `console.log` back to the terminal, which helps with
 > quick debugging.
 
----
+______________________________________________________________________
 
 ## 3) Hello React + Tailwind
 
-The template includes a basic app. If starting from a blank template, here’s the minimal shape.
+The template includes a basic app. If starting from a blank template, here’s
+the minimal shape.
 
 **`index.html`** (HTML import entry; Bun resolves and bundles dependencies):
 
@@ -138,11 +142,12 @@ export default {
 };
 ```
 
----
+______________________________________________________________________
 
 ## 4) Build for production
 
-Bun bundles HTML, TS/JS, CSS assets. Use `--production` for minification and tree‑shaking.
+Bun bundles HTML, TS/JS, CSS assets. Use `--production` for minification and
+tree‑shaking.
 
 ```bash
 bun build ./index.html --production --outdir=dist
@@ -150,7 +155,7 @@ bun build ./index.html --production --outdir=dist
 
 The result is a _fully bundled_ `dist/` directory ready to host anywhere.
 
----
+______________________________________________________________________
 
 ## 5) Serve the production build
 
@@ -160,7 +165,8 @@ The result is a _fully bundled_ `dist/` directory ready to host anywhere.
 
 ### With Bun itself (simple static server)
 
-For local preview or DIY hosting, a tiny Bun server can serve the `dist` folder. Example SPA‑safe server that falls back to `index.html`:
+For local preview or DIY hosting, a tiny Bun server can serve the `dist`
+folder. Example SPA‑safe server that falls back to `index.html`:
 
 ```ts
 // server.ts
@@ -189,7 +195,7 @@ Run it:
 bun run server.ts
 ```
 
----
+______________________________________________________________________
 
 ## 6) (Optional) One‑process full‑stack dev
 
@@ -219,18 +225,21 @@ bun run dev-serve.ts
 The setup still provides HMR, HTML bundling, and a tidy `/api/*` space without
 CORS faff.
 
----
+______________________________________________________________________
 
 ## 7) Troubleshooting
 
 - **Tailwind classes not applying**: ensure `index.css` is linked in
   `index.html`; add an `@source` directive only when templates are stored
   outside Tailwind's automatic scan roots.
-- **404s in production for client‑side routes**: add the SPA fallback (see server example) or configure your static host’s rewrite rules.
-- **HMR not triggering**: ensure you started via `bun './**/*.html'` or a `Bun.serve()` with `development.hmr: true`.
-- **TypeScript module quirks**: Bun defaults to `"module": "Preserve"`; avoid incompatible TS transforms in your own config.
+- **404s in production for client‑side routes**: add the SPA fallback (see
+  server example) or configure your static host’s rewrite rules.
+- **HMR not triggering**: ensure you started via `bun './**/*.html'` or a
+  `Bun.serve()` with `development.hmr: true`.
+- **TypeScript module quirks**: Bun defaults to `"module": "Preserve"`; avoid
+  incompatible TS transforms in your own config.
 
----
+______________________________________________________________________
 
 ## 8) Bonus: compile to a single executable (advanced)
 
@@ -241,9 +250,10 @@ bun build --compile ./index.html --outfile myapp
 ./myapp  # starts a server; routes can be added in code
 ```
 
-Use this for kiosk‑style SPAs or internal tools where “download and run” beats provisioning infra.
+Use this for kiosk‑style SPAs or internal tools where “download and run” beats
+provisioning infra.
 
----
+______________________________________________________________________
 
 ## That’s it
 

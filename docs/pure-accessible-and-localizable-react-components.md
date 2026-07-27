@@ -130,8 +130,8 @@ and executed outside of the component's main body. React provides two primary
    to synchronize with the component's lifecycle, such as fetching data when
    the component mounts or subscribing to an external data source. The function
    passed to `useEffect` runs _after_ the component has rendered and the DOM
-   has been updated, thereby keeping the render itself pure.[^8] The
-   dependency array of
+   has been updated, thereby keeping the render itself pure.[^8] The dependency
+   array of
 
 `useEffect` provides fine-grained control over when the effect re-runs, and the
 returned cleanup function prevents memory leaks by unsubscribing or cancelling
@@ -645,8 +645,8 @@ adding a single `data-theme` attribute to a parent element, typically the root
 HTML tag.[^19] The components, using semantic colour names like
 
 `primary` and `secondary`, will automatically adapt to the active theme's colour
-palette.[^19] This decouples the component's structure from its specific colour
-implementation, allowing for global visual changes without altering any
+palette.[^19] This decouples the component's structure from its specific
+colour implementation, allowing for global visual changes without altering any
 component code.
 
 This layered composition creates a system of "controlled inheritance." Each
@@ -782,8 +782,8 @@ user-settings-unsaved-count =
 
 This format keeps translators in a single `.ftl` document where they can mix
 plain messages, attributes, and selectors without touching JSX. When new keys
-are added, ensure that Fluent variables (for example, `{$count}`) match
-the argument names passed to `t`.
+are added, ensure that Fluent variables (for example, `{$count}`) match the
+argument names passed to `t`.
 
 #### Synchronizing Language Metadata and Layout Direction
 
@@ -792,18 +792,18 @@ Locale metadata now travels with the source by way of
 `getLocaleDirection` and `isRtlLocale`. After `i18nReady` resolves, the app
 updates `document.documentElement.lang` and `.dir`, mirrors the direction onto
 `body`, and stores it in `data-direction` attributes, so CSS can branch without
-extra JavaScript. Language changes propagate through `i18n.on("languageChanged")`,
-so Suspense can keep waiting for `.ftl` bundles whilst the DOM attributes stay in
-sync.
+extra JavaScript. Language changes propagate through
+`i18n.on("languageChanged")`, so Suspense can keep waiting for `.ftl` bundles
+whilst the DOM attributes stay in sync.
 
 CSS favours logical properties (`padding-inline`, `inset-inline`,
 `border-inline`) and `[dir="rtl"]` attribute hooks for cases where flexbox
 alignment must flip, such as the floating global-controls drawer or toast
-stacks. Components that need overlapping effects (for example, the walk-complete
-avatar cluster) rely on logical margins, so the overlap stays pointed towards the
-interior regardless of writing mode. MapLibre also loads the published RTL text
-plugin via `setRTLTextPlugin` during lazy import, so Arabic and Hebrew labels
-render with proper glyph shaping.
+stacks. Components that need overlapping effects (for example, the
+walk-complete avatar cluster) rely on logical margins, so the overlap stays
+pointed towards the interior regardless of writing mode. MapLibre also loads
+the published RTL text plugin via `setRTLTextPlugin` during lazy import, so
+Arabic and Hebrew labels render with proper glyph shaping.
 
 #### The `useTranslation` Hook and `<Trans>` Component
 
@@ -822,9 +822,9 @@ const { t } = useTranslation('userProfile');
 Interpolated variables must line up with the Fluent placeholders (`{$name}`)
 and plural selectors just need a `count` (or similar) argument:
 `t('user-settings-unsaved-count', { count: dirtyFields })`. Because Fluent does
-not use braces for JSX, developers should continue to reach for `<Trans>` when a
-sentence needs a React component (for example, a link) embedded inside it; the
-component injects the React nodes while the Fluent string keeps the prose,
+not use braces for JSX, developers should continue to reach for `<Trans>` when
+a sentence needs a React component (for example, a link) embedded inside it;
+the component injects the React nodes while the Fluent string keeps the prose,
 yielding truly localizable markup without unsafe HTML.[^28]
 
 The following table compares leading React i18n libraries, justifying the
@@ -1071,7 +1071,8 @@ but also adaptable and maintainable for the future.
     2025,
     [https://stackoverflow.com/questions/54646553/usestate-vs-usereducer](https://stackoverflow.com/questions/54646553/usestate-vs-usereducer)
 
-[^12]: Choosing between useReducer and useState in React - Saeloun Blog, accessed
+[^12]: Choosing between useReducer and useState in React - Saeloun Blog,
+       accessed
     on 17 August 2025,
     [https://blog.saeloun.com/2023/03/30/when-to-use-usestate-vs-usereducer/](https://blog.saeloun.com/2023/03/30/when-to-use-usestate-vs-usereducer/)
 
@@ -1095,21 +1096,24 @@ but also adaptable and maintainable for the future.
     accessed on 17 August 2025,
     [https://javascript.plainenglish.io/how-i-use-typescript-to-design-reliable-apis-before-writing-a-single-line-of-backend-code-1f3e5f3d2e30](https://javascript.plainenglish.io/how-i-use-typescript-to-design-reliable-apis-before-writing-a-single-line-of-backend-code-1f3e5f3d2e30)
 
-[^19]: daisyUI — Tailwind CSS Components ( version 5 update is here ), accessed on
+[^19]: daisyUI — Tailwind CSS Components ( version 5 update is here ), accessed
+       on
    17 August 2025, [https://daisyui.com/](https://daisyui.com/)
 
 [^20]: Responsive design - Core concepts - Tailwind CSS, accessed on 17 August
     2025,
     [https://tailwindcss.com/docs/responsive-design](https://tailwindcss.com/docs/responsive-design)
 
-[^21]: A Guide to React Localization with i18next - Phrase, accessed on 17 August
+[^21]: A Guide to React Localization with i18next - Phrase, accessed on 17
+       August
     2025,
     [https://phrase.com/blog/posts/localizing-react-apps-with-i18next/](https://phrase.com/blog/posts/localizing-react-apps-with-i18next/)
 
 [^22]: react-i18next — repository and documentation, accessed on 17 August 2025,
     [https://github.com/i18next/react-i18next](https://github.com/i18next/react-i18next)
 
-[^23]: Complete Guide — React Internationalization (i18n) with i18next — YouTube,
+[^23]: Complete Guide — React Internationalization (i18n) with i18next —
+       YouTube,
     accessed on 17 August 2025,
     [https://www.youtube.com/watch?v=LFaFPORPmeo](https://www.youtube.com/watch?v=LFaFPORPmeo)
 
@@ -1121,7 +1125,8 @@ but also adaptable and maintainable for the future.
 [^26]: Quick start - react-i18next documentation, accessed on 17 August 2025,
     [https://react.i18next.com/guides/quick-start](https://react.i18next.com/guides/quick-start)
 
-[^27]: useTranslation (hook) — react-i18next documentation, accessed on 17 August
+[^27]: useTranslation (hook) — react-i18next documentation, accessed on 17
+       August
     2025,
     [https://react.i18next.com/latest/usetranslation-hook](https://react.i18next.com/latest/usetranslation-hook)
 

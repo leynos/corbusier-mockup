@@ -4,16 +4,16 @@ Last updated: 12 March 2026
 
 ## Purpose
 
-Every card in the mockup must render from a concrete entity data model
-that already contains its localized strings and SI-based measurements.
-Locale bundles should keep only UI chrome and formatting scaffolding.
-This document defines the schemas, localization rules, and migration
-steps for the Corbusier front end.
+Every card in the mockup must render from a concrete entity data model that
+already contains its localized strings and SI-based measurements. Locale
+bundles should keep only UI chrome and formatting scaffolding. This document
+defines the schemas, localization rules, and migration steps for the Corbusier
+front end.
 
-This architecture applies to all v2a stack front ends. For a
-backend-compatible perspective on hexagonal domain boundaries and ports,
-see `docs/concept.md`. For the cross-application summary of the shared
-card primitives, see `docs/v2a-front-end-stack.md`.
+This architecture applies to all v2a stack front ends. For a backend-compatible
+perspective on hexagonal domain boundaries and ports, see `docs/concept.md`.
+For the cross-application summary of the shared card primitives, see
+`docs/v2a-front-end-stack.md`.
 
 ## Principles to enforce
 
@@ -31,13 +31,13 @@ card primitives, see `docs/v2a-front-end-stack.md`.
 ## Card inventory and current data sources
 
 - **Dashboard (`dashboard-screen.tsx`)**: system health status panel,
-  KPI cards, recent activity feed, agent utilization summary. Data
-  comes from `data/dashboard.ts`.
+  KPI cards, recent activity feed, agent utilization summary. Data comes from
+  `data/dashboard.ts`.
 - **My Tasks (`tasks-screen.tsx`)**: filterable task queue with state,
   priority, and project filters. Data from `data/tasks.ts`.
 - **Task Detail (`task-detail-screen.tsx`)**: task header, dependency
-  hierarchy, state machine controls, subtask checklist, dependency
-  panels, branch/PR, activity timeline, metadata panel, related tasks.
+  hierarchy, state machine controls, subtask checklist, dependency panels,
+  branch/PR, activity timeline, metadata panel, related tasks.
 - **Task Dependencies (`task-deps-screen.tsx`)**: hierarchy view,
   dependency graph, current task focus.
 - **Project List (`projects-screen.tsx`)**: project cards with name,
@@ -50,8 +50,7 @@ card primitives, see `docs/v2a-front-end-stack.md`.
 - **AI Suggestions**: suggestion cards with confidence badges, priority
   grouping, AI insights panel.
 - **System Pages**: personnel directory, agent backend registry, MCP
-  tool registry, hooks & policies, monitoring dashboard, tenant
-  management.
+  tool registry, hooks & policies, monitoring dashboard, tenant management.
 - **Settings and Global**: command palette results, notification
   entries, integration cards, user menu.
 
@@ -87,10 +86,10 @@ export type ImageAsset = {
 };
 ```
 
-Fallback rule: prefer the current user locale, fall back to `en-GB`
-then any available locale. Components must not construct names from
-translation keys. The same fallback chain resolves localized image alt
-text when the current locale is absent.
+Fallback rule: prefer the current user locale, fall back to `en-GB` then any
+available locale. Components must not construct names from translation keys.
+The same fallback chain resolves localized image alt text when the current
+locale is absent.
 
 ## Entity schemas by card type
 
@@ -248,13 +247,13 @@ text when the current locale is absent.
 
 ## Descriptor registries
 
-Descriptors resolve stable internal identifiers to localized display
-strings. Each registry entry owns its `localizations`.
+Descriptors resolve stable internal identifiers to localized display strings.
+Each registry entry owns its `localizations`.
 
 - **LabelDescriptor** — `backend`, `agent`, `schema`, `hooks`,
-  `policy`, `streaming`, `frontend`, `ui`, `testing`, `devops`,
-  `governance`, `dashboard`, `parser`, `security`, `automation`,
-  `a11y`, `monitoring`, `settings`.
+  `policy`, `streaming`, `frontend`, `ui`, `testing`, `devops`, `governance`,
+  `dashboard`, `parser`, `security`, `automation`, `a11y`, `monitoring`,
+  `settings`.
 - **PriorityDescriptor** — `low`, `medium`, `high`, `critical`.
 - **TaskStateDescriptor** — `draft`, `in_progress`, `in_review`,
   `paused`, `done`, `abandoned`.
@@ -265,8 +264,8 @@ strings. Each registry entry owns its `localizations`.
 
 ## Visual model references
 
-Figure 1 illustrates the entity relationships for the orchestration
-domain, mapping how cards compose their data inputs.
+Figure 1 illustrates the entity relationships for the orchestration domain,
+mapping how cards compose their data inputs.
 
 ```mermaid
 erDiagram
@@ -325,8 +324,8 @@ erDiagram
   SUGGESTION }o--|| PROJECT : targets
 ```
 
-Figure 2 sketches the class-level model with localization-aware fields
-and asset references that underpin the card architecture.
+Figure 2 sketches the class-level model with localization-aware fields and
+asset references that underpin the card architecture.
 
 ```mermaid
 classDiagram
@@ -418,13 +417,13 @@ classDiagram
   once per render using a `pickLocalization(entity, locale)` helper.
 - Fluent bundles keep only chrome (button labels, aria labels, section
   headings, format strings with pluralization). Remove entity names,
-  descriptions, and state labels from `public/locales/*/common.ftl`
-  once migration lands.
+  descriptions, and state labels from `public/locales/*/common.ftl` once
+  migration lands.
 - Descriptor registries live in `src/data/registries/` and store
   `localizations` instead of Fluent label keys.
 - Component props shift from `title`/`description` strings to entire
-  entity objects. Helpers (e.g., `formatTimestamp`) continue to format
-  values with translated unit labels.
+  entity objects. Helpers (e.g., `formatTimestamp`) continue to format values
+  with translated unit labels.
 
 ## Attribute identifier strategy
 
@@ -433,8 +432,8 @@ classDiagram
 - The `labelDescriptors` registry resolves task label tags (backend,
   agent, schema, hooks, etc.) to localized display names.
 - Status badges, priority tags, and health indicators resolve their
-  display strings from the corresponding descriptor registries rather
-  than from hard-coded Fluent keys.
+  display strings from the corresponding descriptor registries rather than from
+  hard-coded Fluent keys.
 
 ## Proposed folder layout
 

@@ -1,6 +1,10 @@
 # Dexie introduction
 
-Dexie lives in that curious middle ground where JavaScript storage stops being “slap some JSON in localStorage and pray” and starts behaving like a real database. It’s basically a civilized wrapper over IndexedDB—civilized in the sense that it removes the callback-ridden, error-prone medieval torture apparatus that IndexedDB exposes by default.
+Dexie lives in that curious middle ground where JavaScript storage stops being
+“slap some JSON in localStorage and pray” and starts behaving like a real
+database. It’s basically a civilized wrapper over IndexedDB—civilized in the
+sense that it removes the callback-ridden, error-prone medieval torture
+apparatus that IndexedDB exposes by default.
 
 Dexie does not pretend to be a universal state manager, a sync engine, or a
 CRDT playground. It does one job: **make IndexedDB fast, pleasant, and
@@ -9,7 +13,7 @@ indexes, and transactions instead of event handlers and arcane IDB boilerplate.
 
 Here’s the shape of it.
 
----
+______________________________________________________________________
 
 ## What Dexie actually is
 
@@ -20,12 +24,14 @@ modern, typed, Promise-based façade:
 
 - Declare a database schema in a single string.
 - Issue queries with familiar methods (`where`, `equals`, `startsWith`, etc.).
-- Wrap multiple operations in a transaction that behaves like a normal transaction.
+- Wrap multiple operations in a transaction that behaves like a normal
+  transaction.
 - Handle upgrades declaratively instead of juggling IDB versionchange events.
 
-Dexie doesn’t abstract away IndexedDB; it simply exposes a sane representation of it.
+Dexie doesn’t abstract away IndexedDB; it simply exposes a sane representation
+of it.
 
----
+______________________________________________________________________
 
 ## A tiny taste
 
@@ -62,17 +68,18 @@ const tilesForZ14 = await db.tiles
 
 ```
 
-The appeal is immediate: the mental model is “small SQLite”, not “screaming into the asynchronous void”.
+The appeal is immediate: the mental model is “small SQLite”, not “screaming
+into the asynchronous void”.
 
----
+______________________________________________________________________
 
 ## Where Dexie shines
 
 ### 1. Managing large local datasets
 
 Dexie is built for situations where _thousands_ or _millions_ of records must
-be stored in the browser, efficiently, with indexed lookups. That’s exactly
-why people reach for it in mapping PWAs, note-taking apps, offline CRMs, and
+be stored in the browser, efficiently, with indexed lookups. That’s exactly why
+people reach for it in mapping PWAs, note-taking apps, offline CRMs, and
 anything involving attachments or binary blobs.
 
 Dexie doesn’t blink at 500MB of tiles. LocalStorage would die of fright.
@@ -106,9 +113,11 @@ needed.
 
 ### 4. Extremely stable and well-maintained
 
-IndexedDB is part of the browser platform and isn’t going anywhere. Dexie builds directly on it, with no external daemon or runtime. It’s one of the more boringly reliable pieces of the web stack.
+IndexedDB is part of the browser platform and isn’t going anywhere. Dexie
+builds directly on it, with no external daemon or runtime. It’s one of the more
+boringly reliable pieces of the web stack.
 
----
+______________________________________________________________________
 
 ## The bits Dexie doesn’t do (and shouldn’t)
 
@@ -123,9 +132,10 @@ Dexie is not:
 It doesn’t solve “how does reconciliation with later server updates work?” It
 stores bytes in a structured way and makes retrieval very fast.
 
-That’s exactly why it pairs cleanly with **TanStack Query**, **Zustand**, and **a service worker**: it behaves like a local storage engine, not a worldview.
+That’s exactly why it pairs cleanly with **TanStack Query**, **Zustand**, and
+**a service worker**: it behaves like a local storage engine, not a worldview.
 
----
+______________________________________________________________________
 
 ## Why Dexie fits beautifully in Wildside’s architecture
 
@@ -147,25 +157,29 @@ This yields a clean separation:
 - “What needs re-syncing?” → Query + the outbox
 - “Where do the bytes live?” → Dexie
 
-This division of labour scales, makes testing easier, and avoids the architectural contortions of PouchDB/RxDB where the database starts eating the whole app.
+This division of labour scales, makes testing easier, and avoids the
+architectural contortions of PouchDB/RxDB where the database starts eating the
+whole app.
 
----
+______________________________________________________________________
 
 ## Performance profile
 
-Dexie’s performance is mostly IndexedDB’s performance, which is surprisingly decent:
+Dexie’s performance is mostly IndexedDB’s performance, which is surprisingly
+decent:
 
 - Bulk inserts of tens of thousands of items in a transaction: fine.
 - Lookups by compound keys: very fast.
 - Range queries via indexes: fast.
-- Iterating through hundreds of thousands of map tiles: fine, but you stream them, not grab them all at once.
+- Iterating through hundreds of thousands of map tiles: fine, but you stream
+  them, not grab them all at once.
 - Blob storage: depends on browser; Chrome’s IDB handles blobs gracefully.
 
 For map tiles specifically: keep tiles in Dexie or Cache Storage depending on
 the caching strategy. Dexie gives more control; Cache Storage gives more “free”
 caching semantics.
 
----
+______________________________________________________________________
 
 ## The “developer ergonomics” bit
 
@@ -204,7 +218,7 @@ const notesForRoute = await db.notes
 
 Fighting the browser is unnecessary; the result is code that feels obvious.
 
----
+______________________________________________________________________
 
 ## In summary
 

@@ -1,7 +1,11 @@
-.PHONY: check-fmt typecheck lint spelling test
+.PHONY: fmt check-fmt typecheck lint spelling test
 
 TYPOS_VERSION ?= 1.48.0
 TYPOS := uv tool run typos@$(TYPOS_VERSION)
+
+fmt:
+	bun run fmt
+	mdformat-all
 
 check-fmt:
 	bun fmt

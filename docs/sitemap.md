@@ -41,14 +41,14 @@ graph TD
     AI_SUG --> AIS_MED["Medium Priority Suggestions"]
     AI_SUG --> AIS_LOW["Low Priority Suggestions"]
     AI_SUG --> AIS_INSIGHTS["AI Insights Panel"]
-    AIS_HIGH --> AIS_CARD["Suggestion Card<br/>(project, tags, confidence %, rationale,<br/>dependencies, estimate, suggested assignees)"]
+    AIS_HIGH --> AIS_CARD["Suggestion Card (proj, tags, confidence, rationale, dependencies, estimate, suggested assignees)"]
     AIS_CARD --> AIS_ADD["Add to Backlog"]
     AIS_CARD --> AIS_DISMISS["Dismiss"]
 
     %% ── Projects ──
     PROJECTS --> PROJ_LIST["Project List"]
     PROJ_LIST --> PROJ_DETAIL["Project Landing"]
-    PROJ_DETAIL --> PROJ_HEADER["Project Header<br/>(lead, date range, status badge, team avatars)"]
+    PROJ_DETAIL --> PROJ_HEADER["Project Header<br/>(lead, date range, status badge,<br/>team avatars)"]
     PROJ_DETAIL --> PROJ_VIEWS["View Switcher"]
     PROJ_VIEWS --> PV_BACKLOG["Backlog"]
     PROJ_VIEWS --> PV_KANBAN["Kanban Board"]
@@ -58,7 +58,7 @@ graph TD
 
     %% ── Kanban Board ──
     PV_KANBAN --> KB_COL["Columns<br/>(To-Do · Planned · In Progress · In Review · Done)"]
-    KB_COL --> KB_CARD["Task Card<br/>(priority tag, category tag, title, description,<br/>status, progress %, assignee avatars, task ID)"]
+    KB_COL --> KB_CARD["Task Card (priority, category, title, description, status, progress, assignee avatars, ID)"]
     KB_CARD --> MT_DETAIL
     KB_COL --> KB_NEW["+ Add New (inline card creation)"]
 
@@ -148,47 +148,56 @@ graph TD
 
 ### 1. Dashboard (`/`)
 
-The landing view. Four panels: system health gauges (CPU, memory, DB connections), KPI cards (SLA status, active tasks, agent utilization, tool success rate), a recent activity feed drawn from the domain event stream, and an agent utilization summary showing active backends and turn counts. All panels fed by SSE from `/api/v1/events`.
+The landing view. Four panels: system health gauges (CPU, memory, DB
+connections), KPI cards (SLA status, active tasks, agent utilization, tool
+success rate), a recent activity feed drawn from the domain event stream, and
+an agent utilization summary showing active backends and turn counts. All
+panels fed by SSE from `/api/v1/events`.
 
 ### 2. My Tasks (`/tasks`)
 
-A personal task queue. Filterable by state (`draft`, `in_progress`, `in_review`, `paused`), priority, and project. Clicking a task opens the **Task Detail View**.
+A personal task queue. Filterable by state (`draft`, `in_progress`, `in_review`,
+`paused`), priority, and project. Clicking a task opens the **Task Detail
+View**.
 
 #### 2.1 Task Detail (`/tasks/:id`)
 
-The densest page in the application, corresponding to the Task Dependencies mockup. Structured as:
+The densest page in the application, corresponding to the Task Dependencies
+mockup. Structured as:
 
-| Section | Content | Data source |
-|---|---|---|
-| Header | Title, assignee, due date, priority badge, state badge, Edit Task button | `GET /api/v1/tasks/:id` |
-| Dependency Hierarchy | Goal → Idea → Step → Current Task breadcrumb with expand/collapse | Task origin + milestone associations |
-| Task Metadata | Assignee, due date, priority, estimate, labels | Task record |
-| Progress | Completion %, time spent gauge | Derived from subtask state |
-| Subtask Checklist | Ordered subtask list with status icons and active highlight | Child task query |
-| Dependencies (Blocks This Task) | Cards for upstream blocking tasks with status, assignee, completion date | `find_by_branch_ref` / dependency graph |
-| Blocked By This Task | Cards for downstream blocked tasks | Reverse dependency lookup |
-| Related Tasks in Same Step | Sibling task cards with progress bars | Step-scoped query |
-| Branch & PR Association | Branch name, PR number, link to VCS | `branch_ref`, `pull_request_ref` |
-| State Machine Controls | Buttons for valid transitions only, greyed-out invalid targets | `TaskState::can_transition_to` |
-| Activity Timeline | Chronological audit log: state transitions, subtask completions, comments, agent actions | Domain events filtered by `aggregate_id` |
+| Section                         | Content                                                                                  | Data source                              |
+| ------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Header                          | Title, assignee, due date, priority badge, state badge, Edit Task button                 | `GET /api/v1/tasks/:id`                  |
+| Dependency Hierarchy            | Goal → Idea → Step → Current Task breadcrumb with expand/collapse                        | Task origin + milestone associations     |
+| Task Metadata                   | Assignee, due date, priority, estimate, labels                                           | Task record                              |
+| Progress                        | Completion %, time spent gauge                                                           | Derived from subtask state               |
+| Subtask Checklist               | Ordered subtask list with status icons and active highlight                              | Child task query                         |
+| Dependencies (Blocks This Task) | Cards for upstream blocking tasks with status, assignee, completion date                 | `find_by_branch_ref` / dependency graph  |
+| Blocked By This Task            | Cards for downstream blocked tasks                                                       | Reverse dependency lookup                |
+| Related Tasks in Same Step      | Sibling task cards with progress bars                                                    | Step-scoped query                        |
+| Branch & PR Association         | Branch name, PR number, link to VCS                                                      | `branch_ref`, `pull_request_ref`         |
+| State Machine Controls          | Buttons for valid transitions only, greyed-out invalid targets                           | `TaskState::can_transition_to`           |
+| Activity Timeline               | Chronological audit log: state transitions, subtask completions, comments, agent actions | Domain events filtered by `aggregate_id` |
 
 ### 3. AI Suggestions (`/suggestions`)
 
-Corresponds to the AI Task Suggestions mockup. An analytical overlay that scans project roadmaps and recommends new tasks.
+Corresponds to the AI Task Suggestions mockup. An analytical overlay that scans
+project roadmaps and recommends new tasks.
 
-| Section | Content |
-|---|---|
-| Summary Bar | Analysed items count, suggested task count, average confidence score, last update timestamp |
-| Project Filter Tabs | All Projects, per-project tabs |
-| High / Medium / Low Priority Groups | Suggestion cards grouped by inferred priority |
-| Suggestion Card | Project badge, category tags (BACKEND, FRONTEND, TESTING, etc.), title, rationale paragraph, dependency context, estimated duration, confidence percentage, suggested assignees, Dismiss / Add to Backlog actions |
-| AI Insights Panel | Bullet observations: schedule forecasts, blocked-task warnings, velocity trends |
+| Section                             | Content                                                                                                                                                                                                           |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Summary Bar                         | Analysed items count, suggested task count, average confidence score, last update timestamp                                                                                                                       |
+| Project Filter Tabs                 | All Projects, per-project tabs                                                                                                                                                                                    |
+| High / Medium / Low Priority Groups | Suggestion cards grouped by inferred priority                                                                                                                                                                     |
+| Suggestion Card                     | Project badge, category tags (BACKEND, FRONTEND, TESTING, etc.), title, rationale paragraph, dependency context, estimated duration, confidence percentage, suggested assignees, Dismiss / Add to Backlog actions |
+| AI Insights Panel                   | Bullet observations: schedule forecasts, blocked-task warnings, velocity trends                                                                                                                                   |
 
 ### 4. Projects (`/projects`)
 
 #### 4.1 Project List (`/projects`)
 
-Card grid of all projects. Each card shows name, lead, date range, status badge (IN-ORBIT, ACTIVE, etc.), team avatar stack.
+Card grid of all projects. Each card shows name, lead, date range, status badge
+(IN-ORBIT, ACTIVE, etc.), team avatar stack.
 
 #### 4.2 Project Landing (`/projects/:slug`)
 
@@ -196,7 +205,12 @@ Corresponds to the Kanban mockup. A tabbed view:
 
 **Backlog** — unscheduled tasks, bulk triage actions.
 
-**Kanban** (`/projects/:slug/kanban`) — columns map directly to `TaskState` values: To-Do (draft), Planned (scheduled), In Progress, In Review, Done. Each card shows priority and category tags, title, short description, status icon, progress bar, assignee avatars, and task ID. Cards are draggable to trigger `transition_task`. Column headers include count badges and "+ Add New" inline creation.
+**Kanban** (`/projects/:slug/kanban`) — columns map directly to `TaskState`
+values: To-Do (draft), Planned (scheduled), In Progress, In Review, Done. Each
+card shows priority and category tags, title, short description, status icon,
+progress bar, assignee avatars, and task ID. Cards are draggable to trigger
+`transition_task`. Column headers include count badges and "+ Add New" inline
+creation.
 
 **Calendar** — deadline-centric view, tasks plotted by due date.
 
@@ -206,27 +220,31 @@ Corresponds to the Kanban mockup. A tabbed view:
 
 #### 4.3 Task Dependencies (`/projects/:slug/tasks/:id/dependencies`)
 
-The hierarchical dependency view from the first mockup. Accessible from a task card or the task detail page.
+The hierarchical dependency view from the first mockup. Accessible from a task
+card or the task detail page.
 
 #### 4.4 Conversations (`/projects/:slug/conversations`)
 
-Lists conversations scoped to the project's tasks. Clicking opens the **Conversation Detail**.
+Lists conversations scoped to the project's tasks. Clicking opens the
+**Conversation Detail**.
 
 #### 4.5 Conversation Detail (`/projects/:slug/conversations/:id`)
 
 A chat-style interface:
 
-| Element | Behaviour |
-|---|---|
-| Message Timeline | Canonical message history, colour-coded by role (user, assistant, tool, system). Tool-call messages show expandable result cards with syntax-highlighted output. |
-| Agent Status Badge | Shows active backend name, model identifier, current turn state (idle / processing / awaiting tool result). |
+| Element             | Behaviour                                                                                                                                                                         |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Message Timeline    | Canonical message history, colour-coded by role (user, assistant, tool, system). Tool-call messages show expandable result cards with syntax-highlighted output.                  |
+| Agent Status Badge  | Shows active backend name, model identifier, current turn state (idle / processing / awaiting tool result).                                                                       |
 | Slash Command Input | Text input with `/` trigger for auto-complete. Selecting a command expands a parameter form. Submitted commands produce `SlashCommandExpansion` metadata visible in the timeline. |
-| Tool Execution Log | Inline cards within the message stream showing `call_id`, `tool_name`, `status`, execution duration. Expandable to full input/output JSON. |
-| Handoff Annotations | Visual marker when the agent backend changes mid-conversation, showing the source and target backend with context snapshot link. |
+| Tool Execution Log  | Inline cards within the message stream showing `call_id`, `tool_name`, `status`, execution duration. Expandable to full input/output JSON.                                        |
+| Handoff Annotations | Visual marker when the agent backend changes mid-conversation, showing the source and target backend with context snapshot link.                                                  |
 
 #### 4.6 Directives (`/projects/:slug/directives`)
 
-Browse and manage slash command definitions registered for the project scope. Each entry shows the command name, required/optional parameters, template body, and a "try it" expansion preview.
+Browse and manage slash command definitions registered for the project scope.
+Each entry shows the command name, required/optional parameters, template body,
+and a "try it" expansion preview.
 
 ### 5. System (`/system`)
 
@@ -234,35 +252,57 @@ Administrative and operational pages, gated behind Team Lead / Admin roles.
 
 #### 5.1 Personnel (`/system/personnel`)
 
-User directory. Shows name, role, assigned task count, last active timestamp. User detail shows full activity history and role management controls.
+User directory. Shows name, role, assigned task count, last active timestamp.
+User detail shows full activity history and role management controls.
 
 #### 5.2 Reports (`/system/reports`)
 
 Three report categories:
 
-- **Audit Trail** — searchable, filterable event log drawn from `audit_logs` and `domain_events`. Columns: timestamp, tenant, table, operation, user, correlation ID.
-- **Performance** — agent turn duration percentiles, tool execution success rates, API latency histograms. Time-range selectable.
-- **Compliance** — policy violation summary, hook execution pass/fail rates, data retention status.
+- **Audit Trail** — searchable, filterable event log drawn from `audit_logs` and
+  `domain_events`. Columns: timestamp, tenant, table, operation, user,
+  correlation ID.
+- **Performance** — agent turn duration percentiles, tool execution success
+  rates, API latency histograms. Time-range selectable.
+- **Compliance** — policy violation summary, hook execution pass/fail rates,
+  data retention status.
 
 #### 5.3 Agent Backends (`/system/agents`)
 
-Registry of agent backends (from `BackendRegistryService`). Each entry shows name, display name, version, vendor, `BackendStatus` (Active/Inactive), capability flags (`supports_streaming`, `supports_tools`). Detail view provides activate/deactivate controls and a capability editor.
+Registry of agent backends (from `BackendRegistryService`). Each entry shows
+name, display name, version, vendor, `BackendStatus` (Active/Inactive),
+capability flags (`supports_streaming`, `supports_tools`). Detail view provides
+activate/deactivate controls and a capability editor.
 
 #### 5.4 Tool Registry (`/system/tools`)
 
-MCP server management (from `McpServerLifecycleService`). Lists registered servers with name, transport type (stdio/HTTP+SSE), lifecycle state (`registered`/`running`/`stopped`), health status (`healthy`/`unhealthy`/`unknown`), and last health check timestamp. Server detail provides start/stop controls, the tool catalogue (output of `tools/list`), and health history. Each tool definition shows name, description, input JSON Schema, and access policy.
+MCP server management (from `McpServerLifecycleService`). Lists registered
+servers with name, transport type (stdio/HTTP+SSE), lifecycle state
+(`registered`/`running`/`stopped`), health status (`healthy`/`unhealthy`/
+`unknown`), and last health check timestamp. Server detail provides start/stop
+controls, the tool catalogue (output of `tools/list`), and health history. Each
+tool definition shows name, description, input JSON Schema, and access policy.
 
 #### 5.5 Hooks & Policies (`/system/hooks`)
 
-Hook definition browser and editor. Lists hooks by trigger type, priority, enabled status. Detail view shows trigger configuration, predicate rules, action chain, and a read-only execution log showing recent hook invocations with pass/fail/skip outcomes.
+Hook definition browser and editor. Lists hooks by trigger type, priority,
+enabled status. Detail view shows trigger configuration, predicate rules,
+action chain, and a read-only execution log showing recent hook invocations
+with pass/fail/skip outcomes.
 
 #### 5.6 Monitoring (`/system/monitoring`)
 
-Operational dashboard embedding Grafana-style metric panels: HTTP request rate, agent turn latency (P50/P95/P99), tool execution throughput, database connection pool utilization. Active alerts panel with severity, trigger time, and acknowledgement controls. Health check panel showing endpoint status for `/health/live`, `/health/ready`, `/health/detailed`.
+Operational dashboard embedding Grafana-style metric panels: HTTP request rate,
+agent turn latency (P50/P95/P99), tool execution throughput, database
+connection pool utilization. Active alerts panel with severity, trigger time,
+and acknowledgement controls. Health check panel showing endpoint status for
+`/health/live`, `/health/ready`, `/health/detailed`.
 
 #### 5.7 Tenant Management (`/system/tenants`)
 
-Current tenant details: ID, slug, display name, status, owning user. In the initial single-user-per-tenant model, this is a read-only view with future provisions for team and organization tenant creation.
+Current tenant details: ID, slug, display name, status, owning user. In the
+initial single-user-per-tenant model, this is a read-only view with future
+provisions for team and organization tenant creation.
 
 ### 6. Settings (`/settings`)
 
@@ -272,15 +312,18 @@ User display name, email, avatar, notification preferences.
 
 #### 6.2 Authentication & Sessions
 
-API key management (generate, revoke, last-used tracking). Active session list with device info and revocation.
+API key management (generate, revoke, last-used tracking). Active session list
+with device info and revocation.
 
 #### 6.3 Workspace Defaults
 
-Default encapsulation provider, resource limits (CPU, memory, disk, timeout), tool policy (allowed tools, file edit policy: `weaver_only` or `agent_native`).
+Default encapsulation provider, resource limits (CPU, memory, disk, timeout),
+tool policy (allowed tools, file edit policy: `weaver_only` or `agent_native`).
 
 #### 6.4 Integrations
 
-VCS provider configuration (GitHub/GitLab OAuth credentials, webhook URLs, repository allow-lists). Frankie review adapter connection settings.
+VCS provider configuration (GitHub/GitLab OAuth credentials, webhook URLs,
+repository allow-lists). Frankie review adapter connection settings.
 
 #### 6.5 Appearance
 
@@ -288,13 +331,13 @@ Theme toggle (light/dark), layout density, and SSE reconnection preferences.
 
 ### 7. Global Elements
 
-| Element | Location | Behaviour |
-|---|---|---|
-| Search Directives | Header bar, `⌘K` shortcut | Global command palette searching tasks, conversations, slash commands, and projects |
-| Notifications Bell | Header bar | Real-time notification count badge; dropdown lists recent events (task assignments, hook failures, PR reviews) |
-| User Menu | Header bar, avatar click | Profile link, tenant switcher (future), sign out |
-| Help | Header bar, `?` icon | Links to user guide, API docs, keyboard shortcuts overlay |
-| Feedback | Footer / sidebar | In-app feedback form |
+| Element            | Location                  | Behaviour                                                                                                      |
+| ------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Search Directives  | Header bar, `⌘K` shortcut | Global command palette searching tasks, conversations, slash commands, and projects                            |
+| Notifications Bell | Header bar                | Real-time notification count badge; dropdown lists recent events (task assignments, hook failures, PR reviews) |
+| User Menu          | Header bar, avatar click  | Profile link, tenant switcher (future), sign out                                                               |
+| Help               | Header bar, `?` icon      | Links to user guide, API docs, keyboard shortcuts overlay                                                      |
+| Feedback           | Footer / sidebar          | In-app feedback form                                                                                           |
 
 ## Navigation model
 
@@ -326,66 +369,77 @@ Settings
 Feedback
 ```
 
-Projects in the sidebar use a status indicator (filled circle = active, hollow = inactive). The currently selected project/page is highlighted. Project entries expand on click to reveal that project's sub-navigation (Kanban, List, Calendar, Timeline, Conversations, Directives).
+Projects in the sidebar use a status indicator (filled circle = active, hollow
+= inactive). The currently selected project/page is highlighted. Project
+entries expand on click to reveal that project's sub-navigation (Kanban, List,
+Calendar, Timeline, Conversations, Directives).
 
 ## Route table
 
-| Route | Page | Auth required | Min role |
-|---|---|---|---|
-| `/` | Dashboard | Yes | Viewer |
-| `/tasks` | My Tasks | Yes | Developer |
-| `/tasks/:id` | Task Detail | Yes | Developer |
-| `/suggestions` | AI Suggestions | Yes | Developer |
-| `/projects` | Project List | Yes | Viewer |
-| `/projects/:slug` | Project Landing (Kanban default) | Yes | Viewer |
-| `/projects/:slug/kanban` | Kanban Board | Yes | Viewer |
-| `/projects/:slug/backlog` | Backlog | Yes | Developer |
-| `/projects/:slug/calendar` | Calendar View | Yes | Viewer |
-| `/projects/:slug/list` | List View | Yes | Viewer |
-| `/projects/:slug/timeline` | Timeline View | Yes | Viewer |
-| `/projects/:slug/tasks/:id` | Task Detail (project-scoped) | Yes | Developer |
-| `/projects/:slug/tasks/:id/dependencies` | Task Dependencies | Yes | Developer |
-| `/projects/:slug/conversations` | Conversation List | Yes | Developer |
-| `/projects/:slug/conversations/:id` | Conversation Detail | Yes | Developer |
-| `/projects/:slug/directives` | Slash Command Registry | Yes | Developer |
-| `/system/personnel` | Personnel | Yes | Team Lead |
-| `/system/personnel/:id` | User Profile | Yes | Team Lead |
-| `/system/reports` | Reports | Yes | Team Lead |
-| `/system/agents` | Agent Backends | Yes | Admin |
-| `/system/agents/:id` | Backend Detail | Yes | Admin |
-| `/system/tools` | Tool Registry | Yes | Admin |
-| `/system/tools/:id` | MCP Server Detail | Yes | Admin |
-| `/system/hooks` | Hooks & Policies | Yes | Team Lead |
-| `/system/hooks/:id` | Hook Detail | Yes | Team Lead |
-| `/system/monitoring` | Monitoring Dashboard | Yes | Team Lead |
-| `/system/tenants` | Tenant Management | Yes | Admin |
-| `/settings` | Settings (Profile) | Yes | Viewer |
-| `/settings/auth` | Authentication & Sessions | Yes | Viewer |
-| `/settings/workspace` | Workspace Defaults | Yes | Developer |
-| `/settings/integrations` | Integrations | Yes | Admin |
-| `/settings/appearance` | Appearance | Yes | Viewer |
+| Route                                    | Page                             | Auth required | Min role  |
+| ---------------------------------------- | -------------------------------- | ------------- | --------- |
+| `/`                                      | Dashboard                        | Yes           | Viewer    |
+| `/tasks`                                 | My Tasks                         | Yes           | Developer |
+| `/tasks/:id`                             | Task Detail                      | Yes           | Developer |
+| `/suggestions`                           | AI Suggestions                   | Yes           | Developer |
+| `/projects`                              | Project List                     | Yes           | Viewer    |
+| `/projects/:slug`                        | Project Landing (Kanban default) | Yes           | Viewer    |
+| `/projects/:slug/kanban`                 | Kanban Board                     | Yes           | Viewer    |
+| `/projects/:slug/backlog`                | Backlog                          | Yes           | Developer |
+| `/projects/:slug/calendar`               | Calendar View                    | Yes           | Viewer    |
+| `/projects/:slug/list`                   | List View                        | Yes           | Viewer    |
+| `/projects/:slug/timeline`               | Timeline View                    | Yes           | Viewer    |
+| `/projects/:slug/tasks/:id`              | Task Detail (project-scoped)     | Yes           | Developer |
+| `/projects/:slug/tasks/:id/dependencies` | Task Dependencies                | Yes           | Developer |
+| `/projects/:slug/conversations`          | Conversation List                | Yes           | Developer |
+| `/projects/:slug/conversations/:id`      | Conversation Detail              | Yes           | Developer |
+| `/projects/:slug/directives`             | Slash Command Registry           | Yes           | Developer |
+| `/system/personnel`                      | Personnel                        | Yes           | Team Lead |
+| `/system/personnel/:id`                  | User Profile                     | Yes           | Team Lead |
+| `/system/reports`                        | Reports                          | Yes           | Team Lead |
+| `/system/agents`                         | Agent Backends                   | Yes           | Admin     |
+| `/system/agents/:id`                     | Backend Detail                   | Yes           | Admin     |
+| `/system/tools`                          | Tool Registry                    | Yes           | Admin     |
+| `/system/tools/:id`                      | MCP Server Detail                | Yes           | Admin     |
+| `/system/hooks`                          | Hooks & Policies                 | Yes           | Team Lead |
+| `/system/hooks/:id`                      | Hook Detail                      | Yes           | Team Lead |
+| `/system/monitoring`                     | Monitoring Dashboard             | Yes           | Team Lead |
+| `/system/tenants`                        | Tenant Management                | Yes           | Admin     |
+| `/settings`                              | Settings (Profile)               | Yes           | Viewer    |
+| `/settings/auth`                         | Authentication & Sessions        | Yes           | Viewer    |
+| `/settings/workspace`                    | Workspace Defaults               | Yes           | Developer |
+| `/settings/integrations`                 | Integrations                     | Yes           | Admin     |
+| `/settings/appearance`                   | Appearance                       | Yes           | Viewer    |
 
 ## Real-time data requirements
 
-Every page that shows live state subscribes to the SSE endpoint at `/api/v1/events`. The front-end event stream manager filters by event type and resource scope:
+Every page that shows live state subscribes to the SSE endpoint at
+`/api/v1/events`. The front-end event stream manager filters by event type and
+resource scope:
 
-| Page | Event types consumed | Scope filter |
-|---|---|---|
-| Dashboard | All system events | Tenant-wide |
-| My Tasks | `TaskStateTransition`, `TaskAssigned` | Current user |
-| Kanban Board | `TaskStateTransition`, `TaskCreated` | Current project |
-| Task Detail | `TaskStateTransition`, `SubtaskCompleted`, `CommentAdded` | Specific task |
+| Page                | Event types consumed                                                                  | Scope filter          |
+| ------------------- | ------------------------------------------------------------------------------------- | --------------------- |
+| Dashboard           | All system events                                                                     | Tenant-wide           |
+| My Tasks            | `TaskStateTransition`, `TaskAssigned`                                                 | Current user          |
+| Kanban Board        | `TaskStateTransition`, `TaskCreated`                                                  | Current project       |
+| Task Detail         | `TaskStateTransition`, `SubtaskCompleted`, `CommentAdded`                             | Specific task         |
 | Conversation Detail | `TurnStarted`, `ToolCallInitiated`, `ToolExecutionComplete`, `TurnCompleted`, `Error` | Specific conversation |
-| Monitoring | `HealthCheck`, `AlertTriggered`, `AlertResolved` | Tenant-wide |
+| Monitoring          | `HealthCheck`, `AlertTriggered`, `AlertResolved`                                      | Tenant-wide           |
 
 ## Design system notes
 
-The mockups establish a warm, mid-century-tinged palette consistent with the Corbusier namesake:
+The mockups establish a warm, mid-century-tinged palette consistent with the
+Corbusier namesake:
 
-- **Primary accent**: Coral/terracotta (`~#E07A5F`) for active states, status badges, CTAs
+- **Primary accent**: Coral/terracotta (`~#E07A5F`) for active states, status
+  badges, CTAs
 - **Surface**: Warm off-white (`~#FDF6EC`) backgrounds, not stark white
 - **Cards**: Soft cream with subtle warm-grey borders, generous padding
-- **Typography**: Monospace for IDs and code (`TASK-892`, `STEP-117`); humanist sans-serif for body; condensed uppercase for section labels (`MAINFRAME`, `PROJECTS`, `SYSTEM`)
-- **Status colours**: Green (completed), coral (in progress/active), amber (pending/blocked), red (critical/blocked)
+- **Typography**: Monospace for IDs and code (`TASK-892`, `STEP-117`); humanist
+  sans-serif for body; condensed uppercase for section labels (`MAINFRAME`,
+  `PROJECTS`, `SYSTEM`)
+- **Status colours**: Green (completed), coral (in progress/active), amber
+  (pending/blocked), red (critical/blocked)
 - **Avatar treatment**: Overlapping circular stacks with ring borders
-- **Confidence scores**: Circular percentage badges (green ≥90%, amber 80–89%, grey <80%)
+- **Confidence scores**: Circular percentage badges (green ≥90%, amber 80–89%,
+  grey <80%)

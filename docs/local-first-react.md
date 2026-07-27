@@ -418,9 +418,9 @@ cached query and are often a point of confusion.
 (300,000 ms). This means that if a user navigates away from a page, the data
 for that page will be kept in the cache for 5 minutes. If they navigate back
 within that window, the data will be instantly available. After 5 minutes of
-inactivity, the data is deleted from the cache. As shown in Section 6,
-this setting has critical implications for building a local-first application,
-as the default value is insufficient for offline persistence.
+inactivity, the data is deleted from the cache. As shown in Section 6, this
+setting has critical implications for building a local-first application, as
+the default value is insufficient for offline persistence.
 
 ### The Power of Query Keys: The Cache's Primary Identifier
 
@@ -473,9 +473,9 @@ export function useTodos(filters) {
 
 - **`useMutation`:** This hook is used for creating, updating, or deleting
   data. It takes a `mutationFn` as its argument. The returned `mutate` function
-  is called to trigger the mutation. A common and powerful pattern is to use
-  the `onSuccess` callback to invalidate related queries, which prompts
-  Tanstack Query to automatically refetch the data and keep the UI in sync.[^12]
+  is called to trigger the mutation. A common and powerful pattern is to use the
+  `onSuccess` callback to invalidate related queries, which prompts Tanstack
+  Query to automatically refetch the data and keep the UI in sync.[^12]
 
 ```javascript
 // src/hooks/useAddTodo.js
@@ -1285,8 +1285,7 @@ evolution, providing a higher-level abstraction specifically designed for
 local-first and real-time applications.[^34]
 
 Tanstack DB builds directly on top of Tanstack Query, extending it with a set
-of primitives that formalize the patterns manually constructed in this
-guide[^35]:
+of primitives that formalize the patterns manually constructed in this guide:
 
 - **Collections:** A formal local store primitive that acts as the client-side
   database. Collections can be populated by Tanstack Query, a real-time sync
@@ -1461,7 +1460,6 @@ August 20, 2025,
 [^20]: TkDodo's Blog | TanStack Query React Docs, accessed on August 20, 2025,
 [https://tanstack.com/query/v4/docs/react/community/tkdodos-blog](https://tanstack.com/query/v4/docs/react/community/tkdodos-blog)
 
-[^35]: Local-first sync with TanStack DB and Electric | ElectricSQL, accessed on
 August 20, 2025,
 [https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db](https://electric-sql.com/blog/2025/07/29/local-first-sync-with-tanstack-db)
 
@@ -1472,7 +1470,8 @@ GitHub, accessed on August 20, 2025,
 [^21]: XState | Stately, accessed on August 21, 2025,
 [https://stately.ai/docs/xstate](https://stately.ai/docs/xstate)
 
-[^22]: statelyai/xstate: Actor-based state management & orchestration for complex app
+[^22]: statelyai/xstate: Actor-based state management & orchestration for
+       complex app
 logic. - GitHub, accessed on August 21, 2025,
 [https://github.com/statelyai/xstate](https://github.com/statelyai/xstate)
 
