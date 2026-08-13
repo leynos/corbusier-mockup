@@ -33,3 +33,7 @@ test-results/
 *.swo
 *~
 .DS_Store
+.vtcode/
+.claude/
+.memdb/
+.grepai/
