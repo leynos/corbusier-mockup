@@ -117,6 +117,11 @@
 
 ## Markdown Guidance
 
+- `make fmt` and `make check-fmt` run `mdtablefix` (version 0.6.0, the same
+  release CI installs); install it once with
+  `cargo install --locked mdtablefix --version 0.6.0`. `make fmt` also runs
+  `markdownlint-cli2`, which CI provides through its GitHub action; locally
+  install it with `bun install -g markdownlint-cli2` (or `npm install -g`).
 - Validate Markdown files using `bunx markdownlint-cli "*.md" "docs/**/*.md"`.
 - Run `make spelling` to refresh the shared en-GB-oxendict base, regenerate
   `typos.toml`, and check maintained Markdown with the pinned `typos` release.
