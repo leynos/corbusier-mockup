@@ -629,7 +629,7 @@ successful commit.
 The token build (`bun run tokens:build`) is idempotent — running it again
 produces identical output for the same inputs.
 
-## Artifacts and notes
+## Artefacts and notes
 
 ### Token value reference (light theme)
 

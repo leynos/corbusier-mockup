@@ -997,10 +997,10 @@ debugging:
 
 - Playwright, by default, can produce an HTML report that includes screenshots,
   failing test traces, and related diagnostics. Enable it and upload it as a CI
-  artifact on failure.
+  artefact on failure.
 
 The resulting workflow is straightforward: if a test fails, especially an
-accessibility one, the report artifact can be downloaded to inspect the exact
+accessibility one, the report artefact can be downloaded to inspect the exact
 failure. A Playwright trace may show that focus did not move as expected after
 clicking a button, whilst an axe report may highlight a missing form label.
 
@@ -1038,7 +1038,7 @@ Below is a summary of the two major layers and their roles:
 | Execution Speed | Very fast (milliseconds per test file under Bun; a bit more for axe)                                                                                                                                                             | Slower (seconds per test, overall minutes per suite)                                                                                                                                                                                                      |
 | Defects Caught  | **Structural/Semantic issues:** missing labels, incorrect roles, improper ARIA, form associations, and basic functional bugs in components. *(Visual/style issues generally are not caught here due to Happy DOM/JSDOM limits.)* | **Visual & Interactive issues:** colour-contrast failures, element focus order, keyboard traps, missing focus outlines, responsive layout breakages, incorrect `lang` attributes, integration issues, and end-to-end flows such as modals and navigation. |
 | When to Run     | On every code change or commit (developer inner loop); each PR as a quick check                                                                                                                                                  | On each PR merge request (CI gating) and nightly full runs; also useful locally before major releases                                                                                                                                                     |
-| CI Role         | Fast feedback that fails the build quickly if a core test or axe rule fails, preventing bad code early                                                                                                                           | Final quality gate that ensures the merged product is accessible in reality and produces review artifacts such as screenshots and traces                                                                                                                  |
+| CI Role         | Fast feedback that fails the build quickly if a core test or axe rule fails, preventing bad code early                                                                                                                           | Final quality gate that ensures the merged product is accessible in reality and produces review artefacts such as screenshots and traces                                                                                                                  |
 
 This model ensures **accessibility is woven into every stage**: immediate IDE
 or terminal feedback catches obvious issues, and CI catches anything that
@@ -1160,11 +1160,11 @@ To adopt this framework, a phased rollout is advisable:
   ensure runners have the necessary dependencies (or use the official
   Playwright action).
 
-- **Artifact & Reporting:** Configure each job to output results. For
+- **Artefact & Reporting:** Configure each job to output results. For
   Bun/Node tests, a simple console output might suffice, but JUnit or HTML
   reports can also be emitted using tools like `bun test --reporter junit` or a
-  custom format. For Playwright, enable the HTML report and artifacts (videos,
-  traces on failure). Upload these in CI (Actions artifacts).
+  custom format. For Playwright, enable the HTML report and artefacts (videos,
+  traces on failure). Upload these in CI (Actions artefacts).
 
 - **Failure Criteria:** Decide the threshold for failing. Likely any failing
   test fails the job. For axe violations, the suite naturally fails if any

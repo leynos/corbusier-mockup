@@ -11,7 +11,47 @@ accepted = []
 [words.corrections]
 
 [patterns]
-ignore = []
+# Upstream identifiers that keep their US spelling, as the documentation
+# style guide requires for API names. Each pattern is one exact inline code
+# span, so the same spelling anywhere else, including any other code span,
+# is still checked.
+ignore = [
+  # Web app manifest members.
+  '`background_color`',
+  '`theme_color`',
+  # CSS keywords, functions and example custom properties.
+  '`color`',
+  '`currentColor`',
+  '`color-mix\(\)`',
+  '`var\(--color-brand-500\)`',
+  '`--color-\*: initial;`',
+  '`--color-foo-500`',
+  # Linter rules: axe-core and Stylelint.
+  '`color-contrast`',
+  '`color-no-hex`',
+  # daisyUI theme variables and component modifiers.
+  '`--color-primary`',
+  '`--color-base-100`',
+  '`--color-\*-content`',
+  '`var\(--color-primary\)`',
+  '`var\(--color-primary, #1a6e6e\)`',
+  '`carousel-center`',
+  '`dropdown-center`',
+  '`footer-center`',
+  '`indicator-center`',
+  '`navbar-center`',
+  '`toast-center`',
+  # Tailwind utilities and variables.
+  '`text-\{color\}/\{opacity\}`',
+  '`bg-\{color\}/\{opacity\}`',
+  '`border-\{color\}/\{opacity\}`',
+  '`--tw-color-red-500`',
+  '`bg-\(--my-brand-color\)`',
+  '`bg-\[--my-brand-color\]`',
+  '`inline-flex items-center gap-2 text-sm font-medium text-base-content`',
+  # MCP tool catalogue field in the frontend data model.
+  '`toolCatalog: McpTool\[\]`',
+]
 
 [files]
 exclude = []
