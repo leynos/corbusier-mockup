@@ -11,7 +11,12 @@ accepted = []
 [words.corrections]
 
 [patterns]
-ignore = []
+# CSS, daisyUI, Tailwind and web-manifest identifiers keep their upstream US
+# spelling (`background_color`, `navbar-center`, `currentColor`,
+# `toolCatalog`), as the documentation style guide requires for API names.
+# Only an inline code span holding one of those spellings is ignored; prose
+# and every other code span are still checked.
+ignore = ["`[^`\\n]*(?:[Cc]olor|center|Catalog)[^`\\n]*`"]
 
 [files]
 exclude = []

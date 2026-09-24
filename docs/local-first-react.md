@@ -26,7 +26,7 @@ user's devices or with other collaborators.[^2] This fundamental shift is not
 merely a technical implementation detail; it is a re-evaluation of the
 relationship between the user, their data, and the network. The motivation is
 to create applications that are inherently faster, more reliable, and that
-grant users true ownership and control over their digital artifacts.[^1] The
+grant users true ownership and control over their digital artefacts.[^1] The
 ultimate goal is to achieve the best of both worlds: the rich, real-time
 collaboration of modern cloud applications combined with the performance,
 longevity, and data sovereignty of traditional, offline-capable desktop

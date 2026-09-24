@@ -353,7 +353,7 @@ bun run ff
 Each milestone produces a commit. Discard uncommitted changes and retry from
 the last commit if a milestone fails.
 
-## Artifacts and notes
+## Artefacts and notes
 
 ### Task state transitions
 
