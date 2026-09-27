@@ -1,12 +1,11 @@
 # Corbusier Front‑End Semantic Linting — Implementation Guide (BiomeJS + GritQL first)
 
 **Audience:** Implementers working on `corbusier-mockup` (and later
-`corbusier`).
-**Goal:** Enforce semantic, accessible HTML with clean, token‑driven
-Tailwind/DaisyUI usage. Prefer **BiomeJS + GritQL** rules; fall back to
-**Semgrep**/**Stylelint** when they express rules better.
-**Outcome:** Readable, queryable markup; reusable semantic classes via
-`@apply`; consistent DaisyUI/Radix‑aligned naming; single CLI for local + CI.
+`corbusier`). **Goal:** Enforce semantic, accessible HTML with clean,
+token‑driven Tailwind/DaisyUI usage. Prefer **BiomeJS + GritQL** rules; fall
+back to **Semgrep**/**Stylelint** when they express rules better. **Outcome:**
+Readable, queryable markup; reusable semantic classes via `@apply`; consistent
+DaisyUI/Radix‑aligned naming; single CLI for local + CI.
 
 ______________________________________________________________________
 
