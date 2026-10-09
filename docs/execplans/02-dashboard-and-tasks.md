@@ -110,9 +110,10 @@ activity timelines, progress bars, avatar stacks, and state machine controls.
 ## Surprises & discoveries
 
 - Night theme semantic colours (`text-success` #7A9060, `text-error`
-  #C65A48) fail Web Content Accessibility Guidelines (WCAG) AA contrast
-  (3.98:1) against `bg-base-100` (#262D30). Supplementary text that conveys
-  meaning via icons/labels should use `text-base-content/80` (7.47:1) instead.
+  #C65A48) fail Web Content Accessibility Guidelines (WCAG) AA contrast (3.99:1
+  and 3.30:1 respectively) against `bg-base-100` (#262D30). Supplementary text
+  that conveys meaning via icons/labels should use `text-base-content/80`
+  (7.47:1) instead.
 - `text-base-content/50` gives exactly 4.5:1 in night theme — axe
   may flag this due to rounding. Use `/60` (4.9:1) as the minimum safe opacity
   for secondary text.
