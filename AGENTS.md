@@ -286,6 +286,10 @@ Keep docs close to code.
   `any`, no non‑null `!`, forbid `@ts-ignore` in favour of `@ts-expect-error`
   (with a reason).
   - In this repo: use `bun fmt`, `bun lint`, and `bun check:types`.
+  - `make lint` first runs `make interrogate`, which needs `uv` and fails on
+    any Python definition under `scripts` without a docstring, and on any
+    `MISSED` row, since the percentage is rounded. Add a new Python directory
+    to `INTERROGATE_TARGETS`.
   - Biome respects `.biomeignore` and VCS ignore files; large build trees like
     any `target/` directory are excluded.
 - **Type‑checking**: Run `bun check:types` to surface TypeScript issues
