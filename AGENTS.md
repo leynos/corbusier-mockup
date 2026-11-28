@@ -31,7 +31,9 @@
 - **Keep file size manageable.** No single code file may be longer than 400
   lines. Long switch statements or dispatch tables should be broken up by
   feature and constituents colocated with targets. Large blocks of test data
-  should be moved to external data files.
+  should be moved to external data files. A file vendored byte for byte from an
+  upstream, such as `scripts/uv_gate.py`, is exempt, because splitting it would
+  break its canonical digest.
 
 ## Documentation Maintenance
 
@@ -282,7 +284,9 @@ Keep docs close to code.
   `any`, no non‑null `!`, forbid `@ts-ignore` in favour of `@ts-expect-error`
   (with a reason).
   - In this repo: use `bun fmt`, `bun lint`, and `bun check:types`.
-  - `make lint` first runs `make interrogate`, which needs `uv` and fails on
+  - `make lint` first runs `make interrogate`, which needs `uv` and `python3`
+    3.9 or newer (it runs through the vendored `scripts/uv_gate.py` helper,
+    offline first, with no `UV` override) and fails on
     any Python definition under `scripts` without a docstring, and on any
     `MISSED` row, since the percentage is rounded. Add a new Python directory
     to `INTERROGATE_TARGETS`.
