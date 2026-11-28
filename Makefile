@@ -36,7 +36,16 @@ INTERROGATE_TARGETS ?= scripts
 # `interrogate` target fails on: the rounded percentage alone can pass a lone
 # gap.
 INTERROGATE_FLAGS ?= -vv --no-color --fail-under 100
-INTERROGATE ?= uv tool run --python 3.13 --from 'interrogate==$(INTERROGATE_VERSION)' interrogate
+# Every uv call but the spelling builder's goes through the vendored helper,
+# which cleans the environment, uses the global uv cache, runs offline first and
+# goes online at most once. The builder runs directly at its release tag,
+# because the spelling baseline requires that form and the helper accepts only
+# a full commit. See
+# https://github.com/leynos/shared-actions/tree/main/uv_gate for the contract.
+# `scripts/uv_gate.py` is the shared-actions helper, vendored byte for byte, so
+# update it by copying the canonical file, never by editing it here.
+UV_GATE ?= python3 scripts/uv_gate.py
+INTERROGATE ?= $(UV_GATE) tool --python 3.13 --from 'interrogate==$(INTERROGATE_VERSION)' -- interrogate
 
 # `grep` reads the whole report, so an early exit cannot break the pipe.
 interrogate: ## Enforce complete Python docstring coverage
